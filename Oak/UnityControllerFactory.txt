@@ -1,0 +1,69 @@
+﻿    //this gives you DI for your controllers in the mvc pipeline
+	public class UnityControllerFactory : IControllerFactory
+    {
+        private IUnityContainer _container;
+        private IControllerFactory _innerFactory;
+        private List<string> _controllerRegistry;
+
+        public UnityControllerFactory(IUnityContainer container)
+            : this(container, new DefaultControllerFactory())
+        {
+
+        }
+
+        protected UnityControllerFactory(IUnityContainer container, IControllerFactory innerFactory)
+        {
+            _container = container;
+            _innerFactory = innerFactory;
+            _controllerRegistry = new List<string>();
+        }
+
+        public IController CreateController(RequestContext requestContext, string controllerName)
+        {
+            if (_controllerRegistry.Contains(controllerName.ToLowerInvariant()))
+            {
+                return _container.Resolve<IController>(controllerName.ToLowerInvariant());
+            }
+
+            return _innerFactory.CreateController(requestContext, controllerName);
+        }
+
+        public void ReleaseController(IController controller)
+        {
+            _container.Teardown(controller);
+        }
+
+        public SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)
+        {
+            return _innerFactory.GetControllerSessionBehavior(requestContext, controllerName);
+        }
+
+        public void RegisterController(string name, Type type)
+        {
+            var scrubbedName = name.Replace("Controller", "").ToLowerInvariant();
+
+            _controllerRegistry.Add(scrubbedName);
+            _container.RegisterType(typeof(IController), type, scrubbedName);
+        }
+    }
+
+	///the following goes in global.asax.cs
+	var unityContainer = new UnityContainer();
+    var controllerFactory = new UnityControllerFactory(unityContainer);
+
+    Type[] controllers = typeof(BlogsController).Assembly.GetTypes();
+    foreach (Type item in controllers)
+    {
+        if (item.Name.EndsWith("Controller"))
+        {
+            controllerFactory.RegisterController(item.Name, item.UnderlyingSystemType);
+        }
+    }
+
+    var connectionProfile = new ConnectionProfile
+    {
+        ConnectionString = ConfigurationManager.AppSettings["ConnectionString"]
+    };
+
+    unityContainer.RegisterInstance<MvcApplication>(connectionProfile);
+    ControllerBuilder.Current.SetControllerFactory(controllerFactory);
