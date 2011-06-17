@@ -1,4 +1,4 @@
-﻿    //this gives you DI for your controllers in the mvc pipeline
+    //this gives you DI for your controllers in the mvc pipeline
 	public class UnityControllerFactory : IControllerFactory
     {
         private IUnityContainer _container;
@@ -51,7 +51,7 @@
 	var unityContainer = new UnityContainer();
     var controllerFactory = new UnityControllerFactory(unityContainer);
 
-    Type[] controllers = typeof(BlogsController).Assembly.GetTypes();
+    Type[] controllers = typeof(SeedController).Assembly.GetTypes();
     foreach (Type item in controllers)
     {
         if (item.Name.EndsWith("Controller"))
@@ -65,5 +65,5 @@
         ConnectionString = ConfigurationManager.AppSettings["ConnectionString"]
     };
 
-    unityContainer.RegisterInstance<MvcApplication>(connectionProfile);
+    unityContainer.RegisterInstance<ConnectionProfile>(connectionProfile);
     ControllerBuilder.Current.SetControllerFactory(controllerFactory);
