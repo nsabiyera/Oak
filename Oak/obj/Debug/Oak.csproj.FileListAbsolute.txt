@@ -5,3 +5,10 @@ C:\Development\Oak\Oak\bin\EntityFramework.xml
 C:\Development\Oak\Oak\obj\Debug\ResolveAssemblyReference.cache
 C:\Development\Oak\Oak\obj\Debug\Oak.dll
 C:\Development\Oak\Oak\obj\Debug\Oak.pdb
+d:\development\Oak\Oak\bin\Oak.dll
+d:\development\Oak\Oak\bin\Oak.pdb
+d:\development\Oak\Oak\bin\EntityFramework.dll
+d:\development\Oak\Oak\bin\EntityFramework.xml
+d:\development\Oak\Oak\obj\Debug\ResolveAssemblyReference.cache
+d:\development\Oak\Oak\obj\Debug\Oak.dll
+d:\development\Oak\Oak\obj\Debug\Oak.pdb

@@ -76,22 +76,22 @@ namespace Massive
         /// <summary>
         /// Turns an IDataReader to a Dynamic list of things
         /// </summary>
-        public static List<dynamic> ToExpandoList(this IDataReader rdr)
+        public static List<dynamic> ToExpandoList(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             var result = new List<dynamic>();
             while (rdr.Read())
             {
-                result.Add(rdr.RecordToExpando());
+                result.Add(rdr.RecordToExpando(projection));
             }
             return result;
         }
-        public static dynamic RecordToExpando(this IDataReader rdr)
+        public static dynamic RecordToExpando(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             dynamic e = new ExpandoObject();
             var d = e as IDictionary<string, object>;
             for (int i = 0; i < rdr.FieldCount; i++)
                 d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
-            return e;
+            return projection(e);
         }
         /// <summary>
         /// Turns the object into an ExpandoObject
@@ -101,6 +101,7 @@ namespace Massive
             var result = new ExpandoObject();
             var d = result as IDictionary<string, object>; //work with the Expando as a Dictionary
             if (o.GetType() == typeof(ExpandoObject)) return o; //shouldn't have to... but just in case
+            if (o is Mix) return ((Mix)o).MixWith;
             if (o.GetType() == typeof(NameValueCollection) || o.GetType().IsSubclassOf(typeof(NameValueCollection)))
             {
                 var nv = (NameValueCollection)o;
@@ -131,6 +132,7 @@ namespace Massive
     {
         DbProviderFactory _factory;
         ConnectionProfile ConnectionProfile { get; set; }
+        public virtual Func<dynamic, dynamic> Projection { get; set; }
 
         public DynamicModel(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
         {
@@ -140,7 +142,7 @@ namespace Massive
             _factory = DbProviderFactories.GetFactory(_providerName);
 
             ConnectionProfile = connectionProfile;
-
+            Projection = (d) => d;
         }
         /// <summary>
         /// List out all the schema bits for use with ... whatever
@@ -163,7 +165,7 @@ namespace Massive
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
                 while (rdr.Read())
                 {
-                    yield return rdr.RecordToExpando(); ;
+                    yield return rdr.RecordToExpando(Projection); ;
                 }
             }
         }
@@ -178,7 +180,7 @@ namespace Massive
                 cmd.AddParams(args);
                 cmd.Connection.Open();
                 var task = Task.Factory.FromAsync<IDataReader>(cmd.BeginExecuteReader, cmd.EndExecuteReader, null);
-                task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList()));
+                task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList(Projection)));
             }
         }
 
@@ -188,7 +190,7 @@ namespace Massive
             {
                 while (rdr.Read())
                 {
-                    yield return rdr.RecordToExpando(); ;
+                    yield return rdr.RecordToExpando(Projection); ;
                 }
             }
         }

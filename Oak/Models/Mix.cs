@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Dynamic;
+using Massive;
 
 namespace Oak
 {
@@ -10,9 +11,12 @@ namespace Oak
     {
         public dynamic MixWith { get; set; }
 
-        public Mix(ExpandoObject mixWith)
+        public Mix(object mixWith)
         {
-            MixWith = mixWith;
+            if (mixWith is ExpandoObject)
+                MixWith = mixWith;
+            else
+                MixWith = mixWith.ToExpando();
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
