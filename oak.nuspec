@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak</id> 
-    <version>1.0.5</version> 
+    <version>1.0.6</version> 
     <authors>Amir Rajan</authors>
     <description>A mini dsl for creating schema using mvc controllers.  Build your database incrementally with a dialect that maps C# to schema creation.</description> 
     <language>en-US</language>
