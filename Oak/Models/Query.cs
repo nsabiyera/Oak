@@ -10,8 +10,10 @@ namespace Oak
 {
     public static class Query
     {
-        public static void ExecuteNonQuery(this string query, ConnectionProfile connectionProfile)
+        public static void ExecuteNonQuery(this string query, ConnectionProfile connectionProfile = null)
         {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
+
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
             sqlCommand.Connection.Open();
@@ -20,8 +22,10 @@ namespace Oak
             sqlCommand.Connection.Close();
         }
 
-        public static object ExecuteScalar(this string query, ConnectionProfile connectionProfile)
+        public static object ExecuteScalar(this string query, ConnectionProfile connectionProfile = null)
         {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
+
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
             sqlCommand.Connection.Open();
@@ -32,8 +36,10 @@ namespace Oak
             return result;
         }
 
-        public static SqlDataReader ExecuteReader(this string query, ConnectionProfile connectionProfile)
+        public static SqlDataReader ExecuteReader(this string query, ConnectionProfile connectionProfile = null)
         {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
+
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
             sqlCommand.Connection.Open();
@@ -41,8 +47,10 @@ namespace Oak
             return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
-        public static void InsertInto(this object o, string table, ConnectionProfile connectionProfile)
+        public static void InsertInto(this object o, string table, ConnectionProfile connectionProfile = null)
         {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
+
             DynamicModel dynamicModel = new DynamicModel(connectionProfile, table, "Id");
 
             dynamicModel.Insert(o);
