@@ -25,7 +25,7 @@ namespace Oak.Controllers
 
         public SeedController()
         {
-            
+            Seed = new Seed();
         }
 
         public ActionResult Index()
@@ -71,11 +71,6 @@ namespace Oak.Controllers
                 Title = "Hello World",
                 Body = "Lorem Ipsum"
             }.InsertInto("Blogs");
-
-            new
-            {
-                Email = "user@example.com"
-            }.InsertInto("Users");
 
             return new EmptyResult();
         }
