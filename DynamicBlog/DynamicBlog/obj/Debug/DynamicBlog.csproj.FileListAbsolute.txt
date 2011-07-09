@@ -1,0 +1,12 @@
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\DynamicBlog.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\DynamicBlog.pdb
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.ServiceLocation.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.Unity.Configuration.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.Unity.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.ServiceLocation.pdb
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.ServiceLocation.xml
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.Unity.xml
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\Microsoft.Practices.Unity.Configuration.xml
+D:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\ResolveAssemblyReference.cache
+D:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\DynamicBlog.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\DynamicBlog.pdb

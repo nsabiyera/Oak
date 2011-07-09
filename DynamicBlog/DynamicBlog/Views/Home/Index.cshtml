@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Blogs";
+}
+
+<h2>Blogs</h2>
+@foreach (var blog in ViewBag.Blogs)
+{
+    @blog.Title<br />
+    @blog.Summary<br />
+    <hr />
+}

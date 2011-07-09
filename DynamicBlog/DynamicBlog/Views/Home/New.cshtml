@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "New";
+}
+
+<h2>New</h2>
+
+@if (ViewBag.Flash != null)
+{
+    <span>Error: @ViewBag.Flash</span>
+}
+
+@using (Html.BeginForm(new { action = "New" }))
+{
+    @Html.Label("Title")<br />
+    @Html.TextBox("title", "")<br />
+    @Html.Label("Body")<br />
+    @Html.TextArea("body", "")<br />
+    <input type="submit" value="insert blog" />
+}

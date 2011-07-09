@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicBlog", "DynamicBlog\DynamicBlog.csproj", "{C645719A-B4B2-4C88-95BD-7E56F6425EE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicBlog.Tests", "DynamicBlog.Tests\DynamicBlog.Tests.csproj", "{F1223DF6-3D65-4C94-9DE0-BC622218354F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C645719A-B4B2-4C88-95BD-7E56F6425EE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C645719A-B4B2-4C88-95BD-7E56F6425EE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C645719A-B4B2-4C88-95BD-7E56F6425EE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C645719A-B4B2-4C88-95BD-7E56F6425EE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1223DF6-3D65-4C94-9DE0-BC622218354F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1223DF6-3D65-4C94-9DE0-BC622218354F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1223DF6-3D65-4C94-9DE0-BC622218354F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1223DF6-3D65-4C94-9DE0-BC622218354F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+	EndGlobalSection
+EndGlobal
