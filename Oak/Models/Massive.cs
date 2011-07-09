@@ -134,6 +134,11 @@ namespace Massive
         ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
 
+        public DynamicModel(string tableName = "", string primaryKeyField = "")
+            : this(null, tableName, primaryKeyField)
+        {
+        }
+
         public DynamicModel(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
         {
             TableName = tableName == "" ? this.GetType().Name : tableName;
@@ -141,6 +146,7 @@ namespace Massive
             var _providerName = "System.Data.SqlClient";
             _factory = DbProviderFactories.GetFactory(_providerName);
 
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
             ConnectionProfile = connectionProfile;
             Projection = (d) => d;
         }

@@ -7,23 +7,25 @@ using Oak;
 
 namespace Oak.Controllers
 {
+    public class LocalOnly : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if(filterContext.RequestContext.HttpContext.Request.IsLocal == false)
+            {
+                filterContext.Result = new HttpNotFoundResult();
+            }
+        }
+    }
+
+    [LocalOnly]
     public class SeedController : Controller
     {
-        public ConnectionProfile ConnectionProfile { get; set; }
-
         public Seed Seed { get; set; }
 
         public SeedController()
-            : this(new ConnectionProfile { ConnectionString = "your connection string" })
         {
-
-        }
-
-        public SeedController(ConnectionProfile connectionProfile)
-        {
-            Seed = new Seed(connectionProfile);
-
-            ConnectionProfile = connectionProfile;
+            
         }
 
         public ActionResult Index()
@@ -31,18 +33,14 @@ namespace Oak.Controllers
             return new EmptyResult();
         }
 
-        //sample
         [HttpPost]
         public ActionResult All()
         {
             CreateBlogs();
 
-            CreateUsers();
-
             return new EmptyResult();
         }
 
-        //sample
         [HttpPost]
         public ActionResult CreateBlogs()
         {
@@ -51,20 +49,7 @@ namespace Oak.Controllers
                 new { Id = "uniqueidentifier", PrimaryKey = true },
                 new { Title = "nvarchar(255)" },
                 new { Body = "nvarchar(max)" }
-            }).ExecuteNonQuery(ConnectionProfile);
-
-            return new EmptyResult();
-        }
-
-        //sample
-        [HttpPost]
-        public ActionResult CreateUsers()
-        {
-            Seed.CommandFor("Users", "Create", new dynamic[] 
-            { 
-                new { Id = "int", PrimaryKey = true, Identity = true },
-                new { Email = "nvarchar(255)" },
-            }).ExecuteNonQuery(ConnectionProfile);
+            }).ExecuteNonQuery();
 
             return new EmptyResult();
         }
@@ -77,7 +62,6 @@ namespace Oak.Controllers
             return new EmptyResult();
         }
 
-        //sample
         [HttpPost]
         public ActionResult SampleEntries()
         {
@@ -86,12 +70,12 @@ namespace Oak.Controllers
                 Id = Guid.NewGuid(),
                 Title = "Hello World",
                 Body = "Lorem Ipsum"
-            }.InsertInto("Blogs", ConnectionProfile);
+            }.InsertInto("Blogs");
 
             new
             {
                 Email = "user@example.com"
-            }.InsertInto("Users", ConnectionProfile);
+            }.InsertInto("Users");
 
             return new EmptyResult();
         }

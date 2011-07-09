@@ -10,8 +10,14 @@ namespace Oak
     {
         public virtual ConnectionProfile ConnectionProfile { get; set; }
 
+        public Seed()
+            : this(null)
+        {
+        }
+
         public Seed(ConnectionProfile connectionProfile)
         {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
             ConnectionProfile = connectionProfile;
         }
 
