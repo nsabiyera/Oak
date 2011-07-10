@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Oak.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Amir Rajan")]
 [assembly: AssemblyProduct("Oak.Tests")]
 [assembly: AssemblyCopyright("Copyright © Amir Rajan 2011")]
 [assembly: AssemblyTrademark("")]
