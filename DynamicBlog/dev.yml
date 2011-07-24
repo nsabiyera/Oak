@@ -1,0 +1,6 @@
+website_port: 3000
+website_deploy_directory: c:\iisexpress\dynamicblog
+solution_name: DynamicBlog.sln
+mvc_project_directory: DynamicBlog
+test_dll: ./DynamicBlog.Tests/bin/debug/DynamicBlog.Tests.dll
+test_runner: ./packages/nspec.0.9.43/tools/NSpecRunner.exe

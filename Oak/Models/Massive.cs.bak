@@ -244,7 +244,7 @@ namespace Massive
                 cmd.AddParams(args);
                 cmd.Connection.Open();
                 var task = Task.Factory.FromAsync<IDataReader>(cmd.BeginExecuteReader, cmd.EndExecuteReader, null);
-                task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList(Projection)));
+                task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList()));
                 //make sure this is closed off.
                 conn.Close();
             }
@@ -560,7 +560,7 @@ namespace Massive
         public virtual dynamic Single(string where, params object[] args)
         {
             var sql = string.Format("SELECT * FROM {0} WHERE {1}", TableName, where);
-            return Query(sql, args).FirstOrDefault();
+            return Query(sql, args).First();
         }
         /// <summary>
         /// Returns a single row from the database
@@ -642,12 +642,16 @@ namespace Massive
             {
                 //default to multiple
                 sql = "SELECT " + columns + " FROM " + TableName + where;
+                justOne = false;
             }
 
-            if (justOne) {
+            if (justOne)
+            {
                 //return a single record
                 result = Query(sql + orderBy, whereArgs.ToArray()).FirstOrDefault();
-            } else {
+            }
+            else
+            {
                 //return lots
                 result = Query(sql + orderBy, whereArgs.ToArray());
             }
@@ -655,4 +659,4 @@ namespace Massive
             return true;
         }
     }
-}
+} 

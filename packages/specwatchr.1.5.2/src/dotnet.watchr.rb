@@ -146,7 +146,7 @@ if you have the nuget package rake-dot-net installed you can use the following l
 make sure to set your builder to :RakeBuilder
 =end
 #watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md| 
-#  @dw.sh.execute "rake"
+#  @dw.sh.execute "rake sync file=\"#{ md[0] }\""
 #  @dw.notifier.execute "website deployed", "deployed", "green"
 #end
 
