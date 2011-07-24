@@ -150,6 +150,63 @@ namespace Massive
             ConnectionProfile = connectionProfile;
             Projection = (d) => d;
         }
+
+        /// <summary>
+        /// Creates a new Expando from a Form POST - white listed against the columns in the DB
+        /// </summary>
+        public dynamic CreateFrom(NameValueCollection coll) {
+            dynamic result = new ExpandoObject();
+            var dc = (IDictionary<string, object>)result;
+            var schema = Schema;
+            //loop the collection, setting only what's in the Schema
+            foreach (var item in coll.Keys) {
+                var exists = schema.Any(x => x.COLUMN_NAME.ToLower() == item.ToString().ToLower());
+                if (exists) {
+                    var key = item.ToString();
+                    var val = coll[key];
+                    if (!String.IsNullOrEmpty(val)) {
+                        //what to do here? If it's empty... set it to NULL?
+                        //if it's a string value - let it go through if it's NULLABLE?
+                        //Empty? WTF?
+                        dc.Add(key, val);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets a default value for the column
+        /// </summary>
+        public dynamic DefaultValue(dynamic column) {
+            dynamic result = null;
+            string def = column.COLUMN_DEFAULT;
+            if (String.IsNullOrEmpty(def)) {
+                result = null;
+            } else if (def == "getdate()" || def == "(getdate())") {
+                result = DateTime.Now.ToShortDateString();
+            } else if (def == "newid()") {
+                result = Guid.NewGuid().ToString();
+            } else {
+                result = def.Replace("(", "").Replace(")", "");
+            }
+            return result;
+        }
+        /// <summary>
+        /// Creates an empty Expando set with defaults from the DB
+        /// </summary>
+        public dynamic Prototype {
+            get {
+                dynamic result = new ExpandoObject();
+                var schema = Schema;
+                foreach (dynamic column in schema) {
+                    var dc = (IDictionary<string, object>)result;
+                    dc.Add(column.COLUMN_NAME, DefaultValue(column));
+                }
+                result._Table = this;
+                return result;
+            }
+        }
         /// <summary>
         /// List out all the schema bits for use with ... whatever
         /// </summary>
@@ -175,6 +232,7 @@ namespace Massive
                 }
             }
         }
+
         /// <summary>
         /// Executes the reader using SQL async API - thanks to Damian Edwards
         /// </summary>
@@ -187,6 +245,8 @@ namespace Massive
                 cmd.Connection.Open();
                 var task = Task.Factory.FromAsync<IDataReader>(cmd.BeginExecuteReader, cmd.EndExecuteReader, null);
                 task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList(Projection)));
+                //make sure this is closed off.
+                conn.Close();
             }
         }
 
@@ -269,6 +329,10 @@ namespace Massive
         public virtual int Execute(DbCommand command)
         {
             return Execute(new DbCommand[] { command });
+        }
+
+        public virtual int Execute(string sql, params object[] args) {
+            return Execute(CreateCommand(sql, null, args));
         }
         /// <summary>
         /// Executes a series of DBCommands in a transaction
@@ -496,7 +560,7 @@ namespace Massive
         public virtual dynamic Single(string where, params object[] args)
         {
             var sql = string.Format("SELECT * FROM {0} WHERE {1}", TableName, where);
-            return Query(sql, args).First();
+            return Query(sql, args).FirstOrDefault();
         }
         /// <summary>
         /// Returns a single row from the database
@@ -578,16 +642,12 @@ namespace Massive
             {
                 //default to multiple
                 sql = "SELECT " + columns + " FROM " + TableName + where;
-                justOne = false;
             }
 
-            if (justOne)
-            {
+            if (justOne) {
                 //return a single record
                 result = Query(sql + orderBy, whereArgs.ToArray()).FirstOrDefault();
-            }
-            else
-            {
+            } else {
                 //return lots
                 result = Query(sql + orderBy, whereArgs.ToArray());
             }
@@ -595,4 +655,4 @@ namespace Massive
             return true;
         }
     }
-} 
+}
