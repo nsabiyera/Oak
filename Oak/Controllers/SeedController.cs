@@ -44,7 +44,7 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult CreateBlogs()
         {
-            Seed.CommandFor("Blogs", "Create", new dynamic[] 
+            Seed.CreateTable("Blogs", new dynamic[] 
             { 
                 new { Id = "uniqueidentifier", PrimaryKey = true },
                 new { Title = "nvarchar(255)" },

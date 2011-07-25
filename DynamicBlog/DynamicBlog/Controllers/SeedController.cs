@@ -40,27 +40,27 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult All()
         {
-            CreateBlogs();
+            CreateBlogs(); //this is a sample
 
             return new EmptyResult();
         }
 
         //this creates the blogs table using the Seed DSL
+        //sample
         [HttpPost]
         public ActionResult CreateBlogs()
         {
             //use seed to create a sql command
-            string create = Seed.CommandFor(
+            string createCommand = Seed.CreateTable(
                 "Blogs", //the table
-                "Create", //the command
                 new dynamic[] //the schema
-            { 
-                new { Id = "uniqueidentifier", PrimaryKey = true },
-                new { Title = "nvarchar(255)" },
-                new { Body = "nvarchar(max)" }
-            });
+                { 
+                    new { Id = "uniqueidentifier", PrimaryKey = true },
+                    new { Title = "nvarchar(255)" },
+                    new { Body = "nvarchar(max)" }
+                });
 
-            create.ExecuteNonQuery(ConnectionProfile);
+            createCommand.ExecuteNonQuery(ConnectionProfile);
 
             return new EmptyResult();
         }
