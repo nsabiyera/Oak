@@ -24,8 +24,8 @@ namespace Oak
         }
 
         /// <summary>
-        /// Returns a sql command for creating a table.  Use ExecuteNonQuery() 
-        /// to execute command.  ExecuteNonQuery is an 
+        /// Generates script for creating a table.  Use ExecuteNonQuery() 
+        /// to execute script.  ExecuteNonQuery is an 
         /// extension method on string (if you dont see the extension method, 
         /// make sure you have using Oak; in your cs file.
         /// </summary>
@@ -48,6 +48,13 @@ namespace Oak
             return CreateTableCommand(table, columnString, primaryKeyColumn);
         }
 
+        /// <summary>
+        /// Generates script to create columns.  Use ExecuteNonQuery()
+        /// to execute script.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="columns"></param>
+        /// <returns></returns>
         public string AddColumns(string table, dynamic[] columns)
         {
             string columnString = "";
@@ -73,15 +80,13 @@ namespace Oak
             var isIdentity = column.IsIdentityColumn();
             var isPrimaryKey = column.IsPrimaryKey();
 
-            string defaultAsString = defaultValue != null ? "DEFAULT('{0}')".With(defaultValue.ToString()) : "";
-
             string identityAsString = isIdentity ? " IDENTITY(1,1)" : "";
 
             return "[{0}] {1} {2} {3}{4}"
                         .With(name, 
                             type, 
-                            column.NullDefinition(), 
-                            defaultAsString, 
+                            column.NullDefinition(),
+                            column.DefaultValueDefinition(), 
                             identityAsString)
                         .ReplaceSequentialSpacesWithSingleSpace()
                         .Trim();
@@ -176,6 +181,22 @@ namespace Oak.Extensions
         public static object DefaultValue(this object columnDefinition)
         {
             return columnDefinition.Properties().Get("Default", @in: columnDefinition);
+        }
+
+        public static object DefaultValueDefinition(this object columnDefinition)
+        {
+            var defaultValue = columnDefinition.DefaultValue();
+
+            string defaultAsString = "";
+
+            if (defaultValue != null) defaultAsString = "DEFAULT('{0}')".With(defaultValue.ToString());
+            else return "";
+
+            var reservedStrings = new [] { "getdate()", "newid()" };
+
+            if (reservedStrings.Contains(defaultValue.ToString().ToLower())) defaultAsString = "DEFAULT({0})".With(defaultValue.ToString());
+
+            return defaultAsString;
         }
 
         public static string NullDefinition(this object columnDefinition)

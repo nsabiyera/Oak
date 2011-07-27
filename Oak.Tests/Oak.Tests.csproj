@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_Mix.cs" />
-    <Compile Include="describe_Seed\when_altering_table.cs" />
+    <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
