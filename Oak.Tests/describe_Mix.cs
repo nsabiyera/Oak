@@ -56,6 +56,20 @@ namespace Oak.Tests
                 (inheritedMix.FirstName as string).should_be("Some");
         }
 
+        void double_inheritance()
+        {
+            act = () => inheritedMix = new InheritedInheritedMix(blog);
+
+            it["calls methods on root mix with"] = () =>
+                (inheritedMix.Title as string).should_be("Some Name");
+
+            it["calls method on first mix"] = () =>
+                (inheritedMix.FirstLetter() as string).should_be("S");
+
+            it["calls method on top most mix"] = () =>
+                (inheritedMix.LastLetter() as string).should_be("e");
+        }
+
         void given_a_blog()
         {
             before = () =>
@@ -91,7 +105,7 @@ namespace Oak.Tests
 
     public class BlogEntry : Mix
     {
-        public BlogEntry(ExpandoObject mixWith)
+        public BlogEntry(object mixWith)
             : base(mixWith)
         {
 
@@ -111,9 +125,23 @@ namespace Oak.Tests
         }
     }
 
+    public class InheritedInheritedMix : InheritedMix
+    {
+        public InheritedInheritedMix(object mixWith)
+            : base(mixWith)
+    	{
+    				
+    	}
+
+        public string LastLetter()
+        {
+            return (MixWith.Title as string).Last().ToString();
+        }
+    }
+
     public class InheritedMix : Mix
     {
-        public InheritedMix(ExpandoObject mixWith)
+        public InheritedMix(object mixWith)
             : base(mixWith)
         {
 
