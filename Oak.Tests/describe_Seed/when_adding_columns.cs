@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Oak.Tests.describe_Seed
 {
-    class when_altering_table : _seed
+    class when_adding_columns : _seed
     {
         void act_each()
         {
@@ -81,6 +81,34 @@ namespace Oak.Tests.describe_Seed
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
                     ALTER TABLE [dbo].[Users] ADD [Column1] int NOT NULL DEFAULT('10'), [Column2] nvarchar(255) NULL DEFAULT('Test')
+                ");
+        }
+
+        void add_date_column_with_default_value_of_GETDATE()
+        {
+            before = () =>
+                columns = new dynamic[] 
+                {
+                    new { Column1 = "datetime", Default = "getdate()", Nullable = false },
+                };
+
+            it["creates the alter table statement"] = () =>
+                CommandShouldBe(@"
+                    ALTER TABLE [dbo].[Users] ADD [Column1] datetime NOT NULL DEFAULT(getdate())
+                ");
+        }
+
+        void add_guid_column_with_default_value_of_newid()
+        {
+            before = () =>
+                columns = new dynamic[] 
+                {
+                    new { Column1 = "uniqueidentifier", Default = "newid()", Nullable = false },
+                };
+
+            it["creates the alter table statement"] = () =>
+                CommandShouldBe(@"
+                    ALTER TABLE [dbo].[Users] ADD [Column1] uniqueidentifier NOT NULL DEFAULT(newid())
                 ");
         }
     }
