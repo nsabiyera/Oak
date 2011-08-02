@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "New";
+    ViewBag.PageTitle = "New";
 }
 
 <h2>New</h2>
@@ -12,8 +12,8 @@
 @using (Html.BeginForm(new { action = "New" }))
 {
     @Html.Label("Title")<br />
-    @Html.TextBox("title", "")<br />
+    @Html.TextBox("title", ViewBag.@params == null ? "" : ViewBag.@params.title as string)<br />
     @Html.Label("Body")<br />
-    @Html.TextArea("body", "")<br />
+    @Html.TextArea("body", ViewBag.@params == null ? "" : ViewBag.@params.body as string)<br />
     <input type="submit" value="insert blog" />
 }

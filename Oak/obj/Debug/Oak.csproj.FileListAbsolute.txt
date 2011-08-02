@@ -1,7 +1,7 @@
-D:\Development\Oak\Oak\bin\Oak.dll
-D:\Development\Oak\Oak\bin\Oak.pdb
-D:\Development\Oak\Oak\bin\EntityFramework.dll
-D:\Development\Oak\Oak\bin\EntityFramework.xml
-D:\Development\Oak\Oak\obj\Debug\ResolveAssemblyReference.cache
-D:\Development\Oak\Oak\obj\Debug\Oak.dll
-D:\Development\Oak\Oak\obj\Debug\Oak.pdb
+d:\development\Oak\Oak\obj\Debug\ResolveAssemblyReference.cache
+d:\development\Oak\Oak\bin\Oak.dll
+d:\development\Oak\Oak\bin\Oak.pdb
+d:\development\Oak\Oak\bin\EntityFramework.dll
+d:\development\Oak\Oak\bin\EntityFramework.xml
+d:\development\Oak\Oak\obj\Debug\Oak.dll
+d:\development\Oak\Oak\obj\Debug\Oak.pdb

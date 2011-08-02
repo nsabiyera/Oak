@@ -1,11 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Blogs";
+    ViewBag.PageTitle = "Blogs";
 }
 
 <h2>Blogs</h2>
 @foreach (var blog in ViewBag.Blogs)
 {
-    @blog.Title<br />
+    @Html.ActionLink(blog.Title as string, "get", new { id = blog.Id })<br />
     @blog.Summary<br />
     <hr />
 }
+
+@Html.ActionLink("new blog", "new")

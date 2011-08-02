@@ -65,7 +65,7 @@ namespace Oak
 
                 columnString += ColumnStringFor(column);
 
-                if(i != columns.Length - 1) columnString += ", ";
+                if (i != columns.Length - 1) columnString += ", ";
             }
 
             return "ALTER TABLE [dbo].[{0}] ADD {1}"
@@ -75,7 +75,7 @@ namespace Oak
         string ColumnStringFor(object column)
         {
             var name = column.Name();
-            var type = column.SqlType() ;
+            var type = column.SqlType();
             var defaultValue = column.DefaultValue();
             var isIdentity = column.IsIdentityColumn();
             var isPrimaryKey = column.IsPrimaryKey();
@@ -83,10 +83,10 @@ namespace Oak
             string identityAsString = isIdentity ? " IDENTITY(1,1)" : "";
 
             return "[{0}] {1} {2} {3}{4}"
-                        .With(name, 
-                            type, 
+                        .With(name,
+                            type,
                             column.NullDefinition(),
-                            column.DefaultValueDefinition(), 
+                            column.DefaultValueDefinition(),
                             identityAsString)
                         .ReplaceSequentialSpacesWithSingleSpace()
                         .Trim();
@@ -97,10 +97,7 @@ namespace Oak
             var primaryKeyScript =
                 " CONSTRAINT [PK_{0}] PRIMARY KEY CLUSTERED ([{1}] ASC)".With(table, primaryKeyColumn ?? string.Empty);
 
-            if (primaryKeyColumn == null)
-            {
-                primaryKeyScript = "";
-            }
+            if (primaryKeyColumn == null) primaryKeyScript = "";
 
             return "CREATE TABLE [dbo].[{0}]({1}{2})".With(table, columns, primaryKeyScript);
         }
@@ -192,7 +189,7 @@ namespace Oak.Extensions
             if (defaultValue != null) defaultAsString = "DEFAULT('{0}')".With(defaultValue.ToString());
             else return "";
 
-            var reservedStrings = new [] { "getdate()", "newid()" };
+            var reservedStrings = new[] { "getdate()", "newid()" };
 
             if (reservedStrings.Contains(defaultValue.ToString().ToLower())) defaultAsString = "DEFAULT({0})".With(defaultValue.ToString());
 

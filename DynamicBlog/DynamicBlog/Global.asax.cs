@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.Practices.Unity;
 using Oak.Controllers;
+using Oak.Models;
 
 namespace DynamicBlog
 {
@@ -23,6 +20,8 @@ namespace DynamicBlog
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.IgnoreRoute("favicon.ico");
+
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
@@ -38,19 +37,7 @@ namespace DynamicBlog
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            var unityContainer = new UnityContainer();
-            var controllerFactory = new UnityControllerFactory(unityContainer);
-
-            Type[] controllers = typeof(SeedController).Assembly.GetTypes();
-            foreach (Type item in controllers)
-            {
-                if (item.Name.EndsWith("Controller"))
-                {
-                    controllerFactory.RegisterController(item.Name, item.UnderlyingSystemType);
-                }
-            }
-
-            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+            ModelBinders.Binders.Add(typeof(object), new DynamicModelBinder());
         }
     }
 }
