@@ -11,9 +11,9 @@ namespace DynamicBlog.Controllers
     {
         public Blogs Blogs { get; set; }
 
-        public HomeController(Blogs blogs)
+        public HomeController()
         {
-            Blogs = blogs;
+            Blogs = new Blogs();
         }
 
         public ActionResult Index()
@@ -28,25 +28,48 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
+        public ActionResult Get(dynamic @params)
+        {
+            var blog = Blogs.Single(@params.id);
+
+            if (blog == null) return HttpNotFound();
+
+            ViewBag.Blog = blog;
+
+            ViewBag.Comments = blog.Comments();
+
+            return View();
+        }
+
         [HttpPost]
-        public ActionResult New(string title, string body)
+        public ActionResult New(dynamic @params)
         {
             var blog = new Blog(new
             {
-                Id = Guid.NewGuid(),
-                Title = title,
-                Body = body
+                Title = @params.title,
+                Body = @params.body
             });
 
             if (!blog.IsValid())
             {
                 ViewBag.Flash = blog.Validate();
+                ViewBag.@params = @params;
                 return View();
             }
 
             Blogs.Insert(blog);
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Comment(dynamic @params)
+        {
+            var blog = Blogs.Single(@params.id);
+
+            blog.AddComment(@params.comment);
+
+            return RedirectToAction("Get", new { id = @params.id });
         }
     }
 }

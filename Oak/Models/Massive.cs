@@ -228,7 +228,7 @@ namespace Massive
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
                 while (rdr.Read())
                 {
-                    yield return rdr.RecordToExpando(Projection); ;
+                    yield return rdr.RecordToExpando(Projection);
                 }
             }
         }
@@ -554,14 +554,16 @@ namespace Massive
             result.Items = Query(string.Format(sql, columns, TableName), args);
             return result;
         }
+
         /// <summary>
         /// Returns a single row from the database
         /// </summary>
-        public virtual dynamic Single(string where, params object[] args)
+        public virtual dynamic SingleWhere(string where, params object[] args)
         {
             var sql = string.Format("SELECT * FROM {0} WHERE {1}", TableName, where);
             return Query(sql, args).FirstOrDefault();
         }
+
         /// <summary>
         /// Returns a single row from the database
         /// </summary>

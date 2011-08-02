@@ -42,27 +42,37 @@ namespace Oak.Controllers
         {
             CreateBlogs(); //this is a sample
 
+            CreateComments();
+
             return new EmptyResult();
         }
 
         //this creates the blogs table using the Seed DSL
         //sample
-        [HttpPost]
-        public ActionResult CreateBlogs()
+        public void CreateBlogs()
         {
             //use seed to create a sql command
             string createCommand = Seed.CreateTable(
                 "Blogs", //the table
                 new dynamic[] //the schema
                 { 
-                    new { Id = "uniqueidentifier", PrimaryKey = true },
+                    new { Id = "int", PrimaryKey = true, Identity = true },
                     new { Title = "nvarchar(255)" },
                     new { Body = "nvarchar(max)" }
                 });
 
             createCommand.ExecuteNonQuery(ConnectionProfile);
+        }
 
-            return new EmptyResult();
+        public void CreateComments()
+        {
+            string createCommand = Seed.CreateTable("Comments", new dynamic[] 
+            { 
+                new { BlogId = "int" },
+                new { Text = "nvarchar(max)" }
+            });
+
+            createCommand.ExecuteNonQuery();
         }
 
         //performing an http post to PurgeDb will purge the database
@@ -91,13 +101,18 @@ namespace Oak.Controllers
             {
                 new
                 {
-                    Id = Guid.NewGuid(),
                     Title = blog.Title,
                     Body = blog.Body
                 }.InsertInto("Blogs", ConnectionProfile);
             }
 
             return new EmptyResult();
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            filterContext.Result = Content(filterContext.Exception.Message);
+            filterContext.ExceptionHandled = true;
         }
     }
 }

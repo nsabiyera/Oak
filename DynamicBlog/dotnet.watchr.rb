@@ -19,7 +19,7 @@ edit the code below to pick your builder and runner,
 for :builder you can use either :MSBuilder, or :RakeBuilder
 for :test_runner you can use :NSpecRunner, :NUnitRunner, or :MSTestRunner
 =end
-@dw = WatcherDotNet.new ".", { :builder => :MSBuilder, :test_runner => :NSpecRunner }
+@dw = WatcherDotNet.new ".", { :builder => :RakeBuilder, :test_runner => :NSpecRunner }
 
 =begin
  _______  _______  _______           _       
@@ -145,10 +145,10 @@ if for some reason you deviate from this convention, you can OVERRIDE the dlls s
 if you have the nuget package rake-dot-net installed you can use the following lines to build and deploy mvc applications everytime you save a web specific file
 make sure to set your builder to :RakeBuilder
 =end
-#watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md| 
-#  @dw.sh.execute "rake"
-#  @dw.notifier.execute "website deployed", "deployed", "green"
-#end
+watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md| 
+  @dw.sh.execute "rake sync file=\"#{ md[0] }\""
+  @dw.notifier.execute "website deployed", "deployed", "green"
+end
 
 #everything after this is specwatchr specific
 def handle filename

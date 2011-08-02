@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.PageTitle = ViewBag.Blog.Title;
+}
+
+<h2>@ViewBag.Blog.Title</h2>
+@Html.Raw(ViewBag.Blog.Body)
+
+<hr />
+
+<h2>Comments</h2>
+@foreach (var comment in ViewBag.Comments)
+{
+    @comment.Text<br />
+}
+
+
+@using (Html.BeginForm("comment", "home"))
+{
+    @Html.Hidden("id", ViewBag.Blog.Id as object)
+    @Html.TextArea("comment")
+    <br />
+    <input type="submit" value="comment" />
+}
