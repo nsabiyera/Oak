@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@if (ViewBag.Flash != null)
+{
+    <span>Error: @ViewBag.Flash</span>
+}
+
+@using (Html.BeginForm(new { action = "Update", id = ViewBag.Blog.Id } ))
+{
+    @Html.Label("Title")<br />
+    @Html.TextBox("title", ViewBag.Blog.Title as string)<br />
+    @Html.Label("Body")<br />
+    @Html.TextArea("body", ViewBag.Blog.Body as string)<br />
+    <input type="submit" value="update blog" />
+}

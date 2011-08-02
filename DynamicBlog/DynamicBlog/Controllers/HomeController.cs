@@ -57,7 +57,7 @@ namespace DynamicBlog.Controllers
                 return View();
             }
 
-            Blogs.Insert(blog);
+            Blogs.Save(blog);
 
             return RedirectToAction("Index");
         }
@@ -70,6 +70,36 @@ namespace DynamicBlog.Controllers
             blog.AddComment(@params.comment);
 
             return RedirectToAction("Get", new { id = @params.id });
+        }
+
+        public ActionResult Edit(dynamic @params)
+        {
+            var blog = Blogs.Single(@params.id);
+
+            if (blog == null) return HttpNotFound();
+
+            ViewBag.Blog = blog;
+
+            return View();
+        }
+
+        public ActionResult Update(dynamic @params)
+        {
+            var blog = Blogs.Single(@params.id);
+
+            blog.Title = @params.title;
+            blog.Body = @params.body;
+
+            if(!blog.IsValid())
+            {
+                ViewBag.Flash = blog.Validate();
+                ViewBag.Blog = blog;
+                return View("edit");
+            }
+
+            Blogs.Save(blog);
+
+            return RedirectToAction("get", new { id = @params.id });
         }
     }
 }

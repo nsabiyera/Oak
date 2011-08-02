@@ -160,9 +160,82 @@ namespace DynamicBlog.Tests.Controllers
             };
         }
 
+        void when_requesting_to_update_blog()
+        {
+            act = () => actionResult = homeController.Edit(new { id = 1 });
+
+            context["given blog 'Hello'"] = () =>
+            {
+                before = () => new { Title = "Hello" }.InsertInto("Blogs");
+
+                it["returns view with blog"] = () =>
+                {
+                    var viewResult = actionResult.should_cast_to<ViewResult>();
+                    var blog = viewResult.ViewBag.Blog;
+                    (blog.Title as string).should_be("Hello");
+                };
+            };
+
+            context["blog doesn't exist"] = () =>
+            {
+                it["returns 404"] = () =>
+                    actionResult.should_cast_to<HttpNotFoundResult>();
+            };
+        }
+
+        void when_updating_blog()
+        {
+            act = () => actionResult = homeController.Update(new { id = 1, title = titleToSave, body = "new body" });
+
+            context["given blog Hello and valid update"] = () =>
+            {
+                before = () =>
+                {
+                    titleToSave = "new title";
+                    new { Title = "Hello" }.InsertInto("Blogs");
+                };
+                    
+
+                it["updates blog with new title and body"] = () =>
+                {
+                    var blog = Blog(1);
+                    (blog.Title as string).should_be("new title");
+                    (blog.Body as string).should_be("new body");
+                };
+
+                it["redirects to get"] = () =>
+                {
+                    var values = actionResult.should_cast_to<RedirectToRouteResult>().RouteValues;
+                    values["action"].should_be("get");
+                    values["id"].should_be(1);
+                };
+
+                context["invalid blog update"] = () =>
+                {
+                    before = () => titleToSave = "";
+
+                    act = () => viewBag = actionResult.should_cast_to<ViewResult>().ViewBag;
+
+                    it["returns errors stating that Title Required."] = () =>
+                        (viewBag.Flash as string).should_be("Title Required.");
+
+                    it["returns blog with values that were attempted"] = () =>
+                    {
+                        (viewBag.Blog.Body as string).should_be("new body");
+                        (viewBag.Blog.Title as string).should_be("");
+                    };
+                };
+            };
+        }
+
         public IEnumerable<dynamic> Blogs()
         {
             return (homeController.Index() as ViewResult).ViewBag.Blogs as IEnumerable<dynamic>;
+        }
+
+        public dynamic Blog(int id)
+        {
+            return (homeController.Get(new { id }) as dynamic).ViewBag.Blog;
         }
     }
 }
