@@ -17,7 +17,15 @@ namespace Oak.Models
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            result = (object)valueProvider.GetValue(binder.Name).AttemptedValue;
+            var value = valueProvider.GetValue(binder.Name);
+
+            if(value == null)
+            {
+                result = null;
+                return false;
+            }
+
+            result = (object)value.AttemptedValue;
             return true;
         }
     }

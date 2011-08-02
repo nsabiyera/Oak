@@ -2,7 +2,7 @@
     ViewBag.PageTitle = ViewBag.Blog.Title;
 }
 
-<h2>@ViewBag.Blog.Title</h2>
+<h2>@ViewBag.Blog.Title @Html.ActionLink("edit", "edit", new { id = ViewBag.Blog.Id })</h2>
 @Html.Raw(ViewBag.Blog.Body)
 
 <hr />
