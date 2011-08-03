@@ -67,7 +67,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ConnectionProfile.cs" />
-    <Compile Include="Models\DynamicModelBinder.cs" />
+    <Compile Include="Models\ParamsModelBinder.cs" />
     <Compile Include="Models\Massive.cs" />
     <Compile Include="Models\Mix.cs" />
     <Compile Include="Models\Query.cs" />

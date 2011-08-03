@@ -21,7 +21,7 @@ namespace DynamicBlog.Models
             return !string.IsNullOrEmpty(MixWith.Title);
         }
 
-        public string Validate()
+        public string Message()
         {
             if(!IsValid())
             {

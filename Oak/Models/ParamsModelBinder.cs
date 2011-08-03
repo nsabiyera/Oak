@@ -7,10 +7,10 @@ using System.Dynamic;
 
 namespace Oak.Models
 {
-    public class DynamicValueProvider : DynamicObject
+    public class DynamicParams : DynamicObject
     {
         IValueProvider valueProvider;
-        public DynamicValueProvider(IValueProvider valueProvider)
+        public DynamicParams(IValueProvider valueProvider)
         {
             this.valueProvider = valueProvider;
         }
@@ -22,7 +22,7 @@ namespace Oak.Models
             if(value == null)
             {
                 result = null;
-                return false;
+                return true;
             }
 
             result = (object)value.AttemptedValue;
@@ -30,14 +30,14 @@ namespace Oak.Models
         }
     }
 
-    public class DynamicModelBinder : DefaultModelBinder
+    public class ParamsModelBinder : DefaultModelBinder
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             if (bindingContext.ModelName != "params")
                 return base.BindModel(controllerContext, bindingContext);
 
-            return new DynamicValueProvider(bindingContext.ValueProvider);
+            return new DynamicParams(bindingContext.ValueProvider);
         }
     }
 }
