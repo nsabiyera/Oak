@@ -9,26 +9,26 @@ namespace DynamicBlog.Controllers
 {
     public class HomeController : Controller
     {
-        public Blogs Blogs { get; set; }
+        protected override void HandleUnknownAction(string actionName)
+        {
+            View(actionName).ExecuteResult(ControllerContext);
+        }
+
+        public dynamic Blogs { get; set; }
 
         public HomeController()
         {
             Blogs = new Blogs();
         }
 
-        public ActionResult Index()
+        public dynamic Index()
         {
             ViewBag.Blogs = Blogs.All();
 
             return View();
         }
 
-        public ActionResult New()
-        {
-            return View();
-        }
-
-        public ActionResult Get(dynamic @params)
+        public dynamic Get(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
 
@@ -42,7 +42,7 @@ namespace DynamicBlog.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(dynamic @params)
+        public dynamic New(dynamic @params)
         {
             var blog = new Blog(new
             {
@@ -52,7 +52,7 @@ namespace DynamicBlog.Controllers
 
             if (!blog.IsValid())
             {
-                ViewBag.Flash = blog.Validate();
+                ViewBag.Flash = blog.Message();
                 ViewBag.@params = @params;
                 return View();
             }
@@ -63,7 +63,7 @@ namespace DynamicBlog.Controllers
         }
 
         [HttpPost]
-        public ActionResult Comment(dynamic @params)
+        public dynamic Comment(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
 
@@ -72,7 +72,7 @@ namespace DynamicBlog.Controllers
             return RedirectToAction("Get", new { id = @params.id });
         }
 
-        public ActionResult Edit(dynamic @params)
+        public dynamic Edit(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
 
@@ -83,7 +83,7 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
-        public ActionResult Update(dynamic @params)
+        public dynamic Update(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
 
@@ -92,7 +92,7 @@ namespace DynamicBlog.Controllers
 
             if(!blog.IsValid())
             {
-                ViewBag.Flash = blog.Validate();
+                ViewBag.Flash = blog.Message();
                 ViewBag.Blog = blog;
                 return View("edit");
             }

@@ -61,14 +61,14 @@
     <Compile Include="..\..\Oak\Models\ConnectionProfile.cs">
       <Link>Models\ConnectionProfile.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\DynamicModelBinder.cs">
-      <Link>Models\DynamicModelBinder.cs</Link>
-    </Compile>
     <Compile Include="..\..\Oak\Models\Massive.cs">
       <Link>Models\Massive.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Mix.cs">
       <Link>Models\Mix.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Models\ParamsModelBinder.cs">
+      <Link>Models\ParamsModelBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Query.cs">
       <Link>Models\Query.cs</Link>

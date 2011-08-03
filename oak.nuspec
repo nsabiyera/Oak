@@ -2,20 +2,20 @@
 <package> 
   <metadata> 
     <id>oak</id> 
-    <version>1.0.9</version> 
+    <version>1.1.1</version> 
     <authors>Amir Rajan</authors>
-    <description>A mini dsl for creating schema using mvc controllers.  Build your database incrementally with a dialect that maps C# to schema creation.</description> 
+    <description>Dynamic MVC hotness.  Build your schemas incrementally with Seed.cs/SeedController.cs, add behavior to your DynamicModel (Massive) entities by using Mix.cs.  Have your controller actions take in dynamic parameters using ParamsModelBinder.cs.  Dynamic data access using an altered version of Massive by Rob Conery.</description> 
     <language>en-US</language>
     <licenseUrl>http://www.github.com/amirrajan/Oak</licenseUrl>
-    <tags>database, migrations</tags>
+    <tags>dynamic mvc database migrations</tags>
   </metadata>
   <files>
     <file src="Oak/Models/ConnectionProfile.cs" target="content/Models/ConnectionProfile.cs" />
+    <file src="Oak/Models/ParamsModelBinder.cs" target="content/Models/ParamsModelBinder.cs" />
     <file src="Oak/Models/Massive.cs" target="content/Models/Massive.cs" />
     <file src="Oak/Models/Query.cs" target="content/Models/Query.cs" />
     <file src="Oak/Models/Seed.cs" target="content/Models/Seed.cs" />
     <file src="Oak/Models/Mix.cs" target="content/Models/Mix.cs" />
     <file src="Oak/Controllers/SeedController.cs" target="content/Controllers/SeedController.cs" />
-    <file src="Oak/UnityControllerFactory.txt" target="content/UnityControllerFactory.txt" />
   </files>
 </package>
