@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>pepper</id> 
+    <version>1.0.0</version> 
+    <authors>Amir Rajan</authors>
+    <description>These packages together make an excellent assistant to the development of ASP.NET MVC applications.</description> 
+    <language>en-US</language>
+    <licenseUrl>http://www.github.com/amirrajan/Oak</licenseUrl>
+    <tags>rake-dot-net oak specwatchr</tags>
+    <dependencies>
+    	<dependency id="oak" version="[0.0.0, 999.999.999]" />
+    	<dependency id="specwatchr" version="[0.0.0, 999.999.999]" />
+    	<dependency id="rake-dot-net" version="[0.0.0, 999.999.999]" />
+    </dependencies>
+  </metadata>
+</package>

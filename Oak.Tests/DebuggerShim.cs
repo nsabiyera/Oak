@@ -3,6 +3,7 @@ using NUnit.Framework;
 using NSpec.Domain;
 using System.Reflection;
 using NSpec;
+using NSpec.Domain.Formatters;
 
 namespace DynamicBlog.Tests
 {
@@ -23,7 +24,7 @@ namespace DynamicBlog.Tests
                 finder,
                 new DefaultConventions());
 
-            new ContextRunner(builder).Run();
+            new ContextRunner(builder, new ConsoleFormatter()).Run();
         }
     }
 }
