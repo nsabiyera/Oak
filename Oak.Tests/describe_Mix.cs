@@ -19,6 +19,8 @@ namespace Oak.Tests
         {
             blog = new ExpandoObject();
             blog.Title = "Some Name";
+            blog.body = "Some Body";
+            blog.BodySummary = "Body Summary";
             mix = new Mix(blog);
         }
 
@@ -26,14 +28,42 @@ namespace Oak.Tests
         {
             it["calls values for mixed entity"] = () =>
                 (mix.Title as string).should_be("Some Name");
+
+            it["calls value for mixed entity even if property's first letter doesn't match case"] = () =>
+                (mix.title as string).should_be("Some Name");
+
+            it["calls value for mixed entity even if property's first letter is capilized, but underlying property is lowercase"] = () =>
+                (mix.Body as string).should_be("Some Body");
+
+            it["ignores case for mixed entity"] = () =>
+                (mix.bodysummary as string).should_be("Body Summary");
         }
 
         void when_setting_properyt_of_mix()
         {
-            act = () => mix.Title = "Some other name";
-
             it["sets property on underlying expando"] = () =>
+            {
+                mix.Title = "Some other name";
                 (blog.Title as string).should_be("Some other name");
+            };
+
+            it["sets property of underlying expando even if property's first letter doesn't match case"] = () =>
+            {
+                mix.title = "Some other name";
+                (blog.Title as string).should_be("Some other name");
+            };
+
+            it["sets property of underlying expando even if property's first letter is capitalized, but underlying property is lowercase"] = () =>
+            {
+                mix.Body = "Some other name";
+                (blog.body as string).should_be("Some other name");
+            };
+
+            it["ignores case for mixed entity"] = () =>
+            {
+                mix.bodysummary = "Blog Summary New";
+                (blog.BodySummary as string).should_be("Blog Summary New");
+            };
         }
 
         void inherited_mixed_with_defined_methods()
