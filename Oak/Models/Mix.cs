@@ -29,8 +29,40 @@ namespace Oak
                 return true;
             }
 
+            if (dictionary.ContainsKey(Capitalized(binder.Name)))
+            {
+                result = dictionary[Capitalized(binder.Name)];
+                return true;
+            }
+
+            if (dictionary.ContainsKey(binder.Name.ToLower()))
+            {
+                result = dictionary[binder.Name.ToLower()];
+                return true;
+            }
+
+            var fuzzyMatch = Fuzzy(dictionary, binder.Name);
+
+            if (dictionary.ContainsKey(fuzzyMatch))
+            {
+                result = dictionary[fuzzyMatch];
+                return true;
+            }
+
             result = null;
             return false;
+        }
+
+        string Capitalized(string s)
+        {
+            return s[0].ToString().ToUpper() + s.Substring(1);
+        }
+
+        string Fuzzy(IDictionary<string, object> dictionary, string name)
+        {
+            foreach (var kvp in dictionary) if (kvp.Key.Equals(name, StringComparison.InvariantCultureIgnoreCase)) return kvp.Key;
+
+            return "";
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
@@ -40,6 +72,26 @@ namespace Oak
             if (dictionary.ContainsKey(binder.Name))
             {
                 dictionary[binder.Name] = value;
+                return true;
+            }
+
+            if (dictionary.ContainsKey(Capitalized(binder.Name)))
+            {
+                dictionary[Capitalized(binder.Name)] = value;
+                return true;
+            }
+
+            if (dictionary.ContainsKey(binder.Name.ToLower()))
+            {
+                dictionary[binder.Name.ToLower()] = value;
+                return true;
+            }
+
+            var fuzzyMatch = Fuzzy(dictionary, binder.Name);
+
+            if (dictionary.ContainsKey(fuzzyMatch))
+            {
+                dictionary[fuzzyMatch] = value;
                 return true;
             }
 

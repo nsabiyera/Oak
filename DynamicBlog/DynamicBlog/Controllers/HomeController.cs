@@ -42,18 +42,14 @@ namespace DynamicBlog.Controllers
         }
 
         [HttpPost]
-        public dynamic New(dynamic @params)
+        public dynamic New(dynamic form)
         {
-            var blog = new Blog(new
-            {
-                Title = @params.title,
-                Body = @params.body
-            });
+            var blog = new Blog(form);
 
             if (!blog.IsValid())
             {
                 ViewBag.Flash = blog.Message();
-                ViewBag.@params = @params;
+                ViewBag.@params = form;
                 return View();
             }
 

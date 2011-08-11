@@ -34,10 +34,22 @@ namespace Oak.Models
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            if (bindingContext.ModelName != "params")
-                return base.BindModel(controllerContext, bindingContext);
+            if(bindingContext.ModelName == "form")
+            {
+                dynamic expando = new ExpandoObject();
+                var dict = expando as IDictionary<string, object>;
+                var form = new FormCollection(controllerContext.HttpContext.Request.Form);
+                foreach (string item in form)
+                {
+                    dict.Add(item, form[item]);
+                }
 
-            return new DynamicParams(bindingContext.ValueProvider);
+                return expando;
+            }
+
+            if (bindingContext.ModelName == "params") return new DynamicParams(bindingContext.ValueProvider);
+                
+            return base.BindModel(controllerContext, bindingContext);
         }
     }
 }
