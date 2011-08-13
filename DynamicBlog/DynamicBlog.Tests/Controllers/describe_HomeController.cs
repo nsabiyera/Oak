@@ -47,7 +47,7 @@ namespace DynamicBlog.Tests.Controllers
 
         void when_creating_new_blog()
         {
-            act = () => action = homeController.New(new { title = titleToSave, body = bodyToSave });
+            act = () => action = homeController.New(new { Title = titleToSave, Body = bodyToSave });
 
             context["blog is valid"] = () =>
             {
@@ -84,8 +84,8 @@ namespace DynamicBlog.Tests.Controllers
 
                 it["returns erroneous blog so that it can be fixed"] = () =>
                 {
-                    (action.@params.title as string).should_be(titleToSave);
-                    (action.@params.body as string).should_be(bodyToSave);
+                    (action.@params.Title as string).should_be(titleToSave);
+                    (action.@params.Body as string).should_be(bodyToSave);
                 };
             };
         }
