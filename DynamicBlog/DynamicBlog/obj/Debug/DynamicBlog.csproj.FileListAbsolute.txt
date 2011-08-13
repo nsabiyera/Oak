@@ -1,5 +1,5 @@
-C:\Development\Oak\DynamicBlog\DynamicBlog\bin\DynamicBlog.dll
-C:\Development\Oak\DynamicBlog\DynamicBlog\bin\DynamicBlog.pdb
-C:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\ResolveAssemblyReference.cache
-C:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\DynamicBlog.dll
-C:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\DynamicBlog.pdb
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\DynamicBlog.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\bin\DynamicBlog.pdb
+D:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\ResolveAssemblyReference.cache
+D:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\DynamicBlog.dll
+D:\Development\Oak\DynamicBlog\DynamicBlog\obj\Debug\DynamicBlog.pdb
