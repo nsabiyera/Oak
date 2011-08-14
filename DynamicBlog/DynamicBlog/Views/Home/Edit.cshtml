@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Edit";
+    ViewBag.PageTitle = "Edit";
 }
 
 <h2>Edit</h2>
@@ -12,8 +12,8 @@
 @using (Html.BeginForm(new { action = "Update", id = ViewBag.Blog.Id } ))
 {
     @Html.Label("Title")<br />
-    @Html.TextBox("title", ViewBag.Blog.Title as string)<br />
+    @Html.TextBox("Title", Request.Form["Title"])<br />
     @Html.Label("Body")<br />
-    @Html.TextArea("body", ViewBag.Blog.Body as string)<br />
+    @Html.TextArea("Body", Request.Form["Body"])<br />
     <input type="submit" value="update blog" />
 }
