@@ -49,7 +49,6 @@ namespace DynamicBlog.Controllers
             if (!blog.IsValid())
             {
                 ViewBag.Flash = blog.Message();
-                ViewBag.@params = form;
                 return View();
             }
 

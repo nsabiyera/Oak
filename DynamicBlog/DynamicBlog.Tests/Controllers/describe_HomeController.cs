@@ -81,12 +81,6 @@ namespace DynamicBlog.Tests.Controllers
 
                 it["notifies user that title is required"] = () =>
                     (action.Flash as string).should_be("Title Required.");
-
-                it["returns erroneous blog so that it can be fixed"] = () =>
-                {
-                    (action.@params.Title as string).should_be(titleToSave);
-                    (action.@params.Body as string).should_be(bodyToSave);
-                };
             };
         }
 
