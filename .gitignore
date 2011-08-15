@@ -1,2 +1,8 @@
-*/obj/debug/*
-*/bin/debug/*
+DynamicBlog/DynamicBlog.Tests/bin/*
+DynamicBlog/DynamicBlog.Tests/obj/*
+DynamicBlog/DynamicBlog/bin/*
+DynamicBlog/DynamicBlog/obj/*
+Oak.Tests/bin/*
+Oak.Tests/obj/*
+Oak/bin/*
+Oak/obj/Debug/*
