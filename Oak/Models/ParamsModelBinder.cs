@@ -1,31 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Dynamic;
+using System.Collections.Specialized;
 
 namespace Oak.Models
 {
-    public class DynamicParams : DynamicObject
+    public class DynamicParams : Mix
     {
-        IValueProvider valueProvider;
-        public DynamicParams(IValueProvider valueProvider)
+        private IValueProvider valueProvider;
+
+        public DynamicParams(IValueProvider valueProvider, NameValueCollection form)
+            : base(form)
         {
             this.valueProvider = valueProvider;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            var found = base.TryGetMember(binder, out result);
+
+            if (found) return true;
+
             var value = valueProvider.GetValue(binder.Name);
 
-            if(value == null)
+            if (value == null)
             {
                 result = null;
                 return true;
             }
 
             result = (object)value.AttemptedValue;
+
             return true;
         }
     }
@@ -34,20 +39,7 @@ namespace Oak.Models
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            if(bindingContext.ModelName == "form")
-            {
-                dynamic expando = new ExpandoObject();
-                var dict = expando as IDictionary<string, object>;
-                var form = new FormCollection(controllerContext.HttpContext.Request.Form);
-                foreach (string item in form)
-                {
-                    dict.Add(item, form[item]);
-                }
-
-                return expando;
-            }
-
-            if (bindingContext.ModelName == "params") return new DynamicParams(bindingContext.ValueProvider);
+            if (bindingContext.ModelName == "params") return new DynamicParams(bindingContext.ValueProvider, controllerContext.HttpContext.Request.Form);
                 
             return base.BindModel(controllerContext, bindingContext);
         }

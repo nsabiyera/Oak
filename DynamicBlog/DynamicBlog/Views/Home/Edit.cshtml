@@ -9,11 +9,11 @@
     <span>Error: @ViewBag.Flash</span>
 }
 
-@using (Html.BeginForm(new { action = "Update", id = ViewBag.Blog.Id } ))
+@using (Html.BeginForm(new { action = "Update", ID = ViewBag.Blog.Id } ))
 {
     @Html.Label("Title")<br />
-    @Html.TextBox("Title", Request.Form["Title"])<br />
+    @Html.TextBox("title", ViewBag.Blog.Title as string)<br />
     @Html.Label("Body")<br />
-    @Html.TextArea("Body", Request.Form["Body"])<br />
+    @Html.TextArea("body", ViewBag.Blog.Body as string)<br />
     <input type="submit" value="update blog" />
 }
