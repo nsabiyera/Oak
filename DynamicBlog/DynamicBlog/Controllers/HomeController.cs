@@ -42,9 +42,9 @@ namespace DynamicBlog.Controllers
         }
 
         [HttpPost]
-        public dynamic New(dynamic form)
+        public dynamic New(dynamic @params)
         {
-            var blog = new Blog(form);
+            var blog = new Blog(@params);
 
             if (!blog.IsValid())
             {

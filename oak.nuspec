@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak</id> 
-    <version>1.1.2</version> 
+    <version>1.1.3</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic MVC hotness.  Build your schemas incrementally with Seed.cs/SeedController.cs, add behavior to your DynamicModel (Massive) entities by using Mix.cs.  Have your controller actions take in dynamic parameters using ParamsModelBinder.cs.  Dynamic data access using an altered version of Massive by Rob Conery.</description> 
     <language>en-US</language>
