@@ -1,9 +1,0 @@
-D:\Development\Oak\Oak.Tests\bin\Debug\Oak.Tests.dll
-D:\Development\Oak\Oak.Tests\bin\Debug\Oak.Tests.pdb
-D:\Development\Oak\Oak.Tests\bin\Debug\NSpec.dll
-D:\Development\Oak\Oak.Tests\bin\Debug\nunit.framework.dll
-D:\Development\Oak\Oak.Tests\bin\Debug\Oak.dll
-D:\Development\Oak\Oak.Tests\bin\Debug\Oak.pdb
-D:\Development\Oak\Oak.Tests\obj\Debug\ResolveAssemblyReference.cache
-D:\Development\Oak\Oak.Tests\obj\Debug\Oak.Tests.dll
-D:\Development\Oak\Oak.Tests\obj\Debug\Oak.Tests.pdb
