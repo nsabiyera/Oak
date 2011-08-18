@@ -12,8 +12,8 @@
 @using (Html.BeginForm(new { action = "New" }))
 {
     @Html.Label("Title")<br />
-    @Html.TextBox("Title", Request.Form["Title"])<br />
+    @ViewBag.Blog.Title_TextBox<br />
     @Html.Label("Body")<br />
-    @Html.TextArea("Body", Request.Form["Body"])<br />
+    @ViewBag.Blog.Body_TextBox<br />
     <input type="submit" value="insert blog" />
 }
