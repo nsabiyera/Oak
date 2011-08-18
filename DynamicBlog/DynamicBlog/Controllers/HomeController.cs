@@ -41,6 +41,16 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
+        [HttpGet]
+        public dynamic New()
+        {
+            dynamic blog = new Blog();
+
+            ViewBag.Blog = blog;
+
+            return View();
+        }
+
         [HttpPost]
         public dynamic New(dynamic @params)
         {
@@ -49,6 +59,7 @@ namespace DynamicBlog.Controllers
             if (!blog.IsValid())
             {
                 ViewBag.Flash = blog.Message();
+
                 return View();
             }
 
