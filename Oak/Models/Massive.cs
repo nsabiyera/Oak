@@ -128,18 +128,18 @@ namespace Massive
     /// <summary>
     /// A class that wraps your database table in Dynamic Funtime
     /// </summary>
-    public class DynamicModel : DynamicObject
+    public class DynamicRepository : DynamicObject
     {
         DbProviderFactory _factory;
         ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
 
-        public DynamicModel(string tableName = "", string primaryKeyField = "")
+        public DynamicRepository(string tableName = "", string primaryKeyField = "")
             : this(null, tableName, primaryKeyField)
         {
         }
 
-        public DynamicModel(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
+        public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
         {
             TableName = tableName == "" ? this.GetType().Name : tableName;
             PrimaryKeyField = string.IsNullOrEmpty(primaryKeyField) ? "Id" : primaryKeyField;

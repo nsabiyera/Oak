@@ -6,7 +6,7 @@ using Massive;
 
 namespace DynamicBlog.Models
 {
-    public class Comments : DynamicModel
+    public class Comments : DynamicRepository
     {
     }
 }
