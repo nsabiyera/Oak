@@ -131,6 +131,27 @@ namespace Oak.Tests
             };
 
         }
+
+        void working_with_parameterless_mix_that_defines_properites_in_the_constructor()
+        {
+            before = () => mix = new ParameterlessMix();
+
+            it["properties are accessible"] = () => (mix.FirstName as string).should_be("");
+
+            context["tacking on properties after the fact is allowed"] = () =>
+            {
+                act = () => mix.MixWith.NewProp = "new prop";
+
+                it["new prop is accessible"] = () => (mix.NewProp as string).should_be("new prop");
+            };
+
+            context["tacking on methods after the fact is allowed"] = () =>
+            {
+                act = () => mix.MixWith.NewProp = new Func<string, string>((s) => s.ToUpper());
+
+                it["new method is accessible"] = () => (mix.NewProp("hello") as string).should_be("HELLO");
+            };
+        }
     }
 
     public class BlogEntry : Mix
@@ -188,6 +209,15 @@ namespace Oak.Tests
             {
                 return (MixWith.Title as string).Split(' ').First();
             }
+        }
+    }
+
+    public class ParameterlessMix : Mix
+    {
+        public ParameterlessMix()
+        {
+            MixWith.FirstName = "";
+            MixWith.LastName = "";
         }
     }
 }
