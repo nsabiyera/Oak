@@ -11,6 +11,12 @@ namespace Oak
     {
         public dynamic MixWith { get; set; }
 
+        public Mix()
+            : this(new {})
+        {
+
+        }
+
         public Mix(object mixWith)
         {
             if (mixWith is ExpandoObject)

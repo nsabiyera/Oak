@@ -61,6 +61,9 @@
     <Compile Include="..\..\Oak\Models\ConnectionProfile.cs">
       <Link>Models\ConnectionProfile.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\Models\DynamicModel.cs">
+      <Link>Models\DynamicModel.cs</Link>
+    </Compile>
     <Compile Include="..\..\Oak\Models\Massive.cs">
       <Link>Models\Massive.cs</Link>
     </Compile>
@@ -84,6 +87,7 @@
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\Blogs.cs" />
     <Compile Include="Models\Comments.cs" />
+    <Compile Include="Models\DynamicForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
