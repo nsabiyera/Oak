@@ -51,7 +51,7 @@ namespace Oak
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
-            DynamicModel dynamicModel = new DynamicModel(connectionProfile, table, "Id");
+            DynamicRepository dynamicModel = new DynamicRepository(connectionProfile, table, "Id");
 
             dynamicModel.Insert(o);
         }

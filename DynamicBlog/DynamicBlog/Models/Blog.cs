@@ -4,16 +4,19 @@ using System.Linq;
 using System.Web;
 using Oak;
 using System.Web.Mvc;
+using Oak.Models;
 
 namespace DynamicBlog.Models
 {
-    public class Blog : Mix
+    public class Blog : DynamicModel
     {
         Comments comments;
 
         public Blog()
-            : base(new { title = "", body = "" })
+            : base()
         {
+            MixWith.Title = null;
+            MixWith.Body = null;
             comments = new Comments();
         }
 
@@ -74,18 +77,6 @@ namespace DynamicBlog.Models
             }
         }
 
-        public MvcHtmlString Title_TextBox
-        {
-            get
-            {
-                var tb = new TagBuilder("input");
-                tb.Attributes.Add("id", "Title");
-                tb.Attributes.Add("name", "Title");
-
-                return MvcHtmlString.Create(tb.ToString());
-            }
-        }
-
         public MvcHtmlString Title_ValidationMessage
         {
             get
@@ -101,18 +92,6 @@ namespace DynamicBlog.Models
 
                     return MvcHtmlString.Create(tb.ToString());
                 }
-            }
-        }
-
-        public MvcHtmlString Body_TextBox
-        {
-            get
-            {
-                var tb = new TagBuilder("textarea");
-                tb.Attributes.Add("id", "Body");
-                tb.Attributes.Add("name", "Body");
-
-                return MvcHtmlString.Create(tb.ToString());
             }
         }
     }

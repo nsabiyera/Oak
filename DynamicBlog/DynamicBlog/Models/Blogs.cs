@@ -7,7 +7,7 @@ using Oak;
 
 namespace DynamicBlog.Models
 {
-    public class Blogs : DynamicModel
+    public class Blogs : DynamicRepository
     {
         public Blogs()
         {
