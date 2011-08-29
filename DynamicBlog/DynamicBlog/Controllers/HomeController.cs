@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DynamicBlog.Models;
+using Massive;
 
 namespace DynamicBlog.Controllers
 {
@@ -41,6 +42,16 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
+        [HttpGet]
+        public dynamic New()
+        {
+            dynamic blog = new Blog();
+
+            ViewBag.Blog = blog;
+
+            return View();
+        }
+
         [HttpPost]
         public dynamic New(dynamic @params)
         {
@@ -49,6 +60,7 @@ namespace DynamicBlog.Controllers
             if (!blog.IsValid())
             {
                 ViewBag.Flash = blog.Message();
+
                 return View();
             }
 
