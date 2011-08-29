@@ -15,7 +15,7 @@ class GrowlNotifier
   def execute title, text, color
     return unless GrowlNotifier.growl_path
 
-    text.gsub!('"', "'")
+    text.gsub!('"', "''")
 
     text = text + "\n\n---"
 
