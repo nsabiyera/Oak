@@ -4,16 +4,20 @@
 
 <h2>Edit</h2>
 
+@{
+    dynamic form = new Oak.Models.DynamicForm(ViewBag.Blog);
+}
+
 @if (ViewBag.Flash != null)
 {
     <span>Error: @ViewBag.Flash</span>
 }
 
-@using (Html.BeginForm(new { action = "Update", ID = ViewBag.Blog.Id } ))
+@using (Html.BeginForm(new { action = "Edit", id = ViewBag.Blog.Id } ))
 {
     @Html.Label("Title")<br />
-    @Html.TextBox("title", ViewBag.Blog.Title as string)<br />
+    @OakForm.TextBox(form.Title)<br />
     @Html.Label("Body")<br />
-    @Html.TextArea("body", ViewBag.Blog.Body as string)<br />
+    @OakForm.TextArea(form.Body)<br />
     <input type="submit" value="update blog" />
 }

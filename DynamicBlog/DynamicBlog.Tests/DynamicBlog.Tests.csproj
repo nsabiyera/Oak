@@ -55,7 +55,6 @@
     <Compile Include="Controllers\describe_HomeController.cs" />
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="Models\describe_Blog.cs" />
-    <Compile Include="Models\describe_DynamicForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,7 @@
+﻿@helper TextBox(Oak.Models.ElementMetaData metaData) {
+    <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" />
+}
+
+@helper TextArea(Oak.Models.ElementMetaData metaData) {
+    <textarea id="@metaData.Id" name="@metaData.Id">@metaData.Value</textarea>
+}

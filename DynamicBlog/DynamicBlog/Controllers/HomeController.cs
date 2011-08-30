@@ -42,16 +42,6 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
-        [HttpGet]
-        public dynamic New()
-        {
-            dynamic blog = new Blog();
-
-            ViewBag.Blog = blog;
-
-            return View();
-        }
-
         [HttpPost]
         public dynamic New(dynamic @params)
         {
@@ -90,6 +80,8 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ActionName("Edit")]
         public dynamic Update(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
@@ -101,7 +93,7 @@ namespace DynamicBlog.Controllers
             {
                 ViewBag.Flash = blog.Message();
                 ViewBag.Blog = blog;
-                return View("edit");
+                return View();
             }
 
             Blogs.Save(blog);
