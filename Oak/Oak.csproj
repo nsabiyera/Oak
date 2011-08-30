@@ -67,7 +67,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ConnectionProfile.cs" />
+    <Compile Include="Models\DynamicForm.cs" />
     <Compile Include="Models\DynamicModel.cs" />
+    <Compile Include="Models\ElementMetaData.cs" />
     <Compile Include="Models\ParamsModelBinder.cs" />
     <Compile Include="Models\Massive.cs" />
     <Compile Include="Models\Mix.cs" />
@@ -86,7 +88,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="App_Code\OakForm.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

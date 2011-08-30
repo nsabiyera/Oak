@@ -13,11 +13,9 @@ namespace DynamicBlog.Models
         Comments comments;
 
         public Blog()
-            : base()
+            : this(new { Title = "", Body = "" })
         {
-            MixWith.Title = null;
-            MixWith.Body = null;
-            comments = new Comments();
+
         }
 
         public Blog(object valueType)
@@ -28,19 +26,7 @@ namespace DynamicBlog.Models
 
         public bool IsValid()
         {
-            if (!CheckTitle())
-                return false;
-
-            return true;
-
-        }
-
-        private bool CheckTitle()
-        {
-            if (string.IsNullOrEmpty(MixWith.Title))
-            {
-                return false;
-            }
+            if (string.IsNullOrEmpty(MixWith.Title)) return false;
 
             return true;
         }
@@ -74,24 +60,6 @@ namespace DynamicBlog.Models
                 if (MixWith.Body.Length > 50) return MixWith.Body.Substring(0, 50);
 
                 return MixWith.Body;
-            }
-        }
-
-        public MvcHtmlString Title_ValidationMessage
-        {
-            get
-            {
-                if (CheckTitle())
-                {
-                    return null;
-                }
-                else
-                {
-                    var tb = new TagBuilder("label");
-
-
-                    return MvcHtmlString.Create(tb.ToString());
-                }
             }
         }
     }

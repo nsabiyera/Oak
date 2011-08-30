@@ -61,8 +61,14 @@
     <Compile Include="..\..\Oak\Models\ConnectionProfile.cs">
       <Link>Models\ConnectionProfile.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\Models\DynamicForm.cs">
+      <Link>Models\DynamicForm.cs</Link>
+    </Compile>
     <Compile Include="..\..\Oak\Models\DynamicModel.cs">
       <Link>Models\DynamicModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Models\ElementMetaData.cs">
+      <Link>Models\ElementMetaData.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Massive.cs">
       <Link>Models\Massive.cs</Link>
@@ -87,7 +93,6 @@
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\Blogs.cs" />
     <Compile Include="Models\Comments.cs" />
-    <Compile Include="Models\DynamicForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\OakForm.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

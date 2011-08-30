@@ -2,10 +2,10 @@
     ViewBag.PageTitle = "New";
 }
 
-<h2>New BLOG</h2>
+<h2>New Blog</h2>
 
 @{
-    dynamic form = new DynamicBlog.Models.DynamicForm(ViewBag.Blog);
+    dynamic form = new Oak.Models.DynamicForm(new DynamicBlog.Models.Blog());
 }
 
 @if (ViewBag.Flash != null)
@@ -16,8 +16,8 @@
 @using (Html.BeginForm(new { action = "New" }))
 {
     @Html.Label("Title")<br />
-    @form.Title_TextBox <br />
+    @OakForm.TextBox(form.Title);<br />
     @Html.Label("Body") <br />
-    @form.Body_TextArea <br />
+    @OakForm.TextArea(form.Body);<br />
     <input type="submit" value="insert blog" />
 }
