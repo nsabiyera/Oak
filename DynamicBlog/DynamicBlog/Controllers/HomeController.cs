@@ -82,6 +82,7 @@ namespace DynamicBlog.Controllers
 
         [HttpPost]
         [ActionName("Edit")]
+        [ValidateInput(false)]
         public dynamic Update(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
