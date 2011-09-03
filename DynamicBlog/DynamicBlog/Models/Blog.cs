@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Oak;
+using System.Web.Mvc;
+using Oak.Models;
 
 namespace DynamicBlog.Models
 {
-    public class Blog : Mix
+    public class Blog : DynamicModel
     {
         Comments comments;
+
+        public Blog()
+            : this(new { Title = "", Body = "" })
+        {
+
+        }
 
         public Blog(object valueType)
             : base(valueType)
@@ -18,14 +26,16 @@ namespace DynamicBlog.Models
 
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(MixWith.Title);
+            if (string.IsNullOrEmpty(MixWith.Title)) return false;
+
+            return true;
         }
 
         public string Message()
         {
             if(!IsValid())
             {
-                return "Title Required.";
+                return "Invalid Blog, please correct errors and try again.";
             }
 
             return "";

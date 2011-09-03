@@ -77,10 +77,13 @@ namespace DynamicBlog.Tests.Controllers
                     bodyToSave = "some body";
                 };
                     
-                act = () => action = action.ViewBag;
+                act = () => 
+                {
+                    action = action.ViewBag;
+                };
 
-                it["notifies user that title is required"] = () =>
-                    (action.Flash as string).should_be("Title Required.");
+                it["notifies user that there were validation errors"] = () =>
+                    (action.Flash as string).should_be("Invalid Blog, please correct errors and try again.");
             };
         }
 
@@ -182,7 +185,7 @@ namespace DynamicBlog.Tests.Controllers
                     before = () => titleToSave = "";
 
                     it["returns errors stating that Title Required."] = () =>
-                        (action.ViewBag.Flash as string).should_be("Title Required.");
+                        (action.ViewBag.Flash as string).should_be("Invalid Blog, please correct errors and try again.");
 
                     it["returns blog with values that were attempted"] = () =>
                     {

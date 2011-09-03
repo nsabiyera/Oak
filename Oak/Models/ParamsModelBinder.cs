@@ -2,6 +2,8 @@
 using System.Web.Mvc;
 using System.Dynamic;
 using System.Collections.Specialized;
+using System.IO;
+using System.Web;
 
 namespace Oak.Models
 {
@@ -9,7 +11,7 @@ namespace Oak.Models
     {
         private IValueProvider valueProvider;
 
-        public DynamicParams(IValueProvider valueProvider, NameValueCollection form)
+        public DynamicParams(NameValueCollection form, IValueProvider valueProvider)
             : base(form)
         {
             this.valueProvider = valueProvider;
@@ -39,7 +41,7 @@ namespace Oak.Models
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            if (bindingContext.ModelName == "params") return new DynamicParams(bindingContext.ValueProvider, controllerContext.HttpContext.Request.Form);
+            if (bindingContext.ModelName == "params") return new DynamicParams(controllerContext.HttpContext.Request.Form, bindingContext.ValueProvider);
                 
             return base.BindModel(controllerContext, bindingContext);
         }

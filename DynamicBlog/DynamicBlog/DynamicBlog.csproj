@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\External Assemblies\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
     <Reference Include="System.Web.Helpers" />
@@ -59,22 +62,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Oak\Models\ConnectionProfile.cs">
-      <Link>Models\ConnectionProfile.cs</Link>
+      <Link>Oak\ConnectionProfile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Models\DynamicForm.cs">
+      <Link>Oak\DynamicForm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Models\DynamicModel.cs">
+      <Link>Oak\DynamicModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Models\ElementMetaData.cs">
+      <Link>Oak\ElementMetaData.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Massive.cs">
-      <Link>Models\Massive.cs</Link>
+      <Link>Oak\Massive.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Mix.cs">
-      <Link>Models\Mix.cs</Link>
+      <Link>Oak\Mix.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\ParamsModelBinder.cs">
-      <Link>Models\ParamsModelBinder.cs</Link>
+      <Link>Oak\ParamsModelBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Query.cs">
-      <Link>Models\Query.cs</Link>
+      <Link>Oak\Query.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Models\Seed.cs">
-      <Link>Models\Seed.cs</Link>
+      <Link>Oak\Seed.cs</Link>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SeedController.cs" />
@@ -104,6 +116,7 @@
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="rake-dot-net-usage.txt" />
+    <Content Include="Scripts\json2.js" />
     <Content Include="specwatchr-usage.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -147,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\OakForm.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
