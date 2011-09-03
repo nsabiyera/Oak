@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DynamicBlog.Models;
+using Massive;
 
 namespace DynamicBlog.Controllers
 {
@@ -49,6 +50,7 @@ namespace DynamicBlog.Controllers
             if (!blog.IsValid())
             {
                 ViewBag.Flash = blog.Message();
+
                 return View();
             }
 
@@ -78,6 +80,9 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ActionName("Edit")]
+        [ValidateInput(false)]
         public dynamic Update(dynamic @params)
         {
             var blog = Blogs.Single(@params.id);
@@ -89,7 +94,7 @@ namespace DynamicBlog.Controllers
             {
                 ViewBag.Flash = blog.Message();
                 ViewBag.Blog = blog;
-                return View("edit");
+                return View();
             }
 
             Blogs.Save(blog);
