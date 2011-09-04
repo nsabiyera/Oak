@@ -19,7 +19,7 @@ namespace Oak.Tests.describe_DynamicModel
 
             legalDocument.TermsOfService = true;
 
-            legalDocument.TypedOutAcceptance = "I Accept";
+            legalDocument.TypedOutAcceptance = "I Agree";
         }
 
         void validating_acceptance()
@@ -30,9 +30,11 @@ namespace Oak.Tests.describe_DynamicModel
             {
                 before = () => legalDocument.TermsOfService = true;
 
-                it["is valid"] = () => result.should_be_true();
-            };
+                it["the specific property is valid"] = () => ((bool)legalDocument.IsValid("TermsOfService")).should_be_true();
 
+                it["the object is valid"] = () => result.should_be_true();
+            };
+            
             context["terms of service is set to false"] = () =>
             {
                 before = () => legalDocument.TermsOfService = false;
@@ -40,11 +42,11 @@ namespace Oak.Tests.describe_DynamicModel
                 it["is valid"] = () => result.should_be_false();
             };
 
-            xcontext["acceptance criteria is a string match"] = () =>
+            xcontext["acceptance criteria is a string match for 'TypedOutAcceptance'"] = () =>
             {
                 context["user types out I Accept"] = () =>
                 {
-                    before = () => legalDocument.TypedOutAcceptance = "I Accept";
+                    before = () => legalDocument.TypedOutAcceptance = "I Agree";
 
                     it["is valid"] = () => result.should_be_true();
                 };
