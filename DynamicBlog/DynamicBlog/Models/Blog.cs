@@ -24,7 +24,7 @@ namespace DynamicBlog.Models
             comments = new Comments();
         }
 
-        public bool IsValid()
+        public override bool IsValid()
         {
             if (string.IsNullOrEmpty(MixWith.Title)) return false;
 
