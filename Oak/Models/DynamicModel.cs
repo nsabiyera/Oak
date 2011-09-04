@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Dynamic;
+using Massive;
 
 namespace Oak.Models
 {
@@ -10,9 +11,23 @@ namespace Oak.Models
     {
         public class Validation
         {
-            public string Property { get; set; }
-            public dynamic AdditionalArgs { get; set; }
-            public Func<dynamic, string, dynamic, bool> ValidationMethod;
+            public Validation(string property, dynamic additionalArgs, Func<dynamic, string, dynamic, bool> validationMethod)
+            {
+                Property = property;
+                AdditionalArgs = (additionalArgs as object).ToExpando();
+                ValidationMethod = validationMethod;
+            }
+
+            public string Property { get; private set; }
+
+            dynamic AdditionalArgs { get; set; }
+            
+            Func<dynamic, string, dynamic, bool> ValidationMethod;
+
+            public bool Validate(dynamic entity)
+            {
+                return ValidationMethod(entity, Property, AdditionalArgs);
+            }
         }
 
         List<Validation> validates;
@@ -49,17 +64,24 @@ namespace Oak.Models
 
             if (!dictionary.ContainsKey(property)) dictionary.Add(property, null);
 
-            validates.Add(new Validation { Property = property, ValidationMethod = validate, AdditionalArgs = additionalArgs });
+            validates.Add(new Validation(property, additionalArgs, validate));
         }
 
         public virtual bool IsValid()
         {
+            return IsValid(s => true);
+        }
+
+        public virtual bool IsValid(string property)
+        {
+            return IsValid(s => s.Property == property);
+        }
+
+        public virtual bool IsValid(Func<Validation, bool> filter)
+        {
             bool isValid = true;
 
-            foreach (var rule in validates)
-            {
-                isValid = isValid && rule.ValidationMethod(this, rule.Property, rule.AdditionalArgs);
-            }
+            foreach (var rule in validates.Where(filter)) isValid = isValid && rule.Validate(this);
 
             return isValid;
         }
