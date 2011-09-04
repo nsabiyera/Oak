@@ -4,19 +4,11 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Oak.Models;
+using Oak.Tests.describe_DynamicModel.SampleClasses;
 
-namespace Oak.Tests
+namespace Oak.Tests.describe_DynamicModel
 {
-    public class Book : DynamicModel
-    {
-        public Book()
-        {
-            Validates("Title", Presense);
-            Validates("Body", Presense);
-        }
-    }
-
-    class describe_DynamicModel : nspec
+    class presense : nspec
     {
         dynamic book;
 

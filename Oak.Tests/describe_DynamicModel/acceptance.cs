@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NSpec;
+using Oak.Tests.describe_DynamicModel.SampleClasses;
+
+namespace Oak.Tests.describe_DynamicModel
+{
+    class acceptance : nspec
+    {
+        dynamic legalDocument;
+
+        bool result;
+
+        void before_each()
+        {
+            legalDocument = new LegalDocument();
+
+            legalDocument.TermsOfService = true;
+
+            legalDocument.TypedOutAcceptance = "I Accept";
+        }
+
+        void validating_acceptance()
+        {
+            act = () => result = legalDocument.IsValid();
+
+            context["terms of service is set to true"] = () =>
+            {
+                before = () => legalDocument.TermsOfService = true;
+
+                it["is valid"] = () => result.should_be_true();
+            };
+
+            context["terms of service is set to false"] = () =>
+            {
+                before = () => legalDocument.TermsOfService = false;
+
+                it["is valid"] = () => result.should_be_false();
+            };
+
+            xcontext["acceptance criteria is a string match"] = () =>
+            {
+                context["user types out I Accept"] = () =>
+                {
+                    before = () => legalDocument.TypedOutAcceptance = "I Accept";
+
+                    it["is valid"] = () => result.should_be_true();
+                };
+            };
+        }
+    }
+}

@@ -54,6 +54,8 @@ watch('.*.\.cs$') do
 
   if(!tests_passed? results)
     @growl.execute "sad panda", "tests failed", "red"
+  else
+    @growl.execute "passed", "passed", "green"
   end
 end
 
