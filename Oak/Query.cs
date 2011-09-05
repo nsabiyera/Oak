@@ -5,9 +5,11 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using Massive;
+using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public static class Query
     {
         public static void ExecuteNonQuery(this string query, ConnectionProfile connectionProfile = null)

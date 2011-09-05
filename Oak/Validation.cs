@@ -6,9 +6,11 @@ using System.Dynamic;
 using Massive;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class Validation
     {
         public string Property { get; set; }
@@ -35,6 +37,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class Acceptance : Validation
     {
         public Acceptance()
@@ -50,6 +53,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class Confirmation : Validation
     {
         public override void Init(dynamic entity)
@@ -67,6 +71,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class Exclusion : Validation
     {
         public dynamic[] In { get; set; }
@@ -77,6 +82,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class Format : Validation
     {
         public string With { get; set; }
@@ -87,6 +93,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class Inclusion : Validation
     {
         public dynamic[] In { get; set; }
@@ -97,6 +104,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class Presense : Validation
     {
         public override void Init(dynamic entity)

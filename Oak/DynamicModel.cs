@@ -6,9 +6,11 @@ using System.Dynamic;
 using Massive;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class DynamicModel : Mix
     {
         List<dynamic> rules;
