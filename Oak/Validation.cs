@@ -19,12 +19,12 @@ namespace Oak
 
         public virtual void Init(dynamic entity) 
         {
-            if (!(entity as Mix).RespondsTo(Property)) AddDefault(entity, Property);
+            AddDefault(entity, Property);
         }
 
         public void AddDefault(dynamic entity, string property)
         {
-            (entity.MixWith as IDictionary<string, object>).Add(property, null);
+            if (!(entity as Mix).RespondsTo(property)) (entity.MixWith as IDictionary<string, object>).Add(property, null);
         }
 
         public virtual string Message()
@@ -32,6 +32,16 @@ namespace Oak
             if (!string.IsNullOrEmpty(Text)) return Text;
 
             return Property + " is invalid.";
+        }
+
+        public dynamic PropertyValueIn(dynamic entity)
+        {
+            return PropertyValueIn(Property, entity);
+        }
+
+        public dynamic PropertyValueIn(string property, dynamic entity)
+        {
+            return (entity as Mix).GetValueFor(property);
         }
     }
 
@@ -47,7 +57,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return (entity.MixWith as IDictionary<string, object>)[Property].Equals(Accept);
+            return PropertyValueIn(entity).Equals(Accept);
         }
     }
 
@@ -63,9 +73,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            var dictionary = (entity.MixWith as IDictionary<string, object>);
-
-            return dictionary[Property].Equals(dictionary[Property + "Confirmation"]);
+            return PropertyValueIn(entity).Equals(PropertyValueIn(Property + "Confirmation", entity));
         }
     }
 
@@ -76,7 +84,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return !In.Contains((entity.MixWith as IDictionary<string, object>)[Property]);
+            return !In.Contains(PropertyValueIn(entity) as object);
         }
     }
 
@@ -87,7 +95,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return Regex.IsMatch((entity.MixWith as IDictionary<string, object>)[Property] as string ?? "", With);
+            return Regex.IsMatch(PropertyValueIn(entity) as string ?? "", With);
         }
     }
 
@@ -98,7 +106,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return In.Contains((entity.MixWith as IDictionary<string, object>)[Property]);
+            return In.Contains(PropertyValueIn(entity) as object);
         }
     }
 
@@ -114,7 +122,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return !string.IsNullOrEmpty((entity as Mix).GetValueFor(Property));
+            return !string.IsNullOrEmpty(PropertyValueIn(entity));
         }
     }
 }

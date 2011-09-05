@@ -49,13 +49,13 @@ namespace Oak
             return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
-        public static void InsertInto(this object o, string table, ConnectionProfile connectionProfile = null)
+        public static object InsertInto(this object o, string table, ConnectionProfile connectionProfile = null)
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
             DynamicRepository dynamicModel = new DynamicRepository(connectionProfile, table, "Id");
 
-            dynamicModel.Insert(o);
+            return dynamicModel.Insert(o);
         }
     }
 }
