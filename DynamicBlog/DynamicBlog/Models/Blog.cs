@@ -22,7 +22,7 @@ namespace DynamicBlog.Models
         {
             comments = new Comments();
 
-            Validates(new Presense { Property = "Title" });
+            Validates(new Presense { Property = "Title", Text = "Please specify a title for this blog post." });
 
             Validates(new Presense { Property = "Body" });
         }
