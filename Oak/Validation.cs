@@ -13,6 +13,8 @@ namespace Oak
     {
         public string Property { get; set; }
 
+        public string Text { get; set; }
+
         public virtual void Init(dynamic entity) 
         {
             var dictionary = (entity.MixWith as IDictionary<string, object>);
@@ -27,7 +29,9 @@ namespace Oak
 
         public virtual string Message()
         {
-            return "";
+            if (!string.IsNullOrEmpty(Text)) return Text;
+
+            return Property + " is invalid.";
         }
     }
 
@@ -95,14 +99,16 @@ namespace Oak
 
     public class Presense : Validation
     {
+        public override void Init(dynamic entity)
+        {
+            base.Init(entity as object);
+
+            if (string.IsNullOrEmpty(Text)) Text = Property + " is required.";
+        }
+
         public bool Validate(dynamic entity)
         {
             return !string.IsNullOrEmpty((entity.MixWith as IDictionary<string, object>)[Property] as string);
-        }
-
-        public override string Message()
-        {
-            return Property + " is required.";
         }
     }
 }
