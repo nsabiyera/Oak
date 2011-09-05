@@ -24,6 +24,24 @@ namespace Oak.Tests
             mix = new Mix(blog);
         }
 
+        void describe_responds_to()
+        {
+            it["responds to property with exact casing"] = () => (mix as Mix).RespondsTo("Title").should_be_true();
+
+            it["it responds to property with case insensitive"] = () => (mix as Mix).RespondsTo("title").should_be_true();
+
+            it["it doesn't respond to property"] = () => (mix as Mix).RespondsTo("foobar").should_be_false();
+        }
+
+        void describe_get_value_for_property()
+        {
+            it["retrieves value with exact casing"] = () => ((mix as Mix).GetValueFor("Title") as string).should_be("Some Name");
+
+            it["retrieves value with exact case insensitive"] = () => ((mix as Mix).GetValueFor("title") as string).should_be("Some Name");
+
+            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This mix does not respond to the property FooBar.", () => (mix as Mix).GetValueFor("FooBar"));
+        }
+
         void when_retrieving_property_from_mix()
         {
             it["calls values for mixed entity"] = () =>
