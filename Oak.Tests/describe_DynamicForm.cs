@@ -41,7 +41,7 @@ namespace Oak.Tests
 
     class describe_DynamicForm : nspec
     {
-        dynamic dynamicForm;
+        dynamic form;
         dynamic entity;
         ElementMetaData result;
 
@@ -55,12 +55,12 @@ namespace Oak.Tests
                     Age = 10
                 };
 
-                dynamicForm = new DynamicForm(entity);
+                form = new DynamicForm(entity);
             };
 
             context["property being converted is a string"] = () =>
             {
-                act = () => result = dynamicForm.Name;
+                act = () => result = form.Name;
 
                 it["the Value property is set to the class's property value"] = () =>
                     result.Value.should_be(entity.Name as string);
@@ -71,7 +71,7 @@ namespace Oak.Tests
 
             context["property being converted is an int"] = () =>
             {
-                act = () => result = dynamicForm.Age;
+                act = () => result = form.Age;
 
                 it["the Value property is set to the class's property value"] = () =>
                     result.Value.should_be((int)entity.Age);
@@ -84,12 +84,12 @@ namespace Oak.Tests
             {
                 entity = new RegularMix("Jane Doe");
 
-                dynamicForm = new DynamicForm(entity);
+                form = new DynamicForm(entity);
             };
 
             context["property being converted is a string"] = () =>
             {
-                act = () => result = dynamicForm.Name;
+                act = () => result = form.Name;
 
                 it["the Value property is set to the mix's property value"] = () =>
                     result.Value.should_be(entity.Name as string);
@@ -102,12 +102,12 @@ namespace Oak.Tests
             {
                 entity = new NestedMix(new RegularMix("jane"));
 
-                dynamicForm = new DynamicForm(entity);
+                form = new DynamicForm(entity);
             };
 
             context["proeprty being converted is a newly defined property on top level mix"] = () =>
             {
-                act = () => result = dynamicForm.AllCaps;
+                act = () => result = form.AllCaps;
 
                 it["the Value property is set to the newly defined property value"] = () =>
                     result.Value.should_be("JANE");
@@ -116,37 +116,46 @@ namespace Oak.Tests
 
         void accessing_a_property_that_doesnt_exist_on_a_regular_class()
         {
-            before = () => dynamicForm = new DynamicForm(new RegularClass());
+            before = () => form = new DynamicForm(new RegularClass());
 
             it["throws an friendly exception"] =
-                expect<InvalidOperationException>("The entity that you passed into DynamicForm does not contain the property called LastName.", () => result = dynamicForm.LastName);
+                expect<InvalidOperationException>("The entity that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
         void accessing_a_property_that_doesnt_exist_on_a_Mix()
         {
-            before = () => dynamicForm = new DynamicForm(new RegularMix("jane"));
+            before = () => form = new DynamicForm(new RegularMix("jane"));
 
             it["throws an friendly exception"] =
-                expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = dynamicForm.LastName);
+                expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
         void concatenating_html_attributes()
         {
-            before = () =>
+            context["adding reserved attributes"] = () =>
             {
-                entity = new DynamicModel();
+                before = () =>
+                {
+                    entity = new DynamicModel();
 
-                dynamicForm = new DynamicForm(entity);
-            };
+                    form = new DynamicForm(entity);
+                };
 
-            act = () =>
-                result = dynamicForm.Title(
-                    new Dictionary<string, string>
+                act = () =>
+                    result = form.Title(
+                    new Hash
                     {
-                        { "id", "name" }
+                        { FirstInputAttribute(), "firstName" }
                     });
 
-            xit["is not null"] = () => result.should_not_be_null();
+                it["had reserved values as attributes"] = () =>
+                    result.Attributes[FirstInputAttribute()].should_be("firstName");
+            };
+        }
+
+        string FirstInputAttribute()
+        {
+            return (form as DynamicForm).InputeAttributes().First();
         }
     }
 }

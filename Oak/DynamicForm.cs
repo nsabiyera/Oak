@@ -10,16 +10,21 @@ using System.Diagnostics;
 
 namespace Oak
 {
-    [DebuggerNonUserCode]
+    public class Hash : Dictionary<string, string>
+    {
+        
+    }
+
     public class DynamicForm : DynamicObject
     {
         dynamic entity;
+
         List<string> InputAttributes;
 
         public DynamicForm(dynamic entity)
         {
             this.entity = entity;
-            InputAttributes = GetInputAttributes();
+            InputAttributes = InputeAttributes();
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -47,7 +52,7 @@ namespace Oak
 
             if(args.Count() == 1)
             {
-                var elements = args[0].ToDictionary();
+                var elements = args[0] as IDictionary<string, string>;
 
                 foreach(var kvp in elements)
                 {
@@ -89,7 +94,7 @@ namespace Oak
             return (entity as object).GetType().GetProperty(name);
         }
 
-        private List<string> GetInputAttributes()
+        public List<string> InputeAttributes()
         {
             var list = new List<string>();
 

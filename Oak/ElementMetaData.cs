@@ -7,6 +7,12 @@ namespace Oak
 {
     public class ElementMetaData
     {
+        public ElementMetaData()
+        {
+            Attributes = new Dictionary<string, string>();
+            Styles = new Dictionary<string, string>();
+        }
+
         public object Value { get; set; }
         public string Id { get; set; }
         public Dictionary<string, string> Attributes { get; set; }
