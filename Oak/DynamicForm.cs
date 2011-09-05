@@ -19,56 +19,47 @@ namespace Oak
     {
         dynamic entity;
 
-        List<string> InputAttributes;
-
         public DynamicForm(dynamic entity)
         {
             this.entity = entity;
-            InputAttributes = InputeAttributes();
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            var propertyName = binder.Name;
+            result = NewElementMetatDataFor(binder.Name);
 
-            var metaData = new ElementMetaData
-            {
-                Id = binder.Name,
-                Value = PropertyValue(binder.Name)
-            };
-
-            result = metaData;
             return true;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            var propertyName = binder.Name;
-
-            var metaData = new ElementMetaData
-            {
-                Id = binder.Name
-            };
-
-            if(args.Count() == 1)
-            {
-                var elements = args[0] as IDictionary<string, string>;
-
-                foreach(var kvp in elements)
-                {
-                    if (InputAttributes.Contains(kvp.Key)) //direct html input attribute
-                    {
-                        metaData.Attributes.Add(kvp.Key, kvp.Value.ToString());
-                    }
-                    else
-                    {
-                        metaData.Styles.Add(kvp.Key, kvp.Value.ToString());
-                    }
-                }
-            }
+            var metaData = NewElementMetatDataFor(binder.Name);
 
             result = metaData;
-            return true;//do some checking
+
+            if (args.Count() == 0) return true;
+
+            var elements = args[0] as IDictionary<string, string>;
+
+            List<string> elementAttributes = ElementAttributes();
+
+            foreach (var kvp in elements)
+            {
+                if (elementAttributes.Contains(kvp.Key)) metaData.Attributes.Add(kvp.Key, kvp.Value.ToString());
+
+                else metaData.Styles.Add(kvp.Key, kvp.Value.ToString());
+            }
+
+            return true;
+        }
+
+        private ElementMetaData NewElementMetatDataFor(string name)
+        {
+            return new ElementMetaData
+            {
+                Id = name,
+                Value = PropertyValue(name)
+            };
         }
 
         private object PropertyValue(string name)
@@ -94,7 +85,7 @@ namespace Oak
             return (entity as object).GetType().GetProperty(name);
         }
 
-        public List<string> InputeAttributes()
+        public List<string> ElementAttributes()
         {
             var list = new List<string>();
 
@@ -109,7 +100,7 @@ namespace Oak
             list.Add("size");
             list.Add("src");
             list.Add("type");
-            
+
             list.Add("accesskey");
             list.Add("class");
             list.Add("dir");

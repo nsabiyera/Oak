@@ -132,30 +132,48 @@ namespace Oak.Tests
 
         void concatenating_html_attributes()
         {
-            context["adding reserved attributes"] = () =>
+            before = () =>
             {
-                before = () =>
-                {
-                    entity = new DynamicModel();
+                entity = new DynamicModel();
 
-                    form = new DynamicForm(entity);
-                };
+                entity.MixWith.Title = "Some Title";
 
+                form = new DynamicForm(entity);
+            };
+
+            it["retains value of dynamic model"] = () => (form.Title() as ElementMetaData).Value.should_be("Some Title");
+
+            it["throws an friendly exception when constructing element meta data for a property that doesn't exist"] =
+                expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
+
+            context["adding reserved dictionary values"] = () =>
+            {
                 act = () =>
-                    result = form.Title(
-                    new Hash
+                    result = form.Title(new Hash
                     {
-                        { FirstInputAttribute(), "firstName" }
+                        { FirstElementAttribute(), "firstName" }
                     });
 
-                it["had reserved values as attributes"] = () =>
-                    result.Attributes[FirstInputAttribute()].should_be("firstName");
+                it["key value is marked as an element attribute"] = () =>
+                    result.Attributes[FirstElementAttribute()].should_be("firstName");
+            };
+
+            context["adding unreserved dictionary values"] = () =>
+            {
+                act = () =>
+                    result = form.Title(new Hash
+                    {
+                        { "background-color", "red" }
+                    });
+
+                it["key value is regarded as a style entry"] = () =>
+                    result.Styles["background-color"].should_be("red");
             };
         }
 
-        string FirstInputAttribute()
+        string FirstElementAttribute()
         {
-            return (form as DynamicForm).InputeAttributes().First();
+            return (form as DynamicForm).ElementAttributes().First();
         }
     }
 }
