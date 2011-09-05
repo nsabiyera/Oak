@@ -6,9 +6,11 @@ using System.Dynamic;
 using Massive;
 using System.Web.Mvc;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class DynamicForm : DynamicObject
     {
         dynamic entity;

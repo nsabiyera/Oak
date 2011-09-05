@@ -4,9 +4,11 @@ using System.Dynamic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Web;
+using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class DynamicParams : Mix
     {
         private IValueProvider valueProvider;
@@ -37,6 +39,7 @@ namespace Oak
         }
     }
 
+    [DebuggerNonUserCode]
     public class ParamsModelBinder : DefaultModelBinder
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)

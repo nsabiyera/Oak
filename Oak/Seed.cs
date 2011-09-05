@@ -5,9 +5,11 @@ using System.Web;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Oak.Extensions;
+using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class Seed
     {
         public virtual ConnectionProfile ConnectionProfile { get; set; }

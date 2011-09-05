@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Oak;
+using System.Diagnostics;
 
 //thank you Rob Conery for this awesome file https://github.com/robconery/massive
 
@@ -31,6 +32,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 namespace Massive
 {
+    [DebuggerNonUserCode]
     public static class ObjectExtensions
     {
         /// <summary>
@@ -128,9 +130,11 @@ namespace Massive
             return (IDictionary<string, object>)thingy.ToExpando();
         }
     }
+    
     /// <summary>
     /// A class that wraps your database table in Dynamic Funtime
     /// </summary>
+    [DebuggerNonUserCode]
     public class DynamicRepository : DynamicObject
     {
         DbProviderFactory _factory;
