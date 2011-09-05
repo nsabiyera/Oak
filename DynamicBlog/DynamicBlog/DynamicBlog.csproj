@@ -61,34 +61,34 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Oak\Models\ConnectionProfile.cs">
+    <Compile Include="..\..\Oak\ConnectionProfile.cs">
       <Link>Oak\ConnectionProfile.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\DynamicForm.cs">
+    <Compile Include="..\..\Oak\DynamicForm.cs">
       <Link>Oak\DynamicForm.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\DynamicModel.cs">
+    <Compile Include="..\..\Oak\DynamicModel.cs">
       <Link>Oak\DynamicModel.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\ElementMetaData.cs">
+    <Compile Include="..\..\Oak\ElementMetaData.cs">
       <Link>Oak\ElementMetaData.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\Massive.cs">
+    <Compile Include="..\..\Oak\Massive.cs">
       <Link>Oak\Massive.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\Mix.cs">
+    <Compile Include="..\..\Oak\Mix.cs">
       <Link>Oak\Mix.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\ParamsModelBinder.cs">
+    <Compile Include="..\..\Oak\ParamsModelBinder.cs">
       <Link>Oak\ParamsModelBinder.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\Query.cs">
+    <Compile Include="..\..\Oak\Query.cs">
       <Link>Oak\Query.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\Seed.cs">
+    <Compile Include="..\..\Oak\Seed.cs">
       <Link>Oak\Seed.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Models\Validation.cs">
+    <Compile Include="..\..\Oak\Validation.cs">
       <Link>Oak\Validation.cs</Link>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />

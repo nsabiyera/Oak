@@ -12,6 +12,9 @@ using System.Data.SqlClient;
 using Oak;
 
 //thank you Rob Conery for this awesome file https://github.com/robconery/massive
+
+//THIS IS AN ALTERED VERSION OF MASSIVE, HOOKS HAVE BEEN ADDED TO WORK WITH OAK
+
 /*
 New BSD License
 http://www.opensource.org/licenses/bsd-license.php

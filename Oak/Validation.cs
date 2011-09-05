@@ -7,7 +7,7 @@ using Massive;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace Oak.Models
+namespace Oak
 {
     public class Validation
     {
@@ -100,7 +100,7 @@ namespace Oak.Models
             return !string.IsNullOrEmpty((entity.MixWith as IDictionary<string, object>)[Property] as string);
         }
 
-        public string Message()
+        public override string Message()
         {
             return Property + " is required.";
         }
