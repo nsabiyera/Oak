@@ -29,27 +29,39 @@ namespace Oak
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            return TryGetMember(binder.Name, out result);
+        }
+
+        public bool RespondsTo(string property)
+        {
+            object result = null;
+
+            return TryGetMember(property, out result);
+        }
+
+        public bool TryGetMember(string name, out object result)
+        {
             var dictionary = MixWith as IDictionary<string, object>;
 
-            if (dictionary.ContainsKey(binder.Name))
+            if (dictionary.ContainsKey(name))
             {
-                result = dictionary[binder.Name];
+                result = dictionary[name];
                 return true;
             }
 
-            if (dictionary.ContainsKey(Capitalized(binder.Name)))
+            if (dictionary.ContainsKey(Capitalized(name)))
             {
-                result = dictionary[Capitalized(binder.Name)];
+                result = dictionary[Capitalized(name)];
                 return true;
             }
 
-            if (dictionary.ContainsKey(binder.Name.ToLower()))
+            if (dictionary.ContainsKey(name.ToLower()))
             {
-                result = dictionary[binder.Name.ToLower()];
+                result = dictionary[name.ToLower()];
                 return true;
             }
 
-            var fuzzyMatch = Fuzzy(dictionary, binder.Name);
+            var fuzzyMatch = Fuzzy(dictionary, name);
 
             if (dictionary.ContainsKey(fuzzyMatch))
             {
@@ -59,6 +71,15 @@ namespace Oak
 
             result = null;
             return false;
+        }
+
+        public dynamic GetValueFor(string property)
+        {
+            object result = null;
+
+            if (TryGetMember(property, out result)) return result;
+
+            throw new InvalidOperationException("This mix does not respond to the property " + property + ".");
         }
 
         string Capitalized(string s)

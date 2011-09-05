@@ -19,9 +19,7 @@ namespace Oak
 
         public virtual void Init(dynamic entity) 
         {
-            var dictionary = (entity.MixWith as IDictionary<string, object>);
-
-            if (!dictionary.ContainsKey(Property)) AddDefault(entity, Property);
+            if (!(entity as Mix).RespondsTo(Property)) AddDefault(entity, Property);
         }
 
         public void AddDefault(dynamic entity, string property)
@@ -116,7 +114,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return !string.IsNullOrEmpty((entity.MixWith as IDictionary<string, object>)[Property] as string);
+            return !string.IsNullOrEmpty((entity as Mix).GetValueFor(Property));
         }
     }
 }

@@ -50,7 +50,7 @@
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
     <Compile Include="describe_DynamicModel\acceptance.cs" />
-    <Compile Include="describe_DynamicModel\errors.cs" />
+    <Compile Include="describe_DynamicModel\core_validation.cs" />
     <Compile Include="describe_DynamicModel\exclusion.cs" />
     <Compile Include="describe_DynamicModel\inclusion.cs" />
     <Compile Include="describe_DynamicModel\SampleClasses\Book.cs" />
