@@ -32,7 +32,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 namespace Massive
 {
-    [DebuggerNonUserCode]
+    
     public static class ObjectExtensions
     {
         /// <summary>
@@ -134,7 +134,6 @@ namespace Massive
     /// <summary>
     /// A class that wraps your database table in Dynamic Funtime
     /// </summary>
-    [DebuggerNonUserCode]
     public class DynamicRepository : DynamicObject
     {
         DbProviderFactory _factory;
