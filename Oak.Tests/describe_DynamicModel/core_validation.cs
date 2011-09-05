@@ -64,12 +64,9 @@ namespace Oak.Tests.describe_DynamicModel
         {
             act = () => isValid = book.IsValid();
 
-            context["setting the title with a lower case T"] = () =>
+            context["setting the title with a lower case T and body with lower case b"] = () =>
             {
-                before = () =>
-                {
-                    book = new Book(new { title = "Title", body = "Body" });
-                };
+                before = () => book = new Book(new { title = "Title", body = "Body" });
 
                 it["is still valid"] = () => isValid.should_be_true();
             };
