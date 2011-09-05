@@ -52,7 +52,9 @@
     <Compile Include="describe_DynamicModel\acceptance.cs" />
     <Compile Include="describe_DynamicModel\SampleClasses\Book.cs" />
     <Compile Include="describe_DynamicModel\presense.cs" />
+    <Compile Include="describe_DynamicModel\confirmation.cs" />
     <Compile Include="describe_DynamicModel\SampleClasses\LegalDocument.cs" />
+    <Compile Include="describe_DynamicModel\SampleClasses\Registration.cs" />
     <Compile Include="describe_Mix.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
