@@ -18,7 +18,7 @@ namespace Oak.Tests
         public RegularMix(string name)
             : base(new { Name = name })
         {
-            
+
         }
     }
 
@@ -129,6 +129,28 @@ namespace Oak.Tests
 
             it["throws an friendly exception"] =
                 expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = dynamicForm.LastName);
+        }
+
+        void concatenating_html_attributes()
+        {
+            before = () =>
+            {
+                entity = new DynamicModel();
+
+                dynamicForm = new DynamicForm(entity);
+            };
+
+            act = () =>
+            {
+                result = dynamicForm.Title(new Dictionary<string, string>
+                                            {
+                                                {"id", "name" }
+                                            });
+            };
+
+            result.should_not_be_null();
+
+
         }
     }
 }
