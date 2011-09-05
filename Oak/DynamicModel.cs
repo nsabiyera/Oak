@@ -7,11 +7,12 @@ using Massive;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace Oak.Models
+namespace Oak
 {
     public class DynamicModel : Mix
     {
         List<dynamic> rules;
+
         List<KeyValuePair<string, string>> errors;
 
         public DynamicModel()
@@ -24,6 +25,7 @@ namespace Oak.Models
             : base(value)
         {
             rules = new List<dynamic>();
+
             errors = new List<KeyValuePair<string, string>>();
         }
 
@@ -65,18 +67,13 @@ namespace Oak.Models
             return isValid;
         }
 
-        public bool Validate(dynamic rule)
+        private bool Validate(dynamic rule)
         {
             bool isValid = rule.Validate(this);
 
             if(!isValid) AddError(rule.Property, rule.Message());
 
             return isValid;
-        }
-
-        bool RespondsTo(object entity, string method)
-        {
-            return entity.GetType().GetMethod(method) != null;
         }
 
         public string FirstError()

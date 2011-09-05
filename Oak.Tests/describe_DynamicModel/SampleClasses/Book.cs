@@ -1,5 +1,4 @@
 using System;
-using Oak.Models;
 
 namespace Oak.Tests.describe_DynamicModel.SampleClasses
 {

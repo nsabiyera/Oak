@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Oak.Controllers;
-using Oak.Models;
+using Oak;
 using System.Linq;
 
 namespace DynamicBlog

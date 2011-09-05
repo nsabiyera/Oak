@@ -16,8 +16,9 @@
 @using (Html.BeginForm(new { action = "New" }))
 {
     @Html.Label("Title")<br />
-    @OakForm.TextBox(form.Title);<br />
+    
+    @OakForm.TextBox(form.Title)<br />
     @Html.Label("Body") <br />
-    @OakForm.TextArea(form.Body);<br />
+    @OakForm.TextArea(form.Body)<br />
     <input type="submit" value="insert blog" />
 }

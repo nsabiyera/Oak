@@ -11,6 +11,7 @@ namespace DynamicBlog.Tests.Models
     {
         dynamic blog;
         string summary;
+        bool isValid;
 
         void describe_summary()
         {
@@ -35,6 +36,44 @@ namespace DynamicBlog.Tests.Models
                 before = () => GivenBlog(withBody: "01234567890123456789012345678901234567890123456789OVER50");
 
                 it["returns the first 50 characters"] = () => summary.should_be("01234567890123456789012345678901234567890123456789");
+            };
+        }
+
+        void blog_validation()
+        {
+            act = () => isValid = blog.IsValid();
+
+            context["title and body are provided"] = () =>
+            {
+                before = () =>
+                {
+                    blog.Title = "Title";
+                    blog.Body = "Body";
+                };
+
+                it["is valid"] = () => isValid.should_be_true();
+            };
+
+            context["only title is provided"] = () =>
+            {
+                before = () =>
+                {
+                    blog.Title = "Title";
+                    blog.Body = string.Empty;
+                };
+
+                it["is invalid"] = () => isValid.should_be_false();
+            };
+
+            context["only body is provided"] = () =>
+            {
+                before = () =>
+                {
+                    blog.Title = string.Empty;
+                    blog.Body = "Body";
+                };
+
+                it["is invalid"] = () => isValid.should_be_false();
             };
         }
 

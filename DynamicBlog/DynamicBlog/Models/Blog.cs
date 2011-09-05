@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using Oak;
 using System.Web.Mvc;
-using Oak.Models;
 
 namespace DynamicBlog.Models
 {
@@ -13,7 +12,7 @@ namespace DynamicBlog.Models
         Comments comments;
 
         public Blog()
-            : this(new { Title = "", Body = "" })
+            : this(new { })
         {
 
         }
@@ -24,16 +23,8 @@ namespace DynamicBlog.Models
             comments = new Comments();
 
             Validates(new Presense { Property = "Title" });
-        }
 
-        public string FirstError()
-        {
-            if(!IsValid())
-            {
-                return "Invalid Blog, please correct errors and try again.";
-            }
-
-            return "";
+            Validates(new Presense { Property = "Body" });
         }
 
         public void AddComment(string comment)
@@ -43,7 +34,7 @@ namespace DynamicBlog.Models
 
         public List<dynamic> Comments()
         {
-            return (comments.All("BlogId = @0", "", 0, "*", MixWith.Id) as IEnumerable<dynamic>).ToList();
+            return comments.All("BlogId = @0", args: new[] { MixWith.Id }).ToList();
         }
 
         public string Summary
