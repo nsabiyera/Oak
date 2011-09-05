@@ -6,11 +6,11 @@ using Oak.Models;
 
 namespace Oak.Tests.describe_DynamicModel.SampleClasses
 {
-    public class Registration : DynamicModel
+    public class Product : DynamicModel
     {
-        public Registration()
+        public Product()
         {
-            Validates(new Exclusion { Property = "UserName", In = new[] { "admin", "administrator" } });
+            Validates(new Format { Property = "Code", With = @"\A[a-zA-z]+\z" });
         }
     }
 }

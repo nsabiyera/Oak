@@ -7,8 +7,8 @@ namespace Oak.Tests.describe_DynamicModel.SampleClasses
     {
         public LegalDocument()
         {
-            Validates("TermsOfService", Acceptance);
-            Validates("TypedOutAcceptance", Acceptance, new { accept = "I Agree" });
+            Validates(new Acceptance { Property = "TermsOfService" });
+            Validates(new Acceptance { Property = "TypedOutAcceptance", Accept = "I Agree" });
         }
     }
 }
