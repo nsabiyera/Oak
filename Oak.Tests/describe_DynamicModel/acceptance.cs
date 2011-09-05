@@ -13,6 +13,8 @@ namespace Oak.Tests.describe_DynamicModel
 
         bool isValid;
 
+        string error;
+
         void before_each()
         {
             legalDocument = new LegalDocument();
@@ -50,6 +52,31 @@ namespace Oak.Tests.describe_DynamicModel
 
                     it["is valid"] = () => isValid.should_be_true();
                 };
+            };
+        }
+
+        void error_message()
+        {
+            act = () =>
+            {
+                legalDocument.IsValid();
+
+                error = legalDocument.FirstError();
+            };
+
+            context["Terms of service has default error message and has not been accepted."] = () =>
+            {
+                before = () => legalDocument.TermsOfService = false;
+
+                it["error message reads 'TermsOfService is invalid.'"] = () => error.should_be("TermsOfService is invalid.");
+            };
+
+            context["Typed out acceptances has customized error message and is not valid"] = () =>
+            {
+                before = () => legalDocument.TypedOutAcceptance = "I disagree";
+
+                it["error message reads 'You have not typed out the acceptence. Type I Accept.'"] = () =>
+                    error.should_be("You have not typed out the acceptance. Type I Accept.");
             };
         }
     }
