@@ -35,6 +35,13 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["is valid"] = () => isValid.should_be_true();
             };
+
+            context["product code is null"] = () =>
+            {
+                before = () => product.Code = default(string);
+
+                it["is invalid"] = () => isValid.should_be_false();
+            };
         }
     }
 }
