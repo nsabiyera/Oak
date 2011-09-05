@@ -42,7 +42,7 @@ namespace Oak.Tests.describe_DynamicModel
                 it["is valid"] = () => result.should_be_false();
             };
 
-            xcontext["acceptance criteria is a string match for 'TypedOutAcceptance'"] = () =>
+            context["acceptance criteria is a string match for 'TypedOutAcceptance'"] = () =>
             {
                 context["user types out I Accept"] = () =>
                 {

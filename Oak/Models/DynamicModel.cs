@@ -21,7 +21,7 @@ namespace Oak.Models
             public string Property { get; private set; }
 
             dynamic AdditionalArgs { get; set; }
-            
+
             Func<dynamic, string, dynamic, bool> ValidationMethod;
 
             public bool Validate(dynamic entity)
@@ -55,6 +55,8 @@ namespace Oak.Models
 
             if (validate == Acceptance) defaultArgs = new { accept = true };
 
+            if (validate == Confirmation) AddDefault(property + "Confirmation");
+
             Validates(property, validate, defaultArgs);
         }
 
@@ -62,9 +64,14 @@ namespace Oak.Models
         {
             var dictionary = (MixWith as IDictionary<string, object>);
 
-            if (!dictionary.ContainsKey(property)) dictionary.Add(property, null);
+            if (!dictionary.ContainsKey(property)) AddDefault(property);
 
             validates.Add(new Validation(property, additionalArgs, validate));
+        }
+
+        private void AddDefault(string property)
+        {
+            (MixWith as IDictionary<string, object>).Add(property, null);
         }
 
         public virtual bool IsValid()
@@ -98,6 +105,13 @@ namespace Oak.Models
             var dictionary = (entity.MixWith as IDictionary<string, object>);
 
             return dictionary[property].Equals(additionalArgs.accept);
+        };
+
+        protected Func<dynamic, string, dynamic, bool> Confirmation = (entity, property, additionalArgs) =>
+        {
+            var dictionary = (entity.MixWith as IDictionary<string, object>);
+
+            return dictionary[property].Equals(dictionary[property + "Confirmation"]);
         };
     }
 }
