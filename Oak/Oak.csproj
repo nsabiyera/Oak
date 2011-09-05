@@ -72,6 +72,8 @@
     <Compile Include="Models\ConnectionProfile.cs" />
     <Compile Include="Models\DynamicForm.cs" />
     <Compile Include="Models\DynamicModel.cs" />
+    <Compile Include="Models\Format.cs" />
+    <Compile Include="Models\Validation.cs" />
     <Compile Include="Models\ElementMetaData.cs" />
     <Compile Include="Models\ParamsModelBinder.cs" />
     <Compile Include="Models\Massive.cs" />

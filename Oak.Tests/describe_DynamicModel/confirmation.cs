@@ -9,43 +9,42 @@ namespace Oak.Tests.describe_DynamicModel
 {
     class confirmation : nspec
     {
-        dynamic registration;
+        dynamic person;
 
-        bool result;
+        bool isValid;
 
         void before_each()
         {
-            registration = new Registration();
+            person = new Person();
 
-            registration.Email = "user@example.com";
-            registration.Password = "Password";
-            registration.PasswordConfirmation = "Password";
+            person.Email = "user@example.com";
+            person.EmailConfirmation = "user@example.com";
         }
 
         void confirming_password_is_entered()
         {
-            act = () => result = registration.IsValid();
+            act = () => isValid = person.IsValid();
 
-            context["given passwords match"] = () =>
+            context["given emails match"] = () =>
             {
                 before = () =>
                 {
-                    registration.Password = "Password";
-                    registration.PasswordConfirmation = "Password";
+                    person.Email = "user@example.com";
+                    person.EmailConfirmation = "user@example.com";
                 };
 
-                it["is valid"] = () => result.should_be_true();
+                it["is valid"] = () => isValid.should_be_true();
             };
 
-            context["given passwords do not match"] = () =>
+            context["given emails do not match"] = () =>
             {
                 before = () =>
                 {
-                    registration.Password = "Password";
-                    registration.PasswordConfirmation = "password";
+                    person.Email = "user@example.com";
+                    person.EmailConfirmation = "dd";
                 };
 
-                it["is invalid"] = () => result.should_be_false();
+                it["is invalid"] = () => isValid.should_be_false();
             };
         }
     }

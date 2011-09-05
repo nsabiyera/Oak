@@ -88,6 +88,9 @@
     <Compile Include="..\..\Oak\Models\Seed.cs">
       <Link>Oak\Seed.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\Models\Validation.cs">
+      <Link>Oak\Validation.cs</Link>
+    </Compile>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="Global.asax.cs">

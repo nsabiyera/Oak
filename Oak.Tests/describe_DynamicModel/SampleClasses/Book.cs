@@ -7,8 +7,8 @@ namespace Oak.Tests.describe_DynamicModel.SampleClasses
     {
         public Book()
         {
-            Validates("Title", Presense);
-            Validates("Body", Presense);
+            Validates(new Presense { Property = "Title" });
+            Validates(new Presense { Property = "Body" });
         }
     }
 }
