@@ -11,7 +11,8 @@ namespace Oak.Models
 {
     public class DynamicModel : Mix
     {
-        List<dynamic> validates;
+        List<dynamic> rules;
+        List<KeyValuePair<string, string>> errors;
 
         public DynamicModel()
             : this(new { })
@@ -22,19 +23,25 @@ namespace Oak.Models
         public DynamicModel(object value)
             : base(value)
         {
-            validates = new List<dynamic>();
+            rules = new List<dynamic>();
+            errors = new List<KeyValuePair<string, string>>();
         }
 
-        public Dictionary<string, List<string>> Errors()
+        public void AddError(string property, string message)
         {
-            return null;
+            errors.Add(new KeyValuePair<string, string>(property, message));
+        }
+
+        public List<KeyValuePair<string, string>> Errors()
+        {
+            return errors;
         }
 
         public void Validates(dynamic validate)
         {
             validate.Init(this);
 
-            validates.Add(validate);
+            rules.Add(validate);
         }
 
         public virtual bool IsValid()
@@ -49,9 +56,20 @@ namespace Oak.Models
 
         public virtual bool IsValid(Func<dynamic, bool> filter)
         {
+            errors.Clear();
+
             bool isValid = true;
 
-            foreach (var rule in validates.Where(filter)) isValid = isValid && rule.Validate(this);
+            foreach (var rule in rules.Where(filter)) isValid = Validate(rule) && isValid;
+
+            return isValid;
+        }
+
+        public bool Validate(dynamic rule)
+        {
+            bool isValid = rule.Validate(this);
+
+            if(!isValid) AddError(rule.Property, rule.Message());
 
             return isValid;
         }
@@ -59,6 +77,11 @@ namespace Oak.Models
         bool RespondsTo(object entity, string method)
         {
             return entity.GetType().GetMethod(method) != null;
+        }
+
+        public string FirstError()
+        {
+            return errors.First().Value;
         }
     }
 }

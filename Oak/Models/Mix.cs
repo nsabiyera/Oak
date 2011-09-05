@@ -8,6 +8,7 @@ using System.Diagnostics;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class Mix : DynamicObject
     {
         public dynamic MixWith { get; set; }
