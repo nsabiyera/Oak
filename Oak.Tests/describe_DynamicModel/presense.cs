@@ -46,6 +46,20 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["is valid"] = () => isValid.should_be_true();
             };
+
+            context["book is initialized with title and body are both set to default(string)"] = () =>
+            {
+                before = () =>
+                {
+                    book = new Book(new 
+                    { 
+                        Title = default(string), 
+                        Body = default(string)
+                    });
+                };
+
+                it["is invalid"] = () => isValid.should_be_false();
+            };
         }
     }
 }

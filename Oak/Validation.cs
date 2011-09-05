@@ -89,7 +89,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return Regex.IsMatch((entity.MixWith as IDictionary<string, object>)[Property] as string, With);
+            return Regex.IsMatch((entity.MixWith as IDictionary<string, object>)[Property] as string ?? "", With);
         }
     }
 
