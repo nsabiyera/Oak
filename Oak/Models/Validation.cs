@@ -24,6 +24,11 @@ namespace Oak.Models
         {
             (entity.MixWith as IDictionary<string, object>).Add(property, null);
         }
+
+        public virtual string Message()
+        {
+            return "";
+        }
     }
 
     public class Acceptance : Validation
@@ -93,6 +98,11 @@ namespace Oak.Models
         public bool Validate(dynamic entity)
         {
             return !string.IsNullOrEmpty((entity.MixWith as IDictionary<string, object>)[Property] as string);
+        }
+
+        public string Message()
+        {
+            return Property + " is required.";
         }
     }
 }

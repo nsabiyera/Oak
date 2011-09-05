@@ -49,7 +49,7 @@ namespace DynamicBlog.Controllers
 
             if (!blog.IsValid())
             {
-                ViewBag.Flash = blog.Message();
+                ViewBag.Flash = blog.FirstError();
 
                 return View();
             }
@@ -92,7 +92,7 @@ namespace DynamicBlog.Controllers
 
             if(!blog.IsValid())
             {
-                ViewBag.Flash = blog.Message();
+                ViewBag.Flash = blog.FirstError();
                 ViewBag.Blog = blog;
                 return View();
             }

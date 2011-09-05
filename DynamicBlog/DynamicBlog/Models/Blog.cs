@@ -22,16 +22,11 @@ namespace DynamicBlog.Models
             : base(valueType)
         {
             comments = new Comments();
+
+            Validates(new Presense { Property = "Title" });
         }
 
-        public override bool IsValid()
-        {
-            if (string.IsNullOrEmpty(MixWith.Title)) return false;
-
-            return true;
-        }
-
-        public string Message()
+        public string FirstError()
         {
             if(!IsValid())
             {

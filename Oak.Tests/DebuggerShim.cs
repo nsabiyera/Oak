@@ -13,7 +13,7 @@ namespace DynamicBlog.Tests
         [Test]
         public void debug()
         {
-            var testClassYouWantToDebug = "acceptance";
+            var testClassYouWantToDebug = "errors";
 
             var finder = new SpecFinder(
                 Assembly.GetExecutingAssembly().Location,
