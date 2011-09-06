@@ -21,25 +21,25 @@ namespace Oak.Tests
             blog.Title = "Some Name";
             blog.body = "Some Body";
             blog.BodySummary = "Body Summary";
-            mix = new Mix(blog);
+            mix = new Prototype(blog);
         }
 
         void describe_responds_to()
         {
-            it["responds to property with exact casing"] = () => (mix as Mix).RespondsTo("Title").should_be_true();
+            it["responds to property with exact casing"] = () => (mix as Prototype).RespondsTo("Title").should_be_true();
 
-            it["it responds to property with case insensitive"] = () => (mix as Mix).RespondsTo("title").should_be_true();
+            it["it responds to property with case insensitive"] = () => (mix as Prototype).RespondsTo("title").should_be_true();
 
-            it["it doesn't respond to property"] = () => (mix as Mix).RespondsTo("foobar").should_be_false();
+            it["it doesn't respond to property"] = () => (mix as Prototype).RespondsTo("foobar").should_be_false();
         }
 
         void describe_get_value_for_property()
         {
-            it["retrieves value with exact casing"] = () => ((mix as Mix).GetValueFor("Title") as string).should_be("Some Name");
+            it["retrieves value with exact casing"] = () => ((mix as Prototype).GetValueFor("Title") as string).should_be("Some Name");
 
-            it["retrieves value with exact case insensitive"] = () => ((mix as Mix).GetValueFor("title") as string).should_be("Some Name");
+            it["retrieves value with exact case insensitive"] = () => ((mix as Prototype).GetValueFor("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This mix does not respond to the property FooBar.", () => (mix as Mix).GetValueFor("FooBar"));
+            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This mix does not respond to the property FooBar.", () => (mix as Prototype).GetValueFor("FooBar"));
         }
 
         void when_retrieving_property_from_mix()
@@ -158,31 +158,31 @@ namespace Oak.Tests
 
             context["tacking on properties after the fact is allowed"] = () =>
             {
-                act = () => mix.MixWith.NewProp = "new prop";
+                act = () => mix.Expando.NewProp = "new prop";
 
                 it["new prop is accessible"] = () => (mix.NewProp as string).should_be("new prop");
             };
 
             context["tacking on methods after the fact is allowed"] = () =>
             {
-                act = () => mix.MixWith.NewProp = new Func<string, string>((s) => s.ToUpper());
+                act = () => mix.Expando.NewProp = new Func<string, string>((s) => s.ToUpper());
 
                 it["new method is accessible"] = () => (mix.NewProp("hello") as string).should_be("HELLO");
             };
         }
     }
 
-    public class BlogEntry : Mix
+    public class BlogEntry : Prototype
     {
-        public BlogEntry(object mixWith)
-            : base(mixWith)
+        public BlogEntry(object o)
+            : base(o)
         {
 
         }
 
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(MixWith.Title);
+            return !string.IsNullOrEmpty(Expando.Title);
         }
 
         public string Body
@@ -196,46 +196,46 @@ namespace Oak.Tests
 
     public class InheritedInheritedMix : InheritedMix
     {
-        public InheritedInheritedMix(object mixWith)
-            : base(mixWith)
+        public InheritedInheritedMix(object o)
+            : base(o)
     	{
     				
     	}
 
         public string LastLetter()
         {
-            return (MixWith.Title as string).Last().ToString();
+            return (Expando.Title as string).Last().ToString();
         }
     }
 
-    public class InheritedMix : Mix
+    public class InheritedMix : Prototype
     {
-        public InheritedMix(object mixWith)
-            : base(mixWith)
+        public InheritedMix(object o)
+            : base(o)
         {
 
         }
 
         public string FirstLetter()
         {
-            return (MixWith.Title as string).First().ToString();
+            return (Expando.Title as string).First().ToString();
         }
 
         public string FirstName
         {
             get
             {
-                return (MixWith.Title as string).Split(' ').First();
+                return (Expando.Title as string).Split(' ').First();
             }
         }
     }
 
-    public class ParameterlessMix : Mix
+    public class ParameterlessMix : Prototype
     {
         public ParameterlessMix()
         {
-            MixWith.FirstName = "";
-            MixWith.LastName = "";
+            Expando.FirstName = "";
+            Expando.LastName = "";
         }
     }
 }

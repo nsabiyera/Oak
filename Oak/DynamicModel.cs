@@ -11,11 +11,13 @@ using System.Diagnostics;
 namespace Oak
 {
     [DebuggerNonUserCode]
-    public class DynamicModel : Mix
+    public class DynamicModel : Prototype
     {
         List<dynamic> rules;
 
         List<KeyValuePair<string, string>> errors;
+
+        public dynamic Virtual { get; set; }
 
         public DynamicModel()
             : this(new { })
@@ -29,6 +31,8 @@ namespace Oak
             rules = new List<dynamic>();
 
             errors = new List<KeyValuePair<string, string>>();
+
+            Virtual = new Prototype();
         }
 
         public void AddError(string property, string message)
@@ -81,6 +85,52 @@ namespace Oak
         public string FirstError()
         {
             return errors.First().Value;
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            if ((Virtual as Prototype).RespondsTo(binder.Name))
+            {
+                result = (Virtual as Prototype).GetValueFor(binder.Name);
+
+                return true;
+            }
+
+            return base.TryGetMember(binder, out result);
+        }
+
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            if ((Virtual as Prototype).RespondsTo(binder.Name))
+            {
+                (Virtual as Prototype).SetValueFor(binder.Name, value);
+
+                return true;
+            }
+
+            return base.TrySetMember(binder, value);
+        }
+
+        public override dynamic GetValueFor(string property)
+        {
+            if ((Virtual as Prototype).RespondsTo(property))
+            {
+                (Virtual as Prototype).GetValueFor(property);
+            }
+
+            return base.GetValueFor(property);
+        }
+
+        public override void SetValueFor(string property, object value)
+        {
+            if((Virtual as Prototype).RespondsTo(property))
+            {
+                (Virtual as Prototype).SetValueFor(property, value);
+
+                return;
+            }
+
+            base.SetValueFor(property, value);
         }
     }
 }

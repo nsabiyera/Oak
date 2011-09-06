@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace Oak
 {
     [DebuggerNonUserCode]
-    public class DynamicParams : Mix
+    public class DynamicParams : Prototype
     {
         private IValueProvider valueProvider;
 

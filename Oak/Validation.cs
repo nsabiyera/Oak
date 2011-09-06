@@ -24,7 +24,14 @@ namespace Oak
 
         public void AddDefault(dynamic entity, string property)
         {
-            if (!(entity as Mix).RespondsTo(property)) (entity.MixWith as IDictionary<string, object>).Add(property, null);
+            if (!(entity as Prototype).RespondsTo(property)) (entity.Expando as IDictionary<string, object>).Add(property, null);
+        }
+
+        public void AddVirtual(dynamic entity, string property)
+        {
+            dynamic virtualPrototype = (entity as DynamicModel).Virtual;
+
+            AddDefault(virtualPrototype, property);
         }
 
         public virtual string Message()
@@ -41,7 +48,7 @@ namespace Oak
 
         public dynamic PropertyValueIn(string property, dynamic entity)
         {
-            return (entity as Mix).GetValueFor(property);
+            return (entity as Prototype).GetValueFor(property);
         }
     }
 
@@ -68,12 +75,12 @@ namespace Oak
         {
             base.Init(entity as object);
 
-            AddDefault(entity, Property + "Confirmation");
+            AddVirtual(entity, Property + "Confirmation");
         }
 
         public bool Validate(dynamic entity)
         {
-            return PropertyValueIn(entity).Equals(PropertyValueIn(Property + "Confirmation", entity));
+            return PropertyValueIn(entity) == PropertyValueIn(Property + "Confirmation", entity);
         }
     }
 

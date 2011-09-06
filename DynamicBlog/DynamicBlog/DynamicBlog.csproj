@@ -76,11 +76,11 @@
     <Compile Include="..\..\Oak\Massive.cs">
       <Link>Oak\Massive.cs</Link>
     </Compile>
-    <Compile Include="..\..\Oak\Mix.cs">
-      <Link>Oak\Mix.cs</Link>
-    </Compile>
     <Compile Include="..\..\Oak\ParamsModelBinder.cs">
       <Link>Oak\ParamsModelBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Prototype.cs">
+      <Link>Oak\Prototype.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Query.cs">
       <Link>Oak\Query.cs</Link>
