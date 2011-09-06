@@ -12,7 +12,7 @@ namespace Oak.Tests
         public int Age { get; set; }
     }
 
-    class RegularMix : Mix
+    class RegularMix : Prototype
     {
         public RegularMix(string name)
             : base(new { Name = name })
@@ -21,10 +21,10 @@ namespace Oak.Tests
         }
     }
 
-    class NestedMix : Mix
+    class NestedMix : Prototype
     {
-        public NestedMix(object mixWith)
-            : base(mixWith)
+        public NestedMix(object o)
+            : base(o)
         {
 
         }
@@ -33,7 +33,7 @@ namespace Oak.Tests
         {
             get
             {
-                return (MixWith.Name as string).ToUpper();
+                return (Expando.Name as string).ToUpper();
             }
         }
     }
@@ -136,7 +136,7 @@ namespace Oak.Tests
             {
                 entity = new DynamicModel();
 
-                entity.MixWith.Title = "Some Title";
+                entity.Expando.Title = "Some Title";
 
                 form = new DynamicForm(entity);
             };

@@ -68,9 +68,9 @@ namespace Oak
 
             if (property != null) return property.GetValue(entity as object, null);
 
-            if (entity is Mix)
+            if (entity is Prototype)
             {
-                var underlyingValues = entity.MixWith as IDictionary<string, object>;
+                var underlyingValues = entity.Expando as IDictionary<string, object>;
 
                 if (!underlyingValues.ContainsKey(name)) throw new InvalidOperationException("The Mix that you passed into DynamicForm does not contain the property called " + name + ".");
 

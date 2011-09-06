@@ -46,6 +46,13 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["is invalid"] = () => isValid.should_be_false();
             };
+
+            it["the confirmation property is not considered for persistance, but is still accessible"] = () =>
+            {
+                (person.EmailConfirmation as string).should_be("user@example.com");
+
+                (person as Prototype).RespondsTo("EmailConfirmation").should_be_false();
+            };
         }
     }
 }

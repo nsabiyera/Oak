@@ -29,23 +29,23 @@ namespace DynamicBlog.Models
 
         public void AddComment(string comment)
         {
-            comments.Insert(new { BlogId = MixWith.Id, Text = comment });
+            comments.Insert(new { BlogId = Expando.Id, Text = comment });
         }
 
         public List<dynamic> Comments()
         {
-            return comments.All("BlogId = @0", args: new[] { MixWith.Id }).ToList();
+            return comments.All("BlogId = @0", args: new[] { Expando.Id }).ToList();
         }
 
         public string Summary
         {
             get
             {
-                if (MixWith.Body == null) return "";
+                if (Expando.Body == null) return "";
 
-                if (MixWith.Body.Length > 50) return MixWith.Body.Substring(0, 50);
+                if (Expando.Body.Length > 50) return Expando.Body.Substring(0, 50);
 
-                return MixWith.Body;
+                return Expando.Body;
             }
         }
     }
