@@ -53,6 +53,18 @@ namespace Oak.Tests.describe_DynamicModel
 
                 (person as Prototype).RespondsTo("EmailConfirmation").should_be_false();
             };
+
+            context["loading property on initialization"] = () =>
+            {
+                before = () => person = new Person(new { Email = "user@example.com", EmailConfirmation = "user@example.com" });
+
+                it["the confrimation property is not considered for persistance, but is still accessible"] = () =>
+                {
+                    (person.EmailConfirmation as string).should_be("user@example.com");
+
+                    (person as Prototype).RespondsTo("EmailConfirmation").should_be_false();
+                };
+            };
         }
     }
 }

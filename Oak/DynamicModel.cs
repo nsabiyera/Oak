@@ -10,7 +10,6 @@ using System.Diagnostics;
 
 namespace Oak
 {
-    [DebuggerNonUserCode]
     public class DynamicModel : Prototype
     {
         List<dynamic> rules;
@@ -20,19 +19,19 @@ namespace Oak
         public dynamic Virtual { get; set; }
 
         public DynamicModel()
-            : this(new { })
-        {
-
-        }
-
-        public DynamicModel(object value)
-            : base(value)
         {
             rules = new List<dynamic>();
 
             errors = new List<KeyValuePair<string, string>>();
 
             Virtual = new Prototype();
+        }
+
+        public void Init(object o)
+        {
+            var dictionary = o.ToDictionary();
+
+            foreach (var item in dictionary) SetValueFor(item.Key, item.Value);
         }
 
         public void AddError(string property, string message)
@@ -113,10 +112,7 @@ namespace Oak
 
         public override dynamic GetValueFor(string property)
         {
-            if ((Virtual as Prototype).RespondsTo(property))
-            {
-                (Virtual as Prototype).GetValueFor(property);
-            }
+            if ((Virtual as Prototype).RespondsTo(property)) return (Virtual as Prototype).GetValueFor(property);
 
             return base.GetValueFor(property);
         }

@@ -8,8 +8,15 @@ namespace Oak.Tests.describe_DynamicModel.SampleClasses
     public class Person : DynamicModel
     {
         public Person()
+            : this(new { })
+        {
+        }
+
+        public Person(dynamic o)
         {
             Validates(new Confirmation { Property = "Email" });
+
+            Init(o);
         }
     }
 }
