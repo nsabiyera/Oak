@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NSpec;
-using Oak.Tests.describe_DynamicModel.SampleClasses;
+using Oak.Tests.SampleClasses;
 
 namespace Oak.Tests.describe_DynamicModel
 {

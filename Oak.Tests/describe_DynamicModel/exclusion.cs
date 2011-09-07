@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Oak.Tests.describe_DynamicModel.SampleClasses;
+using Oak.Tests.SampleClasses;
 using NSpec;
 
 namespace Oak.Tests.describe_DynamicModel

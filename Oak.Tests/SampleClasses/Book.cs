@@ -1,6 +1,6 @@
 using System;
 
-namespace Oak.Tests.describe_DynamicModel.SampleClasses
+namespace Oak.Tests.SampleClasses
 {
     public class Book : DynamicModel
     {

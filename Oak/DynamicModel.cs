@@ -117,6 +117,11 @@ namespace Oak
             return base.GetValueFor(property);
         }
 
+        public override bool RespondsTo(string property)
+        {
+            return (Virtual as Prototype).RespondsTo(property) || base.RespondsTo(property);
+        }
+
         public override void SetValueFor(string property, object value)
         {
             if((Virtual as Prototype).RespondsTo(property))
