@@ -8,7 +8,6 @@ using System.Diagnostics;
 
 namespace Oak
 {
-    [DebuggerNonUserCode]
     public class Prototype : DynamicObject
     {
         public dynamic Expando { get; set; }

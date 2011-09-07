@@ -11,14 +11,7 @@ namespace DynamicBlog.Models
     {
         Comments comments;
 
-        public Blog()
-            : this(new { })
-        {
-
-        }
-
         public Blog(object valueType)
-            : base(valueType)
         {
             comments = new Comments();
 

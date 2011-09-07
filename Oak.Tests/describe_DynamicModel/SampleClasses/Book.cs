@@ -10,11 +10,12 @@ namespace Oak.Tests.describe_DynamicModel.SampleClasses
 
         }
 
-        public Book(dynamic entity)
-            : base(entity as object)
+        public Book(dynamic o)
         {
             Validates(new Presense { Property = "Title" });
             Validates(new Presense { Property = "Body" });
+
+            Init(o);
         }
     }
 }
