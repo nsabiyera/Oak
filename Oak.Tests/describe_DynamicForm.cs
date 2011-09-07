@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NSpec;
+using Oak.Tests.SampleClasses;
 
 namespace Oak.Tests
 {
@@ -105,7 +106,7 @@ namespace Oak.Tests
                 form = new DynamicForm(entity);
             };
 
-            context["proeprty being converted is a newly defined property on top level mix"] = () =>
+            context["property being converted is a newly defined property on top level mix"] = () =>
             {
                 act = () => result = form.AllCaps;
 
@@ -114,11 +115,45 @@ namespace Oak.Tests
             };
         }
 
+        void creating_element_meta_data_for_a_dynamic_model()
+        {
+            before = () =>
+            {
+                entity = new Person();
+
+                entity.Email = "user@example.com";
+
+                entity.EmailConfirmation = "user@example.com";
+
+                form = new DynamicForm(entity);
+            };
+
+            context["property is a property that has been added via validation constraint"] = () =>
+            {
+                act = () => result = form.Email;
+
+                it["the Value property is set to the property defined by the validation constraint"] = () =>
+                {
+                    result.Value.should_be("user@example.com");
+                };
+            };
+
+            context["property is a property that has been added as a virtual property"] = () =>
+            {
+                act = () => result = form.EmailConfirmation;
+
+                it["the Value property is set to the virtual property defined by the validation constraint"] = () =>
+                {
+                    result.Value.should_be("user@example.com");
+                };
+            };
+        }
+
         void accessing_a_property_that_doesnt_exist_on_a_regular_class()
         {
             before = () => form = new DynamicForm(new RegularClass());
 
-            it["throws an friendly exception"] =
+            it["throws a friendly exception"] =
                 expect<InvalidOperationException>("The entity that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
@@ -126,7 +161,7 @@ namespace Oak.Tests
         {
             before = () => form = new DynamicForm(new RegularMix("jane"));
 
-            it["throws an friendly exception"] =
+            it["throws a friendly exception"] =
                 expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
@@ -143,7 +178,7 @@ namespace Oak.Tests
 
             it["retains value of dynamic model"] = () => (form.Title() as ElementMetaData).Value.should_be("Some Title");
 
-            it["throws an friendly exception when constructing element meta data for a property that doesn't exist"] =
+            it["throws a friendly exception when constructing element meta data for a property that doesn't exist"] =
                 expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
 
             context["adding reserved dictionary values"] = () =>

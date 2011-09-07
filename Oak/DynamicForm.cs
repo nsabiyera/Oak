@@ -63,10 +63,12 @@ namespace Oak
         }
 
         private object PropertyValue(string name)
-        {
+        {   
             var property = GetProperty(name);
 
             if (property != null) return property.GetValue(entity as object, null);
+
+            if (entity is DynamicModel && (entity as DynamicModel).RespondsTo(name)) return (entity as DynamicModel).GetValueFor(name);
 
             if (entity is Prototype)
             {

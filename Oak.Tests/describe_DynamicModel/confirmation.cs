@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NSpec;
-using Oak.Tests.describe_DynamicModel.SampleClasses;
+using Oak.Tests.SampleClasses;
 
 namespace Oak.Tests.describe_DynamicModel
 {
@@ -51,7 +51,9 @@ namespace Oak.Tests.describe_DynamicModel
             {
                 (person.EmailConfirmation as string).should_be("user@example.com");
 
-                (person as Prototype).RespondsTo("EmailConfirmation").should_be_false();
+                (person as DynamicModel).has_the_virtual_property("EmailConfirmation");
+
+                (person as DynamicModel).does_not_have_the_property("EmailConfirmation");
             };
 
             context["loading property on initialization"] = () =>
@@ -62,9 +64,24 @@ namespace Oak.Tests.describe_DynamicModel
                 {
                     (person.EmailConfirmation as string).should_be("user@example.com");
 
-                    (person as Prototype).RespondsTo("EmailConfirmation").should_be_false();
+                    (person as DynamicModel).has_the_virtual_property("EmailConfirmation");
+
+                    (person as DynamicModel).does_not_have_the_property("EmailConfirmation");
                 };
             };
+        }
+    }
+
+    static class confirmation_extensions
+    {
+        public static void has_the_virtual_property(this DynamicModel model, string property)
+        {
+            (model.Virtual as Prototype).RespondsTo(property).should_be_true();
+        }
+
+        public static void does_not_have_the_property(this DynamicModel model, string property)
+        {
+            ((model as Prototype).Expando as IDictionary<string, object>).ContainsKey(property).should_be_false();
         }
     }
 }

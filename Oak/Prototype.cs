@@ -31,7 +31,7 @@ namespace Oak
             return TryGetMember(binder.Name, out result);
         }
 
-        public bool RespondsTo(string property)
+        public virtual bool RespondsTo(string property)
         {
             object result = null;
 
