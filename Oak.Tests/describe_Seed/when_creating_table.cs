@@ -84,7 +84,7 @@ namespace Oak.Tests.describe_Seed
                     )
                 ");
         }
-        
+
         void primary_key_column()
         {
             before = () =>
@@ -119,6 +119,23 @@ namespace Oak.Tests.describe_Seed
                     CREATE TABLE [dbo].[Users]
                     (
                         [Id] int NOT NULL IDENTITY(1,1),
+                    )
+                ");
+        }
+
+        void foreign_key_column()
+        {
+            before = () =>
+                columns = new[]
+                {
+                    new { CustomerId = "int", ForeignKey = "Customers(Id)" }
+                };
+            
+            it["contains identity definition"] = () =>
+                CommandShouldBe(@"
+                    CREATE TABLE [dbo].[Users]
+                    (
+                        [CustomerId] int FOREIGN KEY REFERENCES Customers(Id),
                     )
                 ");
         }
