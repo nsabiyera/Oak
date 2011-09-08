@@ -139,5 +139,49 @@ namespace Oak.Tests.describe_Seed
                     )
                 ");
         }
+
+        void generating_a_table_where_column_is_an_identity_column_and_primary_key()
+        {
+            before = () =>
+                columns = new dynamic[]
+                {
+                    new { Id = "int", Identity = true, PrimaryKey = true },
+                };
+
+            it["contains identity definition"] = () =>
+                CommandShouldBe(@"
+                    CREATE TABLE [dbo].[Users]
+                    (
+                        [Id] int NOT NULL IDENTITY(1,1), 
+                        CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+                        (
+                            [Id] ASC
+                        )
+                    )
+                ");
+        }
+
+        void generating_a_table_with_identity_column_and_another_column()
+        {
+            before = () =>
+                columns = new dynamic[]
+                {
+                    new { Id = "int", Identity = true, PrimaryKey = true },
+                    new { Name = "nvarchar(255)" }
+                };
+
+            it["contains both columns and the primary key constraint"] = () =>
+               CommandShouldBe(@"
+                    CREATE TABLE [dbo].[Users]
+                    (
+                        [Id] int NOT NULL IDENTITY(1,1),
+                        [Name] nvarchar(255) NULL, 
+                        CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+                        (
+                            [Id] ASC
+                        )
+                    )
+                ");
+        }
     }
 }

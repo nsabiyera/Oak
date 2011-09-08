@@ -111,5 +111,19 @@ namespace Oak.Tests.describe_Seed
                     ALTER TABLE [dbo].[Users] ADD [Column1] uniqueidentifier NOT NULL DEFAULT(newid())
                 ");
         }
+
+        void add_foreign_key_column()
+        {
+            before = () =>
+                columns = new dynamic[]
+                {
+                    new { Column1 = "int", ForeignKey = "Customers(Id)" },
+                };
+
+            it["creates the alter table statement"] = () =>
+                CommandShouldBe(@"
+                    ALTER TABLE [dbo].[Users] ADD [Column1] int FOREIGN KEY REFERENCES Customers(Id)
+                ");
+        }
     }
 }

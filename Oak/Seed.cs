@@ -42,7 +42,7 @@ namespace Oak
             {
                 object column = entry;
 
-                primaryKeyColumn = column.PrimaryKeyColumn();
+                if (column.IsPrimaryKey()) primaryKeyColumn = column.PrimaryKeyColumn();
 
                 columnString += ColumnStringFor(column) + ",";
             }
