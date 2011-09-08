@@ -81,15 +81,18 @@ namespace Oak
             var defaultValue = column.DefaultValue();
             var isIdentity = column.IsIdentityColumn();
             var isPrimaryKey = column.IsPrimaryKey();
+            var isForeignKey = column.IsForeignKeyColumn();
 
             string identityAsString = isIdentity ? " IDENTITY(1,1)" : "";
+            string foreignKeyString = isForeignKey ? " FOREIGN KEY REFERENCES " + column.ForeignKey() : "";
 
-            return "[{0}] {1} {2} {3}{4}"
+            return "[{0}] {1} {2} {3}{4}{5}"
                         .With(name,
                             type,
                             column.NullDefinition(),
                             column.DefaultValueDefinition(),
-                            identityAsString)
+                            identityAsString,
+                            foreignKeyString)
                         .ReplaceSequentialSpacesWithSingleSpace()
                         .Trim();
         }
@@ -172,6 +175,16 @@ namespace Oak.Extensions
             return columnDefinition.Properties().Has("Identity", withValue: true, @in: columnDefinition);
         }
 
+        public static bool IsForeignKeyColumn(this object columnDefinition)
+        {
+            return columnDefinition.Properties().Has("ForeignKey", @in: columnDefinition);
+        }
+
+        public static object ForeignKey(this object columnDefinition)
+        {
+            return columnDefinition.Properties().Get("ForeignKey", @in: columnDefinition);
+        }
+
         public static bool IsPrimaryKey(this object columnDefinition)
         {
             return columnDefinition.Properties().Has("PrimaryKey", withValue: true, @in: columnDefinition);
@@ -204,6 +217,8 @@ namespace Oak.Extensions
 
             if (columnDefinition.IsPrimaryKey() || columnDefinition.IsIdentityColumn()) nullDefinition = "NOT NULL";
 
+            if (columnDefinition.IsForeignKeyColumn()) nullDefinition = "";
+
             return nullDefinition;
         }
 
@@ -225,6 +240,11 @@ namespace Oak.Extensions
         public static bool Has(this PropertyInfo[] properties, string name, bool withValue, object @in)
         {
             return properties.Any(s => s.Name == name && Convert.ToBoolean(s.GetValue(@in, null)) == withValue);
+        }
+
+        public static bool Has(this PropertyInfo[] properties, string name, object @in)
+        {
+            return properties.Any(s => s.Name == name);
         }
 
         public static object Get(this PropertyInfo[] properties, string name, object @in)
