@@ -216,6 +216,41 @@ namespace Oak.Tests
                 it["key value is regarded as a style entry"] = () =>
                     result.Styles["background-color"].should_be("red");
             };
+
+            context["adding id override"] = () =>
+            {
+                act = () =>
+                    result = form.Title(new Hash
+                    {
+                        { "id", "new-title" }
+                    });
+
+                it["the id is overridden with the one specified"] = () =>
+                    result.Id.should_be("new-title");
+            };
+
+            context["added value attribute"] = () =>
+            {
+                act = () =>
+                    result = form.Title(new Hash
+                    {
+                        { "value", "some default" }
+                    });
+
+                context["Title property has value"] = () =>
+                {
+                    before = () => entity.Title = "A Title";
+
+                    it["the title is set to the entity's title"] = () => result.Value.should_be("A Title");
+                };
+
+                context["Title property doesn't have a value"] = () =>
+                {
+                    before = () => entity.Title = null;
+
+                    it["the title is set to the value from the hash"] = () => result.Value.should_be("some default");
+                };
+            };
         }
 
         string FirstElementAttribute()
