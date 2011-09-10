@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>0.1.1</version> 
+    <version>0.1.2</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic MVC Hotness. Simply put...oak is a clone of Ruby on Rails.  The nuget package 'oak' is the stable release, this one is the latest release fresh off the presses.</description> 
     <language>en-US</language>
@@ -10,6 +10,7 @@
     <tags>dynamic mvc migrations rails aspnetmvc</tags>
   </metadata>
   <files>
+    <file src="Oak/App_Code/OakForm.cshtml" target="content/App_Code/OakForm.cshtml" />
     <file src="Oak/ConnectionProfile.cs" target="content/Oak/ConnectionProfile.cs" />
     <file src="Oak/DynamicForm.cs" target="content/Oak/DynamicForm.cs" />
     <file src="Oak/DynamicModel.cs" target="content/Oak/DynamicModel.cs" />
