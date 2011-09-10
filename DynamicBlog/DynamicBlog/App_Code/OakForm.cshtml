@@ -1,7 +1,15 @@
-﻿@helper TextBox(Oak.ElementMetaData metaData) {
-    <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" />
+﻿@helper TextBox(Oak.ElementMetaData metaData) 
+{
+    <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData)/>
 }
 
-@helper TextArea(Oak.ElementMetaData metaData) {
-    <textarea id="@metaData.Id" name="@metaData.Id">@metaData.Value</textarea>
+@helper TextArea(Oak.ElementMetaData metaData) 
+{
+    <textarea id="@metaData.Id" name="@metaData.Id" @Attributes(metaData)>@metaData.Value</textarea>
 }
+
+@helper Attributes(Oak.ElementMetaData metaData)
+{
+    foreach(var attribute in metaData.Attributes) { @attribute.Key<text>="</text>@attribute.Value<text>"</text> }
+}
+
