@@ -82,6 +82,13 @@ namespace Oak.Tests
                 prototype.bodysummary = "Blog Summary New";
                 (blog.BodySummary as string).should_be("Blog Summary New");
             };
+
+            it["sets property to a new value if the property doesn't exist"] = () =>
+            {
+                prototype.FooBar = "Foobar";
+
+                (blog.FooBar as string).should_be("Foobar");
+            };
         }
 
         void inherited_prototypeed_with_defined_methods()
