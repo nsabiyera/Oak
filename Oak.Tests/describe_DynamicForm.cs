@@ -13,18 +13,18 @@ namespace Oak.Tests
         public int Age { get; set; }
     }
 
-    class RegularMix : Prototype
+    class RegularPrototype : Prototype
     {
-        public RegularMix(string name)
+        public RegularPrototype(string name)
             : base(new { Name = name })
         {
 
         }
     }
 
-    class NestedMix : Prototype
+    class NestedPrototype : Prototype
     {
-        public NestedMix(object o)
+        public NestedPrototype(object o)
             : base(o)
         {
 
@@ -79,11 +79,11 @@ namespace Oak.Tests
             };
         }
 
-        void creating_element_meta_data_for_a_mix()
+        void creating_element_meta_data_for_a_prototype()
         {
             before = () =>
             {
-                entity = new RegularMix("Jane Doe");
+                entity = new RegularPrototype("Jane Doe");
 
                 form = new DynamicForm(entity);
             };
@@ -92,21 +92,21 @@ namespace Oak.Tests
             {
                 act = () => result = form.Name;
 
-                it["the Value property is set to the mix's property value"] = () =>
+                it["the Value property is set to the prototype's property value"] = () =>
                     result.Value.should_be(entity.Name as string);
             };
         }
 
-        void creating_element_meta_data_for_a_nested_mix()
+        void creating_element_meta_data_for_a_nested_prototype()
         {
             before = () =>
             {
-                entity = new NestedMix(new RegularMix("jane"));
+                entity = new NestedPrototype(new RegularPrototype("jane"));
 
                 form = new DynamicForm(entity);
             };
 
-            context["property being converted is a newly defined property on top level mix"] = () =>
+            context["property being converted is a newly defined property on top level prototype"] = () =>
             {
                 act = () => result = form.AllCaps;
 
@@ -157,12 +157,12 @@ namespace Oak.Tests
                 expect<InvalidOperationException>("The entity that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
-        void accessing_a_property_that_doesnt_exist_on_a_Mix()
+        void accessing_a_property_that_doesnt_exist_on_a_Prototype()
         {
-            before = () => form = new DynamicForm(new RegularMix("jane"));
+            before = () => form = new DynamicForm(new RegularPrototype("jane"));
 
             it["throws a friendly exception"] =
-                expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
+                expect<InvalidOperationException>("The Prototype that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
         void concatenating_html_attributes()
@@ -179,7 +179,7 @@ namespace Oak.Tests
             it["retains value of dynamic model"] = () => (form.Title() as ElementMetaData).Value.should_be("Some Title");
 
             it["throws a friendly exception when constructing element meta data for a property that doesn't exist"] =
-                expect<InvalidOperationException>("The Mix that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
+                expect<InvalidOperationException>("The Prototype that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
 
             context["adding reserved dictionary values"] = () =>
             {
