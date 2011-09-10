@@ -133,7 +133,9 @@ namespace Oak
                 return true;
             }
 
-            return false;
+            dictionary.Add(property, value);
+
+            return true;
         }
     }
 }

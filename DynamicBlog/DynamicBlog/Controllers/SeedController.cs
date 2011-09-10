@@ -68,7 +68,8 @@ namespace Oak.Controllers
         {
             string createCommand = Seed.CreateTable("Comments", new dynamic[] 
             { 
-                new { BlogId = "int" },
+                new { Id = "int", PrimaryKey = true, Identity = true },
+                new { BlogId = "int", ForeignKey = "Blogs(Id)" },
                 new { Text = "nvarchar(max)" }
             });
 

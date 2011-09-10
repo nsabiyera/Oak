@@ -71,5 +71,15 @@ namespace Oak.Tests.describe_DynamicModel
                 it["is still valid"] = () => isValid.should_be_true();
             };
         }
+
+        void describe_property_location()
+        {
+            context["initialization of entity with properties not defined in validation"] = () =>
+            {
+                before = () => book = new Book(new { id = 1 });
+
+                it["it exists on prototype object as opposed to virtual"] = () => (book as DynamicModel).RespondsTo("id").should_be_true();
+            };
+        }
     }
 }
