@@ -45,7 +45,11 @@ namespace Oak
 
             foreach (var kvp in elements)
             {
-                if (IsAttribute(elementAttributes, kvp)) metaData.Attributes.Add(kvp.Key, kvp.Value.ToString());
+                if (kvp.Key == "id") metaData.Id = kvp.Value;
+
+                else if (kvp.Key == "value" && metaData.Value == null) metaData.Value = kvp.Value;
+
+                else if (IsAttribute(elementAttributes, kvp)) metaData.Attributes.Add(kvp.Key, kvp.Value.ToString());
 
                 else metaData.Styles.Add(kvp.Key, kvp.Value.ToString());
             }
