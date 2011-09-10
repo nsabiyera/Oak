@@ -1,21 +1,36 @@
-﻿@helper TextBox(Oak.ElementMetaData metaData) 
+﻿@helper TextBox(Oak.ElementMetaData metaData)
 {
     <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData) @Styles(metaData)/>
 }
 
-@helper TextArea(Oak.ElementMetaData metaData) 
+@helper Password(Oak.ElementMetaData metaData)
+{
+    <input type="password" id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData) @Styles(metaData)/>
+}
+
+@helper TextArea(Oak.ElementMetaData metaData)
 {
     <textarea id="@metaData.Id" name="@metaData.Id" @Attributes(metaData) @Styles(metaData)>@metaData.Value</textarea>
 }
 
+@helper Label(Oak.ElementMetaData metaData)
+{
+    @Label(metaData, null);
+}
+
+@helper Label(Oak.ElementMetaData metaData, string text)
+{
+    <label for="@metaData.Id" @Attributes(metaData) @Styles(metaData)>@(text ?? @metaData.Id)</label>
+}
+
 @helper Attributes(Oak.ElementMetaData metaData)
 {
-    foreach(var attribute in metaData.Attributes) { @attribute.Key<text>="</text>@attribute.Value<text>"</text> }
+    foreach (var attribute in metaData.Attributes) { @attribute.Key<text>="</text>@attribute.Value<text>"</text> }
 }
 
 @helper Styles(Oak.ElementMetaData metaData)
 {
-    if(metaData.Styles.Count != 0)
+    if (metaData.Styles.Count != 0)
     {
         <text>style="</text>foreach (var attribute in metaData.Styles) { @attribute.Key<text>:</text>@attribute.Value<text>;</text> }<text>"</text>
     }
