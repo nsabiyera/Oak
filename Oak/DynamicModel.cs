@@ -133,5 +133,10 @@ namespace Oak
 
             base.SetValueFor(property, value);
         }
+
+        public void Associations(Association accociation)
+        {
+            accociation.Init(this);
+        }
     }
 }

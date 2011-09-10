@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Oak;
 using System.Web.Mvc;
+using Massive;
 
 namespace DynamicBlog.Models
 {
@@ -19,17 +20,14 @@ namespace DynamicBlog.Models
 
             Validates(new Presense { Property = "Body" });
 
+            Associations(new HasMany(comments));
+
             Init(valueType);
         }
 
         public void AddComment(string comment)
         {
             comments.Insert(new { BlogId = Expando.Id, Text = comment });
-        }
-
-        public List<dynamic> Comments()
-        {
-            return comments.All("BlogId = @0", args: new[] { Expando.Id }).ToList();
         }
 
         public string Summary
