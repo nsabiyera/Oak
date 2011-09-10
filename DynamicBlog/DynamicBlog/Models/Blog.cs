@@ -18,6 +18,8 @@ namespace DynamicBlog.Models
             Validates(new Presense { Property = "Title", Text = "Please specify a title for this blog post." });
 
             Validates(new Presense { Property = "Body" });
+
+            Init(valueType);
         }
 
         public void AddComment(string comment)

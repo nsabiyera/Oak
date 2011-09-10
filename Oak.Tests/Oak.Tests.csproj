@@ -62,7 +62,7 @@
     <Compile Include="SampleClasses\Person.cs" />
     <Compile Include="SampleClasses\Product.cs" />
     <Compile Include="SampleClasses\Registration.cs" />
-    <Compile Include="describe_Mix.cs" />
+    <Compile Include="describe_Prototype.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />
