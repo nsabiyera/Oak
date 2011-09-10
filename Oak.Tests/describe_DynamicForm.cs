@@ -193,6 +193,18 @@ namespace Oak.Tests
                     result.Attributes[FirstElementAttribute()].should_be("firstName");
             };
 
+            context["added values that start with 'data-'"] = () =>
+            {
+                act = () =>
+                    result = form.Title(new Hash
+                    {
+                        { "data-some-value", "firstName" }
+                    });
+
+                it["key value is marked as an element attribute"] = () =>
+                    result.Attributes["data-some-value"].should_be("firstName");
+            };
+
             context["adding unreserved dictionary values"] = () =>
             {
                 act = () =>
