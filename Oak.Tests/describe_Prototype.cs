@@ -11,9 +11,9 @@ namespace Oak.Tests
     {
         dynamic blog;
 
-        dynamic mix;
+        dynamic prototype;
 
-        dynamic inheritedMix;
+        dynamic inheritedPrototype;
 
         void before_each()
         {
@@ -21,101 +21,101 @@ namespace Oak.Tests
             blog.Title = "Some Name";
             blog.body = "Some Body";
             blog.BodySummary = "Body Summary";
-            mix = new Prototype(blog);
+            prototype = new Prototype(blog);
         }
 
         void describe_responds_to()
         {
-            it["responds to property with exact casing"] = () => (mix as Prototype).RespondsTo("Title").should_be_true();
+            it["responds to property with exact casing"] = () => (prototype as Prototype).RespondsTo("Title").should_be_true();
 
-            it["it responds to property with case insensitive"] = () => (mix as Prototype).RespondsTo("title").should_be_true();
+            it["it responds to property with case insensitive"] = () => (prototype as Prototype).RespondsTo("title").should_be_true();
 
-            it["it doesn't respond to property"] = () => (mix as Prototype).RespondsTo("foobar").should_be_false();
+            it["it doesn't respond to property"] = () => (prototype as Prototype).RespondsTo("foobar").should_be_false();
         }
 
         void describe_get_value_for_property()
         {
-            it["retrieves value with exact casing"] = () => ((mix as Prototype).GetValueFor("Title") as string).should_be("Some Name");
+            it["retrieves value with exact casing"] = () => ((prototype as Prototype).GetValueFor("Title") as string).should_be("Some Name");
 
-            it["retrieves value with exact case insensitive"] = () => ((mix as Prototype).GetValueFor("title") as string).should_be("Some Name");
+            it["retrieves value with exact case insensitive"] = () => ((prototype as Prototype).GetValueFor("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This mix does not respond to the property FooBar.", () => (mix as Prototype).GetValueFor("FooBar"));
+            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This prototype does not respond to the property FooBar.", () => (prototype as Prototype).GetValueFor("FooBar"));
         }
 
-        void when_retrieving_property_from_mix()
+        void when_retrieving_property_from_prototype()
         {
-            it["calls values for mixed entity"] = () =>
-                (mix.Title as string).should_be("Some Name");
+            it["calls values for prototypeed entity"] = () =>
+                (prototype.Title as string).should_be("Some Name");
 
-            it["calls value for mixed entity even if property's first letter doesn't match case"] = () =>
-                (mix.title as string).should_be("Some Name");
+            it["calls value for prototypeed entity even if property's first letter doesn't match case"] = () =>
+                (prototype.title as string).should_be("Some Name");
 
-            it["calls value for mixed entity even if property's first letter is capilized, but underlying property is lowercase"] = () =>
-                (mix.Body as string).should_be("Some Body");
+            it["calls value for prototypeed entity even if property's first letter is capilized, but underlying property is lowercase"] = () =>
+                (prototype.Body as string).should_be("Some Body");
 
-            it["ignores case for mixed entity"] = () =>
-                (mix.bodysummary as string).should_be("Body Summary");
+            it["ignores case for prototypeed entity"] = () =>
+                (prototype.bodysummary as string).should_be("Body Summary");
         }
 
-        void when_setting_properyt_of_mix()
+        void when_setting_property_of_prototype()
         {
             it["sets property on underlying expando"] = () =>
             {
-                mix.Title = "Some other name";
+                prototype.Title = "Some other name";
                 (blog.Title as string).should_be("Some other name");
             };
 
             it["sets property of underlying expando even if property's first letter doesn't match case"] = () =>
             {
-                mix.title = "Some other name";
+                prototype.title = "Some other name";
                 (blog.Title as string).should_be("Some other name");
             };
 
             it["sets property of underlying expando even if property's first letter is capitalized, but underlying property is lowercase"] = () =>
             {
-                mix.Body = "Some other name";
+                prototype.Body = "Some other name";
                 (blog.body as string).should_be("Some other name");
             };
 
-            it["ignores case for mixed entity"] = () =>
+            it["ignores case for prototypeed entity"] = () =>
             {
-                mix.bodysummary = "Blog Summary New";
+                prototype.bodysummary = "Blog Summary New";
                 (blog.BodySummary as string).should_be("Blog Summary New");
             };
         }
 
-        void inherited_mixed_with_defined_methods()
+        void inherited_prototypeed_with_defined_methods()
         {
-            act = () => inheritedMix = new InheritedMix(blog);
+            act = () => inheritedPrototype = new InheritedPrototype(blog);
 
             it["calls underlying property"] = () =>
-                (inheritedMix.Title as string).should_be("Some Name");
+                (inheritedPrototype.Title as string).should_be("Some Name");
 
             it["sets underlying property"] = () =>
             {
-                inheritedMix.Title = "Some other name";
+                inheritedPrototype.Title = "Some other name";
                 (blog.Title as string).should_be("Some other name");
             };
 
             it["calls defined method"] = () =>
-                (inheritedMix.FirstLetter() as string).should_be("S");
+                (inheritedPrototype.FirstLetter() as string).should_be("S");
 
             it["calls defined property"] = () =>
-                (inheritedMix.FirstName as string).should_be("Some");
+                (inheritedPrototype.FirstName as string).should_be("Some");
         }
 
         void double_inheritance()
         {
-            act = () => inheritedMix = new InheritedInheritedMix(blog);
+            act = () => inheritedPrototype = new InheritedInheritedPrototype(blog);
 
-            it["calls methods on root mix with"] = () =>
-                (inheritedMix.Title as string).should_be("Some Name");
+            it["calls methods on root prototype with"] = () =>
+                (inheritedPrototype.Title as string).should_be("Some Name");
 
-            it["calls method on first mix"] = () =>
-                (inheritedMix.FirstLetter() as string).should_be("S");
+            it["calls method on first prototype"] = () =>
+                (inheritedPrototype.FirstLetter() as string).should_be("S");
 
-            it["calls method on top most mix"] = () =>
-                (inheritedMix.LastLetter() as string).should_be("e");
+            it["calls method on top most prototype"] = () =>
+                (inheritedPrototype.LastLetter() as string).should_be("e");
         }
 
         void given_a_blog()
@@ -127,47 +127,47 @@ namespace Oak.Tests
                 blog.Body = "Oak is tight, yo.";
             };
 
-            context["given that the dynamic blogged is wrapped with a mix"] = () =>
+            context["given that the dynamic blogged is wrapped with a prototype"] = () =>
             {
                 before = () =>
-                    mix = new BlogEntry(blog);
+                    prototype = new BlogEntry(blog);
 
                 it["base properties are still accessible"] = () =>
-                    (mix.Title as string).should_be("Working With Oak");
+                    (prototype.Title as string).should_be("Working With Oak");
 
                 it["base properties are still settable"] = () =>
                 {
-                    mix.Title = "Another Title";
+                    prototype.Title = "Another Title";
                     (blog.Title as string).should_be("Another Title");
                 };
 
-                it["new properites provided by BlogEntry mix are available"] = () =>
-                    ((bool)mix.IsValid()).should_be_true();
+                it["new properites provided by BlogEntry prototype are available"] = () =>
+                    ((bool)prototype.IsValid()).should_be_true();
 
-                it["properites defined in the mix do override base properties"] = () =>
-                    (mix.Body as string).should_be("");
+                it["properites defined in the prototype do override base properties"] = () =>
+                    (prototype.Body as string).should_be("");
             };
 
         }
 
-        void working_with_parameterless_mix_that_defines_properites_in_the_constructor()
+        void working_with_parameterless_prototype_that_defines_properites_in_the_constructor()
         {
-            before = () => mix = new ParameterlessMix();
+            before = () => prototype = new ParameterlessPrototype();
 
-            it["properties are accessible"] = () => (mix.FirstName as string).should_be("");
+            it["properties are accessible"] = () => (prototype.FirstName as string).should_be("");
 
             context["tacking on properties after the fact is allowed"] = () =>
             {
-                act = () => mix.Expando.NewProp = "new prop";
+                act = () => prototype.Expando.NewProp = "new prop";
 
-                it["new prop is accessible"] = () => (mix.NewProp as string).should_be("new prop");
+                it["new prop is accessible"] = () => (prototype.NewProp as string).should_be("new prop");
             };
 
             context["tacking on methods after the fact is allowed"] = () =>
             {
-                act = () => mix.Expando.NewProp = new Func<string, string>((s) => s.ToUpper());
+                act = () => prototype.Expando.NewProp = new Func<string, string>((s) => s.ToUpper());
 
-                it["new method is accessible"] = () => (mix.NewProp("hello") as string).should_be("HELLO");
+                it["new method is accessible"] = () => (prototype.NewProp("hello") as string).should_be("HELLO");
             };
         }
     }
@@ -194,9 +194,9 @@ namespace Oak.Tests
         }
     }
 
-    public class InheritedInheritedMix : InheritedMix
+    public class InheritedInheritedPrototype : InheritedPrototype
     {
-        public InheritedInheritedMix(object o)
+        public InheritedInheritedPrototype(object o)
             : base(o)
     	{
     				
@@ -208,9 +208,9 @@ namespace Oak.Tests
         }
     }
 
-    public class InheritedMix : Prototype
+    public class InheritedPrototype : Prototype
     {
-        public InheritedMix(object o)
+        public InheritedPrototype(object o)
             : base(o)
         {
 
@@ -230,9 +230,9 @@ namespace Oak.Tests
         }
     }
 
-    public class ParameterlessMix : Prototype
+    public class ParameterlessPrototype : Prototype
     {
-        public ParameterlessMix()
+        public ParameterlessPrototype()
         {
             Expando.FirstName = "";
             Expando.LastName = "";

@@ -78,7 +78,7 @@ namespace Oak
 
             if (TryGetMember(property, out result)) return result;
 
-            throw new InvalidOperationException("This mix does not respond to the property " + property + ".");
+            throw new InvalidOperationException("This prototype does not respond to the property " + property + ".");
         }
 
         public virtual void SetValueFor(string property, object value)
