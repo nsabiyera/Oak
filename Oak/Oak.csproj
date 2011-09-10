@@ -65,6 +65,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Associations.cs" />
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="ConnectionProfile.cs" />
     <Compile Include="DynamicForm.cs" />
