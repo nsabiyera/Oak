@@ -1,11 +1,11 @@
 ﻿@helper TextBox(Oak.ElementMetaData metaData) 
 {
-    <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData)/>
+    <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData) @Styles(metaData)/>
 }
 
 @helper TextArea(Oak.ElementMetaData metaData) 
 {
-    <textarea id="@metaData.Id" name="@metaData.Id" @Attributes(metaData)>@metaData.Value</textarea>
+    <textarea id="@metaData.Id" name="@metaData.Id" @Attributes(metaData) @Styles(metaData)>@metaData.Value</textarea>
 }
 
 @helper Attributes(Oak.ElementMetaData metaData)
@@ -13,3 +13,14 @@
     foreach(var attribute in metaData.Attributes) { @attribute.Key<text>="</text>@attribute.Value<text>"</text> }
 }
 
+@helper Styles(Oak.ElementMetaData metaData)
+{
+    if(metaData.Styles.Count != 0)
+    {
+        <text>style="</text>foreach (var attribute in metaData.Styles) { @attribute.Key<text>:</text>@attribute.Value<text>;</text> }<text>"</text>
+    }
+}
+
+@*
+Todo: labels, radio buttons, drop down lists, password input, anchor tags, etc
+*@

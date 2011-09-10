@@ -45,12 +45,17 @@ namespace Oak
 
             foreach (var kvp in elements)
             {
-                if (elementAttributes.Contains(kvp.Key)) metaData.Attributes.Add(kvp.Key, kvp.Value.ToString());
+                if (IsAttribute(elementAttributes, kvp)) metaData.Attributes.Add(kvp.Key, kvp.Value.ToString());
 
                 else metaData.Styles.Add(kvp.Key, kvp.Value.ToString());
             }
 
             return true;
+        }
+
+        private static bool IsAttribute(List<string> elementAttributes, KeyValuePair<string, string> kvp)
+        {
+            return elementAttributes.Contains(kvp.Key) || kvp.Key.StartsWith("data-");
         }
 
         private ElementMetaData NewElementMetatDataFor(string name)
