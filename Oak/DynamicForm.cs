@@ -102,6 +102,7 @@ namespace Oak
             list.Add("size");
             list.Add("src");
             list.Add("type");
+            list.Add("placeholder");
 
             list.Add("accesskey");
             list.Add("class");
