@@ -28,6 +28,9 @@ task :rake_dot_net_initialize do
   @file_sync.destination = @website_deploy_directory
 end
 
+desc "builds, runs tests, starts iis and adds sample data"
+task :all => [:default, :tests, :server, :sample]
+
 desc "builds and deploys website to directories iis express will use to run app"
 task :default => [:build, :deploy]
 
