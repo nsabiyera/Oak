@@ -61,8 +61,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Oak\Associations.cs">
-      <Link>Oak\Associations.cs</Link>
+    <Compile Include="..\..\Oak\Association.cs">
+      <Link>Oak\Association.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\ConnectionProfile.cs">
       <Link>Oak\ConnectionProfile.cs</Link>

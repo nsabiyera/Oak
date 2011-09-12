@@ -5,7 +5,7 @@ using System.Text;
 using Oak.Tests.SampleClasses;
 using NSpec;
 
-namespace Oak.Tests.describe_DynamicModel
+namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
     class exclusion : nspec
     {

@@ -49,15 +49,19 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
-    <Compile Include="describe_DynamicModel\acceptance.cs" />
-    <Compile Include="describe_DynamicModel\core_validation.cs" />
-    <Compile Include="describe_DynamicModel\exclusion.cs" />
-    <Compile Include="describe_DynamicModel\inclusion.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\hasmany.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\core_validation.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\exclusion.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\inclusion.cs" />
+    <Compile Include="SampleClasses\Blog.cs" />
+    <Compile Include="SampleClasses\Blogs.cs" />
     <Compile Include="SampleClasses\Book.cs" />
-    <Compile Include="describe_DynamicModel\presense.cs" />
-    <Compile Include="describe_DynamicModel\confirmation.cs" />
-    <Compile Include="describe_DynamicModel\format.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\presense.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\confirmation.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\format.cs" />
     <Compile Include="SampleClasses\Coffee.cs" />
+    <Compile Include="SampleClasses\Comments.cs" />
     <Compile Include="SampleClasses\LegalDocument.cs" />
     <Compile Include="SampleClasses\Person.cs" />
     <Compile Include="SampleClasses\Product.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
