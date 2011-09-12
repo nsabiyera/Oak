@@ -5,11 +5,11 @@ using System.Text;
 using NSpec;
 using Massive;
 using Oak;
-using Oak.Tests.SampleClasses;
+using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    class hasmany : nspec
+    class has_many : nspec
     {
         Seed seed;
 
@@ -50,11 +50,11 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     blogId = new { Title = "Some Blog", Body = "Lorem Ipsum" }.InsertInto("Blogs");
 
-                    otherBlogId = new { Title = "Other Blog", Body = "Other Body" }.InsertInto("Blogs");
-
                     new { BlogId = blogId, Text = "Comment 1" }.InsertInto("Comments");
 
                     new { BlogId = blogId, Text = "Comment 2" }.InsertInto("Comments");
+
+                    otherBlogId = new { Title = "Other Blog", Body = "Other Body" }.InsertInto("Blogs");
 
                     new { BlogId = otherBlogId, Text = "Comment 3" }.InsertInto("Comments");
                 };
@@ -85,11 +85,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     };
                 };
             };
-        }
-
-        void describe_has_many_through()
-        {
-            
         }
     }
 }
