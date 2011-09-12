@@ -1,6 +1,6 @@
 using System;
 
-namespace Oak.Tests.SampleClasses
+namespace Oak.Tests.describe_Validation.Classes
 {
     public class LegalDocument : DynamicModel
     {

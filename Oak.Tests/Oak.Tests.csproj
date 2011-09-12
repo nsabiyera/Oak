@@ -49,23 +49,26 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\hasmany.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\belongs_to.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Blog.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Comment.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Blogs.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Comments.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\has_many.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\has_many_through.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Coffee.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\core_validation.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\exclusion.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\inclusion.cs" />
-    <Compile Include="SampleClasses\Blog.cs" />
-    <Compile Include="SampleClasses\Blogs.cs" />
-    <Compile Include="SampleClasses\Book.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Book.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\presense.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\confirmation.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\format.cs" />
-    <Compile Include="SampleClasses\Coffee.cs" />
-    <Compile Include="SampleClasses\Comments.cs" />
-    <Compile Include="SampleClasses\LegalDocument.cs" />
-    <Compile Include="SampleClasses\Person.cs" />
-    <Compile Include="SampleClasses\Product.cs" />
-    <Compile Include="SampleClasses\Registration.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\LegalDocument.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Person.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Product.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
     <Compile Include="describe_Prototype.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
@@ -84,6 +87,9 @@
       <Project>{A84BD08C-2BFE-47B5-B68F-3DB1698FE71A}</Project>
       <Name>Oak</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SampleClasses\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
