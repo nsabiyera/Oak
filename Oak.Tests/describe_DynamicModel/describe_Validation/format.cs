@@ -5,7 +5,7 @@ using System.Text;
 using NSpec;
 using Oak.Tests.SampleClasses;
 
-namespace Oak.Tests.describe_DynamicModel
+namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
     class format : nspec
     {
