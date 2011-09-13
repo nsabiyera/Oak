@@ -4,39 +4,10 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Massive;
+using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    public class Library : DynamicRepository { }
-
-    public class Games : DynamicRepository { }
-
-    public class Users : DynamicRepository
-    {
-        public Users()
-        {
-            Projection = d => new User(d);
-        }
-    }
-
-    public class User : DynamicModel
-    {
-        Games games;
-
-        Library library;
-
-        public User(dynamic entity)
-        {
-            games = new Games();
-
-            library = new Library();
-
-            Associations(new HasMany(games) { Through = library });
-
-            Init(entity);
-        }
-    }
-
     class has_many_through : nspec
     {
         Seed seed;
@@ -44,6 +15,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         IEnumerable<dynamic> games;
 
         dynamic user;
+
+        dynamic otherUser;
 
         Users users;
 
@@ -93,6 +66,45 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         (games.First().Title as string).should_be("Gears of War");
                 };
             };
+        }
+
+        void has_many_naming_customization()
+        {
+            context["given users have users through friends"] = () =>
+            {
+                before = () =>
+                {
+                    seed.PurgeDb();
+
+                    seed.CreateTable("Users", new dynamic[] 
+                    { 
+                        new { Id = "int", Identity = true, PrimaryKey = true },
+                        new { Handle = "nvarchar(1000)" }
+                    }).ExecuteNonQuery();
+
+                    seed.CreateTable("Friends", new dynamic[] {
+                        new { Id = "int", Identity = true, PrimaryKey = true },
+                        new { UserId = "int", ForeignKey = "Users(Id)" },
+                        new { IsFollowing = "int", ForeignKey = "Users(Id)" }
+                    }).ExecuteNonQuery();
+
+                    user = new { Handle = "@me" }.InsertInto("Users");
+
+                    otherUser = new { Handle = "@you" }.InsertInto("Users");
+
+                    new { UserId = user, IsFollowing = otherUser }.InsertInto("Friends");
+                };
+
+                it["user named (@me) has friend (@you)"] = () =>
+                {
+                    (FirstFriendOf(user).Handle as string).should_be("@you");
+                };
+            };
+        }
+
+        public dynamic FirstFriendOf(dynamic userId)
+        {
+            return (users.Single(userId).Friends() as IEnumerable<dynamic>).First();
         }
     }
 }
