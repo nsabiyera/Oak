@@ -13,7 +13,7 @@ namespace DynamicBlog.Tests
         [Test]
         public void debug()
         {
-            var testClassYouWantToDebug = "when_creating_table";
+            var testClassYouWantToDebug = "has_many_through";
 
             var finder = new SpecFinder(
                 Assembly.GetExecutingAssembly().Location,

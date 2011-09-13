@@ -26,13 +26,25 @@ namespace Oak
 
     public class HasMany : Association
     {
+        string named;
+
         DynamicRepository repository;
 
         public DynamicRepository Through { get; set; }
 
+        public string On { get; set; }
+
         public HasMany(DynamicRepository repository)
+            : this(repository, null)
+        {
+
+        }
+
+        public HasMany(DynamicRepository repository, string named)
         {
             this.repository = repository;
+
+            this.named = named ?? repository.GetType().Name;
         }
 
         public override void Init(DynamicModel model)
@@ -44,14 +56,14 @@ namespace Oak
             if(Through == null)
             {
                 (model.Virtual as Prototype).SetValueFor(
-                    toTable,
+                    named,
                     DirectTableQuery(fromColumn, model));    
             }
             else
             {
                 (model.Virtual as Prototype).SetValueFor(
-                    toTable,
-                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, IdFor(repository), model));
+                    named,
+                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, On ?? IdFor(repository), model));
             }
         }
 
@@ -60,7 +72,7 @@ namespace Oak
             return () => repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id });
         }
 
-        private Func<IEnumerable<dynamic>> ThroughTableQuery(string fromColumn, string toTable, string throughTable, string throughColumn, DynamicModel model)
+        private Func<IEnumerable<dynamic>> ThroughTableQuery(string fromColumn, string toTable, string throughTable, string joinColumn, DynamicModel model)
         {
             return () => repository.Query(
                 string.Format(
@@ -69,7 +81,7 @@ namespace Oak
                   from {2}
                   inner join {1}
                   on {2}.{3} = {1}.Id
-                  where {0} = @0", fromColumn, toTable, throughTable, throughColumn), model.Expando.Id);
+                  where {0} = @0", fromColumn, toTable, throughTable, joinColumn), model.Expando.Id);
         }
     }
 
