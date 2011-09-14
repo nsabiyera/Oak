@@ -32,7 +32,7 @@ namespace Oak
 
         public DynamicRepository Through { get; set; }
 
-        public string On { get; set; }
+        public string Using { get; set; }
 
         public HasMany(DynamicRepository repository)
             : this(repository, null)
@@ -63,7 +63,7 @@ namespace Oak
             {
                 (model.Virtual as Prototype).SetValueFor(
                     named,
-                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, On ?? IdFor(repository), model));
+                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? IdFor(repository), model));
             }
         }
 
@@ -85,17 +85,37 @@ namespace Oak
         }
     }
 
+    public class HasOne : Association
+    {
+        private DynamicRepository repository;
+
+        private string name;
+
+        public HasOne(DynamicRepository repository)
+        {
+            this.repository = repository;
+            name = MakeSingular(repository);
+        }
+
+        public override void Init(DynamicModel model)
+        {
+            (model.Virtual as Prototype).SetValueFor(
+                name,
+                new Func<dynamic>(() => repository.Single(model.GetValueFor(IdFor(repository)))));
+        }
+    }
+
     public class BelongsTo : Association
     {
         private DynamicRepository repository;
+
+        private string name;
 
         public BelongsTo(DynamicRepository repository)
         {
             this.repository = repository;
             name = MakeSingular(repository);
         }
-
-        private string name;
 
         public override void Init(DynamicModel model)
         {
