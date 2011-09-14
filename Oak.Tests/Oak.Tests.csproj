@@ -50,6 +50,7 @@
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\belongs_to.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Authors.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blog.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blogs.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Users.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_many.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_many_through.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\has_one.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Coffee.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\core_validation.cs" />

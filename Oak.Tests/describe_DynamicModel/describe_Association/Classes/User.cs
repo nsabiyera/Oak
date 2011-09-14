@@ -27,7 +27,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
             Associations(new HasMany(users, named: "Friends") 
             {
                 Through = friends,
-                On = "IsFollowing"
+                Using = "IsFollowing"
             });
 
             Init(entity);
