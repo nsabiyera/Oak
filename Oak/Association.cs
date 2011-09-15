@@ -18,7 +18,7 @@ namespace Oak
             return o.GetType().Name.Substring(0, o.GetType().Name.Length - 1);
         }
 
-        public string IdFor(object o)
+        public string SigularizedIdFor(object o)
         {
             return MakeSingular(o) + "Id";
         }
@@ -63,7 +63,7 @@ namespace Oak
             {
                 (model.Virtual as Prototype).SetValueFor(
                     named,
-                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? IdFor(repository), model));
+                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? SigularizedIdFor(repository), model));
             }
         }
 
@@ -89,19 +89,18 @@ namespace Oak
     {
         private DynamicRepository repository;
 
-        private string name;
-
         public HasOne(DynamicRepository repository)
         {
             this.repository = repository;
-            name = MakeSingular(repository);
         }
 
         public override void Init(DynamicModel model)
         {
+            var foreignKey = model.GetType().Name + "Id";
+
             (model.Virtual as Prototype).SetValueFor(
-                name,
-                new Func<dynamic>(() => repository.Single(model.GetValueFor(IdFor(repository)))));
+                MakeSingular(repository),
+                new Func<dynamic>(() => repository.SingleWhere(foreignKey + " = @0", model.GetValueFor("Id"))));
         }
     }
 
@@ -121,7 +120,7 @@ namespace Oak
         {
             (model.Virtual as Prototype).SetValueFor(
                 name,
-                new Func<dynamic>(() => repository.Single(model.GetValueFor(IdFor(repository)))));
+                new Func<dynamic>(() => repository.Single(model.GetValueFor(SigularizedIdFor(repository)))));
         }
     }
 }

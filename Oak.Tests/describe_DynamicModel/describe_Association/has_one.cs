@@ -11,11 +11,11 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
     {
         Seed seed;
 
-        dynamic blogId;
+        Authors authors;
+
+        dynamic profileId;
 
         dynamic authorId;
-
-        Blogs blogs;
 
         dynamic author;
 
@@ -23,12 +23,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         {
             seed = new Seed();
 
-            blogs = new Blogs();
+            authors = new Authors();
         }
 
         void describe_has_one()
         {
-            context["given blog with author"] = () =>
+            context["given author with profile"] = () =>
             {
                 before = () =>
                 {
@@ -40,23 +40,23 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         new { Name = "nvarchar(255)" }
                     }).ExecuteNonQuery();
 
-                    seed.CreateTable("Blogs", new dynamic[] 
+                    seed.CreateTable("Profiles", new dynamic[] 
                     {
                         new { Id = "int", Identity = true, PrimaryKey = true },
                         new { AuthorId = "int", ForeignKey = "Authors(Id)" },
-                        new { Title = "nvarchar(255)" }
+                        new { Email = "nvarchar(255)" }
                     }).ExecuteNonQuery();
 
                     authorId = new { Name = "Amir" }.InsertInto("Authors");
 
-                    blogId = new { Title = "SomeTitle", AuthorId = authorId }.InsertInto("Blogs");
+                    profileId = new { Email = "user@example.com", AuthorId = authorId }.InsertInto("Profiles");
                 };
 
-                context["retrieving author for blog"] = () =>
+                context["retrieving author"] = () =>
                 {
-                    act = () => author = blogs.Single(blogId).Author();
+                    act = () => author = authors.Single(authorId);
 
-                    it["author should be retrieved"] = () => (author.Name as string).should_be("Amir");
+                    it["author should have profile"] = () => (author.Profile().Email as string).should_be("user@example.com");
                 };
             };
         }
