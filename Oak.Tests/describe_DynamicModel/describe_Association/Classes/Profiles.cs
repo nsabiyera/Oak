@@ -6,11 +6,7 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
-    public class Authors : DynamicRepository
+    public class Profiles : DynamicRepository
     {
-        public Authors()
-        {
-            Projection = d => new Author(d);
-        }
     }
 }
