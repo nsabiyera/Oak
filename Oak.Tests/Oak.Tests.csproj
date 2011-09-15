@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
+    <Compile Include="describe_DynamicModel\core_behavior.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\belongs_to.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Author.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Authors.cs" />

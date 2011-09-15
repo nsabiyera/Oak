@@ -138,5 +138,16 @@ namespace Oak
         {
             accociation.Init(this);
         }
+
+        public override IEnumerable<string> Methods()
+        {
+            return (Virtual as Prototype).Methods().Union(base.Methods());
+        }
+
+        public override void DeleteMember(string member)
+        {
+            (Virtual as Prototype).DeleteMember(member);
+            base.DeleteMember(member);
+        }
     }
 }

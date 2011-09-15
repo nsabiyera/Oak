@@ -26,20 +26,66 @@ namespace Oak.Tests
 
         void describe_responds_to()
         {
-            it["responds to property with exact casing"] = () => (prototype as Prototype).RespondsTo("Title").should_be_true();
+            it["responds to property with exact casing"] = () => Prototype().RespondsTo("Title").should_be_true();
 
-            it["it responds to property with case insensitive"] = () => (prototype as Prototype).RespondsTo("title").should_be_true();
+            it["it responds to property with case insensitive"] = () => Prototype().RespondsTo("title").should_be_true();
 
-            it["it doesn't respond to property"] = () => (prototype as Prototype).RespondsTo("foobar").should_be_false();
+            it["it doesn't respond to property"] = () => Prototype().RespondsTo("foobar").should_be_false();
+        }
+
+        void describe_methods()
+        {
+            it["it contains a record for each method defined"] = () =>
+            {
+                Prototype().Methods().should_contain("Title");
+                Prototype().Methods().should_contain("body");
+                Prototype().Methods().should_contain("BodySummary");
+            };
+        }
+
+        void deleting_members()
+        {
+            context["given a member is defined"] = () =>
+            {
+                before = () => Prototype().RespondsTo("Title").should_be_true();
+
+                act = () => Prototype().DeleteMember("Title");
+
+                it["no longer responds to member"] = () => Prototype().RespondsTo("Title").should_be_false();
+            };
+
+            new[] { "title", "TITLE" }.Do(member =>
+            {
+                context["member deletion is case insensitive ({0})".With(member)] = () =>
+                {
+                    before = () => Prototype().RespondsTo("Title").should_be_true();
+
+                    act = () => Prototype().DeleteMember(member);
+
+                    it["no longer responds to member"] = () => Prototype().RespondsTo("Title").should_be_false();
+                };
+            });
+            
+
+            context["member is not defined"] = () =>
+            {
+                before = () => Prototype().RespondsTo("FooBar").should_be_false();
+
+                act = () => Prototype().DeleteMember("FooBar");
+
+                it["ignores deletion"] = () => Prototype().RespondsTo("FooBar").should_be_false();
+            };
+
+            
         }
 
         void describe_get_value_for_property()
         {
-            it["retrieves value with exact casing"] = () => ((prototype as Prototype).GetValueFor("Title") as string).should_be("Some Name");
+            it["retrieves value with exact casing"] = () => (Prototype().GetValueFor("Title") as string).should_be("Some Name");
 
-            it["retrieves value with exact case insensitive"] = () => ((prototype as Prototype).GetValueFor("title") as string).should_be("Some Name");
+            it["retrieves value with exact case insensitive"] = () => (Prototype().GetValueFor("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This prototype does not respond to the property FooBar.", () => (prototype as Prototype).GetValueFor("FooBar"));
+            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This prototype does not respond to the property FooBar.", () => Prototype().GetValueFor("FooBar"));
         }
 
         void when_retrieving_property_from_prototype()
@@ -176,6 +222,11 @@ namespace Oak.Tests
 
                 it["new method is accessible"] = () => (prototype.NewProp("hello") as string).should_be("HELLO");
             };
+        }
+
+        Prototype Prototype()
+        {
+            return prototype as Prototype;
         }
     }
 
