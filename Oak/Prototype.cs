@@ -40,7 +40,7 @@ namespace Oak
 
         public bool TryGetMember(string name, out object result)
         {
-            var dictionary = Expando as IDictionary<string, object>;
+            var dictionary = Hash();
 
             if (dictionary.ContainsKey(name))
             {
@@ -105,7 +105,7 @@ namespace Oak
 
         public bool TrySetMember(string property, object value)
         {
-            var dictionary = Expando as IDictionary<string, object>;
+            var dictionary = Hash();
 
             if (dictionary.ContainsKey(property))
             {
@@ -136,6 +136,21 @@ namespace Oak
             dictionary.Add(property, value);
 
             return true;
+        }
+
+        public virtual IEnumerable<string> Methods()
+        {
+            return Hash().Select(s => s.Key);
+        }
+
+        public IDictionary<string, object> Hash()
+        {
+            return (Expando as IDictionary<string, object>);
+        }
+
+        public virtual void DeleteMember(string member)
+        {
+            Hash().Remove(Fuzzy(Hash(), member));
         }
     }
 }

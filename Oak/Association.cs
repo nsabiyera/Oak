@@ -6,6 +6,10 @@ using Massive;
 
 namespace Oak
 {
+    public delegate dynamic DynamicMethod();
+
+    public delegate IEnumerable<dynamic> DynamicEnumerableMethod();
+
     public class Association
     {
         public virtual void Init(DynamicModel model)
@@ -67,21 +71,24 @@ namespace Oak
             }
         }
 
-        private Func<IEnumerable<dynamic>> DirectTableQuery(string foreignKey, DynamicModel model)
+        private DynamicEnumerableMethod DirectTableQuery(string foreignKey, DynamicModel model)
         {
             return () => repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id });
         }
 
-        private Func<IEnumerable<dynamic>> ThroughTableQuery(string fromColumn, string toTable, string throughTable, string joinColumn, DynamicModel model)
+        private DynamicEnumerableMethod ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
             return () => repository.Query(
-                string.Format(
                  @"
-                  select {1}.* 
-                  from {2}
-                  inner join {1}
-                  on {2}.{3} = {1}.Id
-                  where {0} = @0", fromColumn, toTable, throughTable, joinColumn), model.Expando.Id);
+                  select {toTable}.* 
+                  from {throughTable}
+                  inner join {toTable}
+                  on {throughTable}.{using} = {toTable}.Id
+                  where {fromColumn} = @0"
+                    .Replace("{fromColumn}", fromColumn)
+                    .Replace("{toTable}", toTable)
+                    .Replace("{throughTable}", throughTable)
+                    .Replace("{using}", @using), model.Expando.Id);
         }
     }
 
@@ -100,7 +107,7 @@ namespace Oak
 
             (model.Virtual as Prototype).SetValueFor(
                 MakeSingular(repository),
-                new Func<dynamic>(() => repository.SingleWhere(foreignKey + " = @0", model.GetValueFor("Id"))));
+                new DynamicMethod(() => repository.SingleWhere(foreignKey + " = @0", model.GetValueFor("Id"))));
         }
     }
 
@@ -120,7 +127,7 @@ namespace Oak
         {
             (model.Virtual as Prototype).SetValueFor(
                 name,
-                new Func<dynamic>(() => repository.Single(model.GetValueFor(SigularizedIdFor(repository)))));
+                new DynamicMethod(() => repository.Single(model.GetValueFor(SigularizedIdFor(repository)))));
         }
     }
 }
