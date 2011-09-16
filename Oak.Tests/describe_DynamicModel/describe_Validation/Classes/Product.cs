@@ -9,7 +9,7 @@ namespace Oak.Tests.describe_Validation.Classes
     {
         public Product()
         {
-            Validates(new Format { Property = "Code", With = @"\A[a-zA-z]+\z" });
+            Validates(new Format("Code") { With = @"\A[a-zA-z]+\z" });
         }
     }
 }

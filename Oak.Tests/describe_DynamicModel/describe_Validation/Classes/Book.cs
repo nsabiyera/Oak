@@ -12,8 +12,8 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public Book(dynamic o)
         {
-            Validates(new Presense { Property = "Title" });
-            Validates(new Presense { Property = "Body" });
+            Validates(new Presense("Title"));
+            Validates(new Presense("Body"));
 
             Init(o);
         }

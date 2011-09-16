@@ -74,6 +74,8 @@
     <Compile Include="describe_DynamicModel\describe_Association\has_one_through.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Coffee.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\User.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Users.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\core_validation.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\exclusion.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\inclusion.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Person.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Product.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
     <Compile Include="describe_Prototype.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />

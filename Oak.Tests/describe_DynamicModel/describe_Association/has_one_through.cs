@@ -55,7 +55,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     new { CustomerId = customerId, SupplierId = supplierId }.InsertInto("DistributionChannels");
                 };
 
-                it["retrieves has many through"] = () => 
+                it["retrieves has one through"] = () => 
                     (customers.Single(customerId).Supplier().Name as string).should_be("Texas Instruments");
                     
             };
