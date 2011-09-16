@@ -4,26 +4,10 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Massive;
+using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel
 {
-    public class Customers : DynamicRepository
-    {
-        
-    }
-
-    public class Loan : DynamicModel
-    {
-        Customers customers;
-
-        public Loan()
-        {
-            customers = new Customers();
-
-            Associations(new BelongsTo(customers));
-        }
-    }
-
     class core_behavior : nspec
     {
         dynamic loan;
