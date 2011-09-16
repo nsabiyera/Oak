@@ -57,10 +57,15 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blogs.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Comments.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Customer.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Customers.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\DistributionChannels.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Friends.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Games.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Library.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Loan.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Profiles.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Suppliers.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\User.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Users.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_many.cs" />

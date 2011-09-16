@@ -57,11 +57,11 @@ namespace Oak
 
             var toTable = repository.GetType().Name;
 
-            if(Through == null)
+            if (Through == null)
             {
                 (model.Virtual as Prototype).SetValueFor(
                     named,
-                    DirectTableQuery(fromColumn, model));    
+                    DirectTableQuery(fromColumn, model));
             }
             else
             {
@@ -96,6 +96,8 @@ namespace Oak
     {
         private DynamicRepository repository;
 
+        public DynamicRepository Through { get; set; }
+
         public HasOne(DynamicRepository repository)
         {
             this.repository = repository;
@@ -105,9 +107,34 @@ namespace Oak
         {
             var foreignKey = model.GetType().Name + "Id";
 
-            (model.Virtual as Prototype).SetValueFor(
-                MakeSingular(repository),
-                new DynamicMethod(() => repository.SingleWhere(foreignKey + " = @0", model.GetValueFor("Id"))));
+            if (Through != null)
+            {
+                (model.Virtual as Prototype).SetValueFor(
+                    MakeSingular(repository),
+                    ThroughTableQuery(foreignKey, repository.GetType().Name, Through.GetType().Name, SigularizedIdFor(repository), model));
+            }
+            else
+            {
+                (model.Virtual as Prototype).SetValueFor(
+                    MakeSingular(repository),
+                    new DynamicMethod(() => repository.SingleWhere(foreignKey + " = @0", model.GetValueFor("Id"))));
+            }
+        }
+
+        private DynamicMethod ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        {
+            return () => repository.Query(
+                @"
+                select {toTable}.*
+                from {throughTable}
+                inner join {toTable}
+                on {throughTable}.{using} = {toTable}.Id
+                where {fromColumn} = @0"
+                    .Replace("{toTable}", toTable)
+                    .Replace("{throughTable}", throughTable)
+                    .Replace("{using}", @using)
+                    .Replace("{fromColumn}", fromColumn), model.Expando.Id as object)
+                    .FirstOrDefault();
         }
     }
 
