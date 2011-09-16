@@ -6,11 +6,10 @@ namespace Oak.Tests.describe_Validation.Classes
     {
         public LegalDocument()
         {
-            Validates(new Acceptance { Property = "TermsOfService" });
+            Validates(new Acceptance("TermsOfService"));
 
-            Validates(new Acceptance
+            Validates(new Acceptance("TypedOutAcceptance")
             {
-                Property = "TypedOutAcceptance",
                 Accept = "I Agree",
                 Text = "You have not typed out the acceptance. Type I Accept."
             });

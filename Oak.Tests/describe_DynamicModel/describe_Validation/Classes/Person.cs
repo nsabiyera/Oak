@@ -14,7 +14,7 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public Person(dynamic o)
         {
-            Validates(new Confirmation { Property = "Email" });
+            Validates(new Confirmation("Email"));
 
             Init(o);
         }

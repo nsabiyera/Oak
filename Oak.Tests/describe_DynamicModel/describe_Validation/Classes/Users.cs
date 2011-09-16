@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Massive;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 {
-    public class Coffee : DynamicModel
+    public class Users : DynamicRepository
     {
-        public Coffee()
+        public Users()
         {
-            Validates(new Inclusion("Size") { In = new[] { "small", "medium", "large" } });
+            Projection = d => new User(d);
         }
     }
 }

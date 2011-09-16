@@ -16,19 +16,29 @@ namespace Oak
 
         public string Text { get; set; }
 
-        public virtual void Init(dynamic entity) 
+        public Validation()
+        {
+            
+        }
+
+        public Validation(string property)
+        {
+            Property = property;
+        }
+
+        public virtual void Init(DynamicModel entity) 
         {
             AddDefault(entity, Property);
         }
 
-        public void AddDefault(dynamic entity, string property)
+        public void AddDefault(Prototype entity, string property)
         {
-            if (!(entity as Prototype).RespondsTo(property)) (entity.Expando as IDictionary<string, object>).Add(property, null);
+            if (!entity.RespondsTo(property)) (entity.Expando as IDictionary<string, object>).Add(property, null);
         }
 
-        public void AddVirtual(dynamic entity, string property)
+        public void AddVirtual(DynamicModel entity, string property)
         {
-            dynamic virtualPrototype = (entity as DynamicModel).Virtual;
+            dynamic virtualPrototype = entity.Virtual;
 
             AddDefault(virtualPrototype, property);
         }
@@ -40,12 +50,12 @@ namespace Oak
             return Property + " is invalid.";
         }
 
-        public dynamic PropertyValueIn(dynamic entity)
+        public dynamic PropertyValueIn(DynamicModel entity)
         {
             return PropertyValueIn(Property, entity);
         }
 
-        public dynamic PropertyValueIn(string property, dynamic entity)
+        public dynamic PropertyValueIn(string property, DynamicModel entity)
         {
             return (entity as DynamicModel).GetValueFor(property);
         }
@@ -53,14 +63,15 @@ namespace Oak
 
     public class Acceptance : Validation
     {
-        public Acceptance()
+        public Acceptance(string property)
+            : base(property)
         {
             Accept = true;
         }
 
         public dynamic Accept { get; set; }
 
-        public bool Validate(dynamic entity)
+        public bool Validate(DynamicModel entity)
         {
             return PropertyValueIn(entity).Equals(Accept);
         }
@@ -68,14 +79,20 @@ namespace Oak
 
     public class Confirmation : Validation
     {
-        public override void Init(dynamic entity)
+        public Confirmation(string property)
+            : base(property)
         {
-            base.Init(entity as object);
+            
+        }
+
+        public override void Init(DynamicModel entity)
+        {
+            base.Init(entity);
 
             AddVirtual(entity, Property + "Confirmation");
         }
 
-        public bool Validate(dynamic entity)
+        public bool Validate(DynamicModel entity)
         {
             return PropertyValueIn(entity) == PropertyValueIn(Property + "Confirmation", entity);
         }
@@ -83,9 +100,14 @@ namespace Oak
 
     public class Exclusion : Validation
     {
+        public Exclusion(string property)
+            : base(property)
+        {
+            
+        }
         public dynamic[] In { get; set; }
 
-        public bool Validate(dynamic entity)
+        public bool Validate(DynamicModel entity)
         {
             return !In.Contains(PropertyValueIn(entity) as object);
         }
@@ -93,9 +115,15 @@ namespace Oak
 
     public class Format : Validation
     {
+        public Format(string property)
+            : base(property)
+        {
+            
+        }
+
         public string With { get; set; }
 
-        public bool Validate(dynamic entity)
+        public bool Validate(DynamicModel entity)
         {
             return Regex.IsMatch(PropertyValueIn(entity) as string ?? "", With);
         }
@@ -103,9 +131,15 @@ namespace Oak
 
     public class Inclusion : Validation
     {
+        public Inclusion(string property)
+            : base(property)
+        {
+            
+        }
+
         public dynamic[] In { get; set; }
 
-        public bool Validate(dynamic entity)
+        public bool Validate(DynamicModel entity)
         {
             return In.Contains(PropertyValueIn(entity) as object);
         }
@@ -113,16 +147,49 @@ namespace Oak
 
     public class Presense : Validation
     {
-        public override void Init(dynamic entity)
+        public Presense(string property)
+            : base(property)
         {
-            base.Init(entity as object);
+            
+        }
+
+        public override void Init(DynamicModel entity)
+        {
+            base.Init(entity);
 
             if (string.IsNullOrEmpty(Text)) Text = Property + " is required.";
         }
 
-        public bool Validate(dynamic entity)
+        public bool Validate(DynamicModel entity)
         {
             return !string.IsNullOrEmpty(PropertyValueIn(entity));
+        }
+    }
+
+    public class Uniqueness : Validation
+    {
+        public Uniqueness(string property)
+            : base(property)
+        {
+            
+        }
+
+        public override void Init(DynamicModel entity)
+        {
+            base.Init(entity);
+
+            if (string.IsNullOrEmpty(Text)) Text = Property + " is taken.";
+        }
+
+        public DynamicRepository Using { get; set; }
+
+        public bool Validate(DynamicModel entity)
+        {
+            object value = entity.GetValueFor(Property);
+
+            if (Using.SingleWhere(Property + " = @0", value) != null) return false;
+
+            return true;
         }
     }
 }

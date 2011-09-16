@@ -9,7 +9,7 @@ namespace Oak.Tests.describe_Validation.Classes
     {
         public Registration()
         {
-            Validates(new Exclusion { Property = "UserName", In = new[] { "admin", "administrator" } });
+            Validates(new Exclusion("UserName") { In = new[] { "admin", "administrator" } });
         }
     }
 }
