@@ -33,6 +33,8 @@ namespace Oak
             new MixInAssociation(this);
 
             foreach (var item in dto.ToDictionary()) SetMember(item.Key, item.Value);
+
+            new MixInChanges(this);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -111,6 +113,11 @@ namespace Oak
         private void ThrowIfNotInitialized()
         {
             if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statment in your constructors.");
+        }
+
+        public ExpandoObject TrackedProperties()
+        {
+            return new ExpandoObject();
         }
     }
 }

@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
+    <Compile Include="describe_DynamicModel\Classes\Inventory.cs" />
+    <Compile Include="describe_DynamicModel\Classes\InventoryItem.cs" />
     <Compile Include="describe_DynamicModel\core_behavior_for_dynamic_model.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\belongs_to.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Author.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="describe_DynamicModel\describe_Association\has_one.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_one_through.cs" />
     <Compile Include="describe_DynamicModel\describe_Changes\core_behavior_for_tracking_changes.cs" />
+    <Compile Include="describe_DynamicModel\saving_dynamic_model.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Coffee.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\User.cs" />
