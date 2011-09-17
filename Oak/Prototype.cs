@@ -12,6 +12,8 @@ namespace Oak
 
     public delegate IEnumerable<dynamic> DynamicEnumerableFunction();
 
+    public delegate dynamic DynamicFuctionWithParam(dynamic parameter);
+
     public class Prototype : DynamicObject
     {
         public dynamic Expando { get; set; }

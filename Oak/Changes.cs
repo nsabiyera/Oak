@@ -10,9 +10,9 @@ namespace Oak
     {
         DynamicModel @this;
 
-        IDictionary<string, object> originalValues;
+        IDictionary<string, dynamic> originalValues;
 
-        IDictionary<string, object> currentValues;
+        IDictionary<string, dynamic> currentValues;
 
         public MixInChanges(DynamicModel dynamicModel)
         {
@@ -22,27 +22,31 @@ namespace Oak
 
             currentValues = dynamicModel.Hash();
 
-            dynamicModel.Virtual.SetMember("IsChanged", new DynamicFunction(IsChanged));
+            dynamicModel.Virtual.SetMember("HasChanged", new DynamicFunction(HasChanged));
 
-            dynamicModel.Virtual.SetMember("Original", new Func<string, dynamic>(Original));
+            dynamicModel.Virtual.SetMember("HasPropertyChanged", new DynamicFuctionWithParam(HasPropertyChanged));
 
-            dynamicModel.Virtual.SetMember("Changes", new Func<IDictionary<string, dynamic>>(Changes));
+            dynamicModel.Virtual.SetMember("Original", new DynamicFuctionWithParam(Original));
 
-            dynamicModel.Virtual.SetMember("ChangesFor", new Func<string, dynamic>(ChangesFor));
+            dynamicModel.Virtual.SetMember("Changes", new DynamicFunction(Changes));
+
+            dynamicModel.Virtual.SetMember("ChangesFor", new DynamicFuctionWithParam(ChangesFor));
         }
 
-        public IDictionary<string, dynamic> Changes()
+        public dynamic Changes()
         {
             var dictionary = new Dictionary<string, dynamic>();
 
-            foreach (var key in currentValues.Keys) dictionary.Add(key, ChangesFor(key));
+            var keys = currentValues.Keys.Union(originalValues.Keys).Distinct();
+
+            foreach (var key in keys) if (HasPropertyChanged(key)) dictionary.Add(key, ChangesFor(key));
 
             return dictionary;
         }
 
-        public dynamic ChangesFor(string property)
+        public dynamic ChangesFor(dynamic property)
         {
-            return BeforeAfter(Original(property), currentValues[property]);
+            return BeforeAfter(Original(property), Current(property));
         }
 
         private dynamic BeforeAfter(dynamic before, dynamic after)
@@ -50,23 +54,37 @@ namespace Oak
             dynamic expando = new ExpandoObject();
 
             expando.Original = before;
+
             expando.New = after;
 
             return expando;
         }
 
-        public dynamic Original(string property)
+        public dynamic Original(dynamic property)
         {
-            if (!originalValues.ContainsKey(property)) return null;
-
-            return originalValues[property];
+            return NullOrValueFor(originalValues, property);
         }
 
-        public dynamic IsChanged()
+        public dynamic Current(dynamic property)
         {
-            foreach (var item in currentValues) if (Original(item.Key) != item.Value) return true;
+            return NullOrValueFor(currentValues, property);
+        }
 
-            return false;
+        private dynamic NullOrValueFor(IDictionary<string, dynamic> dictionary, string key)
+        {
+            if (!dictionary.ContainsKey(key)) return null;
+
+            return dictionary[key];
+        }
+
+        public dynamic HasChanged()
+        {
+            return Changes().Count > 0;
+        }
+
+        public dynamic HasPropertyChanged(dynamic property)
+        {
+            return Original(property) != Current(property);
         }
     }
 }

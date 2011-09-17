@@ -4,23 +4,10 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using System.ComponentModel;
+using Oak.Tests.describe_DynamicModel.describe_Changes.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Changes
 {
-    public class Person : DynamicModel
-    {
-        public Person()
-            : this(new { })
-        {
-
-        }
-
-        public Person(dynamic dto)
-        {
-            Init(dto);
-        }
-    }
-
     class core_behavior_for_tracking_changes : nspec
     {
         dynamic person;
@@ -32,11 +19,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
                 person = new Person();
             };
 
-            it["has no changes"] = () => ((bool)person.IsChanged()).should_be_false();
+            it["has no changes"] = () => ((bool)person.HasChanged()).should_be_false();
+
+            it["property has no changes"] = () => ((bool)person.HasPropertyChanged("FirstName")).should_be_false();
 
             it["methods added are virtual, so that they are ignored by persistance"] = () =>
             {
-                ((bool)person.Virtual.RespondsTo("IsChanged")).should_be_true();
+                ((bool)person.Virtual.RespondsTo("HasChanged")).should_be_true();
+
+                ((bool)person.Virtual.RespondsTo("HasPropertyChanged")).should_be_true();
 
                 ((bool)person.Virtual.RespondsTo("Original")).should_be_true();
 
@@ -51,7 +42,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
                 it["original values are unchanged"] = () => (person.Original("FirstName") as object).should_be(null);
 
-                it["has changes"] = () => ((bool)person.IsChanged()).should_be_true();
+                it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
 
                 it["lists changes"] = () =>
                 {
@@ -76,17 +67,17 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
             act = () =>
             {
                 person = new Person(new { FirstName = "Jane" });
-
-                new MixInChanges(person);
             };
 
-            it["has no changes"] = () => ((bool)person.IsChanged()).should_be_false();
+            it["has no changes"] = () => ((bool)person.HasChanged()).should_be_false();
+
+            it["list of changes is empty"] = () => ((int)person.Changes().Count).should_be(0);
 
             context["changing dynamic model"] = () =>
             {
                 act = () => person.FirstName = "New Value";
 
-                it["has changes"] = () => ((bool)person.IsChanged()).should_be_true();
+                it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
 
                 it["lists changes"] = () =>
                 {
@@ -103,6 +94,40 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
                     (changes.Original as object).should_be("Jane");
                     (changes.New as object).should_be("New Value");
                 };
+            };
+
+            context["setting dynamic model property to what it already is"] = () =>
+            {
+                act = () => person.FirstName = new string("Jane".ToArray());
+
+                it["isn't considered a change"] = () => ((bool)person.HasChanged()).should_be_false();
+            };
+        }
+
+        void deleting_a_property()
+        {
+            act = () =>
+            {
+                person = new Person(new { FirstName = "Jane" });
+
+                person.DeleteMember("FirstName");
+            };
+
+            it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
+
+            it["lists changes"] = () =>
+            {
+                IDictionary<string, dynamic> changes = person.Changes();
+
+                (changes["FirstName"].Original as object).should_be("Jane");
+                (changes["FirstName"].New as object).should_be(null);
+            };
+
+            context["different property is added"] = () =>
+            {
+                act = () => person.SetMember("LastName", "");
+
+                it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
             };
         }
     }
