@@ -6,8 +6,8 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModel.Classes
 {
-    public class Customers : DynamicRepository
+    public class Inventory : DynamicRepository
     {
-
+        
     }
 }
