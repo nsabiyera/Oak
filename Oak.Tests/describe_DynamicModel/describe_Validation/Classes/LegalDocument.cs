@@ -5,6 +5,11 @@ namespace Oak.Tests.describe_Validation.Classes
 {
     public class LegalDocument : DynamicModel
     {
+        public LegalDocument()
+        {
+            Init();
+        }
+
         public IEnumerable<dynamic> Validates()
         {
             yield return new Acceptance("TermsOfService");

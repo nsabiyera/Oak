@@ -171,6 +171,8 @@ namespace Oak.Tests
             {
                 entity = new DynamicModel();
 
+                entity.Init();
+
                 entity.Expando.Title = "Some Title";
 
                 form = new DynamicForm(entity);

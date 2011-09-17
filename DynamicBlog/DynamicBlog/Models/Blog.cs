@@ -12,13 +12,11 @@ namespace DynamicBlog.Models
     {
         Comments comments;
 
-        public Blog(object valueType)
+        public Blog(object dto)
         {
             comments = new Comments();
 
-            Associations(new HasMany(comments));
-
-            Init(valueType);
+            Init(dto);
         }
 
         public IEnumerable<dynamic> Validates()
@@ -26,6 +24,11 @@ namespace DynamicBlog.Models
             yield return new Presense("Title") { Text = "Please specify a title for this blog post." };
 
             yield return new Presense("Body");
+        }
+
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return new HasMany(comments);
         }
 
         public void AddComment(string comment)

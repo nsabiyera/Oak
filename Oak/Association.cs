@@ -6,9 +6,25 @@ using Massive;
 
 namespace Oak
 {
+    public class MixInAssociation
+    {
+        public MixInAssociation(DynamicModel mixWith)
+        {
+            if(mixWith.GetType().GetMethod("Associates") != null)
+            {
+                IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
+
+                foreach (dynamic association in associations)
+                {
+                    association.Init(mixWith);
+                }
+            }
+        }
+    }
+
     public class Association
     {
-        public virtual void Init(DynamicModel model)
+        public virtual void Init(dynamic model)
         {
 
         }
@@ -47,7 +63,7 @@ namespace Oak
             this.named = named ?? repository.GetType().Name;
         }
 
-        public override void Init(DynamicModel model)
+        public override void Init(dynamic model)
         {
             var fromColumn = model.GetType().Name + "Id";
 
@@ -99,7 +115,7 @@ namespace Oak
             this.repository = repository;
         }
 
-        public override void Init(DynamicModel model)
+        public override void Init(dynamic model)
         {
             var foreignKey = model.GetType().Name + "Id";
 
@@ -146,7 +162,7 @@ namespace Oak
             name = MakeSingular(repository);
         }
 
-        public override void Init(DynamicModel model)
+        public override void Init(dynamic model)
         {
             (model.Virtual as Prototype).SetMember(
                 name,

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
@@ -10,9 +11,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             comments = new Comments();
 
-            Associations(new HasMany(comments));
-
             Init(entity);
+        }
+
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return new HasMany(comments);
         }
     }
 }
