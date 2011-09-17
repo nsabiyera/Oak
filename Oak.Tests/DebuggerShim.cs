@@ -13,7 +13,7 @@ namespace DynamicBlog.Tests
         [Test]
         public void debug()
         {
-            var testClassYouWantToDebug = "has_one_through";
+            var testClassYouWantToDebug = "presense";
 
             var finder = new SpecFinder(
                 Assembly.GetExecutingAssembly().Location,

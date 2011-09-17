@@ -51,7 +51,7 @@ namespace Oak.Tests.describe_DynamicModel
         {
             context["method is redefined"] = () =>
             {
-                act = () => loan.Customer = new DynamicMethod(() => new { Name = "Jane Doe" });
+                act = () => loan.Customer = new DynamicFunction(() => new { Name = "Jane Doe" });
 
                 it["behaves using redefined behavior"] = () => (loan.Customer().Name as string).should_be("Jane Doe");
 
@@ -91,9 +91,13 @@ namespace Oak.Tests.describe_DynamicModel
                     loan.Term = 5;
                 };
 
-                act = () => methods = Model().Methods().Do(s => Model().DeleteMember(s));
+                act = () =>
+                {
+                    Model().Methods().ToList().Do(s => Model().DeleteMember(s));
+                    methods = Model().Methods();
+                };
 
-                it["contains both defined methods"] = () =>
+                it["both methods are deleted"] = () =>
                 {
                     methods.ToList().should_not_contain("Customer");
                     methods.ToList().should_not_contain("Term");

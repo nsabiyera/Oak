@@ -8,6 +8,10 @@ using System.Diagnostics;
 
 namespace Oak
 {
+    public delegate dynamic DynamicFunction();
+
+    public delegate IEnumerable<dynamic> DynamicEnumerableFunction();
+
     public class Prototype : DynamicObject
     {
         public dynamic Expando { get; set; }
@@ -72,7 +76,7 @@ namespace Oak
             return false;
         }
 
-        public virtual dynamic GetValueFor(string property)
+        public virtual dynamic GetMember(string property)
         {
             object result = null;
 
@@ -81,7 +85,7 @@ namespace Oak
             throw new InvalidOperationException("This prototype does not respond to the property " + property + ".");
         }
 
-        public virtual void SetValueFor(string property, object value)
+        public virtual void SetMember(string property, object value)
         {
             TrySetMember(property, value);
         }
@@ -140,7 +144,7 @@ namespace Oak
 
         public virtual IEnumerable<string> Methods()
         {
-            return Hash().Select(s => s.Key);
+            return Hash().Select(s => s.Key).ToList();
         }
 
         public IDictionary<string, object> Hash()

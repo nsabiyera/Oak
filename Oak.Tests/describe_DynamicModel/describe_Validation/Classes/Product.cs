@@ -7,9 +7,9 @@ namespace Oak.Tests.describe_Validation.Classes
 {
     public class Product : DynamicModel
     {
-        public Product()
+        public IEnumerable<dynamic> Validates()
         {
-            Validates(new Format("Code") { With = @"\A[a-zA-z]+\z" });
+            yield return new Format("Code") { With = @"\A[a-zA-z]+\z" };
         }
     }
 }

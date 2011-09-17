@@ -7,9 +7,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 {
     public class Coffee : DynamicModel
     {
-        public Coffee()
+        public IEnumerable<dynamic> Validates()
         {
-            Validates(new Inclusion("Size") { In = new[] { "small", "medium", "large" } });
+            yield return new Inclusion("Size") { In = new[] { "small", "medium", "large" } };
         }
     }
 }

@@ -14,9 +14,12 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public Person(dynamic o)
         {
-            Validates(new Confirmation("Email"));
-
             Init(o);
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Confirmation("Email");
         }
     }
 }

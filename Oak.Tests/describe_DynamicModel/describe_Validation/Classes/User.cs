@@ -19,9 +19,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
         {
             users = new Users();
 
-            Validates(new Uniqueness("Email") { Using = users });
-
             Init(dto);
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Uniqueness("Email") { Using = users };
         }
     }
 }

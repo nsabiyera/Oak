@@ -16,13 +16,16 @@ namespace DynamicBlog.Models
         {
             comments = new Comments();
 
-            Validates(new Presense("Title") { Text = "Please specify a title for this blog post." });
-
-            Validates(new Presense("Body"));
-
             Associations(new HasMany(comments));
 
             Init(valueType);
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Presense("Title") { Text = "Please specify a title for this blog post." };
+
+            yield return new Presense("Body");
         }
 
         public void AddComment(string comment)

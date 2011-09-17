@@ -81,11 +81,11 @@ namespace Oak.Tests
 
         void describe_get_value_for_property()
         {
-            it["retrieves value with exact casing"] = () => (Prototype().GetValueFor("Title") as string).should_be("Some Name");
+            it["retrieves value with exact casing"] = () => (Prototype().GetMember("Title") as string).should_be("Some Name");
 
-            it["retrieves value with exact case insensitive"] = () => (Prototype().GetValueFor("title") as string).should_be("Some Name");
+            it["retrieves value with exact case insensitive"] = () => (Prototype().GetMember("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This prototype does not respond to the property FooBar.", () => Prototype().GetValueFor("FooBar"));
+            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This prototype does not respond to the property FooBar.", () => Prototype().GetMember("FooBar"));
         }
 
         void when_retrieving_property_from_prototype()

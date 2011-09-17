@@ -77,7 +77,7 @@ namespace Oak
 
             if (property != null) return property.GetValue(entity as object, null);
 
-            if (entity is DynamicModel && (entity as DynamicModel).RespondsTo(name)) return (entity as DynamicModel).GetValueFor(name);
+            if (entity is DynamicModel && (entity as DynamicModel).RespondsTo(name)) return (entity as DynamicModel).GetMember(name);
 
             if (entity is Prototype)
             {

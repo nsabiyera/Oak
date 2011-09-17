@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Oak.Tests.describe_Validation.Classes
 {
@@ -12,10 +13,14 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public Book(dynamic o)
         {
-            Validates(new Presense("Title"));
-            Validates(new Presense("Body"));
-
             Init(o);
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Presense("Title");
+
+            yield return new Presense("Body");
         }
     }
 }

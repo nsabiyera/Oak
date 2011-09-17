@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>0.1.5</version> 
+    <version>0.1.6</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic MVC Hotness. Simply put...oak is a clone of Ruby on Rails.  The nuget package 'oak' is the stable release, this one is the latest release fresh off the presses.</description> 
     <language>en-US</language>

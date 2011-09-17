@@ -1,15 +1,99 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Dynamic;
 using Massive;
-using System.Collections;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 
 namespace Oak
 {
+    public class MixInValidation
+    {
+        dynamic @this;
+
+        List<dynamic> rules;
+
+        List<dynamic> errors;
+
+        public MixInValidation(DynamicModel mixWith)
+        {
+            rules = new List<dynamic>();
+
+            errors = new List<dynamic>();
+
+            mixWith.Virtual.SetMember("Errors", new DynamicEnumerableFunction(Errors));
+
+            mixWith.Virtual.SetMember("IsValid", new DynamicFunction(IsValid));
+
+            mixWith.Virtual.SetMember("IsPropertyValid", new Func<dynamic, dynamic>(IsValid));
+
+            mixWith.Virtual.SetMember("FirstError", new DynamicFunction(FirstError));
+
+            @this = mixWith;
+
+            if (mixWith.GetType().GetMethod("Validates") != null)
+            {
+                IEnumerable<dynamic> validationRules = this.@this.Validates();
+
+                foreach (var validationRule in validationRules)
+                {
+                    validationRule.Init(mixWith);
+
+                    AddRule(validationRule);
+                }    
+            }
+        }
+
+        public void AddError(string property, string message)
+        {
+            errors.Add(new KeyValuePair<string, string>(property, message));
+        }
+
+        public void AddRule(dynamic rule)
+        {
+            rules.Add(rule);
+        }
+
+        public List<dynamic> Errors()
+        {
+            return errors;
+        }
+
+        public virtual dynamic IsValid()
+        {
+            return IsValid(s => true);
+        }
+
+        public virtual dynamic IsValid(dynamic property)
+        {
+            return IsValid(s => s.Property == property);
+        }
+
+        public virtual bool IsValid(Func<dynamic, bool> filter)
+        {
+            errors.Clear();
+
+            bool isValid = true;
+
+            foreach (var rule in rules.Where(filter)) isValid = Validate(rule) && isValid;
+
+            return isValid;
+        }
+
+        public bool Validate(dynamic rule)
+        {
+            bool isValid = rule.Validate(@this);
+
+            if (!isValid) AddError(rule.Property, rule.Message());
+
+            return isValid;
+        }
+
+        public string FirstError()
+        {
+            return errors.First().Value;
+        }
+    }
+
     public class Validation
     {
         public string Property { get; set; }
@@ -26,7 +110,7 @@ namespace Oak
             Property = property;
         }
 
-        public virtual void Init(DynamicModel entity) 
+        public virtual void Init(dynamic entity) 
         {
             AddDefault(entity, Property);
         }
@@ -57,7 +141,7 @@ namespace Oak
 
         public dynamic PropertyValueIn(string property, DynamicModel entity)
         {
-            return (entity as DynamicModel).GetValueFor(property);
+            return (entity as DynamicModel).GetMember(property);
         }
     }
 
@@ -85,9 +169,9 @@ namespace Oak
             
         }
 
-        public override void Init(DynamicModel entity)
+        public override void Init(dynamic entity)
         {
-            base.Init(entity);
+            base.Init(entity as object);
 
             AddVirtual(entity, Property + "Confirmation");
         }
@@ -153,9 +237,9 @@ namespace Oak
             
         }
 
-        public override void Init(DynamicModel entity)
+        public override void Init(dynamic entity)
         {
-            base.Init(entity);
+            base.Init(entity as object);
 
             if (string.IsNullOrEmpty(Text)) Text = Property + " is required.";
         }
@@ -174,9 +258,9 @@ namespace Oak
             
         }
 
-        public override void Init(DynamicModel entity)
+        public override void Init(dynamic entity)
         {
-            base.Init(entity);
+            base.Init(entity as object);
 
             if (string.IsNullOrEmpty(Text)) Text = Property + " is taken.";
         }
@@ -185,7 +269,7 @@ namespace Oak
 
         public bool Validate(DynamicModel entity)
         {
-            object value = entity.GetValueFor(Property);
+            object value = entity.GetMember(Property);
 
             if (Using.SingleWhere(Property + " = @0", value) != null) return false;
 

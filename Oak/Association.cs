@@ -6,10 +6,6 @@ using Massive;
 
 namespace Oak
 {
-    public delegate dynamic DynamicMethod();
-
-    public delegate IEnumerable<dynamic> DynamicEnumerableMethod();
-
     public class Association
     {
         public virtual void Init(DynamicModel model)
@@ -59,24 +55,24 @@ namespace Oak
 
             if (Through == null)
             {
-                (model.Virtual as Prototype).SetValueFor(
+                (model.Virtual as Prototype).SetMember(
                     named,
                     DirectTableQuery(fromColumn, model));
             }
             else
             {
-                (model.Virtual as Prototype).SetValueFor(
+                (model.Virtual as Prototype).SetMember(
                     named,
                     ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? SigularizedIdFor(repository), model));
             }
         }
 
-        private DynamicEnumerableMethod DirectTableQuery(string foreignKey, DynamicModel model)
+        private DynamicEnumerableFunction DirectTableQuery(string foreignKey, DynamicModel model)
         {
             return () => repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id });
         }
 
-        private DynamicEnumerableMethod ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicEnumerableFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
             return () => repository.Query(
                  @"
@@ -109,19 +105,19 @@ namespace Oak
 
             if (Through != null)
             {
-                (model.Virtual as Prototype).SetValueFor(
+                (model.Virtual as Prototype).SetMember(
                     MakeSingular(repository),
                     ThroughTableQuery(foreignKey, repository.GetType().Name, Through.GetType().Name, SigularizedIdFor(repository), model));
             }
             else
             {
-                (model.Virtual as Prototype).SetValueFor(
+                (model.Virtual as Prototype).SetMember(
                     MakeSingular(repository),
-                    new DynamicMethod(() => repository.SingleWhere(foreignKey + " = @0", model.GetValueFor("Id"))));
+                    new DynamicFunction(() => repository.SingleWhere(foreignKey + " = @0", model.GetMember("Id"))));
             }
         }
 
-        private DynamicMethod ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
             return () => repository.Query(
                 @"
@@ -152,9 +148,9 @@ namespace Oak
 
         public override void Init(DynamicModel model)
         {
-            (model.Virtual as Prototype).SetValueFor(
+            (model.Virtual as Prototype).SetMember(
                 name,
-                new DynamicMethod(() => repository.Single(model.GetValueFor(SigularizedIdFor(repository)))));
+                new DynamicFunction(() => repository.Single(model.GetMember(SigularizedIdFor(repository)))));
         }
     }
 }
