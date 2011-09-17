@@ -64,6 +64,9 @@
     <Compile Include="..\..\Oak\Association.cs">
       <Link>Oak\Association.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\Changes.cs">
+      <Link>Oak\Changes.cs</Link>
+    </Compile>
     <Compile Include="..\..\Oak\ConnectionProfile.cs">
       <Link>Oak\ConnectionProfile.cs</Link>
     </Compile>
