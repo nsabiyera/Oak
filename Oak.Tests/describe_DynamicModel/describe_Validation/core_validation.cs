@@ -15,6 +15,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
         bool isValid;
 
+        dynamic model;
+
         void before_each()
         {
             book = new Book();
@@ -79,6 +81,27 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 before = () => book = new Book(new { id = 1 });
 
                 it["it exists on prototype object as opposed to virtual"] = () => (book as DynamicModel).RespondsTo("id").should_be_true();
+            };
+        }
+
+        void virtual_properties_for_validation()
+        {
+            context["when validation is mixed in to a dynamic model"] = () =>
+            {
+                before = () => model = new DynamicModel();
+
+                it["the properties added for validation are virtual, so that they are not included in persistance by DynamicRepository"] = () =>
+                {
+                    Prototype virtualProperties = (model as DynamicModel).Virtual;
+
+                    virtualProperties.Methods().should_contain("Errors");
+
+                    virtualProperties.Methods().should_contain("IsValid");
+
+                    virtualProperties.Methods().should_contain("IsPropertyValid");
+
+                    virtualProperties.Methods().should_contain("FirstError");
+                };
             };
         }
     }

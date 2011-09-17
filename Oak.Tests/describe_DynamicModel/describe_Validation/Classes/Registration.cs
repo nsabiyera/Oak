@@ -7,9 +7,9 @@ namespace Oak.Tests.describe_Validation.Classes
 {
     public class Registration : DynamicModel
     {
-        public Registration()
+        public IEnumerable<dynamic> Validates()
         {
-            Validates(new Exclusion("UserName") { In = new[] { "admin", "administrator" } });
+            yield return new Exclusion("UserName") { In = new[] { "admin", "administrator" } };
         }
     }
 }

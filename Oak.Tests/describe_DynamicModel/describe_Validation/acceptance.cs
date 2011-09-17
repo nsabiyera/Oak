@@ -32,7 +32,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () => legalDocument.TermsOfService = true;
 
-                it["the specific property is valid"] = () => ((bool)legalDocument.IsValid("TermsOfService")).should_be_true();
+                it["the specific property is valid"] = () => ((bool)legalDocument.IsPropertyValid("TermsOfService")).should_be_true();
 
                 it["the object is valid"] = () => isValid.should_be_true();
             };
