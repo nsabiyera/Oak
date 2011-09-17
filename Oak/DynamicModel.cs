@@ -19,12 +19,12 @@ namespace Oak
             initialized = false;
         }
 
-        public void Init()
+        public virtual void Init()
         {
             Init(new { });
         }
 
-        public void Init(object dto)
+        public virtual void Init(object dto)
         {
             initialized = true;
 
@@ -32,9 +32,7 @@ namespace Oak
 
             new MixInAssociation(this);
 
-            var dictionary = dto.ToDictionary();
-
-            foreach (var item in dictionary) SetMember(item.Key, item.Value);
+            foreach (var item in dto.ToDictionary()) SetMember(item.Key, item.Value);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -99,7 +97,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            return (Virtual as Prototype).Methods().Union(base.Methods());
+            return (Virtual as Prototype).Methods().Union(base.Methods()).ToList();
         }
 
         public override void DeleteMember(string member)
