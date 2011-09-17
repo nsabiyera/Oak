@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak</id> 
-    <version>1.2.5</version> 
+    <version>1.2.6</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic MVC Hotness. Simply put...oak is a clone of Ruby on Rails.  The nuget package 'oak-edge' is the latest release fresh off the presses, this is the stable release.</description> 
     <language>en-US</language>
@@ -21,6 +21,8 @@
     <file src="Oak/Query.cs" target="content/Oak/Query.cs" />
     <file src="Oak/Seed.cs" target="content/Oak/Seed.cs" />
     <file src="Oak/Validation.cs" target="content/Oak/Validation.cs" />
+    <file src="Oak/Association.cs" target="content/Oak/Association.cs" />
+    <file src="Oak/Changes.cs" target="content/Oak/Changes.cs" />
     <file src="Oak/Controllers/SeedController.cs" target="content/Controllers/SeedController.cs" />
   </files>
 </package>
