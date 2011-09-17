@@ -8,7 +8,7 @@ using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel
 {
-    class core_behavior : nspec
+    class core_behavior_for_dynamic_model : nspec
     {
         dynamic loan;
 

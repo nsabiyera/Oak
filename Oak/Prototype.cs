@@ -22,12 +22,12 @@ namespace Oak
 
         }
 
-        public Prototype(object o)
+        public Prototype(object dto)
         {
-            if (o is ExpandoObject)
-                Expando = o;
+            if (dto is ExpandoObject)
+                Expando = dto;
             else
-                Expando = o.ToExpando();
+                Expando = dto.ToExpando();
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)

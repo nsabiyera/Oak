@@ -88,7 +88,11 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
         {
             context["when validation is mixed in to a dynamic model"] = () =>
             {
-                before = () => model = new DynamicModel();
+                before = () =>
+                {
+                    model = new DynamicModel();
+                    model.Init();
+                };
 
                 it["the properties added for validation are virtual, so that they are not included in persistance by DynamicRepository"] = () =>
                 {

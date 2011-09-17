@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
@@ -22,15 +23,20 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
             friends = new Friends();
 
-            Associations(new HasMany(games) { Through = library });
+            Init(entity);
+        }
 
-            Associations(new HasMany(users, named: "Friends") 
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return 
+            new HasMany(games) { Through = library };
+
+            yield return
+            new HasMany(users, named: "Friends")
             {
                 Through = friends,
                 Using = "IsFollowing"
-            });
-
-            Init(entity);
+            };
         }
     }
 }

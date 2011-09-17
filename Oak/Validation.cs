@@ -32,7 +32,7 @@ namespace Oak
 
             if (mixWith.GetType().GetMethod("Validates") != null)
             {
-                IEnumerable<dynamic> validationRules = this.@this.Validates();
+                IEnumerable<dynamic> validationRules = @this.Validates();
 
                 foreach (var validationRule in validationRules)
                 {

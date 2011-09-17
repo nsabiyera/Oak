@@ -10,24 +10,37 @@ namespace Oak
     {
         public dynamic Virtual { get; set; }
 
+        private bool initialized;
+
         public DynamicModel()
         {
             Virtual = new Prototype();
 
-            new MixInValidation(this);
+            initialized = false;
         }
 
-        public void Init(object o)
+        public void Init()
         {
-            var dictionary = o.ToDictionary();
+            Init(new { });
+        }
 
-            foreach (var item in dictionary) SetMember(item.Key, item.Value);
+        public void Init(object dto)
+        {
+            initialized = true;
 
             new MixInValidation(this);
+
+            new MixInAssociation(this);
+
+            var dictionary = dto.ToDictionary();
+
+            foreach (var item in dictionary) SetMember(item.Key, item.Value);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            ThrowIfNotInitialized();
+
             if ((Virtual as Prototype).RespondsTo(binder.Name))
             {
                 result = (Virtual as Prototype).GetMember(binder.Name);
@@ -40,6 +53,8 @@ namespace Oak
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
+            ThrowIfNotInitialized();
+
             if ((Virtual as Prototype).RespondsTo(binder.Name))
             {
                 (Virtual as Prototype).SetMember(binder.Name, value);
@@ -52,6 +67,8 @@ namespace Oak
 
         public override dynamic GetMember(string property)
         {
+            ThrowIfNotInitialized();
+
             if ((Virtual as Prototype).RespondsTo(property)) return (Virtual as Prototype).GetMember(property);
 
             return base.GetMember(property);
@@ -59,11 +76,15 @@ namespace Oak
 
         public override bool RespondsTo(string property)
         {
+            ThrowIfNotInitialized();
+
             return (Virtual as Prototype).RespondsTo(property) || base.RespondsTo(property);
         }
 
         public override void SetMember(string property, object value)
         {
+            ThrowIfNotInitialized();
+
             if((Virtual as Prototype).RespondsTo(property))
             {
                 (Virtual as Prototype).SetMember(property, value);
@@ -74,20 +95,24 @@ namespace Oak
             base.SetMember(property, value);
         }
 
-        public void Associations(Association accociation)
-        {
-            accociation.Init(this);
-        }
-
         public override IEnumerable<string> Methods()
         {
+            ThrowIfNotInitialized();
+
             return (Virtual as Prototype).Methods().Union(base.Methods());
         }
 
         public override void DeleteMember(string member)
         {
+            ThrowIfNotInitialized();
+
             (Virtual as Prototype).DeleteMember(member);
             base.DeleteMember(member);
+        }
+
+        private void ThrowIfNotInitialized()
+        {
+            if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statment in your constructors.");
         }
     }
 }

@@ -14,9 +14,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             profiles = new Profiles();
 
-            Associations(new HasOne(profiles));
-
             Init(dto);
+        }
+
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return new HasOne(profiles);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
@@ -10,7 +11,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             customers = new Customers();
 
-            Associations(new BelongsTo(customers));
+            Init();
+        }
+
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return new BelongsTo(customers);
         }
     }
 }

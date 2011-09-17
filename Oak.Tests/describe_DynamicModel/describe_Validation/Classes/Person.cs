@@ -12,9 +12,9 @@ namespace Oak.Tests.describe_Validation.Classes
         {
         }
 
-        public Person(dynamic o)
+        public Person(dynamic dto)
         {
-            Init(o);
+            Init(dto);
         }
 
         public IEnumerable<dynamic> Validates()

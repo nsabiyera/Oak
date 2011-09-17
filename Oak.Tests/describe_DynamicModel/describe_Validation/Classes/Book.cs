@@ -11,9 +11,9 @@ namespace Oak.Tests.describe_Validation.Classes
 
         }
 
-        public Book(dynamic o)
+        public Book(dynamic dto)
         {
-            Init(o);
+            Init(dto);
         }
 
         public IEnumerable<dynamic> Validates()

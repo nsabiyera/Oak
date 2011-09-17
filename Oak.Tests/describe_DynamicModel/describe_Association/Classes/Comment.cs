@@ -13,9 +13,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             blogs = new Blogs();
 
-            Associations(new BelongsTo(blogs));
-
             Init(dto);
+        }
+
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return
+            new BelongsTo(blogs);
         }
     }
 }
