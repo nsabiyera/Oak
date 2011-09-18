@@ -106,6 +106,7 @@ namespace Massive
             var result = new ExpandoObject();
             var d = result as IDictionary<string, object>; //work with the Expando as a Dictionary
             if (o.GetType() == typeof(ExpandoObject)) return o; //shouldn't have to... but just in case
+            if (o is DynamicModel) return ((DynamicModel)o).TrackedProperties();
             if (o is Prototype) return ((Prototype)o).Expando;
             if (o.GetType() == typeof(NameValueCollection) || o.GetType().IsSubclassOf(typeof(NameValueCollection)))
             {

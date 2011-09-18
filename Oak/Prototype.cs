@@ -149,7 +149,7 @@ namespace Oak
             return Hash().Select(s => s.Key).ToList();
         }
 
-        public IDictionary<string, object> Hash()
+        public virtual IDictionary<string, object> Hash()
         {
             return (Expando as IDictionary<string, object>);
         }

@@ -8,15 +8,19 @@ namespace Oak
 {
     public class DynamicModel : Prototype
     {
-        public dynamic Virtual { get; set; }
-
         private bool initialized;
+
+        List<string> trackedProperties;
+
+        List<string> untrackedProperties;
 
         public DynamicModel()
         {
-            Virtual = new Prototype();
-
             initialized = false;
+
+            trackedProperties = new List<string>();
+
+            untrackedProperties = new List<string>();
         }
 
         public virtual void Init()
@@ -41,13 +45,6 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            if ((Virtual as Prototype).RespondsTo(binder.Name))
-            {
-                result = (Virtual as Prototype).GetMember(binder.Name);
-
-                return true;
-            }
-
             return base.TryGetMember(binder, out result);
         }
 
@@ -55,12 +52,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            if ((Virtual as Prototype).RespondsTo(binder.Name))
-            {
-                (Virtual as Prototype).SetMember(binder.Name, value);
-
-                return true;
-            }
+            if(!untrackedProperties.Contains(binder.Name)) TrackProperty(binder.Name);
 
             return base.TrySetMember(binder, value);
         }
@@ -69,8 +61,6 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            if ((Virtual as Prototype).RespondsTo(property)) return (Virtual as Prototype).GetMember(property);
-
             return base.GetMember(property);
         }
 
@@ -78,19 +68,21 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            return (Virtual as Prototype).RespondsTo(property) || base.RespondsTo(property);
+            return base.RespondsTo(property);
         }
 
         public override void SetMember(string property, object value)
         {
             ThrowIfNotInitialized();
 
-            if((Virtual as Prototype).RespondsTo(property))
-            {
-                (Virtual as Prototype).SetMember(property, value);
+            if (!untrackedProperties.Contains(property)) TrackProperty(property);
 
-                return;
-            }
+            base.SetMember(property, value);
+        }
+
+        public virtual void SetUnTrackedMember(string property, object value)
+        {
+            untrackedProperties.Add(property);
 
             base.SetMember(property, value);
         }
@@ -99,14 +91,13 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            return (Virtual as Prototype).Methods().Union(base.Methods()).ToList();
+            return base.Methods().ToList();
         }
 
         public override void DeleteMember(string member)
         {
             ThrowIfNotInitialized();
 
-            (Virtual as Prototype).DeleteMember(member);
             base.DeleteMember(member);
         }
 
@@ -117,7 +108,38 @@ namespace Oak
 
         public ExpandoObject TrackedProperties()
         {
-            return new ExpandoObject();
+            var expando = new ExpandoObject();
+
+            var dictionary = expando as IDictionary<string, object>;
+
+            foreach (var kvp in TrackedHash()) { dictionary.Add(kvp.Key, kvp.Value); }
+
+            return expando;
+        }
+
+        public ExpandoObject UnTrackedProperties()
+        {
+            var expando = new ExpandoObject();
+
+            var dictionary = expando as IDictionary<string, object>;
+
+            Hash().Where(s => untrackedProperties.Contains(s.Key)).ToList().ForEach(s => dictionary.Add(s.Key, s.Value));
+
+            return expando;
+        }
+
+        public void TrackProperty(string property)
+        {
+            trackedProperties.Add(property);
+        }
+
+        public IDictionary<string, object> TrackedHash()
+        {
+            var dictionary = new Dictionary<string, object>();
+           
+            Hash().Where(s => trackedProperties.Contains(s.Key)).ToList().ForEach(s => dictionary.Add(s.Key, s.Value));
+
+            return dictionary;
         }
     }
 }
