@@ -52,7 +52,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            if(!untrackedProperties.Contains(binder.Name)) TrackProperty(binder.Name);
+            TrackProperty(binder.Name);
 
             return base.TrySetMember(binder, value);
         }
@@ -75,7 +75,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            if (!untrackedProperties.Contains(property)) TrackProperty(property);
+            TrackProperty(property);
 
             base.SetMember(property, value);
         }
@@ -108,36 +108,43 @@ namespace Oak
 
         public ExpandoObject TrackedProperties()
         {
-            var expando = new ExpandoObject();
-
-            var dictionary = expando as IDictionary<string, object>;
-
-            foreach (var kvp in TrackedHash()) { dictionary.Add(kvp.Key, kvp.Value); }
-
-            return expando;
+            return ExpandoFor(TrackedHash());
         }
 
         public ExpandoObject UnTrackedProperties()
         {
-            var expando = new ExpandoObject();
-
-            var dictionary = expando as IDictionary<string, object>;
-
-            Hash().Where(s => untrackedProperties.Contains(s.Key)).ToList().ForEach(s => dictionary.Add(s.Key, s.Value));
-
-            return expando;
+            return ExpandoFor(UnTrackedHash());
         }
 
         public void TrackProperty(string property)
         {
-            trackedProperties.Add(property);
+            if (!untrackedProperties.Contains(property)) trackedProperties.Add(property);
         }
 
         public IDictionary<string, object> TrackedHash()
         {
+            return HashContaining(trackedProperties);
+        }
+
+        public IDictionary<string, object> UnTrackedHash()
+        {
+            return HashContaining(untrackedProperties);
+        }
+
+        private ExpandoObject ExpandoFor(IDictionary<string, object> dictionary)
+        {
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+
+            foreach (var kvp in dictionary) { expando.Add(kvp.Key, kvp.Value); }
+
+            return expando as ExpandoObject;
+        }
+
+        private IDictionary<string, object> HashContaining(IEnumerable<string> keys)
+        {
             var dictionary = new Dictionary<string, object>();
-           
-            Hash().Where(s => trackedProperties.Contains(s.Key)).ToList().ForEach(s => dictionary.Add(s.Key, s.Value));
+
+            Hash().Where(s => keys.Contains(s.Key)).ToList().ForEach(s => dictionary.Add(s.Key, s.Value));
 
             return dictionary;
         }
