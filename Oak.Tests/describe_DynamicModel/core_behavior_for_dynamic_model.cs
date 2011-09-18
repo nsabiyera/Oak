@@ -27,7 +27,7 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["the property is defined on dynamic model"] = () => ((int)loan.Term).should_be(5);
 
-                it["property exists as a root property"] = () => ((int)Root().Term).should_be(5);
+                it["property exists as a root property"] = () => ((int)Properties().Term).should_be(5);
 
                 it["responds to newly defined property"] = () => (loan as DynamicModel).RespondsTo("Term").should_be_true();
             };
@@ -41,7 +41,7 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["the property is defined on dynamic model"] = () => ((double)loan.MonthsFor(1)).should_be(12);
 
-                it["method exists on root"] = () => ((double)Root().MonthsFor(1)).should_be(12);
+                it["method exists on root"] = () => ((double)Properties().MonthsFor(1)).should_be(12);
 
                 it["responds to newly defined method"] = () => (loan as DynamicModel).RespondsTo("MonthsFor").should_be_true();
             };
@@ -55,7 +55,7 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["behaves using redefined behavior"] = () => (loan.Customer().Name as string).should_be("Jane Doe");
 
-                it["exists replaces virtual method"] = () => (Virtual().Customer().Name as string).should_be("Jane Doe");
+                it["exists replaces virtual method"] = () => (Properties().Customer().Name as string).should_be("Jane Doe");
 
                 it["responds to redefined method"] = () => Model().RespondsTo("Customer").should_be_true();
             };
@@ -105,14 +105,9 @@ namespace Oak.Tests.describe_DynamicModel
             };
         }
 
-        dynamic Root()
+        dynamic Properties()
         {
             return Model().Expando;
-        }
-
-        dynamic Virtual()
-        {
-            return Model().Virtual;
         }
 
         DynamicModel Model()

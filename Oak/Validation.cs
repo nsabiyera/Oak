@@ -20,13 +20,13 @@ namespace Oak
 
             errors = new List<dynamic>();
 
-            mixWith.Virtual.SetMember("Errors", new DynamicEnumerableFunction(Errors));
+            mixWith.SetUnTrackedMember("Errors", new DynamicEnumerableFunction(Errors));
 
-            mixWith.Virtual.SetMember("IsValid", new DynamicFunction(IsValid));
+            mixWith.SetUnTrackedMember("IsValid", new DynamicFunction(IsValid));
 
-            mixWith.Virtual.SetMember("IsPropertyValid", new Func<dynamic, dynamic>(IsValid));
+            mixWith.SetUnTrackedMember("IsPropertyValid", new Func<dynamic, dynamic>(IsValid));
 
-            mixWith.Virtual.SetMember("FirstError", new DynamicFunction(FirstError));
+            mixWith.SetUnTrackedMember("FirstError", new DynamicFunction(FirstError));
 
             @this = mixWith;
 
@@ -112,19 +112,17 @@ namespace Oak
 
         public virtual void Init(dynamic entity) 
         {
-            AddDefault(entity, Property);
+            AddTrackedProperty(entity, Property);
         }
 
-        public void AddDefault(Prototype entity, string property)
+        public void AddTrackedProperty(DynamicModel entity, string property)
         {
-            if (!entity.RespondsTo(property)) (entity.Expando as IDictionary<string, object>).Add(property, null);
+            if (!entity.RespondsTo(property)) entity.SetMember(property, null);
         }
 
-        public void AddVirtual(DynamicModel entity, string property)
+        public void AddUnTrackedProperty(DynamicModel entity, string property)
         {
-            dynamic virtualPrototype = entity.Virtual;
-
-            AddDefault(virtualPrototype, property);
+            if (!entity.RespondsTo(property)) entity.SetUnTrackedMember(property, null);
         }
 
         public virtual string Message()
@@ -173,7 +171,7 @@ namespace Oak
         {
             base.Init(entity as object);
 
-            AddVirtual(entity, Property + "Confirmation");
+            AddUnTrackedProperty(entity, Property + "Confirmation");
         }
 
         public bool Validate(DynamicModel entity)

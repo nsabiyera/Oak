@@ -71,19 +71,19 @@ namespace Oak
 
             if (Through == null)
             {
-                (model.Virtual as Prototype).SetMember(
+                (model as DynamicModel).SetUnTrackedMember(
                     named,
                     DirectTableQuery(fromColumn, model));
             }
             else
             {
-                (model.Virtual as Prototype).SetMember(
+                (model as DynamicModel).SetUnTrackedMember(
                     named,
                     ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? SigularizedIdFor(repository), model));
             }
         }
 
-        private DynamicEnumerableFunction DirectTableQuery(string foreignKey, DynamicModel model)
+        private DynamicEnumerableFunction DirectTableQuery(string foreignKey, dynamic model)
         {
             return () => repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id });
         }
@@ -121,13 +121,13 @@ namespace Oak
 
             if (Through != null)
             {
-                (model.Virtual as Prototype).SetMember(
+                (model as DynamicModel).SetUnTrackedMember(
                     MakeSingular(repository),
                     ThroughTableQuery(foreignKey, repository.GetType().Name, Through.GetType().Name, SigularizedIdFor(repository), model));
             }
             else
             {
-                (model.Virtual as Prototype).SetMember(
+                (model as DynamicModel).SetUnTrackedMember(
                     MakeSingular(repository),
                     new DynamicFunction(() => repository.SingleWhere(foreignKey + " = @0", model.GetMember("Id"))));
             }
@@ -164,7 +164,7 @@ namespace Oak
 
         public override void Init(dynamic model)
         {
-            (model.Virtual as Prototype).SetMember(
+            (model as DynamicModel).SetUnTrackedMember(
                 name,
                 new DynamicFunction(() => repository.Single(model.GetMember(SigularizedIdFor(repository)))));
         }

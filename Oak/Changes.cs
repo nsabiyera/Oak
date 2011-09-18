@@ -12,32 +12,33 @@ namespace Oak
 
         IDictionary<string, dynamic> originalValues;
 
-        IDictionary<string, dynamic> currentValues;
+        IDictionary<string, dynamic> CurrentValues()
+        {
+            return @this.TrackedProperties();
+        }
 
         public MixInChanges(DynamicModel dynamicModel)
         {
             @this = dynamicModel;
 
-            originalValues = new Dictionary<string, object>(dynamicModel.Hash());
+            originalValues = new Dictionary<string, object>(dynamicModel.TrackedHash());
 
-            currentValues = dynamicModel.Hash();
+            dynamicModel.SetUnTrackedMember("HasChanged", new DynamicFunction(HasChanged));
 
-            dynamicModel.Virtual.SetMember("HasChanged", new DynamicFunction(HasChanged));
+            dynamicModel.SetUnTrackedMember("HasPropertyChanged", new DynamicFuctionWithParam(HasPropertyChanged));
 
-            dynamicModel.Virtual.SetMember("HasPropertyChanged", new DynamicFuctionWithParam(HasPropertyChanged));
+            dynamicModel.SetUnTrackedMember("Original", new DynamicFuctionWithParam(Original));
 
-            dynamicModel.Virtual.SetMember("Original", new DynamicFuctionWithParam(Original));
+            dynamicModel.SetUnTrackedMember("Changes", new DynamicFunction(Changes));
 
-            dynamicModel.Virtual.SetMember("Changes", new DynamicFunction(Changes));
-
-            dynamicModel.Virtual.SetMember("ChangesFor", new DynamicFuctionWithParam(ChangesFor));
+            dynamicModel.SetUnTrackedMember("ChangesFor", new DynamicFuctionWithParam(ChangesFor));
         }
 
         public dynamic Changes()
         {
             var dictionary = new Dictionary<string, dynamic>();
 
-            var keys = currentValues.Keys.Union(originalValues.Keys).Distinct();
+            var keys = CurrentValues().Keys.Union(originalValues.Keys).Distinct();
 
             foreach (var key in keys) if (HasPropertyChanged(key)) dictionary.Add(key, ChangesFor(key));
 
@@ -67,7 +68,7 @@ namespace Oak
 
         public dynamic Current(dynamic property)
         {
-            return NullOrValueFor(currentValues, property);
+            return NullOrValueFor(CurrentValues(), property);
         }
 
         private dynamic NullOrValueFor(IDictionary<string, dynamic> dictionary, string key)

@@ -23,17 +23,19 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
             it["property has no changes"] = () => ((bool)person.HasPropertyChanged("FirstName")).should_be_false();
 
-            it["methods added are virtual, so that they are ignored by persistance"] = () =>
+            it["methods added are untracked, so that they are ignored by persistance"] = () =>
             {
-                ((bool)person.Virtual.RespondsTo("HasChanged")).should_be_true();
+                var keys = (person.UnTrackedProperties() as IDictionary<string, object>).Keys;
 
-                ((bool)person.Virtual.RespondsTo("HasPropertyChanged")).should_be_true();
+                keys.should_contain("HasChanged");
 
-                ((bool)person.Virtual.RespondsTo("Original")).should_be_true();
+                keys.should_contain("HasPropertyChanged");
 
-                ((bool)person.Virtual.RespondsTo("Changes")).should_be_true();
+                keys.should_contain("Original");
 
-                ((bool)person.Virtual.RespondsTo("ChangesFor")).should_be_true();
+                keys.should_contain("Changes");
+
+                keys.should_contain("ChangesFor");
             };
 
             context["changing dynamic model"] = () =>
