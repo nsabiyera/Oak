@@ -90,22 +90,44 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () =>
                 {
-                    model = new DynamicModel();
-                    model.Init();
+                    model = new Book();
                 };
 
                 it["the properties added for validation are virtual, so that they are not included in persistance by DynamicRepository"] = () =>
                 {
-                    var virtualProperties = (model as DynamicModel).UnTrackedProperties() as IDictionary<string, object>;
+                    var virtualProperties = (model as DynamicModel).UnTrackedHash().Keys;
 
-                    virtualProperties.Keys.should_contain("Errors");
+                    virtualProperties.should_contain("Errors");
 
-                    virtualProperties.Keys.should_contain("IsValid");
+                    virtualProperties.should_contain("IsValid");
 
-                    virtualProperties.Keys.should_contain("IsPropertyValid");
+                    virtualProperties.should_contain("IsPropertyValid");
 
-                    virtualProperties.Keys.should_contain("FirstError");
+                    virtualProperties.should_contain("FirstError");
                 };
+            };
+        }
+
+        void a_dynamic_model_with_no_validates_method()
+        {
+            before = () =>
+            {
+                model = new DynamicModel();
+
+                model.Init();
+            };
+
+            it["does not respond to validation mix in"] = () =>
+            {
+                var virtualProperties = (model as DynamicModel).UnTrackedHash().Keys;
+
+                virtualProperties.should_not_contain("Errors");
+
+                virtualProperties.should_not_contain("IsValid");
+
+                virtualProperties.should_not_contain("IsPropertyValid");
+
+                virtualProperties.should_not_contain("FirstError");
             };
         }
     }

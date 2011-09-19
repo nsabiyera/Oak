@@ -21,9 +21,9 @@ namespace DynamicBlog.Models
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Presense("Title") { Text = "Please specify a title for this blog post." };
+            yield return new Presence("Title") { Text = "Please specify a title for this blog post." };
 
-            yield return new Presense("Body");
+            yield return new Presence("Body");
         }
 
         public IEnumerable<dynamic> Associates()

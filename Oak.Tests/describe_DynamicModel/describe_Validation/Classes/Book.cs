@@ -18,9 +18,9 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Presense("Title");
+            yield return new Presence("Title");
 
-            yield return new Presense("Body");
+            yield return new Presence("Body");
         }
     }
 }

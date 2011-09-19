@@ -7,7 +7,7 @@ using Oak.Tests.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class presense : nspec
+    class presence : nspec
     {
         dynamic book;
 
