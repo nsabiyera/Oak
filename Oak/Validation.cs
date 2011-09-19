@@ -20,18 +20,18 @@ namespace Oak
 
             errors = new List<dynamic>();
 
-            mixWith.SetUnTrackedMember("Errors", new DynamicEnumerableFunction(Errors));
-
-            mixWith.SetUnTrackedMember("IsValid", new DynamicFunction(IsValid));
-
-            mixWith.SetUnTrackedMember("IsPropertyValid", new Func<dynamic, dynamic>(IsValid));
-
-            mixWith.SetUnTrackedMember("FirstError", new DynamicFunction(FirstError));
-
             @this = mixWith;
 
-            if (mixWith.GetType().GetMethod("Validates") != null)
+            if (HasValidationCapabilities(mixWith))
             {
+                mixWith.SetUnTrackedMember("Errors", new DynamicEnumerableFunction(Errors));
+
+                mixWith.SetUnTrackedMember("IsValid", new DynamicFunction(IsValid));
+
+                mixWith.SetUnTrackedMember("IsPropertyValid", new Func<dynamic, dynamic>(IsValid));
+
+                mixWith.SetUnTrackedMember("FirstError", new DynamicFunction(FirstError));
+
                 IEnumerable<dynamic> validationRules = @this.Validates();
 
                 foreach (var validationRule in validationRules)
@@ -39,8 +39,13 @@ namespace Oak
                     validationRule.Init(mixWith);
 
                     AddRule(validationRule);
-                }    
+                }
             }
+        }
+
+        private static bool HasValidationCapabilities(DynamicModel mixWith)
+        {
+            return mixWith.GetType().GetMethod("Validates") != null;
         }
 
         public void AddError(string property, string message)
@@ -99,11 +104,6 @@ namespace Oak
         public string Property { get; set; }
 
         public string Text { get; set; }
-
-        public Validation()
-        {
-            
-        }
 
         public Validation(string property)
         {
@@ -227,9 +227,9 @@ namespace Oak
         }
     }
 
-    public class Presense : Validation
+    public class Presence : Validation
     {
-        public Presense(string property)
+        public Presence(string property)
             : base(property)
         {
             
@@ -250,10 +250,10 @@ namespace Oak
 
     public class Uniqueness : Validation
     {
-        public Uniqueness(string property)
+        public Uniqueness(string property, DynamicRepository usingRepository)
             : base(property)
         {
-            
+            Using = usingRepository;
         }
 
         public override void Init(dynamic entity)

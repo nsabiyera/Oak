@@ -103,7 +103,7 @@ namespace Oak
 
         private void ThrowIfNotInitialized()
         {
-            if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statment in your constructors.");
+            if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statement in your constructors.");
         }
 
         public ExpandoObject TrackedProperties()

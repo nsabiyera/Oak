@@ -85,7 +85,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\exclusion.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\inclusion.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Book.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\presense.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\presence.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\confirmation.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\format.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\LegalDocument.cs" />

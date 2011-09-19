@@ -24,7 +24,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Uniqueness("Email") { Using = users };
+            yield return new Uniqueness("Email", users);
         }
     }
 }

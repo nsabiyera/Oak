@@ -143,7 +143,7 @@ namespace DynamicBlog.Tests
         public IEnumerable<dynamic> Validates()
         {
             yield return
-            new Presense("FirstName") { Text = "First name is required." };
+            new Presence("FirstName") { Text = "First name is required." };
 
             yield return
             new Confirmation("Email") { Text = "Emails must match." };
