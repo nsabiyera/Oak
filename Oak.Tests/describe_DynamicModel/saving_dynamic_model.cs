@@ -15,11 +15,15 @@ namespace Oak.Tests.describe_DynamicModel
 
         Inventory inventory;
 
+        dynamic itemId;
+
         void before_each()
         {
             inventory = new Inventory();
 
             seed = new Seed();
+
+            seed.PurgeDb();
 
             seed.CreateTable("Inventory", new dynamic[] 
             {
@@ -42,6 +46,22 @@ namespace Oak.Tests.describe_DynamicModel
 
                     (savedItem.Sku as string).should_be("1112212");
                 };
+            };
+
+            context["setting a property to null on a model that exists"] = () =>
+            {
+                before = () => 
+                {
+                    itemId = new { Sku = "11122212" }.InsertInto("Inventory");
+
+                    item = inventory.Single(itemId);
+
+                    item.Sku = null;
+
+                    inventory.Save(item);
+                };
+
+                it["retains null value"] = () => (inventory.Single(itemId).Sku as string).should_be(null);
             };
         }
     }
