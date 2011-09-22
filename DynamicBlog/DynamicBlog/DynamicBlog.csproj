@@ -76,17 +76,20 @@
     <Compile Include="..\..\Oak\DynamicModel.cs">
       <Link>Oak\DynamicModel.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\DynamicModels.cs">
+      <Link>Oak\DynamicModels.cs</Link>
+    </Compile>
     <Compile Include="..\..\Oak\ElementMetaData.cs">
       <Link>Oak\ElementMetaData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Oak\Gemini.cs">
+      <Link>Oak\Gemini.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Massive.cs">
       <Link>Oak\Massive.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\ParamsModelBinder.cs">
       <Link>Oak\ParamsModelBinder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Oak\Prototype.cs">
-      <Link>Oak\Prototype.cs</Link>
     </Compile>
     <Compile Include="..\..\Oak\Query.cs">
       <Link>Oak\Query.cs</Link>

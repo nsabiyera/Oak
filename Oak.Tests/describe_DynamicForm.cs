@@ -13,7 +13,7 @@ namespace Oak.Tests
         public int Age { get; set; }
     }
 
-    class RegularPrototype : Prototype
+    class RegularPrototype : Gemini
     {
         public RegularPrototype(string name)
             : base(new { Name = name })
@@ -22,7 +22,7 @@ namespace Oak.Tests
         }
     }
 
-    class NestedPrototype : Prototype
+    class NestedPrototype : Gemini
     {
         public NestedPrototype(object o)
             : base(o)
@@ -162,7 +162,7 @@ namespace Oak.Tests
             before = () => form = new DynamicForm(new RegularPrototype("jane"));
 
             it["throws a friendly exception"] =
-                expect<InvalidOperationException>("The Prototype that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
+                expect<InvalidOperationException>("The Gemini that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
         void concatenating_html_attributes()

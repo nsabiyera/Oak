@@ -19,6 +19,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         dynamic comment;
 
+        dynamic blog;
+
         void before_each()
         {
             seed = new Seed();
@@ -26,7 +28,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             comments = new Comments();
         }
 
-        void describe_belongs_to()
+        void describe_retrieval_of_belongs_to()
         {
             context["given blogs that have many comments"] = () =>
             {

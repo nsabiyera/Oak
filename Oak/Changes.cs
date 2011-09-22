@@ -25,13 +25,13 @@ namespace Oak
 
             dynamicModel.SetUnTrackedMember("HasChanged", new DynamicFunction(HasChanged));
 
-            dynamicModel.SetUnTrackedMember("HasPropertyChanged", new DynamicFuctionWithParam(HasPropertyChanged));
+            dynamicModel.SetUnTrackedMember("HasPropertyChanged", new DynamicFunctionWithParam(HasPropertyChanged));
 
-            dynamicModel.SetUnTrackedMember("Original", new DynamicFuctionWithParam(Original));
+            dynamicModel.SetUnTrackedMember("Original", new DynamicFunctionWithParam(Original));
 
             dynamicModel.SetUnTrackedMember("Changes", new DynamicFunction(Changes));
 
-            dynamicModel.SetUnTrackedMember("ChangesFor", new DynamicFuctionWithParam(ChangesFor));
+            dynamicModel.SetUnTrackedMember("ChangesFor", new DynamicFunctionWithParam(ChangesFor));
         }
 
         public dynamic Changes()

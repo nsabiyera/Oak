@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Massive;
+using System.Dynamic;
 
 namespace Oak
 {
@@ -10,7 +11,7 @@ namespace Oak
     {
         public MixInAssociation(DynamicModel mixWith)
         {
-            if(mixWith.GetType().GetMethod("Associates") != null)
+            if (mixWith.GetType().GetMethod("Associates") != null)
             {
                 IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
 
@@ -29,14 +30,23 @@ namespace Oak
 
         }
 
-        public string MakeSingular(object o)
+        public string Singular(object o)
         {
-            return o.GetType().Name.Substring(0, o.GetType().Name.Length - 1);
+            var name = o.GetType().Name;
+
+            if (!name.EndsWith("s")) return name;
+
+            return name.Substring(0, o.GetType().Name.Length - 1);
         }
 
-        public string SigularizedIdFor(object o)
+        public string ForeignKeyFor(object o)
         {
-            return MakeSingular(o) + "Id";
+            return Singular(o) + Id();
+        }
+
+        public string Id()
+        {
+            return "Id";
         }
     }
 
@@ -65,30 +75,73 @@ namespace Oak
 
         public override void Init(dynamic model)
         {
-            var fromColumn = model.GetType().Name + "Id";
+            var fromColumn = ForeignKeyFor(model);
 
             var toTable = repository.GetType().Name;
 
+            AddAssociationMethod(model, fromColumn, toTable);
+        }
+
+        private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
+        {
+            collection.SetMember(
+                "New",
+                new DynamicFunction(() =>
+                {
+                    return EntityFor(model, new { });
+                }));
+        }
+
+        private void AddNewAssociationWithMethod(DynamicModels collections, DynamicModel model)
+        {
+            collections.SetMember(
+                "NewWith",
+                new DynamicFunctionWithParam(attributes =>
+                {
+                    return EntityFor(model, attributes);
+                }));
+        }
+
+        private dynamic EntityFor(DynamicModel model, dynamic attributes)
+        {
+            var entity = new Gemini(attributes);
+
+            entity.SetMember(ForeignKeyFor(model), model.GetMember(Id()));
+
+            return repository.Projection(entity);
+        }
+
+        private void AddAssociationMethod(DynamicModel model, string fromColumn, string toTable)
+        {
             if (Through == null)
             {
-                (model as DynamicModel).SetUnTrackedMember(
+                model.SetUnTrackedMember(
                     named,
                     DirectTableQuery(fromColumn, model));
             }
             else
             {
-                (model as DynamicModel).SetUnTrackedMember(
+                model.SetUnTrackedMember(
                     named,
-                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? SigularizedIdFor(repository), model));
+                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
             }
         }
 
-        private DynamicEnumerableFunction DirectTableQuery(string foreignKey, dynamic model)
+        private DynamicFunction DirectTableQuery(string foreignKey, dynamic model)
         {
-            return () => repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id });
+            return () => 
+            {
+                var collection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }));
+
+                AddNewAssociationMethod(collection, model);
+
+                AddNewAssociationWithMethod(collection, model);
+
+                return collection;
+            };
         }
 
-        private DynamicEnumerableFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
             return () => repository.Query(
                  @"
@@ -117,19 +170,19 @@ namespace Oak
 
         public override void Init(dynamic model)
         {
-            var foreignKey = model.GetType().Name + "Id";
+            var foreignKey = ForeignKeyFor(model);
 
             if (Through != null)
             {
                 (model as DynamicModel).SetUnTrackedMember(
-                    MakeSingular(repository),
-                    ThroughTableQuery(foreignKey, repository.GetType().Name, Through.GetType().Name, SigularizedIdFor(repository), model));
+                    Singular(repository),
+                    ThroughTableQuery(foreignKey, repository.GetType().Name, Through.GetType().Name, ForeignKeyFor(repository), model));
             }
             else
             {
                 (model as DynamicModel).SetUnTrackedMember(
-                    MakeSingular(repository),
-                    new DynamicFunction(() => repository.SingleWhere(foreignKey + " = @0", model.GetMember("Id"))));
+                    Singular(repository),
+                    new DynamicFunction(() => repository.SingleWhere(foreignKey + " = @0", model.GetMember(Id()))));
             }
         }
 
@@ -159,14 +212,14 @@ namespace Oak
         public BelongsTo(DynamicRepository repository)
         {
             this.repository = repository;
-            name = MakeSingular(repository);
+            name = Singular(repository);
         }
 
         public override void Init(dynamic model)
         {
             (model as DynamicModel).SetUnTrackedMember(
                 name,
-                new DynamicFunction(() => repository.Single(model.GetMember(SigularizedIdFor(repository)))));
+                new DynamicFunction(() => repository.Single(model.GetMember(ForeignKeyFor(repository)))));
         }
     }
 }

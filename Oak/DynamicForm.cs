@@ -79,7 +79,7 @@ namespace Oak
 
             if (entity is DynamicModel && (entity as DynamicModel).RespondsTo(name)) return (entity as DynamicModel).GetMember(name);
 
-            if (entity is Prototype)
+            if (entity is Gemini)
             {
                 var underlyingValues = entity.Expando as IDictionary<string, object>;
 
