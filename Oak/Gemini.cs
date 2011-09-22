@@ -12,19 +12,19 @@ namespace Oak
 
     public delegate IEnumerable<dynamic> DynamicEnumerableFunction();
 
-    public delegate dynamic DynamicFuctionWithParam(dynamic parameter);
+    public delegate dynamic DynamicFunctionWithParam(dynamic parameter);
 
-    public class Prototype : DynamicObject
+    public class Gemini : DynamicObject
     {
         public dynamic Expando { get; set; }
 
-        public Prototype()
+        public Gemini()
             : this(new { })
         {
 
         }
 
-        public Prototype(object dto)
+        public Gemini(object dto)
         {
             if (dto is ExpandoObject)
                 Expando = dto;
@@ -84,7 +84,7 @@ namespace Oak
 
             if (TryGetMember(property, out result)) return result;
 
-            throw new InvalidOperationException("This prototype does not respond to the property " + property + ".");
+            throw new InvalidOperationException("This instance of type " + this.GetType().Name + " does not respond to the property " + property + ".");
         }
 
         public virtual void SetMember(string property, object value)

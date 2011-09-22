@@ -6,7 +6,7 @@ using Massive;
 
 namespace Oak
 {
-    public class DynamicModel : Prototype
+    public class DynamicModel : Gemini
     {
         private bool initialized;
 

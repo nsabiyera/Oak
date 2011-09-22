@@ -37,7 +37,7 @@ namespace DynamicBlog.Controllers
 
             ViewBag.Blog = blog;
 
-            ViewBag.Comments = blog.Comments();
+            ViewBag.Comments = blog.Comments() as IEnumerable<dynamic>;
 
             return View();
         }

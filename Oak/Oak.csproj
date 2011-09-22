@@ -71,11 +71,12 @@
     <Compile Include="ConnectionProfile.cs" />
     <Compile Include="DynamicForm.cs" />
     <Compile Include="DynamicModel.cs" />
+    <Compile Include="DynamicModels.cs" />
     <Compile Include="Validation.cs" />
     <Compile Include="ElementMetaData.cs" />
     <Compile Include="ParamsModelBinder.cs" />
     <Compile Include="Massive.cs" />
-    <Compile Include="Prototype.cs" />
+    <Compile Include="Gemini.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="Seed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

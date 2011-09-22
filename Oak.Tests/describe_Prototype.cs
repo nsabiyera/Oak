@@ -21,7 +21,7 @@ namespace Oak.Tests
             blog.Title = "Some Name";
             blog.body = "Some Body";
             blog.BodySummary = "Body Summary";
-            prototype = new Prototype(blog);
+            prototype = new Gemini(blog);
         }
 
         void describe_responds_to()
@@ -85,7 +85,7 @@ namespace Oak.Tests
 
             it["retrieves value with exact case insensitive"] = () => (Prototype().GetMember("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This prototype does not respond to the property FooBar.", () => Prototype().GetMember("FooBar"));
+            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This instance of type Prototype does not respond to the property FooBar.", () => Prototype().GetMember("FooBar"));
         }
 
         void when_retrieving_property_from_prototype()
@@ -224,13 +224,13 @@ namespace Oak.Tests
             };
         }
 
-        Prototype Prototype()
+        Gemini Prototype()
         {
-            return prototype as Prototype;
+            return prototype as Gemini;
         }
     }
 
-    public class BlogEntry : Prototype
+    public class BlogEntry : Gemini
     {
         public BlogEntry(object o)
             : base(o)
@@ -266,7 +266,7 @@ namespace Oak.Tests
         }
     }
 
-    public class InheritedPrototype : Prototype
+    public class InheritedPrototype : Gemini
     {
         public InheritedPrototype(object o)
             : base(o)
@@ -288,7 +288,7 @@ namespace Oak.Tests
         }
     }
 
-    public class ParameterlessPrototype : Prototype
+    public class ParameterlessPrototype : Gemini
     {
         public ParameterlessPrototype()
         {
