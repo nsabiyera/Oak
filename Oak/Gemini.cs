@@ -92,6 +92,13 @@ namespace Oak
             TrySetMember(property, value);
         }
 
+        public virtual void SetMembers(object o)
+        {
+            var dictionary = o.ToDictionary();
+
+            foreach (var item in dictionary) SetMember(item.Key, item.Value);
+        }
+
         string Capitalized(string s)
         {
             return s[0].ToString().ToUpper() + s.Substring(1);

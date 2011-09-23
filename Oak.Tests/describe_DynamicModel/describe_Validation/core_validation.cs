@@ -80,7 +80,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () => book = new Book(new { id = 1 });
 
-                it["it exists on prototype object as opposed to virtual"] = () => (book as DynamicModel).RespondsTo("id").should_be_true();
+                it["it exists on gemini object as opposed to virtual"] = () => (book as DynamicModel).RespondsTo("id").should_be_true();
             };
         }
 

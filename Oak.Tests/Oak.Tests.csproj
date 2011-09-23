@@ -93,7 +93,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Product.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
-    <Compile Include="describe_Prototype.cs" />
+    <Compile Include="describe_Gemini.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />

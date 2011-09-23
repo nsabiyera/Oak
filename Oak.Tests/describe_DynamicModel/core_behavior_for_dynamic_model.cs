@@ -105,6 +105,38 @@ namespace Oak.Tests.describe_DynamicModel
             };
         }
 
+        void setting_members()
+        {
+            context["setting a single tracked member"] = () =>
+            {
+                act = () => loan.SetMember("Email", "user@example.com");
+
+                it["sets tracked member"] = () => (loan.Email as string).should_be("user@example.com");
+
+                it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
+            };
+
+            context["setting a single untracked member"] = () =>
+            {
+                act = () => loan.SetMember("EmailConfirmation", "user@example.com");
+
+                it["sets untracked member"] = () => (loan.EmailConfirmation as string).should_be("user@example.com");
+
+                it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
+            };
+
+            context["setting multiple members (tracked and untracked)"] = () =>
+            {
+                act = () => loan.SetMembers(new { Email = "user@example.com", EmailConfirmation = "user2@example.com" });
+
+                it["sets tracked member"] = () => (loan.Email as string).should_be("user@example.com");
+
+                it["sets untracked member"] = () => (loan.EmailConfirmation as string).should_be("user2@example.com");
+
+                it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
+            };
+        }
+
         dynamic Properties()
         {
             return Model().Expando;

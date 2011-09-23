@@ -83,7 +83,7 @@ namespace Oak
             {
                 var underlyingValues = entity.Expando as IDictionary<string, object>;
 
-                if (!underlyingValues.ContainsKey(name)) throw new InvalidOperationException("The Prototype that you passed into DynamicForm does not contain the property called " + name + ".");
+                if (!underlyingValues.ContainsKey(name)) throw new InvalidOperationException("The Gemini that you passed into DynamicForm does not contain the property called " + name + ".");
 
                 return underlyingValues[name];
             }
