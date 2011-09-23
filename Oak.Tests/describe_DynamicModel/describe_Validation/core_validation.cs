@@ -130,5 +130,52 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 virtualProperties.should_not_contain("FirstError");
             };
         }
+
+        void validation_provides_with_if_clause()
+        {
+            context["a order has a payment type that can be card"] = () =>
+            {
+                context["payment type is card and cardnumber is not specified"] = () =>
+                {
+                    before = () =>
+                    {
+                        model = new Order();
+                        model.PaymentType = "Card";
+                    };
+
+                    it["is invalid"] = () => ((bool)model.IsValid()).should_be(false);
+
+                    it["is has error message"] = () =>
+                    {
+                        model.IsValid();
+
+                        (model.FirstError() as string).should_be("CardNumber is required.");
+                    };
+                };
+
+                context["payment type is card and cardnumber is specified"] = () =>
+                {
+                    before = () =>
+                    {
+                        model = new Order();
+                        model.PaymentType = "Card";
+                        model.CardNumber = "488839";
+                    };
+
+                    it["is valid"] = () => ((bool)model.IsValid()).should_be(true);
+                };
+
+                context["payment type is not card and cardnumber is not specified"] = () =>
+                {
+                    before = () =>
+                    {
+                        model = new Order();
+                        model.PaymentType = "Cash";
+                    };
+
+                    it["is valid because it disregards card number"] = () => ((bool)model.IsValid()).should_be(true);
+                };
+            };
+        }
     }
 }
