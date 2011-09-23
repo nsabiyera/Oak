@@ -274,4 +274,96 @@ namespace Oak
             return true;
         }
     }
+
+    public class Numericality : Validation
+    {
+        public Numericality(string property)
+            : base(property)
+        {
+        }
+
+        public bool OnlyInteger { get; set; }
+
+        public decimal? GreaterThan { get; set; }
+
+        public decimal? GreaterThanOrEqualTo { get; set; }
+
+        public decimal? EqualTo { get; set; }
+
+        public decimal? LessThan { get; set; }
+
+        public decimal? LessThanOrEqualTo { get; set; }
+
+        public bool Odd { get; set; }
+
+        public bool Even { get; set; }
+
+        public bool Validate(DynamicModel entity)
+        {
+            string value = entity.GetMember(Property).ToString();
+
+            int intResult;
+            decimal decimalResult;
+            
+            if (!decimal.TryParse(value, out decimalResult))
+                return false;
+
+            if(OnlyInteger == true)
+            {
+                if (!int.TryParse(value, out intResult))
+                    return false;
+            }
+
+            if(GreaterThan != null)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if (!(decimalResult > GreaterThan))
+                    return false;
+            }
+
+            if(GreaterThanOrEqualTo != null)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if (!(decimalResult >= GreaterThanOrEqualTo))
+                    return false;
+            }
+            
+            if(EqualTo != null)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if (!(decimalResult == EqualTo))
+                    return false;
+            }
+            
+            if(LessThan != null)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if(!(decimalResult < LessThan))
+                    return false;
+            }
+            
+            if(LessThanOrEqualTo != null)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if(!(decimalResult <= LessThanOrEqualTo))
+                    return false;
+            }
+            
+            if(Odd == true)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if(decimalResult % 2 == 0)
+                    return false;
+            }
+
+            if(Even == true)
+            {
+                decimal.TryParse(value, out decimalResult);
+                if(decimalResult % 2 == 1)
+                    return false;
+            }
+            
+            return true;
+        }
+    }
 }
