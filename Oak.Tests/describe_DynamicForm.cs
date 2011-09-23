@@ -13,18 +13,18 @@ namespace Oak.Tests
         public int Age { get; set; }
     }
 
-    class RegularPrototype : Gemini
+    class RegularGemini : Gemini
     {
-        public RegularPrototype(string name)
+        public RegularGemini(string name)
             : base(new { Name = name })
         {
 
         }
     }
 
-    class NestedPrototype : Gemini
+    class NestedGemini : Gemini
     {
-        public NestedPrototype(object o)
+        public NestedGemini(object o)
             : base(o)
         {
 
@@ -79,11 +79,11 @@ namespace Oak.Tests
             };
         }
 
-        void creating_element_meta_data_for_a_prototype()
+        void creating_element_meta_data_for_a_gemini()
         {
             before = () =>
             {
-                entity = new RegularPrototype("Jane Doe");
+                entity = new RegularGemini("Jane Doe");
 
                 form = new DynamicForm(entity);
             };
@@ -92,21 +92,21 @@ namespace Oak.Tests
             {
                 act = () => result = form.Name;
 
-                it["the Value property is set to the prototype's property value"] = () =>
+                it["the Value property is set to the gemini's property value"] = () =>
                     result.Value.should_be(entity.Name as string);
             };
         }
 
-        void creating_element_meta_data_for_a_nested_prototype()
+        void creating_element_meta_data_for_a_nested_gemini()
         {
             before = () =>
             {
-                entity = new NestedPrototype(new RegularPrototype("jane"));
+                entity = new NestedGemini(new RegularGemini("jane"));
 
                 form = new DynamicForm(entity);
             };
 
-            context["property being converted is a newly defined property on top level prototype"] = () =>
+            context["property being converted is a newly defined property on top level gemini"] = () =>
             {
                 act = () => result = form.AllCaps;
 
@@ -157,9 +157,9 @@ namespace Oak.Tests
                 expect<InvalidOperationException>("The entity that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
         }
 
-        void accessing_a_property_that_doesnt_exist_on_a_Prototype()
+        void accessing_a_property_that_doesnt_exist_on_a_Gemini()
         {
-            before = () => form = new DynamicForm(new RegularPrototype("jane"));
+            before = () => form = new DynamicForm(new RegularGemini("jane"));
 
             it["throws a friendly exception"] =
                 expect<InvalidOperationException>("The Gemini that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName);
@@ -181,7 +181,7 @@ namespace Oak.Tests
             it["retains value of dynamic model"] = () => (form.Title() as ElementMetaData).Value.should_be("Some Title");
 
             it["throws a friendly exception when constructing element meta data for a property that doesn't exist"] =
-                expect<InvalidOperationException>("The Prototype that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
+                expect<InvalidOperationException>("The Gemini that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
 
             context["adding reserved dictionary values"] = () =>
             {

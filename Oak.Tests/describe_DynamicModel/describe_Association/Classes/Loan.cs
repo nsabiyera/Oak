@@ -18,5 +18,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             yield return new BelongsTo(customers);
         }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Confirmation("Email");
+        }
     }
 }
