@@ -86,6 +86,8 @@ namespace Oak
 
         public bool Validate(dynamic rule)
         {
+            if (rule.If != null && !rule.If(@this)) return true;
+
             bool isValid = rule.Validate(@this);
 
             if (!isValid) AddError(rule.Property, rule.Message());
@@ -141,6 +143,8 @@ namespace Oak
         {
             return (entity as DynamicModel).GetMember(property);
         }
+
+        public Func<dynamic, bool> If { get; set; }
     }
 
     public class Acceptance : Validation

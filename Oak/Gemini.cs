@@ -17,6 +17,11 @@ namespace Oak
     public class Gemini : DynamicObject
     {
         public dynamic Expando { get; set; }
+        
+        public dynamic This()
+        {
+            return this as dynamic;
+        }
 
         public Gemini()
             : this(new { })
