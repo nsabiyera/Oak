@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Oak.Tests.describe_Validation.Classes
+namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 {
     public class Person : DynamicModel
     {
