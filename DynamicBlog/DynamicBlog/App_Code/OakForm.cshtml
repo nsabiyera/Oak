@@ -56,6 +56,19 @@
 
         return dateAsString;
     }
+    
+    static bool IsAttribute(string key) 
+    {
+        return Attributes().Contains(key) || key.StartsWith("data-");
+    }
+    
+    static string[] Attributes()
+    {
+        return new[]
+        {
+            "id"
+        };
+    }
 }
 
 @*

@@ -64,10 +64,10 @@ namespace Oak.Tests
                 act = () => result = form.Name;
 
                 it["the Value property is set to the class's property value"] = () =>
-                    result.Value.should_be(entity.Name as string);
+                    result.Value().should_be(entity.Name as string);
 
                 it["the Id property is set to the class's "] = () =>
-                    result.Id.should_be("Name");
+                    result.Id().should_be("Name");
             };
 
             context["property being converted is an int"] = () =>
@@ -75,7 +75,7 @@ namespace Oak.Tests
                 act = () => result = form.Age;
 
                 it["the Value property is set to the class's property value"] = () =>
-                    result.Value.should_be((int)entity.Age);
+                    result.Value().should_be(entity.Age.ToString() as string);
             };
         }
 
@@ -93,7 +93,7 @@ namespace Oak.Tests
                 act = () => result = form.Name;
 
                 it["the Value property is set to the gemini's property value"] = () =>
-                    result.Value.should_be(entity.Name as string);
+                    result.Value().should_be(entity.Name as string);
             };
         }
 
@@ -111,7 +111,7 @@ namespace Oak.Tests
                 act = () => result = form.AllCaps;
 
                 it["the Value property is set to the newly defined property value"] = () =>
-                    result.Value.should_be("JANE");
+                    result.Value().should_be("JANE");
             };
         }
 
@@ -134,7 +134,7 @@ namespace Oak.Tests
 
                 it["the Value property is set to the property defined by the validation constraint"] = () =>
                 {
-                    result.Value.should_be("user@example.com");
+                    result.Value().should_be("user@example.com");
                 };
             };
 
@@ -144,7 +144,7 @@ namespace Oak.Tests
 
                 it["the Value property is set to the virtual property defined by the validation constraint"] = () =>
                 {
-                    result.Value.should_be("user@example.com");
+                    result.Value().should_be("user@example.com");
                 };
             };
         }
@@ -178,46 +178,10 @@ namespace Oak.Tests
                 form = new DynamicForm(entity);
             };
 
-            it["retains value of dynamic model"] = () => (form.Title() as ElementMetaData).Value.should_be("Some Title");
+            it["retains value of dynamic model"] = () => (form.Title() as ElementMetaData).Value().should_be("Some Title");
 
             it["throws a friendly exception when constructing element meta data for a property that doesn't exist"] =
                 expect<InvalidOperationException>("The Gemini that you passed into DynamicForm does not contain the property called LastName.", () => result = form.LastName());
-
-            context["adding reserved dictionary values"] = () =>
-            {
-                act = () =>
-                    result = form.Title(new Hash
-                    {
-                        { FirstElementAttribute(), "firstName" }
-                    });
-
-                it["key value is marked as an element attribute"] = () =>
-                    result.Attributes[FirstElementAttribute()].should_be("firstName");
-            };
-
-            context["added values that start with 'data-'"] = () =>
-            {
-                act = () =>
-                    result = form.Title(new Hash
-                    {
-                        { "data-some-value", "firstName" }
-                    });
-
-                it["key value is marked as an element attribute"] = () =>
-                    result.Attributes["data-some-value"].should_be("firstName");
-            };
-
-            context["adding unreserved dictionary values"] = () =>
-            {
-                act = () =>
-                    result = form.Title(new Hash
-                    {
-                        { "background-color", "red" }
-                    });
-
-                it["key value is regarded as a style entry"] = () =>
-                    result.Styles["background-color"].should_be("red");
-            };
 
             context["adding id override"] = () =>
             {
@@ -228,7 +192,7 @@ namespace Oak.Tests
                     });
 
                 it["the id is overridden with the one specified"] = () =>
-                    result.Id.should_be("new-title");
+                    result.Id().should_be("new-title");
             };
 
             context["added value attribute"] = () =>
@@ -243,21 +207,16 @@ namespace Oak.Tests
                 {
                     before = () => entity.Title = "A Title";
 
-                    it["the title is set to the entity's title"] = () => result.Value.should_be("A Title");
+                    it["the title is set to the entity's title"] = () => result.Value().should_be("A Title");
                 };
 
                 context["Title property doesn't have a value"] = () =>
                 {
                     before = () => entity.Title = null;
 
-                    it["the title is set to the value from the hash"] = () => result.Value.should_be("some default");
+                    it["the title is set to the value from the hash"] = () => result.Value().should_be("some default");
                 };
             };
-        }
-
-        string FirstElementAttribute()
-        {
-            return (form as DynamicForm).ElementAttributes().First();
         }
     }
 }
