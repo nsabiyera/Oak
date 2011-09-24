@@ -223,6 +223,10 @@ namespace Oak
 
         private string name;
 
+        public string ForeignKey { get; set; }
+
+        public string PrimaryKey { get; set; }
+
         public BelongsTo(DynamicRepository repository)
         {
             this.repository = repository;
@@ -231,9 +235,15 @@ namespace Oak
 
         public void Init(dynamic model)
         {
+            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(repository) : ForeignKey;
+            string primaryKeyName = (string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey);
+
+            string whereClause = string.Format("{0} = @0", primaryKeyName);
+
             (model as DynamicModel).SetUnTrackedMember(
                 name,
-                new DynamicFunction(() => repository.Single(model.GetMember(ForeignKeyFor(repository)))));
+                new DynamicFunction(() => repository.SingleWhere(whereClause, model.GetMember(foreignKeyName)
+                                                    )));
         }
     }
 }
