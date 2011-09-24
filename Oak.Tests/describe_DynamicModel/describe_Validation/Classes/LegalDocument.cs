@@ -16,7 +16,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
             yield return new Acceptance("TypedOutAcceptance")
             {
                 Accept = "I Agree",
-                Text = "You have not typed out the acceptance. Type I Accept."
+                ErrorMessage = "You have not typed out the acceptance. Type I Accept."
             };
         }
     }

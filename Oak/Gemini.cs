@@ -10,9 +10,9 @@ namespace Oak
 {
     public delegate dynamic DynamicFunction();
 
-    public delegate IEnumerable<dynamic> DynamicEnumerableFunction();
-
     public delegate dynamic DynamicFunctionWithParam(dynamic parameter);
+
+    public delegate void DynamicMethodWithParam(dynamic parameter);
 
     public class Gemini : DynamicObject
     {
@@ -179,13 +179,27 @@ namespace Oak
 
             if (!Hash().ContainsKey(binder.Name)) return false;
 
-            var function = Hash()[binder.Name] as DynamicFunctionWithParam;
+            var member = Hash()[binder.Name];
 
-            if (function == null || args.Count() != 0) return base.TryInvokeMember(binder, args, out result);
+            if (!IsPolymorphicFunction(member)) return base.TryInvokeMember(binder, args, out result);
 
-            result = function.Invoke(null);
+            result = InvokePolymorphicFunction(member, args);
 
             return true;
+        }
+
+        public virtual bool IsPolymorphicFunction(object member)
+        {
+            return (member is DynamicFunctionWithParam) || (member is DynamicMethodWithParam);
+        }
+
+        public virtual dynamic InvokePolymorphicFunction(dynamic member, object[] args)
+        {
+            if ((member is DynamicFunctionWithParam)) return member.Invoke(args.FirstOrDefault());
+
+            member.Invoke(args.FirstOrDefault());
+
+            return null;
         }
     }
 }
