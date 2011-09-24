@@ -7,26 +7,41 @@ namespace Oak
 {
     public class ElementMetaData
     {
+        string value;
+        string id;
+
         public ElementMetaData()
         {
             Hash = new Hash();
+            value = null;
+            id = null;
         }
 
         public string Value()
         {
-            return Hash["value"];
+            return value;
         }
 
         public string Id()
         {
-            return Hash["id"];
+            return id;
         }
 
         public void Set(string key, string value)
         {
-            if (!Hash.ContainsKey(key)) Hash.Add(key, null);
+            if (key == "value" && this.value == null)
+            {
+                this.value = value;
+                return;
+            }
 
-            if (key == "value" && Hash[key] != null) return;
+            if(key == "id")
+            {
+                id = value;
+                return;
+            }
+
+            if (!Hash.ContainsKey(key)) Hash.Add(key, null);
 
             Hash[key] = value;
         }

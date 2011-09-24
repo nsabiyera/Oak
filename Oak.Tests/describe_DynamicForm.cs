@@ -136,6 +136,8 @@ namespace Oak.Tests
                 {
                     result.Value().should_be("user@example.com");
                 };
+
+                it["value is not considered as part of the element meta data hash (used by OakForm.cshtml)"] = () => result.Hash.ContainsKey("value").should_be_false();
             };
 
             context["property is a property that has been added as a virtual property"] = () =>
@@ -193,6 +195,8 @@ namespace Oak.Tests
 
                 it["the id is overridden with the one specified"] = () =>
                     result.Id().should_be("new-title");
+
+                it["id property should not be contained in hash (used by OakForm.cshtml)"] = () => result.Hash.ContainsKey("id").should_be_false();
             };
 
             context["added value attribute"] = () =>
