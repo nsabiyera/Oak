@@ -138,6 +138,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                     {
                         model = new Order();
                         model.PaymentType = "Card";
+                        model.ItemType = "Physical";
+                        model.Address = "1537 Paper Street";
                     };
 
                     it["is invalid"] = () => ((bool)model.IsValid()).should_be(false);
@@ -157,6 +159,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                         model = new Order();
                         model.PaymentType = "Card";
                         model.CardNumber = "488839";
+                        model.ItemType = "Physical";
+                        model.Address = "1537 Paper Street";
                     };
 
                     it["is valid"] = () => ((bool)model.IsValid()).should_be(true);
@@ -168,9 +172,62 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                     {
                         model = new Order();
                         model.PaymentType = "Cash";
+                        model.ItemType = "Physical";
+                        model.Address = "1537 Paper Street";
                     };
 
                     it["is valid because it disregards card number"] = () => ((bool)model.IsValid()).should_be(true);
+                };
+            };
+        }
+
+        void validation_provides_with_unless_clause()
+        {
+            context["a order has an item type that can be a digital item"] = () =>
+            {
+                context["the item type is 'physical' and the address is not specified"] = () =>
+                {
+                    before = () =>
+                    {
+                        model = new Order();
+                        model.PaymentType = "Cash";
+                        model.ItemType = "Physical";
+                    };
+
+                    it["is invalid"] = () => ((bool)model.IsValid()).should_be(false);
+
+                    it["is has error message"] = () =>
+                    {
+                        model.IsValid();
+
+                        (model.FirstError() as string).should_be("Address is required.");
+                    };
+                };
+
+                context["the item type is 'physical' and the address is specified"] = () =>
+                {
+                    before = () =>
+                    {
+                        model = new Order();
+                        model.PaymentType = "Card";
+                        model.CardNumber = "488839";
+                        model.ItemType = "Physical";
+                        model.Address = "1537 Paper Street";
+                    };
+
+                    it["is valid"] = () => ((bool)model.IsValid()).should_be(true);
+                };
+
+                context["the item type is 'digital' and the address is not specified"] = () =>
+                {
+                    before = () =>
+                    {
+                        model = new Order();
+                        model.PaymentType = "Cash";
+                        model.ItemType = "Digital";
+                    };
+
+                    it["is valid because it disregards address"] = () => ((bool)model.IsValid()).should_be(true);
                 };
             };
         }

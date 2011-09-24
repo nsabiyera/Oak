@@ -12,7 +12,7 @@ namespace Oak
         public MixInAssociation(DynamicModel mixWith)
         {
             if (!SupportsAssociations(mixWith)) return;
-                
+
             IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
 
             foreach (dynamic association in associations) association.Init(mixWith);
@@ -51,8 +51,6 @@ namespace Oak
         string named;
 
         DynamicRepository repository;
-
-        public DynamicRepository Through { get; set; }
 
         public string Using { get; set; }
 
@@ -99,23 +97,13 @@ namespace Oak
 
         private void AddAssociationMethod(DynamicModel model, string fromColumn, string toTable)
         {
-            if (Through == null)
-            {
-                model.SetUnTrackedMember(
-                    named,
-                    DirectTableQuery(fromColumn, model));
-            }
-            else
-            {
-                model.SetUnTrackedMember(
-                    named,
-                    ThroughTableQuery(fromColumn, toTable, Through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
-            }
+            model.SetUnTrackedMember(named, DirectTableQuery(fromColumn, model));
+
         }
 
         private DynamicFunction DirectTableQuery(string foreignKey, dynamic model)
         {
-            return () => 
+            return () =>
             {
                 var collection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }));
 
@@ -123,6 +111,48 @@ namespace Oak
 
                 return collection;
             };
+        }
+    }
+
+    public class HasManyThrough : Association
+    {
+        DynamicRepository repository;
+
+        DynamicRepository through;
+
+        string named;
+
+        public string Using { get; set; }
+
+        public HasManyThrough(DynamicRepository repository, DynamicRepository through)
+            : this(repository, through, null)
+        {
+
+        }
+
+        public HasManyThrough(DynamicRepository repository, DynamicRepository through, string named)
+        {
+            this.repository = repository;
+
+            this.through = through;
+
+            this.named = named ?? repository.GetType().Name;
+        }
+
+        public void Init(dynamic model)
+        {
+            var fromColumn = ForeignKeyFor(model);
+
+            var toTable = repository.GetType().Name;
+
+            AddAssociationMethod(model, fromColumn, toTable);
+        }
+
+        private void AddAssociationMethod(DynamicModel model, string fromColumn, string toTable)
+        {
+            model.SetUnTrackedMember(
+                named,
+                ThroughTableQuery(fromColumn, toTable, through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
         }
 
         private DynamicFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
