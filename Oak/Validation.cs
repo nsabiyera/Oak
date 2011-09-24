@@ -88,6 +88,8 @@ namespace Oak
         {
             if (rule.If != null && !rule.If(@this)) return true;
 
+            if (rule.Unless != null && rule.Unless(@this)) return true;
+
             bool isValid = rule.Validate(@this);
 
             if (!isValid) AddError(rule.Property, rule.Message());
@@ -145,6 +147,8 @@ namespace Oak
         }
 
         public Func<dynamic, bool> If { get; set; }
+
+        public Func<dynamic, bool> Unless { get; set; }
     }
 
     public class Acceptance : Validation
@@ -288,15 +292,15 @@ namespace Oak
 
         public bool OnlyInteger { get; set; }
 
-        public decimal? GreaterThan { get; set; }
+        public double? GreaterThan { get; set; }
 
-        public decimal? GreaterThanOrEqualTo { get; set; }
+        public double? GreaterThanOrEqualTo { get; set; }
 
-        public decimal? EqualTo { get; set; }
+        public double? EqualTo { get; set; }
 
-        public decimal? LessThan { get; set; }
+        public double? LessThan { get; set; }
 
-        public decimal? LessThanOrEqualTo { get; set; }
+        public double? LessThanOrEqualTo { get; set; }
 
         public bool Odd { get; set; }
 
@@ -306,68 +310,43 @@ namespace Oak
         {
             string value = entity.GetMember(Property).ToString();
 
-            int intResult;
-            decimal decimalResult;
-            
-            if (!decimal.TryParse(value, out decimalResult))
-                return false;
+            var decimalValue = Double(value);
 
-            if(OnlyInteger == true)
-            {
-                if (!int.TryParse(value, out intResult))
-                    return false;
-            }
+            if (decimalValue == null) return false;
 
-            if(GreaterThan != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if (!(decimalResult > GreaterThan))
-                    return false;
-            }
+            if (OnlyInteger == true && !IsInteger(value)) return false;
 
-            if(GreaterThanOrEqualTo != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if (!(decimalResult >= GreaterThanOrEqualTo))
-                    return false;
-            }
-            
-            if(EqualTo != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if (!(decimalResult == EqualTo))
-                    return false;
-            }
-            
-            if(LessThan != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(!(decimalResult < LessThan))
-                    return false;
-            }
-            
-            if(LessThanOrEqualTo != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(!(decimalResult <= LessThanOrEqualTo))
-                    return false;
-            }
-            
-            if(Odd == true)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(decimalResult % 2 == 0)
-                    return false;
-            }
+            if (GreaterThan != null && decimalValue <= GreaterThan) return false;
 
-            if(Even == true)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(decimalResult % 2 == 1)
-                    return false;
-            }
+            if (GreaterThanOrEqualTo != null && decimalValue < GreaterThanOrEqualTo) return false;
+
+            if (EqualTo != null && decimalValue != EqualTo) return false;
+
+            if (LessThan != null && decimalValue >= LessThan) return false;
+
+            if (LessThanOrEqualTo != null && decimalValue > LessThanOrEqualTo) return false;
+
+            if (Odd == true && decimalValue % 2 == 0) return false;
+
+            if (Even == true && decimalValue % 2 == 1) return false;
             
             return true;
+        }
+
+        public double? Double(string value)
+        {
+            double doubleResult;
+
+            if (double.TryParse(value, out doubleResult)) return doubleResult;
+
+            return null;
+        }
+
+        public bool IsInteger(string value)
+        {
+            int intResult;
+
+            return int.TryParse(value, out intResult);
         }
     }
 }
