@@ -17,7 +17,7 @@ namespace Oak
     public class Gemini : DynamicObject
     {
         public dynamic Expando { get; set; }
-        
+
         public dynamic This()
         {
             return this as dynamic;
@@ -31,6 +31,8 @@ namespace Oak
 
         public Gemini(object dto)
         {
+            if (dto == null) dto = new ExpandoObject();
+
             if (dto is ExpandoObject)
                 Expando = dto;
             else
@@ -169,6 +171,21 @@ namespace Oak
         public virtual void DeleteMember(string member)
         {
             Hash().Remove(Fuzzy(Hash(), member));
+        }
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            result = null;
+
+            if (!Hash().ContainsKey(binder.Name)) return false;
+
+            var function = Hash()[binder.Name] as DynamicFunctionWithParam;
+
+            if (function == null || args.Count() != 0) return base.TryInvokeMember(binder, args, out result);
+
+            result = function.Invoke(null);
+
+            return true;
         }
     }
 }

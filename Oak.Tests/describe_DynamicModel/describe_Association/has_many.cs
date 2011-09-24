@@ -114,7 +114,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
             context["building a comment for a blog with attributes"] = () =>
             {
-                act = () => comment = blog.Comments().NewWith(new { Text = "Hi" });
+                act = () => comment = blog.Comments().New(new { Text = "Hi" });
 
                 it["sets additional attributes"] = () => ((string)comment.Text).should_be("Hi");
 
@@ -123,7 +123,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
             context["building a comment where the blog id is specified"] = () =>
             {
-                act = () => comment = blog.Comments().NewWith(new { BlogId = 20 });
+                act = () => comment = blog.Comments().New(new { BlogId = 20 });
 
                 it["overrides the id"] = () => ((int)comment.BlogId).should_be(blog.Id as object);
             };
@@ -154,7 +154,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             {
                 blog = blogs.Single(blogId);
 
-                comment = blog.Comments().NewWith(new { Text = "hello" });
+                comment = blog.Comments().New(new { Text = "hello" });
 
                 comments.Save(comment);
             };
