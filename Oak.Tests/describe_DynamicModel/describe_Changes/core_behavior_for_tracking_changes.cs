@@ -21,7 +21,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
             it["has no changes"] = () => ((bool)person.HasChanged()).should_be_false();
 
-            it["property has no changes"] = () => ((bool)person.HasPropertyChanged("FirstName")).should_be_false();
+            it["property has no changes"] = () => ((bool)person.HasChanged("FirstName")).should_be_false();
 
             it["methods added are untracked, so that they are ignored by persistance"] = () =>
             {
@@ -29,13 +29,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
                 keys.should_contain("HasChanged");
 
-                keys.should_contain("HasPropertyChanged");
-
                 keys.should_contain("Original");
 
                 keys.should_contain("Changes");
-
-                keys.should_contain("ChangesFor");
             };
 
             context["changing dynamic model"] = () =>
@@ -48,15 +44,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
                 it["lists changes"] = () =>
                 {
-                    IDictionary<string, dynamic> changes = person.Changes();
+                    dynamic changes = person.Changes();
 
-                    (changes["FirstName"].Original as object).should_be(null);
-                    (changes["FirstName"].New as object).should_be("Jane");
+                    (changes.FirstName.Original as object).should_be(null);
+                    (changes.FirstName.New as object).should_be("Jane");
                 };
 
                 it["gives changes for property"] = () =>
                 {
-                    var changes = person.ChangesFor("FirstName");
+                    var changes = person.Changes("FirstName");
 
                     (changes.Original as object).should_be(null);
                     (changes.New as object).should_be("Jane");
@@ -73,7 +69,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
             it["has no changes"] = () => ((bool)person.HasChanged()).should_be_false();
 
-            it["list of changes is empty"] = () => ((int)person.Changes().Count).should_be(0);
+            it["list of changes is empty"] = () => ((int)(person.Changes() as IDictionary<string, object>).Count).should_be(0);
 
             context["changing dynamic model"] = () =>
             {
@@ -91,7 +87,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
                 it["gives changes for property"] = () =>
                 {
-                    var changes = person.ChangesFor("FirstName");
+                    var changes = person.Changes("FirstName");
 
                     (changes.Original as object).should_be("Jane");
                     (changes.New as object).should_be("New Value");
