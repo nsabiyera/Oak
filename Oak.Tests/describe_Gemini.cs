@@ -75,8 +75,6 @@ namespace Oak.Tests
 
                 it["ignores deletion"] = () => Gemini().RespondsTo("FooBar").should_be_false();
             };
-
-            
         }
 
         void describe_get_value_for_property()
@@ -197,10 +195,14 @@ namespace Oak.Tests
                 it["new properites provided by BlogEntry gemini are available"] = () =>
                     ((bool)gemini.IsValid()).should_be_true();
 
-                it["properites defined in the gemini do override base properties"] = () =>
+                it["properites defined in the gemini override base properties"] = () =>
                     (gemini.Body as string).should_be("");
             };
+        }
 
+        void specify_initializing_gemini_with_null_does_not_throw_error()
+        {
+            gemini = new Gemini(null);
         }
 
         void working_with_parameterless_gemini_that_defines_properites_in_the_constructor()
@@ -249,6 +251,32 @@ namespace Oak.Tests
                 {
                     (gemini.FirstName as string).should_be("Amir");
                     (gemini.LastName as string).should_be("Rajan");
+                };
+            };
+        }
+
+        void calling_dynamically_defined_methods()
+        {
+            context["method is defined as a dynamic function that takes in one dynamic parameter"] = () =>
+            {
+                act = () =>
+                {
+                    gemini = new ParameterlessGemini();
+                    gemini.CreateNewGemini = new DynamicFunctionWithParam(d => new Gemini(d));
+                };
+
+                it["calls method with parameter specified"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini(new { FirstName = "Amir" });
+
+                    (newGemini.FirstName as string).should_be("Amir");
+                };
+
+                it["calls method with even if parameter is not specified"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini();
+
+                    (newGemini as object).should_not_be_null();
                 };
             };
         }

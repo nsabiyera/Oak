@@ -86,16 +86,6 @@ namespace Oak
         {
             collection.SetMember(
                 "New",
-                new DynamicFunction(() =>
-                {
-                    return EntityFor(model, new { });
-                }));
-        }
-
-        private void AddNewAssociationWithMethod(DynamicModels collections, DynamicModel model)
-        {
-            collections.SetMember(
-                "NewWith",
                 new DynamicFunctionWithParam(attributes =>
                 {
                     return EntityFor(model, attributes);
@@ -134,8 +124,6 @@ namespace Oak
                 var collection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }));
 
                 AddNewAssociationMethod(collection, model);
-
-                AddNewAssociationWithMethod(collection, model);
 
                 return collection;
             };
