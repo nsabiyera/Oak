@@ -1,6 +1,6 @@
 ﻿@helper TextBox(Oak.ElementMetaData metaData)
 {
-    <input id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData) @Styles(metaData)/>
+    <input type="text" id="@metaData.Id" name="@metaData.Id" value="@metaData.Value" @Attributes(metaData) @Styles(metaData)/>
 }
 
 @helper Password(Oak.ElementMetaData metaData)
@@ -23,6 +23,11 @@
     <label for="@metaData.Id" @Attributes(metaData) @Styles(metaData)>@(text ?? @metaData.Id)</label>
 }
 
+@helper Date(Oak.ElementMetaData metaData)
+{
+    <input type="text" id="@metaData.Id" name="@metaData.Id" value="@DateFor(metaData)" @Attributes(metaData) @Styles(metaData)/>
+}
+
 @helper Attributes(Oak.ElementMetaData metaData)
 {
     foreach (var attribute in metaData.Attributes) { @attribute.Key<text>="</text>@attribute.Value<text>"</text> }
@@ -33,6 +38,23 @@
     if (metaData.Styles.Count != 0)
     {
         <text>style="</text>foreach (var attribute in metaData.Styles) { @attribute.Key<text>:</text>@attribute.Value<text>;</text> }<text>"</text>
+    }
+}
+
+@functions
+{
+    static string DateFor(Oak.ElementMetaData metaData) 
+    {
+        var dateTime = DateTime.Today;
+        var dateAsString = "";
+        
+        if (DateTime.TryParse(metaData.Value.ToString(), out dateTime))
+        {
+            if (dateTime.Date == dateTime) dateAsString = dateTime.ToShortDateString();
+            else dateAsString = dateTime.ToString();
+        }
+
+        return dateAsString;
     }
 }
 
