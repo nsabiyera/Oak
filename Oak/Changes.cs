@@ -17,7 +17,7 @@ namespace Oak
             return @this.TrackedProperties();
         }
 
-        public MixInChanges(DynamicModel dynamicModel)
+        public MixInChanges(dynamic dynamicModel)
         {
             @this = dynamicModel;
 

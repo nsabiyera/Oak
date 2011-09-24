@@ -11,25 +11,21 @@ namespace Oak
     {
         public MixInAssociation(DynamicModel mixWith)
         {
-            if (mixWith.GetType().GetMethod("Associates") != null)
-            {
-                IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
+            if (!SupportsAssociations(mixWith)) return;
+                
+            IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
 
-                foreach (dynamic association in associations)
-                {
-                    association.Init(mixWith);
-                }
-            }
+            foreach (dynamic association in associations) association.Init(mixWith);
+        }
+
+        public bool SupportsAssociations(DynamicModel mixWith)
+        {
+            return mixWith.GetType().GetMethod("Associates") != null;
         }
     }
 
     public class Association
     {
-        public virtual void Init(dynamic model)
-        {
-
-        }
-
         public string Singular(object o)
         {
             var name = o.GetType().Name;
@@ -73,7 +69,7 @@ namespace Oak
             this.named = named ?? repository.GetType().Name;
         }
 
-        public override void Init(dynamic model)
+        public void Init(dynamic model)
         {
             var fromColumn = ForeignKeyFor(model);
 
@@ -156,7 +152,7 @@ namespace Oak
             this.repository = repository;
         }
 
-        public override void Init(dynamic model)
+        public void Init(dynamic model)
         {
             var foreignKey = ForeignKeyFor(model);
 
@@ -203,7 +199,7 @@ namespace Oak
             name = Singular(repository);
         }
 
-        public override void Init(dynamic model)
+        public void Init(dynamic model)
         {
             (model as DynamicModel).SetUnTrackedMember(
                 name,

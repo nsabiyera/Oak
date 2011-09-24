@@ -279,6 +279,29 @@ namespace Oak.Tests
                     (newGemini as object).should_not_be_null();
                 };
             };
+
+            context["method is defined as a dynamic method that takes in one dynamic parameter"] = () =>
+            {
+                act = () =>
+                {
+                    gemini = new ParameterlessGemini();
+                    gemini.AlterGemini = new DynamicMethodWithParam(d => gemini.Property = d ?? "Default");
+                };
+
+                it["calls method with parameter specified"] = () =>
+                {
+                    gemini.AlterGemini("Other");
+
+                    (gemini.Property as string).should_be("Other");
+                };
+
+                it["calls method with even if parameter is not specified"] = () =>
+                {
+                    gemini.AlterGemini();
+
+                    (gemini.Property as string).should_be("Default");
+                };
+            };
         }
 
         Gemini Gemini()
