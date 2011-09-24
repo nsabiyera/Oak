@@ -104,7 +104,7 @@ namespace Oak.Controllers
                 {
                     Title = blog.Title,
                     Body = blog.Body
-                }.InsertInto("Blogs", ConnectionProfile);
+                }.InsertInto("Blogs", connectionProfile: ConnectionProfile);
             }
 
             return new EmptyResult();
