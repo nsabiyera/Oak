@@ -1,4 +1,14 @@
-﻿@helper TextBox(Oak.ElementMetaData metaData)
+﻿@helper TextBox(string name)
+{
+    @TextBox(new Oak.ElementMetaData(name))
+}
+
+@helper TextBox(string name, string value)
+{
+    @TextBox(new Oak.ElementMetaData(name, value))
+}
+
+@helper TextBox(Oak.ElementMetaData metaData)
 {
     <input type="text" id="@metaData.Id()" name="@metaData.Id()" value="@metaData.Value()"@Attributes(metaData)@Styles(metaData)/>
 }
@@ -6,6 +16,16 @@
 @helper Password(Oak.ElementMetaData metaData)
 {
     <input type="password" id="@metaData.Id()" name="@metaData.Id()" value="@metaData.Value()"@Attributes(metaData)@Styles(metaData)/>
+}
+
+@helper TextArea(string name)
+{
+    @TextArea(new Oak.ElementMetaData(name))    
+}
+
+@helper TextArea(string name, string value)
+{
+    @TextArea(new Oak.ElementMetaData(name, value))    
 }
 
 @helper TextArea(Oak.ElementMetaData metaData)

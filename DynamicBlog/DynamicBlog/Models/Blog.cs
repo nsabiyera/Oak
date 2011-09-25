@@ -12,6 +12,12 @@ namespace DynamicBlog.Models
     {
         Comments comments;
 
+        public Blog()
+            : this(new { })
+        {
+
+        }
+
         public Blog(object dto)
         {
             comments = new Comments();

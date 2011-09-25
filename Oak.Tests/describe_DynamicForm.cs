@@ -151,6 +151,59 @@ namespace Oak.Tests
             };
         }
 
+        void creating_element_data_out_of_hash()
+        {
+            before = () =>
+            {
+                result = new ElementMetaData(new Hash
+                {
+                    { "id", "Title" },
+                    { "value", "Some Value" },
+                    { "data-foo", "foobar" }
+                });
+            };
+
+            it["creates element metadata"] = () =>
+            {
+                result.Id().should_be("Title");
+
+                result.Value().should_be("Some Value");
+
+                result.Hash.First().Value.should_be("foobar");
+            };
+        }
+
+        void creating_element_meta_data_out_of_constructor_initializer()
+        {
+            context["name is specified"] = () =>
+            {
+                before = () =>
+                {
+                    result = new ElementMetaData("Title");
+                };
+
+                it["creates element metadata"] = () =>
+                {
+                    result.Id().should_be("Title");
+                };
+            };
+
+            context["name and value are specified"] = () =>
+            {
+                before = () =>
+                {
+                    result = new ElementMetaData("Title", "Some Value");
+                };
+
+                it["creates element metadata"] = () =>
+                {
+                    result.Id().should_be("Title");
+
+                    result.Value().should_be("Some Value");
+                };
+            };
+        }
+
         void accessing_a_property_that_doesnt_exist_on_a_regular_class()
         {
             before = () => form = new DynamicForm(new RegularClass());

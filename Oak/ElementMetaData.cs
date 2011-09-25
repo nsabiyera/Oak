@@ -13,8 +13,29 @@ namespace Oak
         public ElementMetaData()
         {
             Hash = new Hash();
-            value = null;
-            id = null;
+        }
+
+        public ElementMetaData(Hash hash)
+        {
+            Hash = new Hash();
+
+            foreach (var key in hash.Keys) Set(key, hash[key]);
+        }
+
+        public ElementMetaData(string name)
+            : this(new Hash { { "id", name } })
+        {
+
+        }
+
+        public ElementMetaData(string name, string value)
+            : this(new Hash 
+            { 
+                { "id", name },
+                { "value", value } 
+            })
+        {
+
         }
 
         public string Value()
