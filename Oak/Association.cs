@@ -177,6 +177,8 @@ namespace Oak
 
         public DynamicRepository Through { get; set; }
 
+        public string ForeignKey { get; set; }
+
         public HasOne(DynamicRepository repository)
         {
             this.repository = repository;
@@ -184,19 +186,19 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            var foreignKey = ForeignKeyFor(model);
+            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
 
             if (Through != null)
             {
                 (model as DynamicModel).SetUnTrackedMember(
                     Singular(repository),
-                    ThroughTableQuery(foreignKey, repository.GetType().Name, Through.GetType().Name, ForeignKeyFor(repository), model));
+                    ThroughTableQuery(foreignKeyName, repository.GetType().Name, Through.GetType().Name, ForeignKeyFor(repository), model));
             }
             else
             {
                 (model as DynamicModel).SetUnTrackedMember(
                     Singular(repository),
-                    new DynamicFunction(() => repository.SingleWhere(foreignKey + " = @0", model.GetMember(Id()))));
+                    new DynamicFunction(() => repository.SingleWhere(foreignKeyName + " = @0", model.GetMember(Id()))));
             }
         }
 
