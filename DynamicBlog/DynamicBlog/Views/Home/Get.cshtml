@@ -17,7 +17,7 @@
 @using (Html.BeginForm("comment", "home"))
 {
     @Html.Hidden("id", ViewBag.Blog.Id as object)
-    @Html.TextArea("comment")
+    @OakForm.TextArea("comment")
     <br />
     <input type="submit" value="comment" />
 }

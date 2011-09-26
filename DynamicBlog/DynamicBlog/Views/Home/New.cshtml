@@ -12,7 +12,6 @@
 @using (Html.BeginForm(new { action = "New" }))
 {
     @Html.Label("Title")<br />
-    
     @OakForm.TextBox("Title", Request["Title"])<br />
     @Html.Label("Body") <br />
     @OakForm.TextArea("Body", Request["Body"])<br />
