@@ -78,8 +78,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 context["retrieving author"] = () =>
                 {
                     act = () => author = authors.Single(authorId);
-                    //this fails?
-                    //it["author should have profile"] = () => (author.Profile().Email as string).should_be("test@test.com");
+                    
+                    it["author should have profile"] = () => (author.Profile().Email as string).should_be("test@test.com");
                 };
             };
         }
