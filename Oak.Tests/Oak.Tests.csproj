@@ -68,10 +68,13 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Loan.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Profiles.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Suppliers.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\Classes\UnconventionalComment.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\Classes\UnconventionalComment2.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\Classes\UnconventionalComments.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\Classes\UnconventionalComments2.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalAuthor.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalAuthors.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalComment.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalComment2.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalComments.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalComments2.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalProfile.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\User.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Users.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_many.cs" />
