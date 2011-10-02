@@ -11,6 +11,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
         dynamic user;
 
+        dynamic userId;
+
         void before_each()
         {
             seed = new Seed();
@@ -29,7 +31,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                     new { Email = "nvarchar(255)" }
                 }).ExecuteNonQuery();
 
-                new { Email = "user@example.com" }.InsertInto("Users");
+                userId = new { Email = "user@example.com" }.InsertInto("Users");
             };
 
             context["email associated with users is not taken"] = () =>
@@ -52,6 +54,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 };
 
                 it["user is valid"] = () => ((bool)user.IsValid()).should_be_false();
+            };
+
+            context["email that is taken belongs to current user"] = () =>
+            {
+                before = () => user = users.Single(userId);
+
+                it["users is valid because the taken email belongs to current user"] = () => ((bool)user.IsValid()).should_be_true();
             };
         }
     }

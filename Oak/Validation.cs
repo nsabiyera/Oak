@@ -277,7 +277,18 @@ namespace Oak
         {
             object value = entity.GetMember(Property);
 
-            if (Using.SingleWhere(Property + " = @0", value) != null) return false;
+            var whereClause = Property + " = @0";
+
+            var values = new List<object> { value };
+
+            if (entity.RespondsTo("Id"))
+            {
+                whereClause += " and Id != @1";
+
+                values.Add(entity.Id);
+            }
+
+            if (Using.SingleWhere(whereClause, values.ToArray()) != null) return false;
 
             return true;
         }
