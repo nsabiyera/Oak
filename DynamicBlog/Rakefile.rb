@@ -20,6 +20,7 @@ task :rake_dot_net_initialize do
   @test_runner_command = "#{ yml["test_runner"] } #{ @test_dll }"
   
   @iis_express = IISExpress.new
+  @iis_express.execution_path = yml["iis_express"]
   @web_deploy = WebDeploy.new
   @sh = CommandShell.new
   @sln = SlnBuilder.new
