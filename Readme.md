@@ -10,7 +10,6 @@ Oak is a set of awesome C# 4.0 dynamic constructs that bring frictionless web de
 - General dev assistance in creating schema, building, deploying and running tests provided by [rake-dot-net](http://github.com/amirrajan/rake-dot-net) (install-package rake-dot-net)
 - A dynamic ModelBinder called **ParamsModelBinder**
 - A set of razor templates used to render Html: **DynamicForm** **OakForm.cshtml**
+- [Sample project](https://github.com/amirrajan/Oak/tree/master/DynamicBlog) is included with the source 
 
 Head over to the [wiki](https://github.com/amirrajan/oak/wiki) for additional details.
-
-[Sample project](https://github.com/amirrajan/Oak/tree/master/DynamicBlog) is included with the source 
