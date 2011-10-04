@@ -10,9 +10,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
     class has_many_through : nspec
     {
+        dynamic game;
+
         Seed seed;
 
         IEnumerable<dynamic> games;
+
+        IEnumerable<dynamic> gamesIds;
 
         dynamic user;
 
@@ -53,7 +57,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     user = new { Email = "user@example.com" }.InsertInto("Users");
 
-                    var game = new { Title = "Gears of War" }.InsertInto("Games");
+                    game = new { Title = "Gears of War" }.InsertInto("Games");
 
                     new { UserId = user, GameId = game }.InsertInto("Library");
                 };
@@ -64,6 +68,14 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     it["contains game for user"] = () =>
                         (games.First().Title as string).should_be("Gears of War");
+                };
+
+                context["retrieving game ids for user's library"] = () =>
+                {
+                    act = () => gamesIds = users.Single(user).GameIds();
+
+                    it["contains game for user"] = () =>
+                        (gamesIds.First() as object).should_be(game as object);
                 };
             };
         }

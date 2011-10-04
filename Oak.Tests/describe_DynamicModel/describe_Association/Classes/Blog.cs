@@ -24,6 +24,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             yield return 
             new HasMany(comments);
+
+            yield return
+            new HasMany(comments, "Roses"); //a rose by any other name
         }
     }
 }
