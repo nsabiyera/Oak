@@ -30,9 +30,11 @@ namespace Oak
         {
             var name = o.GetType().Name;
 
+            if (o is string) name = o as string;
+
             if (!name.EndsWith("s")) return name;
 
-            return name.Substring(0, o.GetType().Name.Length - 1);
+            return name.Substring(0, name.Length - 1);
         }
 
         public string ForeignKeyFor(object o)
@@ -51,8 +53,6 @@ namespace Oak
         string named;
 
         DynamicRepository repository;
-
-        public string Using { get; set; }
 
         public HasMany(DynamicRepository repository)
             : this(repository, null)
@@ -73,7 +73,7 @@ namespace Oak
 
             var toTable = repository.GetType().Name;
 
-            AddAssociationMethod(model, fromColumn, toTable);
+            AddAssociationMethods(model, fromColumn, toTable);
         }
 
         private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
@@ -95,13 +95,14 @@ namespace Oak
             return repository.Projection(entity);
         }
 
-        private void AddAssociationMethod(DynamicModel model, string fromColumn, string toTable)
+        private void AddAssociationMethods(DynamicModel model, string fromColumn, string toTable)
         {
-            model.SetUnTrackedMember(named, DirectTableQuery(fromColumn, model));
+            model.SetUnTrackedMember(named, Query(fromColumn, model));
 
+            model.SetUnTrackedMember(Singular(named) + "Ids", QueryIds(fromColumn, model));
         }
 
-        private DynamicFunction DirectTableQuery(string foreignKey, dynamic model)
+        private DynamicFunction Query(string foreignKey, dynamic model)
         {
             return () =>
             {
@@ -110,6 +111,16 @@ namespace Oak
                 AddNewAssociationMethod(collection, model);
 
                 return collection;
+            };
+        }
+
+        private DynamicFunction QueryIds(string foreignKey, dynamic model)
+        {
+            return () =>
+            {
+                IEnumerable<dynamic> models = (Query(foreignKey, model) as DynamicFunction).Invoke();
+
+                return models.Select(s => s.Id).ToList();
             };
         }
     }
@@ -152,10 +163,14 @@ namespace Oak
         {
             model.SetUnTrackedMember(
                 named,
-                ThroughTableQuery(fromColumn, toTable, through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
+                Query(fromColumn, toTable, through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
+
+            model.SetUnTrackedMember(
+                Singular(named) + "Ids",
+                QueryIds(fromColumn, toTable, through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
         }
 
-        private DynamicFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
             return () => repository.Query(
                  @"
@@ -168,6 +183,16 @@ namespace Oak
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using), model.Expando.Id);
+        }
+
+        private DynamicFunction QueryIds(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        {
+            return () =>
+            {
+                IEnumerable<dynamic> models = (Query(fromColumn, toTable, throughTable, @using, model) as DynamicFunction).Invoke();
+
+                return models.Select(s => s.Id).ToList();
+            };
         }
     }
 
