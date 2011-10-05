@@ -87,20 +87,20 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         void CreateConventionalAuthorsTable()
         {
             seed.CreateTable("Authors", new dynamic[] 
-                    {
-                        new { Id = "int", Identity = true, PrimaryKey = true },
-                        new { Name = "nvarchar(255)" }
-                    }).ExecuteNonQuery();
+            {
+                new { Id = "int", Identity = true, PrimaryKey = true },
+                new { Name = "nvarchar(255)" }
+            }).ExecuteNonQuery();
         }
 
         void CreateConventionalProfilesTable()
         {
             seed.CreateTable("Profiles", new dynamic[] 
-                    {
-                        new { Id = "int", Identity = true, PrimaryKey = true },
-                        new { AuthorId = "int", ForeignKey = "Authors(Id)" },
-                        new { Email = "nvarchar(255)" }
-                    }).ExecuteNonQuery();
+            {
+                new { Id = "int", Identity = true, PrimaryKey = true },
+                new { AuthorId = "int", ForeignKey = "Authors(Id)" },
+                new { Email = "nvarchar(255)" }
+            }).ExecuteNonQuery();
         }
     }
 }

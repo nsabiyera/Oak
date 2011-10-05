@@ -22,8 +22,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return 
-            new HasOne(suppliers) { Through = distributionChannel };
+            yield return new HasOneThrough(suppliers, through: distributionChannel);
         }
     }
 }
