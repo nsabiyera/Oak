@@ -127,11 +127,11 @@ namespace Oak
 
     public class HasManyThrough : Association
     {
-        DynamicRepository repository;
+        private DynamicRepository repository;
 
-        DynamicRepository through;
+        private DynamicRepository through;
 
-        string named;
+        private string named;
 
         public string Using { get; set; }
 
@@ -200,8 +200,6 @@ namespace Oak
     {
         private DynamicRepository repository;
 
-        public DynamicRepository Through { get; set; }
-
         public string ForeignKey { get; set; }
 
         public HasOne(DynamicRepository repository)
@@ -213,21 +211,36 @@ namespace Oak
         {
             string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
 
-            if (Through != null)
-            {
-                (model as DynamicModel).SetUnTrackedMember(
-                    Singular(repository),
-                    ThroughTableQuery(foreignKeyName, repository.GetType().Name, Through.GetType().Name, ForeignKeyFor(repository), model));
-            }
-            else
-            {
-                (model as DynamicModel).SetUnTrackedMember(
+            (model as DynamicModel).SetUnTrackedMember(
                     Singular(repository),
                     new DynamicFunction(() => repository.SingleWhere(foreignKeyName + " = @0", model.GetMember(Id()))));
-            }
+        }
+    }
+
+    public class HasOneThrough : Association
+    {
+        private DynamicRepository repository;
+
+        private DynamicRepository through;
+
+        public string ForeignKey { get; set; }
+
+        public HasOneThrough(DynamicRepository repository, DynamicRepository through)
+        {
+            this.repository = repository;
+            this.through = through;
         }
 
-        private DynamicFunction ThroughTableQuery(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        public void Init(dynamic model)
+        {
+            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
+
+            (model as DynamicModel).SetUnTrackedMember(
+                    Singular(repository),
+                    Query(foreignKeyName, repository.GetType().Name, through.GetType().Name, ForeignKeyFor(repository), model));
+        }
+
+        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
             return () => repository.Query(
                 @"
