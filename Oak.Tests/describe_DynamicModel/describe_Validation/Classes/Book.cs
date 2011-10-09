@@ -14,7 +14,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
         {
             Init(dto);
         }
-
+        
         public IEnumerable<dynamic> Validates()
         {
             yield return new Presence("Title");

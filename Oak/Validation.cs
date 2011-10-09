@@ -366,4 +366,24 @@ namespace Oak
             return true;
         }
     }
+    
+    public class Length : Validation
+    {
+        public Length(string property)
+            : base(property)
+        {
+        }
+
+        public int? Minimum { get; set; }
+        
+        public bool Validate(DynamicModel entity)
+        {
+            dynamic value = entity.GetMember(Property);
+            int length = value.Length;
+
+            if (Minimum != null && length < Minimum) return false;
+            
+            return true;
+        }
+    }
 }
