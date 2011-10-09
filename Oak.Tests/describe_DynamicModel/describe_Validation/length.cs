@@ -23,7 +23,14 @@ namespace Oak.Tests.describe_DynamicModel.describe_Length
             {
                 before = () => essay.Title = string.Empty;
                 
-                it["is not valid"] = () => isValid.should_be_true();
+                it["is not valid"] = () => isValid.should_be_false();
+            };
+
+            context["title is exact length"] = () =>
+            {
+                before = () => essay.Title = "1";
+                
+                it["is valid"] = () => isValid.should_be_true();
             };
         }
     }
