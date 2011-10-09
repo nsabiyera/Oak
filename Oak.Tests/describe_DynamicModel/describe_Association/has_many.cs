@@ -17,7 +17,11 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         dynamic otherBlogId;
 
+        dynamic commentId;
+
         IEnumerable<dynamic> blogComments;
+
+        IEnumerable<dynamic> blogCommentIds;
 
         Blogs blogs;
 
@@ -58,7 +62,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     blogId = new { Title = "Some Blog", Body = "Lorem Ipsum" }.InsertInto("Blogs");
 
-                    new { BlogId = blogId, Text = "Comment 1" }.InsertInto("Comments");
+                    commentId = new { BlogId = blogId, Text = "Comment 1" }.InsertInto("Comments");
 
                     new { BlogId = blogId, Text = "Comment 2" }.InsertInto("Comments");
 
@@ -78,6 +82,40 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         blogComments.should_contain(s => s.Text == "Comment 1");
 
                         blogComments.should_contain(s => s.Text == "Comment 2");
+                    };
+                };
+
+                context["retrieving comments for blog by another name"] = () =>
+                {
+                    act = () => blogComments = blogs.Single(blogId).Roses();
+
+                    it["has two comments"] = () =>
+                    {
+                        blogComments.Count().should_be(2);
+
+                        blogComments.should_contain(s => s.Text == "Comment 1");
+
+                        blogComments.should_contain(s => s.Text == "Comment 2");
+                    };
+                };
+
+                context["retriving comment ids for blog"] = () =>
+                {
+                    act = () => blogCommentIds = blogs.Single(blogId).CommentIds();
+
+                    it["has ids for comment"] = () =>
+                    {
+                        (blogCommentIds.First() as object).should_be(commentId as object);
+                    };
+                };
+
+                context["retriving comment ids for blog by another name"] = () =>
+                {
+                    act = () => blogCommentIds = blogs.Single(blogId).RoseIds();
+
+                    it["has ids for comment"] = () =>
+                    {
+                        (blogCommentIds.First() as object).should_be(commentId as object);
                     };
                 };
 
@@ -114,7 +152,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
             context["building a comment for a blog with attributes"] = () =>
             {
-                act = () => comment = blog.Comments().NewWith(new { Text = "Hi" });
+                act = () => comment = blog.Comments().New(new { Text = "Hi" });
 
                 it["sets additional attributes"] = () => ((string)comment.Text).should_be("Hi");
 
@@ -123,7 +161,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
             context["building a comment where the blog id is specified"] = () =>
             {
-                act = () => comment = blog.Comments().NewWith(new { BlogId = 20 });
+                act = () => comment = blog.Comments().New(new { BlogId = 20 });
 
                 it["overrides the id"] = () => ((int)comment.BlogId).should_be(blog.Id as object);
             };
@@ -154,7 +192,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             {
                 blog = blogs.Single(blogId);
 
-                comment = blog.Comments().NewWith(new { Text = "hello" });
+                comment = blog.Comments().New(new { Text = "hello" });
 
                 comments.Save(comment);
             };

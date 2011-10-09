@@ -11,7 +11,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
     {
         Seed seed;
 
-        Authors authors;
+        dynamic authors;
 
         dynamic profileId;
 
@@ -22,11 +22,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         void before_each()
         {
             seed = new Seed();
-
-            authors = new Authors();
         }
 
-        void describe_has_one()
+        void describe_has_one() //TODO: this for unconventional foreign keys
         {
             context["given author with profile"] = () =>
             {
@@ -34,18 +32,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 {
                     seed.PurgeDb();
 
-                    seed.CreateTable("Authors", new dynamic[] 
-                    {
-                        new { Id = "int", Identity = true, PrimaryKey = true },
-                        new { Name = "nvarchar(255)" }
-                    }).ExecuteNonQuery();
+                    authors = new Authors();
 
-                    seed.CreateTable("Profiles", new dynamic[] 
-                    {
-                        new { Id = "int", Identity = true, PrimaryKey = true },
-                        new { AuthorId = "int", ForeignKey = "Authors(Id)" },
-                        new { Email = "nvarchar(255)" }
-                    }).ExecuteNonQuery();
+                    CreateConventionalAuthorsTable();
+                    CreateConventionalProfilesTable();
 
                     authorId = new { Name = "Amir" }.InsertInto("Authors");
 
@@ -59,6 +49,58 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     it["author should have profile"] = () => (author.Profile().Email as string).should_be("user@example.com");
                 };
             };
+        }
+
+        void describe_unconventional_schema()
+        {
+            context["given foreign key does not match convention"] = () =>
+            {
+                before = () =>
+                {
+                    seed.PurgeDb();
+
+                    authors = new UnconventionalAuthors();
+
+                    CreateConventionalAuthorsTable();
+
+                    seed.CreateTable("Profiles", new dynamic[] 
+                    {
+                        new { Id = "int", Identity = true, PrimaryKey = true },
+                        new { fkAuthorId = "int", ForeignKey = "Authors(Id)" },
+                        new { Email = "nvarchar(255)" }
+                    }).ExecuteNonQuery();
+
+                    authorId = new { Name = "Justin" }.InsertInto("Authors");
+
+                    profileId = new { Email = "test@test.com", fkAuthorId = authorId }.InsertInto("Profiles");
+                };
+
+                context["retrieving author"] = () =>
+                {
+                    act = () => author = authors.Single(authorId);
+                    
+                    it["author should have profile"] = () => (author.Profile().Email as string).should_be("test@test.com");
+                };
+            };
+        }
+
+        void CreateConventionalAuthorsTable()
+        {
+            seed.CreateTable("Authors", new dynamic[] 
+            {
+                new { Id = "int", Identity = true, PrimaryKey = true },
+                new { Name = "nvarchar(255)" }
+            }).ExecuteNonQuery();
+        }
+
+        void CreateConventionalProfilesTable()
+        {
+            seed.CreateTable("Profiles", new dynamic[] 
+            {
+                new { Id = "int", Identity = true, PrimaryKey = true },
+                new { AuthorId = "int", ForeignKey = "Authors(Id)" },
+                new { Email = "nvarchar(255)" }
+            }).ExecuteNonQuery();
         }
     }
 }

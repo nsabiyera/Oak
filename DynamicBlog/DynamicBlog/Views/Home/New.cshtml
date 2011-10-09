@@ -4,10 +4,6 @@
 
 <h2>New Blog</h2>
 
-@{
-    dynamic form = new Oak.DynamicForm(new DynamicBlog.Models.Blog());
-}
-
 @if (ViewBag.Flash != null)
 {
     <span>Error: @ViewBag.Flash</span>
@@ -16,9 +12,8 @@
 @using (Html.BeginForm(new { action = "New" }))
 {
     @Html.Label("Title")<br />
-    
-    @OakForm.TextBox(form.Title)<br />
+    @OakForm.TextBox("Title", Request["Title"])<br />
     @Html.Label("Body") <br />
-    @OakForm.TextArea(form.Body)<br />
+    @OakForm.TextArea("Body", Request["Body"])<br />
     <input type="submit" value="insert blog" />
 }

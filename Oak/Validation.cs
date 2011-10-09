@@ -24,11 +24,11 @@ namespace Oak
 
             if (HasValidationCapabilities(mixWith))
             {
-                mixWith.SetUnTrackedMember("Errors", new DynamicEnumerableFunction(Errors));
+                mixWith.SetUnTrackedMember("Errors", new DynamicFunction(Errors));
 
                 mixWith.SetUnTrackedMember("IsValid", new DynamicFunction(IsValid));
 
-                mixWith.SetUnTrackedMember("IsPropertyValid", new Func<dynamic, dynamic>(IsValid));
+                mixWith.SetUnTrackedMember("IsPropertyValid", new DynamicFunctionWithParam(IsValid));
 
                 mixWith.SetUnTrackedMember("FirstError", new DynamicFunction(FirstError));
 
@@ -43,7 +43,7 @@ namespace Oak
             }
         }
 
-        private static bool HasValidationCapabilities(DynamicModel mixWith)
+        public bool HasValidationCapabilities(DynamicModel mixWith)
         {
             return mixWith.GetType().GetMethod("Validates") != null;
         }
@@ -58,7 +58,7 @@ namespace Oak
             rules.Add(rule);
         }
 
-        public List<dynamic> Errors()
+        public dynamic Errors()
         {
             return errors;
         }
@@ -86,6 +86,10 @@ namespace Oak
 
         public bool Validate(dynamic rule)
         {
+            if (rule.If != null && !rule.If(@this)) return true;
+
+            if (rule.Unless != null && rule.Unless(@this)) return true;
+
             bool isValid = rule.Validate(@this);
 
             if (!isValid) AddError(rule.Property, rule.Message());
@@ -93,7 +97,7 @@ namespace Oak
             return isValid;
         }
 
-        public string FirstError()
+        public dynamic FirstError()
         {
             return errors.First().Value;
         }
@@ -103,7 +107,7 @@ namespace Oak
     {
         public string Property { get; set; }
 
-        public string Text { get; set; }
+        public string ErrorMessage { get; set; }
 
         public Validation(string property)
         {
@@ -115,32 +119,36 @@ namespace Oak
             AddTrackedProperty(entity, Property);
         }
 
-        public void AddTrackedProperty(DynamicModel entity, string property)
+        public void AddTrackedProperty(dynamic entity, string property)
         {
             if (!entity.RespondsTo(property)) entity.SetMember(property, null);
         }
 
-        public void AddUnTrackedProperty(DynamicModel entity, string property)
+        public void AddUnTrackedProperty(dynamic entity, string property)
         {
             if (!entity.RespondsTo(property)) entity.SetUnTrackedMember(property, null);
         }
 
         public virtual string Message()
         {
-            if (!string.IsNullOrEmpty(Text)) return Text;
+            if (!string.IsNullOrEmpty(ErrorMessage)) return ErrorMessage;
 
             return Property + " is invalid.";
         }
 
-        public dynamic PropertyValueIn(DynamicModel entity)
+        public dynamic PropertyValueIn(dynamic entity)
         {
             return PropertyValueIn(Property, entity);
         }
 
-        public dynamic PropertyValueIn(string property, DynamicModel entity)
+        public dynamic PropertyValueIn(string property, dynamic entity)
         {
-            return (entity as DynamicModel).GetMember(property);
+            return entity.GetMember(property);
         }
+
+        public Func<dynamic, bool> If { get; set; }
+
+        public Func<dynamic, bool> Unless { get; set; }
     }
 
     public class Acceptance : Validation
@@ -153,7 +161,7 @@ namespace Oak
 
         public dynamic Accept { get; set; }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             return PropertyValueIn(entity).Equals(Accept);
         }
@@ -174,7 +182,7 @@ namespace Oak
             AddUnTrackedProperty(entity, Property + "Confirmation");
         }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             return PropertyValueIn(entity) == PropertyValueIn(Property + "Confirmation", entity);
         }
@@ -189,7 +197,7 @@ namespace Oak
         }
         public dynamic[] In { get; set; }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             return !In.Contains(PropertyValueIn(entity) as object);
         }
@@ -205,7 +213,7 @@ namespace Oak
 
         public string With { get; set; }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             return Regex.IsMatch(PropertyValueIn(entity) as string ?? "", With);
         }
@@ -221,7 +229,7 @@ namespace Oak
 
         public dynamic[] In { get; set; }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             return In.Contains(PropertyValueIn(entity) as object);
         }
@@ -239,10 +247,10 @@ namespace Oak
         {
             base.Init(entity as object);
 
-            if (string.IsNullOrEmpty(Text)) Text = Property + " is required.";
+            if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is required.";
         }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             return !string.IsNullOrEmpty(PropertyValueIn(entity));
         }
@@ -260,16 +268,27 @@ namespace Oak
         {
             base.Init(entity as object);
 
-            if (string.IsNullOrEmpty(Text)) Text = Property + " is taken.";
+            if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is taken.";
         }
 
         public DynamicRepository Using { get; set; }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             object value = entity.GetMember(Property);
 
-            if (Using.SingleWhere(Property + " = @0", value) != null) return false;
+            var whereClause = Property + " = @0";
+
+            var values = new List<object> { value };
+
+            if (entity.RespondsTo("Id"))
+            {
+                whereClause += " and Id != @1";
+
+                values.Add(entity.Id);
+            }
+
+            if (Using.SingleWhere(whereClause, values.ToArray()) != null) return false;
 
             return true;
         }
@@ -284,86 +303,61 @@ namespace Oak
 
         public bool OnlyInteger { get; set; }
 
-        public decimal? GreaterThan { get; set; }
+        public double? GreaterThan { get; set; }
 
-        public decimal? GreaterThanOrEqualTo { get; set; }
+        public double? GreaterThanOrEqualTo { get; set; }
 
-        public decimal? EqualTo { get; set; }
+        public double? EqualTo { get; set; }
 
-        public decimal? LessThan { get; set; }
+        public double? LessThan { get; set; }
 
-        public decimal? LessThanOrEqualTo { get; set; }
+        public double? LessThanOrEqualTo { get; set; }
 
         public bool Odd { get; set; }
 
         public bool Even { get; set; }
 
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             string value = entity.GetMember(Property).ToString();
 
-            int intResult;
-            decimal decimalResult;
-            
-            if (!decimal.TryParse(value, out decimalResult))
-                return false;
+            var decimalValue = Double(value);
 
-            if(OnlyInteger == true)
-            {
-                if (!int.TryParse(value, out intResult))
-                    return false;
-            }
+            if (decimalValue == null) return false;
 
-            if(GreaterThan != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if (!(decimalResult > GreaterThan))
-                    return false;
-            }
+            if (OnlyInteger == true && !IsInteger(value)) return false;
 
-            if(GreaterThanOrEqualTo != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if (!(decimalResult >= GreaterThanOrEqualTo))
-                    return false;
-            }
-            
-            if(EqualTo != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if (!(decimalResult == EqualTo))
-                    return false;
-            }
-            
-            if(LessThan != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(!(decimalResult < LessThan))
-                    return false;
-            }
-            
-            if(LessThanOrEqualTo != null)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(!(decimalResult <= LessThanOrEqualTo))
-                    return false;
-            }
-            
-            if(Odd == true)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(decimalResult % 2 == 0)
-                    return false;
-            }
+            if (GreaterThan != null && decimalValue <= GreaterThan) return false;
 
-            if(Even == true)
-            {
-                decimal.TryParse(value, out decimalResult);
-                if(decimalResult % 2 == 1)
-                    return false;
-            }
+            if (GreaterThanOrEqualTo != null && decimalValue < GreaterThanOrEqualTo) return false;
+
+            if (EqualTo != null && decimalValue != EqualTo) return false;
+
+            if (LessThan != null && decimalValue >= LessThan) return false;
+
+            if (LessThanOrEqualTo != null && decimalValue > LessThanOrEqualTo) return false;
+
+            if (Odd == true && decimalValue % 2 == 0) return false;
+
+            if (Even == true && decimalValue % 2 == 1) return false;
             
             return true;
+        }
+
+        public double? Double(string value)
+        {
+            double doubleResult;
+
+            if (double.TryParse(value, out doubleResult)) return doubleResult;
+
+            return null;
+        }
+
+        public bool IsInteger(string value)
+        {
+            int intResult;
+
+            return int.TryParse(value, out intResult);
         }
     }
     

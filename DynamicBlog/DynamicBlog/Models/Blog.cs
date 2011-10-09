@@ -12,6 +12,12 @@ namespace DynamicBlog.Models
     {
         Comments comments;
 
+        public Blog()
+            : this(new { })
+        {
+
+        }
+
         public Blog(object dto)
         {
             comments = new Comments();
@@ -21,7 +27,7 @@ namespace DynamicBlog.Models
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Presence("Title") { Text = "Please specify a title for this blog post." };
+            yield return new Presence("Title") { ErrorMessage = "Please specify a title for this blog post." };
 
             yield return new Presence("Body");
         }

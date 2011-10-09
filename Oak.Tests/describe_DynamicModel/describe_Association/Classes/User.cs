@@ -28,13 +28,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return 
-            new HasMany(games) { Through = library };
+            yield return new HasManyThrough(games, library);
 
-            yield return
-            new HasMany(users, named: "Friends")
+            yield return new HasManyThrough(users, friends, named: "Friends")
             {
-                Through = friends,
                 Using = "IsFollowing"
             };
         }

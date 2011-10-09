@@ -15,7 +15,7 @@ class GrowlNotifier
   def execute title, text, color
     return unless GrowlNotifier.growl_path
 
-    text.gsub!('"', "''")
+    text.gsub!('"', "'")
 
     text = text + "\n\n---"
 
@@ -400,12 +400,11 @@ OUTPUT
       console_output.each_line do |line|
         if(/^\*\*\*\*\*/.match(line))
           test = Hash.new
-          @tests[line.gsub("***** ", "").strip] = test
-          
-          tokens = line.gsub("***** ", "").strip.split(".")
+          spec_name = line.gsub("***** ", "").strip
 
-          test[:name] = tokens[-1].gsub("_", " ")
-          test[:spec] = tokens[-2].gsub("_", " ")
+          @tests[spec_name] = test
+          
+          test[:name] = spec_name
           test[:failed] = false
           test[:error] = ""
           test[:dll] = test_dll
@@ -417,7 +416,7 @@ OUTPUT
           last_test = @tests[full]
           in_failures = true
         elsif(in_failures && line.strip != "")
-          last_test[:error] += "        " + line.strip + "\n"
+          last_test[:error] += line.strip + "\n"
         end
       end
     end
@@ -459,12 +458,7 @@ OUTPUT
       
       current_spec = ""
       tests_to_display.each do |k, v|
-        if(current_spec != v[:spec])
-          test_output += v[:spec] + "\n"
-          current_spec = v[:spec]
-        end
-      
-        test_output += "    " + v[:name] + "\n"
+        test_output += v[:name] + "\n"
         test_output += v[:error] if(v[:error])
         test_output += "\n"
 
@@ -578,7 +572,9 @@ OUTPUT
   end
 
   def test_config
-    Find.find(@folder) { |f| return f.gsub("./", "") if /Local.testsettings$/.match(f) != nil || /LocalTestRun.testrunconfig$/.match(f) != nil }
+    Find.find(@folder) do |f| 
+      return f.gsub("./", "") if /Local.testsettings$/.match(f) != nil || /LocalTestRun.testrunconfig$/.match(f) != nil
+    end
   end
 
   def set_test_status test_dll, test_output
@@ -594,40 +590,30 @@ OUTPUT
     @status_by_dll[test_dll] = results
   end
 
-  def itemize_test_results test_dll, test_output, test_name
+  def parse_test_result test_dll, test_output, test_name
     last_test_item = nil
     in_error = false
 
     test_output.split("\n").each do |line|
-      if(line.strip.match(/^Failed/))
+      stripped_line = line.strip
+      if(line.match(/^Failed/))
         in_error = false
-        tokens = line.split(".")
-        if(tokens.length > 1)
-          test_name = tokens[-1].strip
-          test_spec = tokens[-2].strip
-          last_test_item = { :spec => test_spec.gsub("_", " "), :name => test_name.gsub("_", " "), :dll => test_dll }
-          @failed_tests << last_test_item
-        end
-      elsif(line.strip.match(/errormessage/))
+        last_test_item = { :name => stripped_line.gsub("Failed   ", "").gsub(" ", ""), :dll => test_dll }
+        @failed_tests << last_test_item
+      elsif(stripped_line.match(/errormessage/))
         in_error = true 
-        tokens = line.split(".")
-        if(last_test_item)
-          last_test_item[:errormessage] = line.gsub("[errormessage] ", "")
-        end
-      elsif(line.strip.match(/^Passed/))
+        last_test_item[:errormessage] = stripped_line.gsub("[errormessage] ", "")
+      elsif(line.match(/^Passed/))
         in_error = false
-        tokens = line.split(".")
-        if(tokens.length > 1)
-          test_name = tokens[-1].strip
-          test_spec = tokens[-2].strip
-          last_test_item = { :spec => test_spec.gsub("_", " "), :name => test_name.gsub("_", " "), :dll => test_dll }
-          @passed_tests << last_test_item
-        end
+        last_test_item = { :name => stripped_line.gsub("Passed  ", "").gsub(" ", ""), :dll => test_dll }
+        @passed_tests << last_test_item
+      elsif(stripped_line.match(/^Summary/))
+         in_error = false
       elsif(in_error)
-         last_test_item[:errormessage] += "\n    " + line
+         last_test_item[:errormessage] += "\n" + stripped_line
       end
     end
-    
+
     @failed_tests.sort! { |a, b| a[:spec] <=> b[:spec] }
     @passed_tests.sort! { |a, b| a[:spec] <=> b[:spec] }
   end
@@ -636,38 +622,35 @@ OUTPUT
     tests = Array.new
     failed = @status_by_dll[test_dll][:failed]
     inconclusive = @status_by_dll[test_dll][:inconclusive]
+    passed = !failed && !inconclusive
 
     if(failed)
       test_output = "Failed Tests:\n"
       tests = @failed_tests.select { |kvp| kvp[:dll] == test_dll }
-    elsif(!failed && !inconclusive)
-      if(!@failed)
-        test_output = "All Passed:\n"
-        tests = @passed_tests.select { |kvp| kvp[:dll] == test_dll }
-      else
-        test_output = ""
-      end
+    elsif(passed)
+      return if @failed
+      test_output = "All Passed:\n"
+      tests = @passed_tests.select { |kvp| kvp[:dll] == test_dll }
     else
-      test_output = "Test Inconclusive:\nNo tests found under #{ test_name }\n\n"
+      test_output = "Test Inconclusive:\nNo tests found under #{ test_name }\n"
     end
     
     current_spec = ""
+
+    first_test = true
+
     tests.each do |line|
-      if(current_spec != line[:spec])
-        test_output += line[:spec] + "\n"
-        current_spec = line[:spec]
-      end
-    
-      test_output += "    " + line[:name] + "\n"
-      test_output += "    " + line[:errormessage] + "\n" if(line[:errormessage])
-      test_output += "\n"
+      test_output += "\n" unless first_test
+      first_test = false
+      test_output += line[:name] + "\n"
+      test_output += line[:errormessage] + "\n" if line[:errormessage]
 
       if(failed && @first_failed_test == nil && line[:errormessage])
         @first_failed_test = test_output
       end
     end
 
-    @test_results += test_output
+    @test_results += test_output + "\n"
 
     puts @test_results
   end
@@ -683,8 +666,7 @@ OUTPUT
       test_output = @sh.execute "#{test_cmd(test_dll, test_name)}"
   
       set_test_status test_dll, test_output
-      itemize_test_results test_dll, test_output, test_name
-      
+      parse_test_result test_dll, test_output, test_name
     end
 
     @inconclusive = true
@@ -736,7 +718,7 @@ class CommandShell
 end
 
 class WatcherDotNet
-  attr_accessor :notifier, :test_runner, :builder, :sh, :first_run
+  attr_accessor :notifier, :test_runner, :builder, :sh, :first_run, :config
   require 'find'
 
   EXCLUDES = [/\.dll$/, /debug/i, /TestResult.xml/, /testresults/i, /\.rb$/, /\.suo$/]
@@ -747,6 +729,7 @@ class WatcherDotNet
     @notifier = GrowlNotifier.new
     @builder = Kernel.const_get(config[:builder].to_s).new folder
     @test_runner = Kernel.const_get(config[:test_runner].to_s).new folder
+    @config = config
     @first_run = true
   end
 
