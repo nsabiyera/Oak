@@ -22,6 +22,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
             yield return new Length("Publisher") {In = Enumerable.Range(1,10)};
             yield return new Length("Version") {Is = 1};
             yield return new Length("Year") {Is = 4};
+            yield return new Length("ThisPropertyDoesNotExist") {IgnoreNull = true};
+            yield return new Length("IsNull") {IgnoreNull = false};
         }
     }
 }
