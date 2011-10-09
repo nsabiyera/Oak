@@ -17,26 +17,24 @@ namespace Oak
             return @this.TrackedProperties();
         }
 
-        public MixInChanges(DynamicModel dynamicModel)
+        public MixInChanges(dynamic dynamicModel)
         {
             @this = dynamicModel;
 
             originalValues = new Dictionary<string, object>(dynamicModel.TrackedHash());
 
-            dynamicModel.SetUnTrackedMember("HasChanged", new DynamicFunction(HasChanged));
-
-            dynamicModel.SetUnTrackedMember("HasPropertyChanged", new DynamicFunctionWithParam(HasPropertyChanged));
+            dynamicModel.SetUnTrackedMember("HasChanged", new DynamicFunctionWithParam(HasChanged));
 
             dynamicModel.SetUnTrackedMember("Original", new DynamicFunctionWithParam(Original));
 
-            dynamicModel.SetUnTrackedMember("Changes", new DynamicFunction(Changes));
-
-            dynamicModel.SetUnTrackedMember("ChangesFor", new DynamicFunctionWithParam(ChangesFor));
+            dynamicModel.SetUnTrackedMember("Changes", new DynamicFunctionWithParam(Changes));
         }
 
-        public dynamic Changes()
+        public dynamic Changes(dynamic property)
         {
-            var dictionary = new Dictionary<string, dynamic>();
+            if (property != null) return ChangesFor(property);
+
+            var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
             var keys = CurrentValues().Keys.Union(originalValues.Keys).Distinct();
 
@@ -78,9 +76,11 @@ namespace Oak
             return dictionary[key];
         }
 
-        public dynamic HasChanged()
+        public dynamic HasChanged(dynamic property)
         {
-            return Changes().Count > 0;
+            if (property != null) return HasPropertyChanged(property);
+
+            return (Changes(property) as IDictionary<string, object>).Count > 0;
         }
 
         public dynamic HasPropertyChanged(dynamic property)

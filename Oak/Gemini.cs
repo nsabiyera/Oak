@@ -10,13 +10,18 @@ namespace Oak
 {
     public delegate dynamic DynamicFunction();
 
-    public delegate IEnumerable<dynamic> DynamicEnumerableFunction();
-
     public delegate dynamic DynamicFunctionWithParam(dynamic parameter);
 
+    public delegate void DynamicMethodWithParam(dynamic parameter);
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         public dynamic Expando { get; set; }
+
+        public dynamic This()
+        {
+            return this as dynamic;
+        }
 
         public Gemini()
             : this(new { })
@@ -26,6 +31,8 @@ namespace Oak
 
         public Gemini(object dto)
         {
+            if (dto == null) dto = new ExpandoObject();
+
             if (dto is ExpandoObject)
                 Expando = dto;
             else
@@ -164,6 +171,35 @@ namespace Oak
         public virtual void DeleteMember(string member)
         {
             Hash().Remove(Fuzzy(Hash(), member));
+        }
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            result = null;
+
+            if (!Hash().ContainsKey(binder.Name)) return false;
+
+            var member = Hash()[binder.Name];
+
+            if (!IsPolymorphicFunction(member)) return base.TryInvokeMember(binder, args, out result);
+
+            result = InvokePolymorphicFunction(member, args);
+
+            return true;
+        }
+
+        public virtual bool IsPolymorphicFunction(object member)
+        {
+            return (member is DynamicFunctionWithParam) || (member is DynamicMethodWithParam);
+        }
+
+        public virtual dynamic InvokePolymorphicFunction(dynamic member, object[] args)
+        {
+            if ((member is DynamicFunctionWithParam)) return member.Invoke(args.FirstOrDefault());
+
+            member.Invoke(args.FirstOrDefault());
+
+            return null;
         }
     }
 }

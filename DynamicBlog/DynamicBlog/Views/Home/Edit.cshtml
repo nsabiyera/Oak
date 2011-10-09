@@ -16,13 +16,7 @@
 @using (Html.BeginForm(new { action = "Edit", id = ViewBag.Blog.Id } ))
 {
     @Html.Label("Title")<br />
-    @OakForm.TextBox(
-        form.Title(new Oak.Hash 
-        { 
-            { "class", "rounded" },
-            { "placeholder", "type text here" },
-            { "data-first-time", "true" }
-        }))<br />
+    @OakForm.TextBox(form.Title)<br />
     @Html.Label("Body")<br />
     @OakForm.TextArea(form.Body)<br />
     <input type="submit" value="update blog" />
