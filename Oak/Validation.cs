@@ -377,9 +377,16 @@ namespace Oak
 
         public int? Is { get; set; }
         
+        public bool IgnoreNull { get; set; }
+        
         public bool Validate(DynamicModel entity)
         {
             dynamic value = entity.GetMember(Property);
+
+            if (value == null && IgnoreNull == true) return true;
+
+            if (value == null) return false;
+
             int length = value.Length;
 
             if (Minimum != null && length < Minimum) return false;

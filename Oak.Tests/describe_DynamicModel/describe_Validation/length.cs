@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.CSharp.RuntimeBinder;
 using NSpec;
 using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
@@ -18,8 +19,19 @@ namespace Oak.Tests.describe_DynamicModel.describe_Length
             essay.Publisher = "WorldWide";
             essay.Version = "1";
             essay.Year = "1990";
+            essay.IsNull = "NotNullForNowSoThatWeDontBreakOtherTests";
         }
         
+        void validating_length_of_with_types_that_dont_have_length_property()
+        {
+            context["property does not contain a length property"] = () =>
+            {
+                before = () => essay.Year = 1990;
+
+                it["should throw an exception"] = expect<RuntimeBinderException>(() => essay.IsValid());
+            };
+        }
+
         void validating_length_of()
         {
             act = () => isValid = essay.IsValid();
@@ -121,12 +133,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Length
 
                 it["is valid"] = () => isValid.should_be_true();
             };
-
-            context["property does not contain a length property"] = () =>
+            
+            context["isnull is null"] = () =>
             {
-                before = () => essay.Year = 1990;
+                before = () => essay.IsNull = null;
 
-                it["should throw exception"] = expect<Exception>(() => string.Empty.Trim());
+                it["is not valid"] = () => isValid.should_be_false();
             };
         }
     }
