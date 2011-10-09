@@ -76,7 +76,9 @@
     <Compile Include="describe_DynamicModel\describe_Association\has_one_through.cs" />
     <Compile Include="describe_DynamicModel\describe_Changes\Classes\Person.cs" />
     <Compile Include="describe_DynamicModel\describe_Changes\core_behavior_for_tracking_changes.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Essay.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Player.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\length.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\numericality.cs" />
     <Compile Include="describe_DynamicModel\saving_dynamic_model.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
