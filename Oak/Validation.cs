@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Massive;
 using System.Text.RegularExpressions;
@@ -358,6 +359,45 @@ namespace Oak
             int intResult;
 
             return int.TryParse(value, out intResult);
+        }
+    }
+    
+    public class Length : Validation
+    {
+        public Length(string property)
+            : base(property)
+        {
+        }
+
+        public int? Minimum { get; set; }
+
+        public int? Maximum { get; set; }
+
+        public IEnumerable<int> In { get; set; }
+
+        public int? Is { get; set; }
+        
+        public bool IgnoreNull { get; set; }
+        
+        public bool Validate(DynamicModel entity)
+        {
+            dynamic value = entity.GetMember(Property);
+
+            if (value == null && IgnoreNull == true) return true;
+
+            if (value == null) return false;
+
+            int length = value.Length;
+
+            if (Minimum != null && length < Minimum) return false;
+            
+            if (Maximum != null && length > Maximum) return false;
+
+            if (In != null && !In.Contains(length)) return false;
+            
+            if (Is != null && length != Is) return false;
+            
+            return true;
         }
     }
 }
