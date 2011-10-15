@@ -79,6 +79,9 @@
     <Compile Include="..\..\Oak\DynamicModels.cs">
       <Link>Oak\DynamicModels.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\DynamicToJson.cs">
+      <Link>Oak\DynamicToJson.cs</Link>
+    </Compile>
     <Compile Include="..\..\Oak\ElementMetaData.cs">
       <Link>Oak\ElementMetaData.cs</Link>
     </Compile>
