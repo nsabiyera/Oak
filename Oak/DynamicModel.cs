@@ -23,12 +23,12 @@ namespace Oak
             untrackedProperties = new List<string>();
         }
 
-        public virtual void Init()
+        public virtual dynamic Init()
         {
-            Init(new { });
+            return Init(new { });
         }
 
-        public virtual void Init(object dto)
+        public virtual dynamic Init(object dto)
         {
             initialized = true;
 
@@ -39,6 +39,8 @@ namespace Oak
             foreach (var item in dto.ToDictionary()) SetMember(item.Key, item.Value);
 
             new MixInChanges(this);
+
+            return this;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
