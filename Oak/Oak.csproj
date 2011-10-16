@@ -70,6 +70,7 @@
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="ConnectionProfile.cs" />
     <Compile Include="DynamicForm.cs" />
+    <Compile Include="DynamicJsonResult.cs" />
     <Compile Include="DynamicModel.cs" />
     <Compile Include="DynamicModels.cs" />
     <Compile Include="DynamicToJson.cs" />

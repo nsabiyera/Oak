@@ -29,7 +29,7 @@ namespace Oak
 
         private static string StringifyAttributes(IDictionary<string, object> attributes)
         {
-            return string.Join(", ", attributes.Where(CanConvert).Select(StringifyAttribute));
+            return string.Join(", ", attributes.Where(CanConvertValue).Select(StringifyAttribute));
         }
 
         private static string StringifyAttribute(KeyValuePair<string, object> kvp)
@@ -56,12 +56,26 @@ namespace Oak
 
         public static bool IsJsonNumeric(dynamic o)
         {
-            return o.GetType() == typeof(Decimal) || o.GetType() == typeof(int) || o.GetType() == typeof(double);
+            return o.GetType() == typeof(Decimal) || 
+                o.GetType() == typeof(int) || 
+                o.GetType() == typeof(double);
         }
 
-        public static bool CanConvert(KeyValuePair<string, object> kvp)
+        public static bool CanConvertValue(KeyValuePair<string, object> kvp)
         {
-            return IsJsonString(kvp.Value) || IsJsonNumeric(kvp.Value);
+            return IsJsonString(kvp.Value) || 
+                IsJsonNumeric(kvp.Value);
+        }
+
+        public static bool CanConvertObject(dynamic o)
+        {
+            if (o is ExpandoObject) return true;
+
+            if (o is Gemini) return true;
+
+            if (o is IEnumerable<object>) return (o as IEnumerable<object>).All(CanConvertObject);
+
+            return false;
         }
     }
 }
