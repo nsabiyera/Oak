@@ -8,11 +8,20 @@ namespace Oak
 {
     public class DynamicJsonResult : JsonResult
     {
+        public DynamicJsonResult()
+        {
+            JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+        }
+
         public override void ExecuteResult(ControllerContext context)
         {
-            context.HttpContext.Response.ContentType = "application/json";
-            context.HttpContext.Response.Output.Write(DynamicToJson.Convert(Data));
-            context.HttpContext.Response.Output.Flush();
+            if (DynamicToJson.CanConvertObject(Data))
+            {
+                context.HttpContext.Response.ContentType = "application/json";
+                context.HttpContext.Response.Output.Write(DynamicToJson.Convert(Data));
+                context.HttpContext.Response.Output.Flush();
+            }
+            else base.ExecuteResult(context);
         }
     }
 }
