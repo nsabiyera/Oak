@@ -99,5 +99,25 @@ namespace Oak.Tests
 
             it["converts collection"] = () => jsonString.should_be(@"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]");
         }
+
+        void describe_can_be_converted()
+        {
+            new Each<dynamic, bool, string>()
+            {
+                { new ExpandoObject(), true, "expando" },
+                { new Gemini(), true, "gemini" },
+                { new DynamicModel(), true, "dynamic model" },
+                { new { Name = "Jane Doe" }, false, "anonymous type" },
+                { "Jane Doe", false, "string" },
+                { new List<object> { new ExpandoObject(), new Gemini(), new DynamicModel() }, true, "list containing convertable types" },
+                { new List<string>() { "Jane", "Doe" }, false, "list of string" },
+                { new List<object> { new { Name = "Jane Doe" }, new ExpandoObject(), new Gemini() }, false, "list containing convertable and non-convertable types" },
+                { new List<string>(), true, "empty list" }
+            }.Do((entity, expectedResult, type) => 
+            {
+                it["{0} should evaluate to: {1}".With(type, expectedResult)] = () => 
+                    DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
+            });
+        }
     }
 }
