@@ -74,6 +74,7 @@
     <Compile Include="DynamicModel.cs" />
     <Compile Include="DynamicModels.cs" />
     <Compile Include="DynamicToJson.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Validation.cs" />
     <Compile Include="ElementMetaData.cs" />
     <Compile Include="ParamsModelBinder.cs" />

@@ -32,8 +32,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 namespace Massive
 {
-    
-    public static class ObjectExtensions
+    public static class MassiveObjectExtensions
     {
         /// <summary>
         /// Extension method for adding in a bunch of parameters
@@ -98,40 +97,8 @@ namespace Massive
                 d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
             return projection(e);
         }
-        /// <summary>
-        /// Turns the object into an ExpandoObject
-        /// </summary>
-        public static dynamic ToExpando(this object o)
-        {
-            var result = new ExpandoObject();
-            var d = result as IDictionary<string, object>; //work with the Expando as a Dictionary
-            if (o.GetType() == typeof(ExpandoObject)) return o; //shouldn't have to... but just in case
-            if (o is DynamicModel) return ((DynamicModel)o).TrackedProperties();
-            if (o is Gemini) return ((Gemini)o).Expando;
-            if (o.GetType() == typeof(NameValueCollection) || o.GetType().IsSubclassOf(typeof(NameValueCollection)))
-            {
-                var nv = (NameValueCollection)o;
-                nv.Cast<string>().Select(key => new KeyValuePair<string, object>(key, nv[key])).ToList().ForEach(i => d.Add(i));
-            }
-            else
-            {
-                var props = o.GetType().GetProperties();
-                foreach (var item in props)
-                {
-                    d.Add(item.Name, item.GetValue(o, null));
-                }
-            }
-            return result;
-        }
-        /// <summary>
-        /// Turns the object into a Dictionary
-        /// </summary>
-        public static IDictionary<string, object> ToDictionary(this object thingy)
-        {
-            return (IDictionary<string, object>)thingy.ToExpando();
-        }
     }
-    
+
     /// <summary>
     /// A class that wraps your database table in Dynamic Funtime
     /// </summary>

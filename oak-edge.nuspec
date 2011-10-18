@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>0.3.8</version> 
+    <version>0.3.9</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic Hotness. Simply put...oak is a clone of ActiveModel (Ruby on Rails inspired) that can be used with ASP.NET MVC.  The nuget package 'oak' is the stable release, this one is the latest release fresh off the presses.</description> 
     <language>en-US</language>
@@ -19,6 +19,7 @@
     <file src="Oak/DynamicModels.cs" target="content/Oak/DynamicModels.cs" />
     <file src="Oak/ElementMetaData.cs" target="content/Oak/ElementMetaData.cs" />
     <file src="Oak/Massive.cs" target="content/Oak/Massive.cs" />
+    <file src="Oak/ObjectExtensions.cs" target="content/Oak/ObjectExtensions.cs" />
     <file src="Oak/Gemini.cs" target="content/Oak/Gemini.cs" />
     <file src="Oak/ParamsModelBinder.cs" target="content/Oak/ParamsModelBinder.cs" />
     <file src="Oak/Query.cs" target="content/Oak/Query.cs" />
