@@ -91,6 +91,9 @@
     <Compile Include="..\..\Oak\Massive.cs">
       <Link>Oak\Massive.cs</Link>
     </Compile>
+    <Compile Include="..\..\Oak\ObjectExtensions.cs">
+      <Link>Oak\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Oak\ParamsModelBinder.cs">
       <Link>Oak\ParamsModelBinder.cs</Link>
     </Compile>
