@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
+    <Compile Include="describe_DynamicModels.cs" />
     <Compile Include="describe_DynamicModel\Classes\Inventory.cs" />
     <Compile Include="describe_DynamicModel\Classes\InventoryItem.cs" />
     <Compile Include="describe_DynamicModel\core_behavior_for_dynamic_model.cs" />
