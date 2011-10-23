@@ -37,9 +37,9 @@ namespace Oak.Tests
         {
             it["it contains a record for each method defined"] = () =>
             {
-                Gemini().Methods().should_contain("Title");
-                Gemini().Methods().should_contain("body");
-                Gemini().Methods().should_contain("BodySummary");
+                Gemini().Members().should_contain("Title");
+                Gemini().Members().should_contain("body");
+                Gemini().Members().should_contain("BodySummary");
             };
         }
 
