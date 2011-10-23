@@ -32,7 +32,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
             yield return new HasManyThrough(users, friends, named: "Friends")
             {
-                Using = "IsFollowing"
+                ForeignKey = "IsFollowing"
             };
         }
     }

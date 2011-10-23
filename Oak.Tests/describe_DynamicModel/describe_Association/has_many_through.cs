@@ -88,7 +88,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                         new { UserId = userId, GameId = gearsOfWarGameId }.InsertInto("Library");
 
-                        (user.Games() as IEnumerable<dynamic>).Count().should_be(1);
+                        var cachedCount = (user.Games() as IEnumerable<dynamic>).Count();
+
+                        cachedCount.should_be(1);
+
+                        var newCount = (user.Games(new { discardCache = true }) as IEnumerable<dynamic>).Count();
+
+                        newCount.should_be(2);
                     };
                 };
 

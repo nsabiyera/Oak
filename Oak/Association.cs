@@ -54,7 +54,7 @@ namespace Oak
 
         DynamicRepository repository;
 
-        DynamicModels collection;
+        DynamicModels cachedCollection;
 
         public HasMany(DynamicRepository repository)
             : this(repository, null)
@@ -78,6 +78,13 @@ namespace Oak
             AddAssociationMethods(model, fromColumn, toTable);
         }
 
+        private void AddAssociationMethods(DynamicModel model, string fromColumn, string toTable)
+        {
+            model.SetUnTrackedMember(named, Query(fromColumn, model));
+
+            model.SetUnTrackedMember(Singular(named) + "Ids", QueryIds(fromColumn, model));
+        }
+
         private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
         {
             collection.SetMember(
@@ -97,13 +104,6 @@ namespace Oak
             return repository.Projection(entity);
         }
 
-        private void AddAssociationMethods(DynamicModel model, string fromColumn, string toTable)
-        {
-            model.SetUnTrackedMember(named, Query(fromColumn, model));
-
-            model.SetUnTrackedMember(Singular(named) + "Ids", QueryIds(fromColumn, model));
-        }
-
         private DynamicFunctionWithParam Query(string foreignKey, dynamic model)
         {
             return (options) =>
@@ -112,15 +112,15 @@ namespace Oak
 
                 options = (options as object).ToExpando();
 
-                if (options.discardCache == true) collection = null;
+                if (options.discardCache == true) cachedCollection = null;
 
-                if (collection != null) return collection;
+                if (cachedCollection != null) return cachedCollection;
 
-                collection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }).ToList());
+                cachedCollection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }).ToList());
 
-                AddNewAssociationMethod(collection, model);    
+                AddNewAssociationMethod(cachedCollection, model);    
 
-                return collection;
+                return cachedCollection;
             };
         }
 
@@ -137,13 +137,15 @@ namespace Oak
 
     public class HasManyThrough : Association
     {
-        private DynamicRepository repository;
+        DynamicRepository repository;
 
-        private DynamicRepository through;
+        DynamicRepository through;
 
-        private string named;
+        List<dynamic> cachedCollection;
 
-        public string Using { get; set; }
+        string named;
+
+        public string ForeignKey { get; set; }
 
         public HasManyThrough(DynamicRepository repository, DynamicRepository through)
             : this(repository, through, null)
@@ -173,28 +175,38 @@ namespace Oak
         {
             model.SetUnTrackedMember(
                 named,
-                Query(fromColumn, toTable, through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
+                Query(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(repository), model));
 
             model.SetUnTrackedMember(
                 Singular(named) + "Ids",
-                QueryIds(fromColumn, toTable, through.GetType().Name, Using ?? ForeignKeyFor(repository), model));
+                QueryIds(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(repository), model));
         }
 
-        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunctionWithParam Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
-            return () =>
+            return (options) =>
             {
-                return repository.Query(
-                 @"
-                  select {toTable}.* 
-                  from {throughTable}
-                  inner join {toTable}
-                  on {throughTable}.{using} = {toTable}.Id
-                  where {fromColumn} = @0"
+                if (options == null) options = new { discardCache = false };
+
+                options = (options as object).ToExpando();
+
+                if (options.discardCache == true) cachedCollection = null;
+
+                if (cachedCollection != null) return cachedCollection;
+
+                cachedCollection = new List<dynamic>(repository.Query(
+                @"
+                    select {toTable}.* 
+                    from {throughTable}
+                    inner join {toTable}
+                    on {throughTable}.{using} = {toTable}.Id
+                    where {fromColumn} = @0"
                     .Replace("{fromColumn}", fromColumn)
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
-                    .Replace("{using}", @using), model.Expando.Id);
+                    .Replace("{using}", @using), model.Expando.Id));
+
+                return cachedCollection;
             };
         }
 
@@ -202,7 +214,7 @@ namespace Oak
         {
             return () =>
             {
-                IEnumerable<dynamic> models = (Query(fromColumn, toTable, throughTable, @using, model) as DynamicFunction).Invoke();
+                IEnumerable<dynamic> models = (Query(fromColumn, toTable, throughTable, @using, model) as DynamicFunctionWithParam).Invoke(null);
 
                 return models.Select(s => s.Id).ToList();
             };
