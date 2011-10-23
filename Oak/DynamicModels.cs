@@ -9,21 +9,21 @@ namespace Oak
 {
     public class DynamicModels : Gemini, IEnumerable<object>
     {
-        IEnumerable<dynamic> models;
+        public List<dynamic> Models { get; set; }
 
         public DynamicModels(IEnumerable<dynamic> models)
         {
-            this.models = models;
+            Models = models.ToList();
         }
 
         public IEnumerator<object> GetEnumerator()
         {
-            return models.GetEnumerator();
+            return Models.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return models.GetEnumerator();
+            return Models.GetEnumerator();
         }
     }
 }

@@ -83,6 +83,21 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                         blogComments.should_contain(s => s.Text == "Comment 2");
                     };
+
+                    it["comments are cached for an instance of blog"] = () =>
+                    {
+                        var blog = blogs.Single(blogId);
+
+                        blogComments = blog.Comments();
+
+                        blogComments.Count().should_be(2);
+
+                        new { blogId, Text = "Comment 4" }.InsertInto("Comments");
+
+                        blogComments = blog.Comments();
+
+                        blogComments.Count().should_be(2);
+                    };
                 };
 
                 context["retrieving comments for blog by another name"] = () =>
@@ -197,7 +212,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 comments.Save(comment);
             };
 
-            it["blog should have saved comments"] = () => ((blog.Comments() as IEnumerable<dynamic>).First().Text as string).should_be("hello");
+            it["uncached blog should have saved comments"] = () =>
+            {
+                var firstComment = (blog.Comments(new { discardCache = true }) as IEnumerable<dynamic>).First();
+
+                (firstComment.Text as string).should_be("hello");
+            };
         }
     }
 }

@@ -159,7 +159,7 @@ namespace Oak
             return true;
         }
 
-        public virtual IEnumerable<string> Methods()
+        public virtual IEnumerable<string> Members()
         {
             return Hash().Select(s => s.Key).ToList();
         }

@@ -71,7 +71,7 @@ namespace Oak.Tests.describe_DynamicModel
                     loan.Term = 5;
                 };
 
-                act = () => methods = Model().Methods();
+                act = () => methods = Model().Members();
 
                 it["contains both defined methods"] = () =>
                 {
@@ -93,8 +93,8 @@ namespace Oak.Tests.describe_DynamicModel
 
                 act = () =>
                 {
-                    Model().Methods().ToList().Do(s => Model().DeleteMember(s));
-                    methods = Model().Methods();
+                    Model().Members().ToList().Do(s => Model().DeleteMember(s));
+                    methods = Model().Members();
                 };
 
                 it["both methods are deleted"] = () =>

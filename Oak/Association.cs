@@ -54,6 +54,8 @@ namespace Oak
 
         DynamicRepository repository;
 
+        DynamicModels collection;
+
         public HasMany(DynamicRepository repository)
             : this(repository, null)
         {
@@ -102,13 +104,21 @@ namespace Oak
             model.SetUnTrackedMember(Singular(named) + "Ids", QueryIds(fromColumn, model));
         }
 
-        private DynamicFunction Query(string foreignKey, dynamic model)
+        private DynamicFunctionWithParam Query(string foreignKey, dynamic model)
         {
-            return () =>
+            return (options) =>
             {
-                var collection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }));
+                if (options == null) options = new { discardCache = false };
 
-                AddNewAssociationMethod(collection, model);
+                options = (options as object).ToExpando();
+
+                if (options.discardCache == true) collection = null;
+
+                if (collection != null) return collection;
+
+                collection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }).ToList());
+
+                AddNewAssociationMethod(collection, model);    
 
                 return collection;
             };
@@ -118,7 +128,7 @@ namespace Oak
         {
             return () =>
             {
-                IEnumerable<dynamic> models = (Query(foreignKey, model) as DynamicFunction).Invoke();
+                IEnumerable<dynamic> models = (Query(foreignKey, model) as DynamicFunctionWithParam).Invoke(null);
 
                 return models.Select(s => s.Id).ToList();
             };

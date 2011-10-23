@@ -88,11 +88,11 @@ namespace Oak
             base.SetMember(property, value);
         }
 
-        public override IEnumerable<string> Methods()
+        public override IEnumerable<string> Members()
         {
             ThrowIfNotInitialized();
 
-            return base.Methods().ToList();
+            return base.Members().ToList();
         }
 
         public override void DeleteMember(string member)
