@@ -3,26 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NSpec;
+using System.Dynamic;
 
-namespace Oak.Tests
+namespace Oak.Tests.describe_DynamicModels
 {
-    class describe_DynamicModels : nspec
+    class expando_dynamic_models : _dynamic_models
     {
-        dynamic models;
-
-        bool resultForAny;
-
-        IEnumerable<dynamic> resultForWhere;
-
-        object resultForFirst;
-
-        void before_each()
-        {
-            models = new DynamicModels(new List<Gemini>());
-        }
-
         void describe_Any()
         {
+            before = () => models = new DynamicModels(new List<ExpandoObject>());
+
             context["matching single property"] = () =>
             {
                 act = () => resultForAny = models.Any(new { Name = "Jane" });
@@ -34,7 +24,12 @@ namespace Oak.Tests
 
                 context["items exist in list that match"] = () =>
                 {
-                    before = () => models.Models.Add(new Gemini(new { Name = "Jane" }));
+                    before = () =>
+                    {
+                        dynamic expando = new ExpandoObject();
+                        expando.Name = "Jane";
+                        models.Models.Add(expando);
+                    };
 
                     it["any returns true"] = () => resultForAny.should_be_true();
                 };
@@ -46,14 +41,26 @@ namespace Oak.Tests
 
                 context["entry exists where all properties match"] = () =>
                 {
-                    before = () => models.Models.Add(new Gemini(new { Name = "Jane", Age = 15 }));
+                    before = () =>
+                    {
+                        dynamic expando = new ExpandoObject();
+                        expando.Name = "Jane";
+                        expando.Age = 15;
+                        models.Models.Add(expando);
+                    };
 
                     it["any returns true"] = () => resultForAny.should_be_true();
                 };
 
                 context["entry exists where all properties do not match"] = () =>
                 {
-                    before = () => models.Models.Add(new Gemini(new { Name = "Jane", Age = 10 }));
+                    before = () =>
+                    {
+                        dynamic expando = new ExpandoObject();
+                        expando.Name = "Jane";
+                        expando.Age = 10;
+                        models.Models.Add(expando);
+                    };
 
                     it["any returns false"] = () => resultForAny.should_be_false();
                 };
@@ -62,6 +69,8 @@ namespace Oak.Tests
 
         void describe_Where()
         {
+            before = () => models = new DynamicModels(new List<ExpandoObject>());
+
             context["matching single property"] = () =>
             {
                 act = () => resultForWhere = models.Where(new { Name = "Jane" });
@@ -73,7 +82,12 @@ namespace Oak.Tests
 
                 context["items exist in list that match"] = () =>
                 {
-                    before = () => models.Models.Add(new Gemini(new { Name = "Jane" }));
+                    before = () =>
+                    {
+                        dynamic expando = new ExpandoObject();
+                        expando.Name = "Jane";
+                        models.Models.Add(expando);
+                    };
 
                     it["returns item"] = () => resultForWhere.Count().should_be(1);
                 };
@@ -85,14 +99,26 @@ namespace Oak.Tests
 
                 context["entry exists where all properties match"] = () =>
                 {
-                    before = () => models.Models.Add(new Gemini(new { Name = "Jane", Age = 15 }));
+                    before = () =>
+                    {
+                        dynamic expando = new ExpandoObject();
+                        expando.Name = "Jane";
+                        expando.Age = 15;
+                        models.Models.Add(expando);
+                    };
 
                     it["returns item"] = () => resultForWhere.Count().should_be(1);
                 };
 
                 context["entry exists where all properties do not match"] = () =>
                 {
-                    before = () => models.Models.Add(new Gemini(new { Name = "Jane", Age = 10 }));
+                    before = () =>
+                    {
+                        dynamic expando = new ExpandoObject();
+                        expando.Name = "Jane";
+                        expando.Age = 10;
+                        models.Models.Add(expando);
+                    };
 
                     it["result list is empty"] = () => resultForWhere.should_be_empty();
                 };
@@ -101,6 +127,8 @@ namespace Oak.Tests
 
         void describe_First()
         {
+            before = () => models = new DynamicModels(new List<ExpandoObject>());
+
             act = () => resultForFirst = models.First(new { Name = "Jane" });
 
             context["no items in list"] = () =>
@@ -110,7 +138,12 @@ namespace Oak.Tests
 
             context["items exist in list that match"] = () =>
             {
-                before = () => models.Models.Add(new Gemini(new { Name = "Jane" }));
+                before = () =>
+                {
+                    dynamic expando = new ExpandoObject();
+                    expando.Name = "Jane";
+                    models.Models.Add(expando);
+                };
 
                 it["returns item"] = () => resultForFirst.should_not_be_null();
             };

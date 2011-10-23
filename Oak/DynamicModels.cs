@@ -39,7 +39,13 @@ namespace Oak
 
         private bool IsMatch(IDictionary<string, dynamic> options, dynamic model)
         {
-            return options.All(s => model.GetMember(s.Key) == s.Value);
+            IDictionary<string, dynamic> hash = null;
+
+            if (model is Gemini) hash = model.Hash();
+
+            else hash = (model as object).ToExpando();
+
+            return options.All(s => hash[s.Key] == s.Value);
         }
 
         public IEnumerator<object> GetEnumerator()
