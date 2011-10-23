@@ -15,6 +15,32 @@ namespace Oak
         {
             Models = models.ToList();
         }
+               
+        public bool Any(dynamic options)
+        {
+            options = (options as object).ToExpando();
+
+            foreach (dynamic model in Models) if (IsMatch(options, model)) return true;
+
+            return false;
+        }
+
+        public dynamic First(dynamic options)
+        {
+            return Where(options as object).FirstOrDefault();
+        }
+
+        public IEnumerable<dynamic> Where(dynamic options)
+        {
+            options = (options as object).ToExpando();
+
+            foreach (dynamic model in Models) if (IsMatch(options, model)) yield return model;
+        }
+
+        private bool IsMatch(IDictionary<string, dynamic> options, dynamic model)
+        {
+            return options.All(s => model.GetMember(s.Key) == s.Value);
+        }
 
         public IEnumerator<object> GetEnumerator()
         {
