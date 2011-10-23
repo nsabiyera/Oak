@@ -34,11 +34,11 @@ namespace Oak.Tests.describe_DynamicModel
 
         void saving_model()
         {
-            act = () => item.Id = inventory.Save(item);
-
             context["new model"] = () =>
             {
                 before = () => item = new InventoryItem(new { Sku = "1112212" });
+
+                act = () => item.Id = inventory.Insert(item);
 
                 it["saves item"] = () =>
                 {
@@ -55,6 +55,8 @@ namespace Oak.Tests.describe_DynamicModel
                     itemId = new { Sku = "11122212" }.InsertInto("Inventory");
 
                     item = inventory.Single(itemId);
+
+                    (item.Sku as string).should_be("11122212");
 
                     item.Sku = null;
 

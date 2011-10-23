@@ -63,6 +63,7 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Customers.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\DistributionChannels.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Friends.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Game.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Games.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Library.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Loan.cs" />

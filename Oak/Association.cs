@@ -141,7 +141,7 @@ namespace Oak
 
         DynamicRepository through;
 
-        List<dynamic> cachedCollection;
+        DynamicModels cachedCollection;
 
         string named;
 
@@ -194,7 +194,7 @@ namespace Oak
 
                 if (cachedCollection != null) return cachedCollection;
 
-                cachedCollection = new List<dynamic>(repository.Query(
+                cachedCollection = new DynamicModels(repository.Query(
                 @"
                     select {toTable}.* 
                     from {throughTable}
@@ -206,8 +206,27 @@ namespace Oak
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using), model.Expando.Id));
 
+                AddNewAssociationMethod(cachedCollection, model);
+
                 return cachedCollection;
             };
+        }
+
+        private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
+        {
+            collection.SetMember(
+                "New",
+                new DynamicFunctionWithParam(attributes =>
+                {
+                    return EntityFor(model, attributes);
+                }));
+        }
+
+        private dynamic EntityFor(DynamicModel model, dynamic attributes)
+        {
+            var entity = new Gemini(attributes);
+
+            return repository.Projection(entity);
         }
 
         private DynamicFunction QueryIds(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)

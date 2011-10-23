@@ -294,10 +294,11 @@ namespace Massive
         /// These objects can be POCOs, Anonymous, NameValueCollections, or Expandos. Objects
         /// With a PK property (whatever PrimaryKeyField is set to) will be created at UPDATEs
         /// </summary>
-        public virtual int Save(params object[] things)
+        public virtual void Save(params object[] things)
         {
             var commands = BuildCommands(things);
-            return Execute(commands);
+
+            Execute(commands);
         }
 
         public virtual int Execute(DbCommand command)

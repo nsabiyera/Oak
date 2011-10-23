@@ -10,13 +10,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
     class has_many_through : nspec
     {
+        dynamic game;
+
         dynamic gearsOfWarGameId;
 
         dynamic mirrorsEdgeGameId;
 
         Seed seed;
 
-        IEnumerable<dynamic> games;
+        IEnumerable<dynamic> userGames;
 
         IEnumerable<dynamic> gamesIds;
 
@@ -28,11 +30,19 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         Users users;
 
+        Games games;
+
+        Library library;
+
         void before_each()
         {
             seed = new Seed();
 
             users = new Users();
+
+            games = new Games();
+
+            library = new Library();
         }
 
         void describe_has_many_through()
@@ -68,10 +78,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                 context["retriving games for user's library"] = () =>
                 {
-                    act = () => games = users.Single(userId).Games();
+                    act = () => userGames = users.Single(userId).Games();
 
                     it["contains game for user"] = () =>
-                        (games.First().Title as string).should_be("Gears of War");
+                        (userGames.First().Title as string).should_be("Gears of War");
                 };
 
                 context["cacheing"] = () =>
@@ -108,6 +118,66 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             };
         }
 
+        void newing_up_has_many_association()
+        {
+            before = () => user = new User(new { Id = 100 });
+
+            context["building a game for user"] = () =>
+            {
+                act = () => game = user.Games().New(new { Title = "Final Fantasy VII" });
+
+                it["creates a game of type defined in projection"] = () =>
+                    (game as object).should_cast_to<Game>();
+
+                context["saving newly created game"] = () =>
+                {
+                    act = () => games.Save(game);
+
+                    it["saves game"] = () => 
+                        games
+                            .All()
+                            .Any(s => s.Title == "Final Fantasy VII")
+                            .should_be_true();
+
+                    it["saving game doesn't automatically associate the has many through"] = () =>
+                    {
+                        (user.Games(
+                            new 
+                            { 
+                                discardCache = true 
+                            }) as IEnumerable<dynamic>).Count().should_be(0);
+                    };
+                };
+
+                context["saving association through library and game"] = () =>
+                {
+                    act = () =>
+                    {
+                        user = users.Single(userId);
+
+                        var game = user.Games().New(new { Title = "Final Fantasy VII" });
+
+                        game.Id = games.Insert(game);
+
+                        var libraryEntry = user.Library().New(new { GameId = game.Id });
+
+                        library.Insert(libraryEntry);
+                    };
+
+                    it["game is associated with user"] = () =>
+                    {
+                        var gameLibrary = (user.Games(new { discardCache = true }) as IEnumerable<dynamic>);
+
+                        gameLibrary.Count().should_be(2);
+
+                        var firstGame = gameLibrary.Last();
+
+                        (firstGame.Title as string).should_be("Final Fantasy VII");
+                    };
+                };
+            };
+        }
+
         void has_many_naming_customization()
         {
             context["given users have users through friends"] = () =>
@@ -135,10 +205,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     new { UserId = userId, IsFollowing = otherUser }.InsertInto("Friends");
                 };
 
-                it["user named (@me) has friend (@you)"] = () =>
-                {
-                    (FirstFriendOf(userId).Handle as string).should_be("@you");
-                };
+                it["user named (@me) has friend (@you)"] = () => (FirstFriendOf(userId).Handle as string).should_be("@you");
             };
         }
 
