@@ -107,17 +107,126 @@ namespace Oak.Tests
                 { new ExpandoObject(), true, "expando" },
                 { new Gemini(), true, "gemini" },
                 { new DynamicModel(), true, "dynamic model" },
-                { new { Name = "Jane Doe" }, false, "anonymous type" },
+                { new { Name = "Jane Doe" }, true, "anonymous type" },
                 { "Jane Doe", false, "string" },
                 { new List<object> { new ExpandoObject(), new Gemini(), new DynamicModel() }, true, "list containing convertable types" },
                 { new List<string>() { "Jane", "Doe" }, false, "list of string" },
-                { new List<object> { new { Name = "Jane Doe" }, new ExpandoObject(), new Gemini() }, false, "list containing convertable and non-convertable types" },
+                { new List<object> { new { Name = "Jane Doe" }, new ExpandoObject(), new Gemini() }, true, "list containing gemini's and anonymous types" },
+                { new List<object> { new { Name = "Jane Doe" }, "Foobar" }, false, "list containing convertable types and non convertable types" },
                 { new List<string>(), true, "empty list" }
             }.Do((entity, expectedResult, type) => 
             {
                 it["{0} should evaluate to: {1}".With(type, expectedResult)] = () => 
                     DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
             });
+        }
+
+        void describe_anonymous_type_to_json()
+        {
+            before = () => objectToConvert = new { FirstName = "Jane", LastName = "Doe" };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["converts properties of anonymous type"] = () => 
+                jsonString.should_be(@"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe"));
+        }
+
+        void converting_anonymous_types_that_have_defferred_execution()
+        {
+            before = () =>
+            {
+                List<dynamic> users = new List<dynamic>
+                {
+                    new { Name = "Jane" },
+                    new { Name = "John" },
+                    new { Name = "Jake" }
+                };
+
+                objectToConvert = new
+                {
+                    Users = users.Where(s => s.Name.StartsWith("Ja"))
+                };
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["executes deferred statement and serializes result"] = () =>
+            {
+                jsonString.should_be(@"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }");
+            };
+        }
+
+        void coverting_list_string()
+        {
+            before = () =>
+            {
+                List<dynamic> users = new List<dynamic>
+                {
+                    "Jane",
+                    "Doe"
+                };
+
+                objectToConvert = new
+                {
+                    Users = users.Where(s => s.Contains("e"))
+                };
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["executes deferred statement and serializes result"] = () =>
+            {
+                jsonString.should_be(@"{ ""Users"": [ ""Jane"", ""Doe"" ] }");
+            };
+        }
+
+        void converting_list_numeric()
+        {
+            before = () =>
+            {
+                List<dynamic> users = new List<dynamic>
+                {
+                    10,
+                    20
+                };
+
+                objectToConvert = new
+                {
+                    Users = users.Where(s => s % 10 == 0)
+                };
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["executes deferred statement and serializes result"] = () =>
+            {
+                jsonString.should_be(@"{ ""Users"": [ 10, 20 ] }");
+            };
+        }
+
+        void converting_list_of_boolean()
+        {
+            before = () =>
+            {
+                List<dynamic> users = new List<dynamic>
+                {
+                    true,
+                    false
+                };
+
+                objectToConvert = new
+                {
+                    IsAdded = true,
+                    Users = users.Where(s => s == true || s == false)
+                };
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["executes deferred statement and serializes result"] = () =>
+            {
+                jsonString.should_be(@"{ ""IsAdded"": true, ""Users"": [ true, false ] }");
+            };
         }
     }
 }
