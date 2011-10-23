@@ -13,6 +13,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         Friends friends;
 
+        public User() : this(new { }) { }
+
         public User(dynamic entity)
         {
             games = new Games();
@@ -34,6 +36,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
             {
                 ForeignKey = "IsFollowing"
             };
+
+            yield return new HasMany(library);
         }
     }
 }
