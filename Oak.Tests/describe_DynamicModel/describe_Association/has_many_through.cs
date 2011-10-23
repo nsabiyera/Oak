@@ -10,13 +10,17 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
     class has_many_through : nspec
     {
-        dynamic game;
+        dynamic gearsOfWarGameId;
+
+        dynamic mirrorsEdgeGameId;
 
         Seed seed;
 
         IEnumerable<dynamic> games;
 
         IEnumerable<dynamic> gamesIds;
+
+        dynamic userId;
 
         dynamic user;
 
@@ -55,27 +59,45 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         new { GameId = "int", ForeignKey = "Games(Id)" },
                     }).ExecuteNonQuery();
 
-                    user = new { Email = "user@example.com" }.InsertInto("Users");
+                    userId = new { Email = "user@example.com" }.InsertInto("Users");
 
-                    game = new { Title = "Gears of War" }.InsertInto("Games");
+                    gearsOfWarGameId = new { Title = "Gears of War" }.InsertInto("Games");
 
-                    new { UserId = user, GameId = game }.InsertInto("Library");
+                    new { UserId = userId, GameId = gearsOfWarGameId }.InsertInto("Library");
                 };
 
                 context["retriving games for user's library"] = () =>
                 {
-                    act = () => games = users.Single(user).Games();
+                    act = () => games = users.Single(userId).Games();
 
                     it["contains game for user"] = () =>
                         (games.First().Title as string).should_be("Gears of War");
                 };
 
+                context["cacheing"] = () =>
+                {
+                    act = () =>
+                    {
+                        user = users.Single(userId);
+                        user.Games();
+                    };
+
+                    it["games are cached until cache is discarded"] = () =>
+                    {
+                        mirrorsEdgeGameId = new { Title = "Mirror's Edge" }.InsertInto("Games");
+
+                        new { UserId = userId, GameId = gearsOfWarGameId }.InsertInto("Library");
+
+                        (user.Games() as IEnumerable<dynamic>).Count().should_be(1);
+                    };
+                };
+
                 context["retrieving game ids for user's library"] = () =>
                 {
-                    act = () => gamesIds = users.Single(user).GameIds();
+                    act = () => gamesIds = users.Single(userId).GameIds();
 
                     it["contains game for user"] = () =>
-                        (gamesIds.First() as object).should_be(game as object);
+                        (gamesIds.First() as object).should_be(gearsOfWarGameId as object);
                 };
             };
         }
@@ -100,16 +122,16 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         new { IsFollowing = "int", ForeignKey = "Users(Id)" }
                     }).ExecuteNonQuery();
 
-                    user = new { Handle = "@me" }.InsertInto("Users");
+                    userId = new { Handle = "@me" }.InsertInto("Users");
 
                     otherUser = new { Handle = "@you" }.InsertInto("Users");
 
-                    new { UserId = user, IsFollowing = otherUser }.InsertInto("Friends");
+                    new { UserId = userId, IsFollowing = otherUser }.InsertInto("Friends");
                 };
 
                 it["user named (@me) has friend (@you)"] = () =>
                 {
-                    (FirstFriendOf(user).Handle as string).should_be("@you");
+                    (FirstFriendOf(userId).Handle as string).should_be("@you");
                 };
             };
         }

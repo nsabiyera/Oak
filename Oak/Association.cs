@@ -182,7 +182,9 @@ namespace Oak
 
         private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
-            return () => repository.Query(
+            return () =>
+            {
+                return repository.Query(
                  @"
                   select {toTable}.* 
                   from {throughTable}
@@ -193,6 +195,7 @@ namespace Oak
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using), model.Expando.Id);
+            };
         }
 
         private DynamicFunction QueryIds(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
