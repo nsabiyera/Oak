@@ -13,7 +13,7 @@ namespace DynamicBlog.Tests
         [Test]
         public void debug()
         {
-            var testClassYouWantToDebug = "saving_dynamic_model";
+            var testClassYouWantToDebug = "describe_DynamicToJson";
 
             var finder = new SpecFinder(
                 Assembly.GetExecutingAssembly().Location,
