@@ -40,6 +40,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -111,6 +113,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
     <Compile Include="describe_DynamicToJson.cs" />
     <Compile Include="describe_Gemini.cs" />
+    <Compile Include="describe_DynamicParams.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />
