@@ -28,11 +28,13 @@ namespace Oak
         {
             var parsedInt = 0;
 
-            if (!int.TryParse(value, out parsedInt)) return value;
+            var parsedGuid = Guid.Empty;
 
-            if (value.ToString().StartsWith("0")) return value;
+            if (int.TryParse(value, out parsedInt)) return parsedInt;
 
-            return parsedInt;
+            if (Guid.TryParse(value, out parsedGuid)) return parsedGuid;
+
+            return value;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
