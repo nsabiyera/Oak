@@ -29,7 +29,7 @@ namespace Oak.Tests
 
         void describe_casting_assumptions()
         {
-            context["evaluating form collection for potential id candidate"] = () =>
+            context["evaluating form collection for potential Int id candidate"] = () =>
             {
                 context["name ends in Id"] = () =>
                 {
@@ -51,8 +51,8 @@ namespace Oak.Tests
                 {
                     before = () => nameValueCollection.Add("PersonId", "000123");
 
-                    it["keeps original value"] = () =>
-                        ((string)asDynamic.PersonId).should_be("000123");
+                    it["converts to int"] = () =>
+                        ((int)asDynamic.PersonId).should_be(123);
                 };
 
                 context["name ends in ID"] = () => 
@@ -69,6 +69,25 @@ namespace Oak.Tests
 
                     it["disregards conversion"] = () =>
                         (asDynamic.PersonIDFoobar as string).should_be("123");
+                };
+            };
+
+            context["evaluating form collection for potential Guid id candidate"] = () =>
+            {
+                context["name ends in Id"] = () =>
+                {
+                    before = () => nameValueCollection.Add("PersonId", Guid.Empty.ToString());
+
+                    it["comparing key's value with a guid passes"] = () =>
+                        ((Guid)asDynamic.PersonId).should_be(Guid.Empty);
+                };
+
+                context["name ends in ID"] = () =>
+                {
+                    before = () => nameValueCollection.Add("PersonID", Guid.Empty.ToString());
+
+                    it["comparing key's value with a guid passes"] = () =>
+                        ((Guid)asDynamic.PersonId).should_be(Guid.Empty);
                 };
             };
         }
