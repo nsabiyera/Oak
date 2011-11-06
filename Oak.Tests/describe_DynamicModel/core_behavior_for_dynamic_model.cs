@@ -137,6 +137,22 @@ namespace Oak.Tests.describe_DynamicModel
             };
         }
 
+        void selecting_properties()
+        {
+            before = () => loan.SetMembers(new { Term = 10, Amount = 100000, Interest = .30 });
+
+            act = () => loan = loan.Select("Term", "Amount");
+
+            it["only responds to properties that were selected"] = () =>
+            {
+                ((bool)loan.RespondsTo("Term")).should_be(true);
+
+                ((bool)loan.RespondsTo("Amount")).should_be(true);
+
+                ((bool)loan.RespondsTo("Interest")).should_be(false);
+            };
+        }
+
         dynamic Properties()
         {
             return Model().Expando;
