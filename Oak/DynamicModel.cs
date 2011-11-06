@@ -149,5 +149,14 @@ namespace Oak
 
             return dictionary;
         }
+
+        public dynamic Select(params string[] args)
+        {
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+
+            args.ForEach(s => expando.Add(s, GetMember(s)));
+
+            return new Gemini(expando);
+        }
     }
 }
