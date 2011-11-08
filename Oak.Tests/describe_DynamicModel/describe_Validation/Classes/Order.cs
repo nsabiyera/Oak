@@ -12,9 +12,9 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Presence("CardNumber") { If = d => d.PaidWithCard() };
+            yield return new Presence("CardNumber") { If = () => This().PaidWithCard() };
 
-            yield return new Presence("Address") { Unless = d => d.IsDigitalPurchase() };
+            yield return new Presence("Address") { Unless = () => This().IsDigitalPurchase() };
         }
 
         public bool PaidWithCard()
