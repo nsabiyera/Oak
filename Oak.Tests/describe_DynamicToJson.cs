@@ -114,9 +114,9 @@ namespace Oak.Tests
                 { new List<object> { new { Name = "Jane Doe" }, new ExpandoObject(), new Gemini() }, true, "list containing gemini's and anonymous types" },
                 { new List<object> { new { Name = "Jane Doe" }, "Foobar" }, false, "list containing convertable types and non convertable types" },
                 { new List<string>(), true, "empty list" }
-            }.Do((entity, expectedResult, type) => 
+            }.Do((entity, expectedResult, type) =>
             {
-                it["{0} should evaluate to: {1}".With(type, expectedResult)] = () => 
+                it["{0} should evaluate to: {1}".With(type, expectedResult)] = () =>
                     DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
             });
         }
@@ -127,7 +127,7 @@ namespace Oak.Tests
 
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
-            it["converts properties of anonymous type"] = () => 
+            it["converts properties of anonymous type"] = () =>
                 jsonString.should_be(@"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe"));
         }
 
@@ -226,6 +226,31 @@ namespace Oak.Tests
             it["executes deferred statement and serializes result"] = () =>
             {
                 jsonString.should_be(@"{ ""IsAdded"": true, ""Users"": [ true, false ] }");
+            };
+        }
+
+        void converting_nested_object()
+        {
+            before = () =>
+            {
+                objectToConvert = new Gemini(
+                new
+                {
+                    Id = 15,
+                    Name = "Mirror's Edge",
+                    Owner = new Gemini(new
+                    {
+                        Id = 22,
+                        Handle = "@amirrajan"
+                    })
+                });
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["converts whole object graph"] = () =>
+            {
+                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
             };
         }
     }

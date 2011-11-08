@@ -98,8 +98,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
                     virtualProperties.should_contain("IsValid");
 
-                    virtualProperties.should_contain("IsPropertyValid");
-
                     virtualProperties.should_contain("FirstError");
                 };
             };
@@ -121,8 +119,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 virtualProperties.should_not_contain("Errors");
 
                 virtualProperties.should_not_contain("IsValid");
-
-                virtualProperties.should_not_contain("IsPropertyValid");
 
                 virtualProperties.should_not_contain("FirstError");
             };
