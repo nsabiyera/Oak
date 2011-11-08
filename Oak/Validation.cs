@@ -27,9 +27,7 @@ namespace Oak
             {
                 mixWith.SetUnTrackedMember("Errors", new DynamicFunction(Errors));
 
-                mixWith.SetUnTrackedMember("IsValid", new DynamicFunction(IsValid));
-
-                mixWith.SetUnTrackedMember("IsPropertyValid", new DynamicFunctionWithParam(IsValid));
+                mixWith.SetUnTrackedMember("IsValid", new DynamicFunctionWithParam(IsValid));
 
                 mixWith.SetUnTrackedMember("FirstError", new DynamicFunction(FirstError));
 
@@ -64,13 +62,10 @@ namespace Oak
             return errors;
         }
 
-        public virtual dynamic IsValid()
-        {
-            return IsValid(s => true);
-        }
-
         public virtual dynamic IsValid(dynamic property)
         {
+            if(property == null) return IsValid(s => true);
+
             return IsValid(s => s.Property == property);
         }
 

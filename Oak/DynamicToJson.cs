@@ -67,6 +67,8 @@ namespace Oak
 
             if (IsBool(o)) return o.ToString().ToLower();
 
+            if (o is Gemini) return Convert(o as object);
+
             return o.ToString();
         }
 
@@ -97,7 +99,11 @@ namespace Oak
 
         public static bool CanConvertValue(KeyValuePair<string, object> kvp)
         {
-            return IsJsonString(kvp.Value) || IsJsonNumeric(kvp.Value) || IsList(kvp.Value) || IsBool(kvp.Value);
+            return IsJsonString(kvp.Value) || 
+                   IsJsonNumeric(kvp.Value) || 
+                   IsList(kvp.Value) || 
+                   IsBool(kvp.Value) ||
+                   kvp.Value is Gemini;
         }
 
         public static bool CanConvertObject(dynamic o)

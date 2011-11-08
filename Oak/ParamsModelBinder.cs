@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Oak
 {
@@ -17,6 +18,23 @@ namespace Oak
             : base(form)
         {
             this.valueProvider = valueProvider;
+
+            Hash()
+                .Where(s => s.Key.ToLower().EndsWith("id"))
+                .ForEach(kvp => SetMember(kvp.Key, IntOrOriginal(kvp.Value)));
+        }
+
+        private object IntOrOriginal(dynamic value)
+        {
+            var parsedInt = 0;
+
+            var parsedGuid = Guid.Empty;
+
+            if (int.TryParse(value, out parsedInt)) return parsedInt;
+
+            if (Guid.TryParse(value, out parsedGuid)) return parsedGuid;
+
+            return value;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
