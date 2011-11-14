@@ -8,6 +8,8 @@ namespace Oak.Tests.describe_DynamicModels
 {
     class _dynamic_models : nspec
     {
+        public Seed seed;
+
         public dynamic models;
 
         public bool resultForAny;
@@ -16,6 +18,9 @@ namespace Oak.Tests.describe_DynamicModels
 
         public object resultForFirst;
 
-        
+        void before_each()
+        {
+            seed = new Seed();
+        }
     }
 }
