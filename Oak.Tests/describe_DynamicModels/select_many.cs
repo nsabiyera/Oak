@@ -20,27 +20,27 @@ namespace Oak.Tests.describe_DynamicModels
         void before_each()
         {
             users = new Users();
+
+            seed.PurgeDb();
+
+            seed.CreateTable("Users", new dynamic[] 
+                { 
+                    new { Id = "int", Identity = true, PrimaryKey = true },
+                    new { Name = "nvarchar(255)" }
+                }).ExecuteNonQuery();
+
+            seed.CreateTable("Emails", new dynamic[] 
+                {
+                    new { Id = "int", Identity = true, PrimaryKey = true },
+                    new { UserId = "int" },
+                    new { Address = "nvarchar(255)" }
+                }).ExecuteNonQuery();
         }
 
         void selecting_many_off_of_collection()
         {
             before = () =>
             {
-                seed.PurgeDb();
-
-                seed.CreateTable("Users", new dynamic[] 
-                { 
-                    new { Id = "int", Identity = true, PrimaryKey = true },
-                    new { Name = "nvarchar(255)" }
-                }).ExecuteNonQuery();
-
-                seed.CreateTable("Emails", new dynamic[] 
-                {
-                    new { Id = "int", Identity = true, PrimaryKey = true },
-                    new { UserId = "int" },
-                    new { Address = "nvarchar(255)" }
-                }).ExecuteNonQuery();
-
                 user1Id = new { Name = "Jane" }.InsertInto("Users");
 
                 user2Id = new { Name = "John" }.InsertInto("Users");
@@ -59,6 +59,41 @@ namespace Oak.Tests.describe_DynamicModels
                 var firstEmail = emailsForUsers.First();
 
                 (firstEmail.Address as string).should_be("jane@example.com");
+            };
+        }
+
+        void select_many_for_collection_with_where_clause()
+        {
+            context["where clause returns records"] = () =>
+            {
+                before = () =>
+                {
+                    user1Id = new { Name = "Jane" }.InsertInto("Users");
+
+                    user2Id = new { Name = "John" }.InsertInto("Users");
+
+                    new { UserId = user1Id, Address = "jane@example.com" }.InsertInto("Emails");
+
+                    new { UserId = user2Id, Address = "john@example.com" }.InsertInto("Emails");
+                };
+
+                act = () => emailsForUsers = (users.All(where: "Id = @0", args: new object[] { user2Id }) as dynamic).Emails();
+
+                it["returns all emails for all users"] = () =>
+                {
+                    emailsForUsers.Count().should_be(1);
+
+                    var firstEmail = emailsForUsers.First();
+
+                    (firstEmail.Address as string).should_be("john@example.com");
+                };
+            };
+
+            context["where clause returns no records"] = () =>
+            {
+                act = () => emailsForUsers = (users.All(where: "Id = @0", args: new object[] { user1Id }) as dynamic).Emails();
+
+                it["returns an empty list"] = () => emailsForUsers.Count().should_be(0);
             };
         }
     }

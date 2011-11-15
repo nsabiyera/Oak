@@ -52,6 +52,7 @@
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
     <Compile Include="describe_DynamicModels\Classes\Emails.cs" />
+    <Compile Include="describe_DynamicModels\Classes\User.cs" />
     <Compile Include="describe_DynamicModels\Classes\Users.cs" />
     <Compile Include="describe_DynamicModels\expando_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\gemini_dynamic_models.cs" />

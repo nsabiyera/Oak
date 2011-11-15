@@ -9,23 +9,45 @@ namespace Oak
 {
     public class MixInAssociation
     {
+        List<dynamic> referencedAssociations = new List<dynamic>();
+
         public MixInAssociation(DynamicModel mixWith)
         {
             if (!SupportsAssociations(mixWith)) return;
 
             IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
 
-            foreach (dynamic association in associations) association.Init(mixWith);
+            foreach (dynamic association in associations)
+            {
+                referencedAssociations.Add(association);
+                association.Init(mixWith);
+            }
+
+            mixWith.SetUnTrackedMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
         }
 
         public bool SupportsAssociations(DynamicModel mixWith)
         {
             return mixWith.GetType().GetMethod("Associates") != null;
         }
+
+        public dynamic AssociationNamed(dynamic name)
+        {
+            return referencedAssociations.FirstOrDefault(s => s.Named == name);
+        }
     }
 
     public class Association
     {
+        public string Named { get; set; }
+
+        public DynamicRepository Repository { get; set; }
+
+        public string TableName
+        {
+            get { return Repository.TableName; }
+        }
+
         public string Singular(object o)
         {
             var name = o.GetType().Name;
@@ -50,11 +72,9 @@ namespace Oak
 
     public class HasMany : Association
     {
-        string named;
-
-        DynamicRepository repository;
-
         DynamicModels cachedCollection;
+
+        public string ForeignKey { get; set; }
 
         public HasMany(DynamicRepository repository)
             : this(repository, null)
@@ -64,25 +84,25 @@ namespace Oak
 
         public HasMany(DynamicRepository repository, string named)
         {
-            this.repository = repository;
+            this.Repository = repository;
 
-            this.named = named ?? repository.GetType().Name;
+            this.Named = named ?? repository.GetType().Name;
         }
 
         public void Init(dynamic model)
         {
-            var fromColumn = ForeignKeyFor(model);
+            ForeignKey = ForeignKeyFor(model);
 
-            var toTable = repository.GetType().Name;
+            var toTable = Repository.GetType().Name;
 
-            AddAssociationMethods(model, fromColumn, toTable);
+            AddAssociationMethods(model, ForeignKey, toTable);
         }
 
         private void AddAssociationMethods(DynamicModel model, string fromColumn, string toTable)
         {
-            model.SetUnTrackedMember(named, Query(fromColumn, model));
+            model.SetUnTrackedMember(Named, Query(fromColumn, model));
 
-            model.SetUnTrackedMember(Singular(named) + "Ids", QueryIds(fromColumn, model));
+            model.SetUnTrackedMember(Singular(Named) + "Ids", QueryIds(fromColumn, model));
         }
 
         private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
@@ -101,7 +121,7 @@ namespace Oak
 
             entity.SetMember(ForeignKeyFor(model), model.GetMember(Id()));
 
-            return repository.Projection(entity);
+            return Repository.Projection(entity);
         }
 
         private DynamicFunctionWithParam Query(string foreignKey, dynamic model)
@@ -116,9 +136,9 @@ namespace Oak
 
                 if (cachedCollection != null) return cachedCollection;
 
-                cachedCollection = new DynamicModels(repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }).ToList());
+                cachedCollection = new DynamicModels(Repository.All(foreignKey + " = @0", args: new[] { model.Expando.Id }).ToList());
 
-                AddNewAssociationMethod(cachedCollection, model);    
+                AddNewAssociationMethod(cachedCollection, model);
 
                 return cachedCollection;
             };
@@ -133,17 +153,31 @@ namespace Oak
                 return models.Select(s => s.Id).ToList();
             };
         }
+
+        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models)
+        {
+            var query = @"
+                select {childTable}.* 
+                from {childTable} 
+                where {foreignKey} in ({inClause})"
+                .Replace("{childTable}", TableName)
+                .Replace("{foreignKey}", ForeignKey)
+                .Replace("{inClause}", InClause(models));
+
+            return Repository.Query(query);
+        }
+
+        private string InClause(IEnumerable<dynamic> models)
+        {
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(Id()))));
+        }
     }
 
     public class HasManyThrough : Association
     {
-        DynamicRepository repository;
-
         DynamicRepository through;
 
         DynamicModels cachedCollection;
-
-        string named;
 
         public string ForeignKey { get; set; }
 
@@ -155,18 +189,18 @@ namespace Oak
 
         public HasManyThrough(DynamicRepository repository, DynamicRepository through, string named)
         {
-            this.repository = repository;
+            this.Repository = repository;
 
             this.through = through;
 
-            this.named = named ?? repository.GetType().Name;
+            this.Named = named ?? repository.GetType().Name;
         }
 
         public void Init(dynamic model)
         {
             var fromColumn = ForeignKeyFor(model);
 
-            var toTable = repository.GetType().Name;
+            var toTable = Repository.GetType().Name;
 
             AddAssociationMethod(model, fromColumn, toTable);
         }
@@ -174,12 +208,12 @@ namespace Oak
         private void AddAssociationMethod(DynamicModel model, string fromColumn, string toTable)
         {
             model.SetUnTrackedMember(
-                named,
-                Query(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(repository), model));
+                Named,
+                Query(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(Repository), model));
 
             model.SetUnTrackedMember(
-                Singular(named) + "Ids",
-                QueryIds(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(repository), model));
+                Singular(Named) + "Ids",
+                QueryIds(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(Repository), model));
         }
 
         private DynamicFunctionWithParam Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
@@ -194,7 +228,7 @@ namespace Oak
 
                 if (cachedCollection != null) return cachedCollection;
 
-                cachedCollection = new DynamicModels(repository.Query(
+                cachedCollection = new DynamicModels(Repository.Query(
                 @"
                     select {toTable}.* 
                     from {throughTable}
@@ -226,7 +260,7 @@ namespace Oak
         {
             var entity = new Gemini(attributes);
 
-            return repository.Projection(entity);
+            return Repository.Projection(entity);
         }
 
         private DynamicFunction QueryIds(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
@@ -242,13 +276,11 @@ namespace Oak
 
     public class HasOne : Association
     {
-        private DynamicRepository repository;
-
         public string ForeignKey { get; set; }
 
         public HasOne(DynamicRepository repository)
         {
-            this.repository = repository;
+            this.Repository = repository;
         }
 
         public void Init(dynamic model)
@@ -256,22 +288,20 @@ namespace Oak
             string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
 
             (model as DynamicModel).SetUnTrackedMember(
-                    Singular(repository),
-                    new DynamicFunction(() => repository.SingleWhere(foreignKeyName + " = @0", model.GetMember(Id()))));
+                    Singular(Repository),
+                    new DynamicFunction(() => Repository.SingleWhere(foreignKeyName + " = @0", model.GetMember(Id()))));
         }
     }
 
     public class HasOneThrough : Association
     {
-        private DynamicRepository repository;
-
         private DynamicRepository through;
 
         public string ForeignKey { get; set; }
 
         public HasOneThrough(DynamicRepository repository, DynamicRepository through)
         {
-            this.repository = repository;
+            this.Repository = repository;
             this.through = through;
         }
 
@@ -280,13 +310,13 @@ namespace Oak
             string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
 
             (model as DynamicModel).SetUnTrackedMember(
-                    Singular(repository),
-                    Query(foreignKeyName, repository.GetType().Name, through.GetType().Name, ForeignKeyFor(repository), model));
+                    Singular(Repository),
+                    Query(foreignKeyName, Repository.GetType().Name, through.GetType().Name, ForeignKeyFor(Repository), model));
         }
 
         private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
         {
-            return () => repository.Query(
+            return () => Repository.Query(
                 @"
                 select {toTable}.*
                 from {throughTable}
@@ -303,31 +333,26 @@ namespace Oak
 
     public class BelongsTo : Association
     {
-        private DynamicRepository repository;
-
-        private string name;
-
         public string ForeignKey { get; set; }
 
         public string PrimaryKey { get; set; }
 
         public BelongsTo(DynamicRepository repository)
         {
-            this.repository = repository;
-            name = Singular(repository);
+            this.Repository = repository;
+            Named = Singular(repository);
         }
 
         public void Init(dynamic model)
         {
-            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(repository) : ForeignKey;
+            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
             string primaryKeyName = (string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey);
 
             string whereClause = string.Format("{0} = @0", primaryKeyName);
 
             (model as DynamicModel).SetUnTrackedMember(
-                name,
-                new DynamicFunction(() => repository.SingleWhere(whereClause, model.GetMember(foreignKeyName)
-                                                    )));
+                Named,
+                new DynamicFunction(() => Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName))));
         }
     }
 }

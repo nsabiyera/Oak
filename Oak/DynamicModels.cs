@@ -57,11 +57,13 @@ namespace Oak
 
         private bool SelectMany(string collectionName, out object result)
         {
-            var many = new List<dynamic>();
+            result = new List<dynamic>();
 
-            foreach (dynamic model in Models) many.AddRange(Get(collectionName, model));
+            if (Models.Count == 0) return true;
 
-            result = many;
+            var association = Models[0].AssociationNamed(collectionName);
+
+            result = association.SelectManyRelatedTo(Models);
 
             return true;
         }
