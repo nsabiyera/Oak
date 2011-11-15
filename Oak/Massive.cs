@@ -200,6 +200,7 @@ namespace Massive
             using (var conn = OpenConnection())
             {
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
+
                 while (rdr.Read())
                 {
                     yield return rdr.RecordToExpando(Projection);
@@ -481,7 +482,7 @@ namespace Massive
         public virtual IEnumerable<dynamic> All(string where = "", string orderBy = "", int limit = 0, string columns = "*", params object[] args)
         {
             string sql = BuildSelect(where, orderBy, limit);
-            return Query(string.Format(sql, columns, TableName), args);
+            return new DynamicModels(Query(string.Format(sql, columns, TableName), args));
         }
         private static string BuildSelect(string where, string orderBy, int limit)
         {

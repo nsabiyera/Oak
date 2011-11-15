@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_DynamicForm.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Emails.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Users.cs" />
     <Compile Include="describe_DynamicModels\expando_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\gemini_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\select_many.cs" />
@@ -133,9 +135,7 @@
       <Name>Oak</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SampleClasses\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
