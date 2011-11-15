@@ -48,6 +48,29 @@ namespace Oak
             return options.All(s => hash[s.Key] == s.Value);
         }
 
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            if (RespondsTo(binder.Name)) return base.TryInvokeMember(binder, args, out result);
+
+            return SelectMany(binder.Name, out result);
+        }
+
+        private bool SelectMany(string collectionName, out object result)
+        {
+            var many = new List<dynamic>();
+
+            foreach (dynamic model in Models) many.AddRange(Get(collectionName, model));
+
+            result = many;
+
+            return true;
+        }
+
+        private dynamic Get(string collectionName, dynamic model)
+        {
+            return model.GetMember(collectionName).Invoke(null);
+        }
+
         public IEnumerator<object> GetEnumerator()
         {
             return Models.GetEnumerator();
