@@ -13,7 +13,7 @@ namespace DynamicBlog.Tests
         [Test]
         public void debug()
         {
-            var testClassYouWantToDebug = "select_many";
+            var testClassYouWantToDebug = "select_many_for_has_many_relation";
 
             var finder = new SpecFinder(
                 Assembly.GetExecutingAssembly().Location,

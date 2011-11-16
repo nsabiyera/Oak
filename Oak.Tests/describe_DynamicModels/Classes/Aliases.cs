@@ -6,11 +6,7 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModels.Classes
 {
-    public class Emails : DynamicRepository
+    public class Aliases : DynamicRepository
     {
-        public Emails()
-        {
-            Projection = d => new Email(d);
-        }
     }
 }

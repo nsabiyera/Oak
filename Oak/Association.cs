@@ -164,7 +164,7 @@ namespace Oak
                 .Replace("{foreignKey}", ForeignKey)
                 .Replace("{inClause}", InClause(models));
 
-            return Repository.Query(query);
+            return new DynamicModels(Repository.Query(query));
         }
 
         private string InClause(IEnumerable<dynamic> models)
@@ -175,6 +175,14 @@ namespace Oak
 
     public class HasManyThrough : Association
     {
+        string fromColumn;
+
+        string toTable;
+
+        string throughTable;
+
+        string resolvedForeignKey;
+
         DynamicRepository through;
 
         DynamicModels cachedCollection;
@@ -193,30 +201,34 @@ namespace Oak
 
             this.through = through;
 
+            this.throughTable = through.GetType().Name;
+
             this.Named = named ?? repository.GetType().Name;
         }
 
         public void Init(dynamic model)
         {
-            var fromColumn = ForeignKeyFor(model);
+            fromColumn = ForeignKeyFor(model);
 
-            var toTable = Repository.GetType().Name;
+            toTable = Repository.GetType().Name;
 
-            AddAssociationMethod(model, fromColumn, toTable);
+            resolvedForeignKey = ForeignKey ?? ForeignKeyFor(Repository);
+
+            AddAssociationMethod(model);
         }
 
-        private void AddAssociationMethod(DynamicModel model, string fromColumn, string toTable)
+        private void AddAssociationMethod(DynamicModel model)
         {
             model.SetUnTrackedMember(
                 Named,
-                Query(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(Repository), model));
+                Query(model));
 
             model.SetUnTrackedMember(
                 Singular(Named) + "Ids",
-                QueryIds(fromColumn, toTable, through.GetType().Name, ForeignKey ?? ForeignKeyFor(Repository), model));
+                QueryIds(model));
         }
 
-        private DynamicFunctionWithParam Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunctionWithParam Query(DynamicModel model)
         {
             return (options) =>
             {
@@ -238,12 +250,34 @@ namespace Oak
                     .Replace("{fromColumn}", fromColumn)
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
-                    .Replace("{using}", @using), model.Expando.Id));
+                    .Replace("{using}", resolvedForeignKey), model.Expando.Id));
 
                 AddNewAssociationMethod(cachedCollection, model);
 
                 return cachedCollection;
             };
+        }
+
+        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models)
+        {
+            var query = @"
+                select {toTable}.* 
+                from {throughTable}
+                inner join {toTable}
+                on {throughTable}.{using} = {toTable}.Id
+                where {toTable}.Id in ({inClause})"
+                .Replace("{fromColumn}", fromColumn)
+                .Replace("{toTable}", toTable)
+                .Replace("{throughTable}", throughTable)
+                .Replace("{using}", resolvedForeignKey)
+                .Replace("{inClause}", InClause(models));
+
+            return new DynamicModels(Repository.Query(query));
+        }
+
+        private string InClause(IEnumerable<dynamic> models)
+        {
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(Id()))));
         }
 
         private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
@@ -263,11 +297,11 @@ namespace Oak
             return Repository.Projection(entity);
         }
 
-        private DynamicFunction QueryIds(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunction QueryIds(DynamicModel model)
         {
             return () =>
             {
-                IEnumerable<dynamic> models = (Query(fromColumn, toTable, throughTable, @using, model) as DynamicFunctionWithParam).Invoke(null);
+                IEnumerable<dynamic> models = (Query(model) as DynamicFunctionWithParam).Invoke(null);
 
                 return models.Select(s => s.Id).ToList();
             };
