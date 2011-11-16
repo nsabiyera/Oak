@@ -164,7 +164,16 @@ namespace Oak
                 .Replace("{foreignKey}", ForeignKey)
                 .Replace("{inClause}", InClause(models));
 
-            return new DynamicModels(Repository.Query(query));
+            var many = Repository.Query(query).ToList();
+
+            foreach (var item in many)
+            {
+                var model = models.First(s => s.Id == item.GetMember(ForeignKey));
+
+                item.SetMember(model.GetType().Name, new DynamicFunction(() => model));
+            }
+
+            return new DynamicModels(many);
         }
 
         private string InClause(IEnumerable<dynamic> models)
@@ -261,18 +270,27 @@ namespace Oak
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models)
         {
             var query = @"
-                select {toTable}.* 
+                select {toTable}.*, {throughTable}.{fromColumn}
                 from {throughTable}
                 inner join {toTable}
                 on {throughTable}.{using} = {toTable}.Id
-                where {toTable}.Id in ({inClause})"
+                where {throughTable}.{fromColumn} in ({inClause})"
                 .Replace("{fromColumn}", fromColumn)
                 .Replace("{toTable}", toTable)
                 .Replace("{throughTable}", throughTable)
                 .Replace("{using}", resolvedForeignKey)
                 .Replace("{inClause}", InClause(models));
 
-            return new DynamicModels(Repository.Query(query));
+            var many = Repository.Query(query).ToList();
+
+            foreach (var item in many)
+            {
+                var model = models.First(s => s.Id == item.GetMember(fromColumn));
+
+                item.SetMember(model.GetType().Name, new DynamicFunction(() => model));
+            }
+
+            return new DynamicModels(many);
         }
 
         private string InClause(IEnumerable<dynamic> models)

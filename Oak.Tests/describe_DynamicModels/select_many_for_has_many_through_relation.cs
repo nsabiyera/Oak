@@ -48,6 +48,8 @@ namespace Oak.Tests.describe_DynamicModels
                 new { GameId = "int" },
             }).ExecuteNonQuery();
 
+            new { Name = "Fluff To Ensure Different Id's" }.InsertInto("Players");
+
             player1Id = new { Name = "Jane" }.InsertInto("Players");
 
             player2Id = new { Name = "John" }.InsertInto("Players");
@@ -56,9 +58,9 @@ namespace Oak.Tests.describe_DynamicModels
 
             game2Id = new { Title = "Gears of War" }.InsertInto("Games");
 
-            new { PlayerId = player1Id, GameId = game1Id }.InsertInto("Library");
+            new { PlayerId = player1Id, GameId = game2Id }.InsertInto("Library");
 
-            new { PlayerId = player2Id, GameId = game2Id }.InsertInto("Library");
+            new { PlayerId = player2Id, GameId = game1Id }.InsertInto("Library");
         }
 
         void selecting_many_off_of_collection()
@@ -71,7 +73,18 @@ namespace Oak.Tests.describe_DynamicModels
 
                 var firstGame = selectMany.First();
 
-                (firstGame.Title as string).should_be("Mirror's Edge");
+                (firstGame.Title as string).should_be("Gears of War");
+            };
+
+            it["links back to the specific player the query originated from"] = () =>
+            {
+                var firstGame = selectMany.First();
+
+                (firstGame.Player().Name as string).should_be("Jane");
+
+                var secondGame = selectMany.Last();
+
+                (secondGame.Player().Name as string).should_be("John");
             };
         }
 
