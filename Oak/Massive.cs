@@ -85,14 +85,14 @@ namespace Massive
             var result = new List<dynamic>();
             while (rdr.Read())
             {
-                result.Add(rdr.RecordToExpando(projection));
+                result.Add(rdr.RecordToGemini(projection));
             }
             return result;
         }
-        public static dynamic RecordToExpando(this IDataReader rdr, Func<dynamic, dynamic> projection)
+        public static dynamic RecordToGemini(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
-            dynamic e = new ExpandoObject();
-            var d = e as IDictionary<string, object>;
+            dynamic e = new Gemini();
+            var d = e.Expando as IDictionary<string, object>;
             for (int i = 0; i < rdr.FieldCount; i++)
                 d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
             return projection(e);
@@ -203,7 +203,7 @@ namespace Massive
 
                 while (rdr.Read())
                 {
-                    yield return rdr.RecordToExpando(Projection);
+                    yield return rdr.RecordToGemini(Projection);
                 }
             }
         }
@@ -231,7 +231,7 @@ namespace Massive
             {
                 while (rdr.Read())
                 {
-                    yield return rdr.RecordToExpando(Projection); ;
+                    yield return rdr.RecordToGemini(Projection); ;
                 }
             }
         }

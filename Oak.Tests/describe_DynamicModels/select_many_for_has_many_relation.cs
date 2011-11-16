@@ -96,6 +96,13 @@ namespace Oak.Tests.describe_DynamicModels
 
                     (firstEmail.Address as string).should_be("john@example.com");
                 };
+
+                it["links back to the specific user the query originated from"] = () =>
+                {
+                    var firstEmail = selectMany.First();
+
+                    (firstEmail.User().Name as string).should_be("John");
+                };
             };
 
             context["where clause returns no records"] = () =>
