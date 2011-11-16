@@ -6,11 +6,11 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModels.Classes
 {
-    public class Emails : DynamicRepository
+    public class Players : DynamicRepository
     {
-        public Emails()
+        public Players()
         {
-            Projection = d => new Email(d);
+            Projection = d => new Player(d);
         }
     }
 }

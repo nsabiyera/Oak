@@ -25,6 +25,11 @@ namespace Oak
             return false;
         }
 
+        public dynamic First()
+        {
+            return Models.FirstOrDefault();
+        }
+
         public dynamic First(dynamic options)
         {
             return Where(options as object).FirstOrDefault();

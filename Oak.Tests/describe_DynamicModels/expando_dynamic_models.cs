@@ -127,25 +127,37 @@ namespace Oak.Tests.describe_DynamicModels
 
         void describe_First()
         {
-            before = () => models = new DynamicModels(new List<ExpandoObject>());
-
-            act = () => resultForFirst = models.First(new { Name = "Jane" });
-
-            context["no items in list"] = () =>
+            context["first taking in a 'where clause'"] = () =>
             {
-                it["result is null"] = () => resultForFirst.should_be(null);
+                before = () => models = new DynamicModels(new List<ExpandoObject>());
+
+                act = () => resultForFirst = models.First(new { Name = "Jane" });
+
+                context["no items in list"] = () =>
+                {
+                    it["result is null"] = () => resultForFirst.should_be(null);
+                };
+
+                context["items exist in list that match"] = () =>
+                {
+                    before = () => models.Models.Add(new Gemini(new { Name = "Jane" }));
+
+                    it["returns item"] = () => ((string)((dynamic)resultForFirst).Name).should_be("Jane");
+                };
             };
 
-            context["items exist in list that match"] = () =>
+            context["first doesn't take in a 'where clause'"] = () =>
             {
                 before = () =>
                 {
-                    dynamic expando = new ExpandoObject();
-                    expando.Name = "Jane";
-                    models.Models.Add(expando);
+                    models = new DynamicModels(new List<ExpandoObject>());
+
+                    models.Models.Add(new Gemini(new { Name = "Jane" }));
                 };
 
-                it["returns item"] = () => resultForFirst.should_not_be_null();
+                act = () => resultForFirst = models.First();
+
+                it["returns first record"] = () => ((string)((dynamic)resultForFirst).Name).should_be("Jane");
             };
         }
     }
