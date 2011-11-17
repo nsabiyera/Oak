@@ -114,7 +114,7 @@ namespace BorrowedGames.Models
 
         private bool SharesConsole(dynamic console)
         {
-            return This().Games().Any(new { Console = console }) || (This().Games() as IEnumerable<dynamic>).Count() == 0;
+            return This().Games().Any(new { Console = console }) || This().Games().Count() == 0;
         }
 
         public IEnumerable<dynamic> PreferredGames()
