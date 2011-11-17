@@ -5,7 +5,7 @@ $preferredGames = null
 initView = ->
 	$preferredGames = $("#preferredGames")
 
-$addGameToPage = (game) -> 
+$addGameToPage = (game) ->
 	$game = $gameElementFor(game)
 
 	$preferredGames.append $game
@@ -26,10 +26,9 @@ $wireUpActionLink = ($game) ->
 		"TakeActionToolTip",
 		"Click here to request the game.",
 		"You get the idea...<br/>Request game.",
-		$game.offset().left + 100
-		$takeAction.offset().top
+		-> $game.offset().left + 100
+		-> $takeAction.offset().top
 	)
-
 
 $wireUpNotInterested = ($game) ->
 	game = $game.game
@@ -38,9 +37,9 @@ $wireUpNotInterested = ($game) ->
 
 	$closeLink = $game.find("#closeLink#{game.Id}_#{userId}")
 
-	$closeLink.click(-> 
-		$.post(preferred.urls.notInterestedUrl, 
-		{ gameId: game.Id }, 
+	$closeLink.click(->
+		$.post(preferred.urls.notInterestedUrl,
+		{ gameId: game.Id },
 		-> $game.fadeOut()))
 
 	toolTip.init(
@@ -48,8 +47,8 @@ $wireUpNotInterested = ($game) ->
 		"CloseLinkToolTip",
 		"Not interested?<br/>Click to remove it.",
 		"You get the idea...<br/>Remove game.",
-		$game.offset().left + 100,
-		$game.offset().top + -25
+		-> $game.offset().left + 100,
+		-> $game.offset().top + -25
 	)
 		
 $gameElementFor = (game) ->
@@ -62,7 +61,9 @@ $gameElementFor = (game) ->
 
 	gameName = game.Name
 
-	gameName = game.Name.substring(0, 45) + "..." if game.Name.length > 45
+	gameName = game.Name.substring(0, 40) + "... " if game.Name.length > 45
+
+	gameName += " (" + game.Console + ")"
 
 	$game = $.tmpl gameTemplate, { gameId: game.Id, gameName, searchString, owner: game.Owner.Handle, userId }
 	
@@ -89,7 +90,6 @@ this.preferred =
 				if(!games.length)
 					$preferredGames.html("Games you don't own (that your friends have) will show up here.")
 			)
-
 
 gameTemplate =
 	'

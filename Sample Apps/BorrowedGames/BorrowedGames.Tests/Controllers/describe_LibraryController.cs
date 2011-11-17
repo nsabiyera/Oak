@@ -12,7 +12,7 @@ namespace BorrowedGames.Tests.Controllers
     {
         LibraryController controller;
 
-        dynamic user, result, anotherUser;
+        dynamic user, anotherUser;
 
         object finalFantasy7;
 

@@ -15,7 +15,7 @@ namespace BorrowedGames.Tests.Controllers
     {
         AccountController controller;
 
-        dynamic result, user;
+        dynamic user;
 
         bool authenticated;
 

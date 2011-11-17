@@ -19,7 +19,11 @@
     game = $game.game;
     userId = game.Owner.Id;
     $takeAction = $game.find("#takeAction" + game.Id + "_" + userId);
-    return toolTip.init($takeAction, "TakeActionToolTip", "Click here to request the game.", "You get the idea...<br/>Request game.", $game.offset().left + 100, $takeAction.offset().top);
+    return toolTip.init($takeAction, "TakeActionToolTip", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
+      return $game.offset().left + 100;
+    }, function() {
+      return $takeAction.offset().top;
+    });
   };
   $wireUpNotInterested = function($game) {
     var $closeLink, game, userId;
@@ -33,7 +37,11 @@
         return $game.fadeOut();
       });
     });
-    return toolTip.init($closeLink, "CloseLinkToolTip", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", $game.offset().left + 100, $game.offset().top + -25);
+    return toolTip.init($closeLink, "CloseLinkToolTip", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
+      return $game.offset().left + 100;
+    }, function() {
+      return $game.offset().top + -25;
+    });
   };
   $gameElementFor = function(game) {
     var $game, gameName, searchString, userId;
@@ -41,8 +49,9 @@
     userId = game.Owner.Id;
     gameName = game.Name;
     if (game.Name.length > 45) {
-      gameName = game.Name.substring(0, 45) + "...";
+      gameName = game.Name.substring(0, 40) + "... ";
     }
+    gameName += " (" + game.Console + ")";
     $game = $.tmpl(gameTemplate, {
       gameId: game.Id,
       gameName: gameName,

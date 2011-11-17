@@ -13,8 +13,6 @@ namespace BorrowedGames.Controllers
 
         Games games;
 
-        Func<dynamic, dynamic> JsonGame = s => new { s.Id, s.Name };
-
         public LibraryController()
         {
             library = new Library();
@@ -37,7 +35,7 @@ namespace BorrowedGames.Controllers
         {
             if (!UserHasGame(@params.gameId)) library.Insert(new { UserId = CurrentUser, GameId = @params.gameId });
 
-            return Json(JsonGame(games.Single(@params.gameId)));
+            return Json(games.Single(@params.gameId));
         }
 
         [HttpPost]
@@ -54,12 +52,12 @@ namespace BorrowedGames.Controllers
 
             if (searchResults.Count() == 0) searchResults = games.HasWords(searchString);
 
-            return Json(searchResults.Select(JsonGame));
+            return Json(searchResults);
         }
 
         private IEnumerable<dynamic> GamesInLibraryFor(dynamic user)
         {
-            return (users.Single(user).Games() as IEnumerable<dynamic>).Select(JsonGame);
+            return (users.Single(user).Games() as IEnumerable<dynamic>);
         }
 
         private bool UserHasGame(dynamic gameId)

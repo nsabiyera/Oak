@@ -12,8 +12,6 @@ namespace BorrowedGames.Tests.Controllers
     {
         FriendsController controller;
 
-        dynamic result;
-
         void before_each()
         {
             controller = new FriendsController();

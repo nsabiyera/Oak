@@ -13,8 +13,6 @@ namespace BorrowedGames.Tests.Controllers
     {
         GamesController controller;
 
-        dynamic result;
-
         int mirrorsEdgeId, userId, followingId, anotherUserId;
 
         void before_each()

@@ -53,10 +53,11 @@
     <Compile Include="Controllers\describe_GamesController.cs" />
     <Compile Include="Controllers\describe_HomeController.cs" />
     <Compile Include="Controllers\describe_LibraryController.cs" />
-    <Compile Include="Controllers\_borrowed_games.cs" />
+    <Compile Include="_borrowed_games.cs" />
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="Models\describe_Registration.cs" />
-    <Compile Include="Models\describe_User.cs" />
+    <Compile Include="Models\describe_User\retrieving_preferred_games.cs" />
+    <Compile Include="Models\describe_User\user_validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sleight\Execution.cs" />
     <Compile Include="Sleight\Mock.cs" />

@@ -112,17 +112,23 @@ namespace BorrowedGames.Models
             return !This().NotInterestedGames().Any(new { GameId = gameId });
         }
 
+        private bool SharesConsole(dynamic console)
+        {
+            return This().Games().Any(new { Console = console }) || (This().Games() as IEnumerable<dynamic>).Count() == 0;
+        }
+
         public IEnumerable<dynamic> PreferredGames()
         {
             var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;
 
             var distinctPreferredGames =
                 gamesForFriends
-                    .Where(s => !OwnsGame(s.Id) && PrefersGame(s.Id))
+                    .Where(s => !OwnsGame(s.Id) && PrefersGame(s.Id) && SharesConsole(s.Console))
                     .Select(game => new
                     {
                         game.Id,
                         game.Name,
+                        game.Console,
                         Requested = HasGameBeenRequested(game.Id),
                         Owner = game.User().Select("Id", "Handle")
                     })

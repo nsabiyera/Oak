@@ -1,4 +1,4 @@
-toolTipTemplate = 
+toolTipTemplate =
 	'
 	<div class="border dropshadow title" style="padding: 10px">{{html message}}</div>
 	'
@@ -7,11 +7,11 @@ toolTips = { }
 
 $createToolTip = (message) -> $.tmpl toolTipTemplate, { message }
 
-this.toolTip = 
+this.toolTip =
 	init: ($element, key, startingMessage, endingMessage, left, top) ->
-		toolTips[key] = { 
-			startingMessage, 
-			endingMessage, 
+		toolTips[key] = {
+			startingMessage,
+			endingMessage,
 			currentMessage: startingMessage,
 			messageCount: 0
 		} if !toolTips[key]
@@ -34,12 +34,12 @@ this.toolTip =
 					
 				$toolTip.css(
 					position: "absolute"
-					left: left
-					top: top)
+					left: left()
+					top: top())
 
 				$toolTip.fadeIn()
 
 				toolTips[key].messageCount++
 			->
-				$toolTip.fadeOut(-> $toolTip.remove()) if $toolTip
+				$toolTip.fadeOut(-> $toolTip.remove() if $toolTip) if $toolTip
 		)

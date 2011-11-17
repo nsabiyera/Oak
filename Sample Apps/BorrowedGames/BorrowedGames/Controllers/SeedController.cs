@@ -50,6 +50,8 @@ namespace Oak.Controllers
 
             CreateGameRequests();
 
+            AddConsoleToGames();
+
             return new EmptyResult();
         }
 
@@ -109,6 +111,14 @@ namespace Oak.Controllers
             }).ExecuteNonQuery();
         }
 
+        private void AddConsoleToGames()
+        {
+            Seed.AddColumns("Games", new dynamic[] 
+            { 
+                new { Console = "nvarchar(255)" }
+            }).ExecuteNonQuery();
+        }
+
         private object Id()
         {
             return new { Id = "int", Identity = true, PrimaryKey = true };
@@ -144,31 +154,31 @@ namespace Oak.Controllers
 
             var greg = SeedUser("gregkniffin");
 
-            SeedGames(james, 
-                "Battalion Wars 2",
-                "Big Brain Academy: Wii Degree",
-                "Boom Blox",
-                "Cranium Kabookii",
-                "Donkey Kong Barrel Blast",
-                "Fishing Master",
-                "Ghost Squad",
-                "Legend of Zelda: Twilight Princess, The",
-                "Lego Star Wars: The Complete Saga",
-                "Mario & Sonic at the Olympic Games",
-                "Mario Kart Wii",
-                "Mario Strikers Charged",
-                "Mario Super Sluggers",
-                "Metroid Prime 3: Corruption",
-                "No More Heroes",
-                "Paper Mario",
-                "Rayman Raving Rabbids",
-                "Rayman Raving Rabbids 2",
-                "Rayman Raving Rabbids: TV Party",
-                "Super Mario Galaxy",
-                "Super Mario World",
-                "Super Smash Bros. Brawl",
-                "Wii Fit",
-                "Wii Sports",
+            SeedGames(james,
+                "Battalion Wars 2|WII",
+                "Big Brain Academy: Wii Degree|WII",
+                "Boom Blox|WII",
+                "Cranium Kabookii|WII",
+                "Donkey Kong Barrel Blast|WII",
+                "Fishing Master|WII",
+                "Ghost Squad|WII",
+                "Legend of Zelda: Twilight Princess, The|WII",
+                "Lego Star Wars: The Complete Saga|WII",
+                "Mario & Sonic at the Olympic Games|WII",
+                "Mario Kart Wii|WII",
+                "Mario Strikers Charged|WII",
+                "Mario Super Sluggers|WII",
+                "Metroid Prime 3: Corruption|WII",
+                "No More Heroes|WII",
+                "Paper Mario|WII",
+                "Rayman Raving Rabbids|WII",
+                "Rayman Raving Rabbids 2|WII",
+                "Rayman Raving Rabbids: TV Party|WII",
+                "Super Mario Galaxy|WII",
+                "Super Mario World|WII",
+                "Super Smash Bros. Brawl|WII",
+                "Wii Fit|WII",
+                "Wii Sports|WII",
                 "Fable: The Lost Chapters",
                 "Halo",
                 "Halo 2",
@@ -302,27 +312,26 @@ namespace Oak.Controllers
             );
 
             SeedGames(amir, 
-                "Final Fantasy X",
-                "Gran Turismo 3 A-spec",
-                "Grand Theft Auto: Vice City",
-                "Kingdom Hearts",
-                "Kingdom Hearts II",
-                "Metal Gear Solid 2: Sons of Liberty",
-                "Metal Gear Solid 3: Snake Eater",
-                "Okami",
-                "We Love Katamari",
-                "Xenosaga Episode I: Der Wille zur Machz",
-                "Madden NFL 09",
-                "Metroid Prime 3: Corruption",
-                "Monster Hunter Tri",
-                "No More Heroes",
-                "Super Mario Galaxy II",
-                "Super Smash Bros. Brawl",
-                "Trauma Center: New Blood",
-                "Wii Sports",
-                "Wii Sports Resort",
+                "Final Fantasy X|PS2",
+                "Gran Turismo 3 A-spec|PS2",
+                "Grand Theft Auto: Vice City|PS2",
+                "Kingdom Hearts|PS2",
+                "Kingdom Hearts II|PS2",
+                "Metal Gear Solid 2: Sons of Liberty|PS2",
+                "Metal Gear Solid 3: Snake Eater|PS2",
+                "Okami|PS2",
+                "We Love Katamari|PS2",
+                "Xenosaga Episode I: Der Wille zur Machz|PS2",
+                "Madden NFL 09|WII",
+                "Metroid Prime 3: Corruption|WII",
+                "Monster Hunter Tri|WII",
+                "No More Heroes|WII",
+                "Super Mario Galaxy II|WII",
+                "Super Smash Bros. Brawl|WII",
+                "Trauma Center: New Blood|WII",
+                "Wii Sports|WII",
+                "Wii Sports Resort|WII",
                 "Braid",
-                "Call of Duty: Modern Warfare II",
                 "Forza Motorsport II",
                 "Gears of War",
                 "Halo 3",
@@ -379,11 +388,21 @@ namespace Oak.Controllers
         {
             Games games = new Games();
 
+            var console = "XBOX360";
+
+            var tokens = name.Split(new string[] { "|" }, StringSplitOptions.None);
+
+            if (tokens.Length == 2)
+            {
+                name = tokens.First();
+                console = tokens.Last();
+            }
+
             var game = games.SingleWhere("Name = @0", name);
 
             object gameId = null;
 
-            if (game == null) gameId = new { name }.InsertInto("Games");
+            if (game == null) gameId = new { name, console }.InsertInto("Games");
 
             else gameId = game.Id;
 

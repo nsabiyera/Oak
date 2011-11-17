@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using BorrowedGames.Controllers;
 using BorrowedGames.Models;
 
-namespace BorrowedGames.Tests.Controllers
+namespace BorrowedGames.Tests
 {
     class _borrowed_games : nspec
     {
@@ -15,6 +15,8 @@ namespace BorrowedGames.Tests.Controllers
         Dictionary<string, dynamic> session;
 
         Users users;
+
+        public dynamic result;
 
         public Users Users
         {
@@ -46,9 +48,9 @@ namespace BorrowedGames.Tests.Controllers
             return Convert.ToInt32(new { email, password, handle }.InsertInto("Users"));
         }
 
-        protected dynamic GivenGame(string name)
+        protected dynamic GivenGame(string name, string console = "XBOX360")
         {
-            return Convert.ToInt32(new { name }.InsertInto("Games"));
+            return Convert.ToInt32(new { name, console }.InsertInto("Games"));
         }
 
         protected dynamic GetSessionValue(string key)

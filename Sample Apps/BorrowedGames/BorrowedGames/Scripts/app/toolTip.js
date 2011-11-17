@@ -34,15 +34,17 @@
         $toolTip.hide();
         $toolTip.css({
           position: "absolute",
-          left: left,
-          top: top
+          left: left(),
+          top: top()
         });
         $toolTip.fadeIn();
         return toolTips[key].messageCount++;
       }, function() {
         if ($toolTip) {
           return $toolTip.fadeOut(function() {
-            return $toolTip.remove();
+            if ($toolTip) {
+              return $toolTip.remove();
+            }
           });
         }
       });

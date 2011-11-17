@@ -80,7 +80,7 @@
     }
 
     function $gameRecordFor(game) {
-        var $game = $("<div class='border' style='height: 30px; clear: all'>" + game.Name + "</div>")
+        var $game = $("<div class='border' style='height: 30px; clear: all'>" + game.Name +  " (" + game.Console + ")" + "</div>")
 
         $game.attr(view.gameIdAttribute, game.Id);
 
@@ -127,7 +127,7 @@
     }
 
     function populateSearchResults(data) {
-        autocomplete.populateSearchResults(data, "Id", "Name");
+        autocomplete.populateSearchResults(data, "Id", function(item) { return item.Name + " (" + item.Console + ")" });
     }
 
     function clearGamesList() {

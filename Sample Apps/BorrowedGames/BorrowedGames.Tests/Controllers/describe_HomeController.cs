@@ -14,7 +14,7 @@ namespace BorrowedGames.Tests.Controllers
     {
         HomeController controller;
 
-        dynamic user, result;
+        dynamic user;
 
         string handle;
 

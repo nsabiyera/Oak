@@ -73,15 +73,17 @@
 
         var currentValue = $(element).val().toLowerCase();
         for (index = 0; index < data.length; index++) {
-            var name = data[index][value];
+            var dataItem = data[index];
+            var dataItemValue = value(dataItem);
+            var name = dataItemValue;
             var indexOf = name.toLowerCase().indexOf(currentValue);
             if (indexOf != -1 && currentValue.length >= 1) {
-                name = data[index][value].substr(0, indexOf)
-                                    + '<strong>' + data[index][value].substr(indexOf, currentValue.length)
-                                    + '</strong>' + data[index][value].substr(indexOf + currentValue.length);
+                name = dataItemValue.substr(0, indexOf)
+                                    + '<strong>' + dataItemValue.substr(indexOf, currentValue.length)
+                                    + '</strong>' + dataItemValue.substr(indexOf + currentValue.length);
             }
 
-            finalHtml += '<tr id="' + data[index][key] + '" style="cursor: pointer;"><td>' + name + '</td></tr>';
+            finalHtml += '<tr id="' + dataItem[key] + '" style="cursor: pointer;"><td>' + name + '</td></tr>';
         }
 
         finalHtml += '</table>';
