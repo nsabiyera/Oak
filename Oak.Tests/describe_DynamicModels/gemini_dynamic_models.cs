@@ -49,6 +49,13 @@ namespace Oak.Tests.describe_DynamicModels
             };
         }
 
+        void describe_Count()
+        {
+            before = () => models = new DynamicModels(new List<Gemini>());
+
+            it["reports count"] = () => ((int)models.Count()).should_be(0);
+        }
+
         void describe_Where()
         {
             before = () => models = new DynamicModels(new List<Gemini>());

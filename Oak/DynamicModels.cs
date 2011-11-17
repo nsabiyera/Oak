@@ -25,6 +25,11 @@ namespace Oak
             return false;
         }
 
+        public int Count()
+        {
+            return Models.Count;
+        }
+
         public dynamic First()
         {
             return Models.FirstOrDefault();
