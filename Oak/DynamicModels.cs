@@ -57,10 +57,10 @@ namespace Oak
         {
             if (RespondsTo(binder.Name)) return base.TryInvokeMember(binder, args, out result);
 
-            return SelectMany(binder.Name, out result);
+            return SelectMany(binder.Name, args, out result);
         }
 
-        private bool SelectMany(string collectionName, out object result)
+        private bool SelectMany(string collectionName, object[] args, out object result)
         {
             result = new List<dynamic>();
 
@@ -68,7 +68,11 @@ namespace Oak
 
             var association = Models[0].AssociationNamed(collectionName);
 
-            result = association.SelectManyRelatedTo(Models);
+            dynamic options = null;
+
+            if(args.Length > 0) options = args[0];
+
+            result = association.SelectManyRelatedTo(Models, options);
 
             return true;
         }
