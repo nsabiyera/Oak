@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<script src="@Url.Content("~/scripts/app/profile.js")"></script>
+
+<script src="@Url.Content("~/scripts/app/toolTip.js")"></script>
+
+<h2>Hello, <a id="handle" style="color: #000000" href="javascript:;">@(ViewBag.Handle ?? "@nameless")</a><span id="updatePlaceHolder"></span></h2>
+@{
+    Html.RenderPartial("~/views/home/_library.cshtml");
+    Html.RenderPartial("~/views/home/_friends.cshtml");
+    Html.RenderPartial("~/views/home/_games.cshtml");
+}
+
+<script>
+    $(function () {
+        var urls = {};
+
+        urls.updateHandleUrl = '@Url.RouteUrl(new { action = "Handle" })';
+
+        profile.init(urls);
+    });
+</script>

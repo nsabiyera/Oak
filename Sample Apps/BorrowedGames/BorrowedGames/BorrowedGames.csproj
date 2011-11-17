@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2E5DEFA5-5D21-4C20-AD94-36F151189E70}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BorrowedGames</RootNamespace>
+    <AssemblyName>BorrowedGames</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Core">
+      <HintPath>..\packages\Glimpse.0.85\lib\net40\Glimpse.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Elmah">
+      <HintPath>..\packages\Glimpse.Elmah.0.9.5\lib\net40\Glimpse.Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Mvc3">
+      <HintPath>..\packages\Glimpse.Mvc3.0.85\lib\net40\Glimpse.Mvc3.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonFx">
+      <HintPath>..\packages\JsonFx.2.0.1106.2610\lib\net40\JsonFx.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
+    <Compile Include="Controllers\GamesController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LibraryController.cs" />
+    <Compile Include="Models\Friends.cs" />
+    <Compile Include="Models\GameRequests.cs" />
+    <Compile Include="Models\Games.cs" />
+    <Compile Include="Models\Library.cs" />
+    <Compile Include="Controllers\SeedController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NotInterestedGames.cs" />
+    <Compile Include="Models\ObjectExtensions.cs" />
+    <Compile Include="Models\Registration.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Users.cs" />
+    <Compile Include="Oak\Association.cs" />
+    <Compile Include="Oak\Changes.cs" />
+    <Compile Include="Oak\ConnectionProfile.cs" />
+    <Compile Include="Oak\DynamicForm.cs" />
+    <Compile Include="Oak\DynamicJsonResult.cs" />
+    <Compile Include="Oak\DynamicModel.cs" />
+    <Compile Include="Oak\DynamicModels.cs" />
+    <Compile Include="Oak\DynamicToJson.cs" />
+    <Compile Include="Oak\ElementMetaData.cs" />
+    <Compile Include="Oak\Gemini.cs" />
+    <Compile Include="Oak\Massive.cs" />
+    <Compile Include="Oak\ObjectExtensions.cs" />
+    <Compile Include="Oak\ParamsModelBinder.cs" />
+    <Compile Include="Oak\Query.cs" />
+    <Compile Include="Oak\Seed.cs" />
+    <Compile Include="Oak\Validation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\Glimpse.Elmah.Readme.txt" />
+    <Content Include="App_Readme\glimpse.mvc3.readme.txt" />
+    <Content Include="App_Readme\glimpse.readme.txt" />
+    <Content Include="Content\images\add.png" />
+    <Content Include="Content\images\add20.png" />
+    <Content Include="Content\images\addicon.png" />
+    <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\images\appointmentavailable.png" />
+    <Content Include="Content\images\appointmentcomplete.png" />
+    <Content Include="Content\images\appointmentinprogress.png" />
+    <Content Include="Content\images\appointmentwaitingicon.png" />
+    <Content Include="Content\images\back.png" />
+    <Content Include="Content\images\background.png" />
+    <Content Include="Content\images\banner.png" />
+    <Content Include="Content\images\basecircle.png" />
+    <Content Include="Content\images\body-background-bottom.png" />
+    <Content Include="Content\images\body-background.png" />
+    <Content Include="Content\images\button.png" />
+    <Content Include="Content\images\buttonsmall.png" />
+    <Content Include="Content\images\calendaricon.png" />
+    <Content Include="Content\images\cancel.png" />
+    <Content Include="Content\images\cancel20.png" />
+    <Content Include="Content\images\circle20.png" />
+    <Content Include="Content\images\delete.png" />
+    <Content Include="Content\images\delete20.png" />
+    <Content Include="Content\images\down20.png" />
+    <Content Include="Content\images\edit.png" />
+    <Content Include="Content\images\edit20.png" />
+    <Content Include="Content\images\editicon.png" />
+    <Content Include="Content\images\facebook.gif" />
+    <Content Include="Content\images\facebooklarge.jpg" />
+    <Content Include="Content\images\gametrader.png" />
+    <Content Include="Content\images\info.png" />
+    <Content Include="Content\images\info20.png" />
+    <Content Include="Content\images\info_.png" />
+    <Content Include="Content\images\mail.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\add.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\back.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\camera.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\cancel.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\check.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\delete.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\download.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\edit.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\favs.addto.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\favs.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\ff.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\flag.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\folder.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\heart.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\i.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\mail.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\minus.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\next.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\overflowdots.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\parent.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\pause.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\phone.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\play.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\questionmark.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\refresh.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\rew.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\save.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\search.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\settings.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\share.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\upload.png" />
+    <Content Include="Content\images\metro.icons\black, without circle\video.png" />
+    <Content Include="Content\images\metro.icons\black\add.png" />
+    <Content Include="Content\images\metro.icons\black\back.png" />
+    <Content Include="Content\images\metro.icons\black\basecircle.png" />
+    <Content Include="Content\images\metro.icons\black\camera.png" />
+    <Content Include="Content\images\metro.icons\black\cancel.png" />
+    <Content Include="Content\images\metro.icons\black\check.png" />
+    <Content Include="Content\images\metro.icons\black\delete.png" />
+    <Content Include="Content\images\metro.icons\black\download.png" />
+    <Content Include="Content\images\metro.icons\black\edit.png" />
+    <Content Include="Content\images\metro.icons\black\favs.addto.png" />
+    <Content Include="Content\images\metro.icons\black\favs.png" />
+    <Content Include="Content\images\metro.icons\black\ff.png" />
+    <Content Include="Content\images\metro.icons\black\flag.png" />
+    <Content Include="Content\images\metro.icons\black\folder.png" />
+    <Content Include="Content\images\metro.icons\black\heart.png" />
+    <Content Include="Content\images\metro.icons\black\i.png" />
+    <Content Include="Content\images\metro.icons\black\mail.png" />
+    <Content Include="Content\images\metro.icons\black\minus.png" />
+    <Content Include="Content\images\metro.icons\black\next.png" />
+    <Content Include="Content\images\metro.icons\black\overflowdots.png" />
+    <Content Include="Content\images\metro.icons\black\parent.png" />
+    <Content Include="Content\images\metro.icons\black\pause.png" />
+    <Content Include="Content\images\metro.icons\black\phone.png" />
+    <Content Include="Content\images\metro.icons\black\play.png" />
+    <Content Include="Content\images\metro.icons\black\questionmark.png" />
+    <Content Include="Content\images\metro.icons\black\refresh.png" />
+    <Content Include="Content\images\metro.icons\black\rew.png" />
+    <Content Include="Content\images\metro.icons\black\save.png" />
+    <Content Include="Content\images\metro.icons\black\search.png" />
+    <Content Include="Content\images\metro.icons\black\settings.png" />
+    <Content Include="Content\images\metro.icons\black\share.png" />
+    <Content Include="Content\images\metro.icons\black\upload.png" />
+    <Content Include="Content\images\metro.icons\black\video.png" />
+    <Content Include="Content\images\metro.icons\metro icon pack.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\add.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\back.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\camera.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\cancel.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\check.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\delete.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\download.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\edit.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\favs.addto.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\favs.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\ff.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\flag.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\folder.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\heart.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\i.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\mail.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\minus.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\next.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\overflowdots.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\parent.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\pause.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\phone.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\play.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\questionmark.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\refresh.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\rew.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\save.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\search.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\settings.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\share.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\upload.png" />
+    <Content Include="Content\images\metro.icons\white, without circle\video.png" />
+    <Content Include="Content\images\metro.icons\white\add.png" />
+    <Content Include="Content\images\metro.icons\white\back.png" />
+    <Content Include="Content\images\metro.icons\white\basecircle.png" />
+    <Content Include="Content\images\metro.icons\white\camera.png" />
+    <Content Include="Content\images\metro.icons\white\cancel.png" />
+    <Content Include="Content\images\metro.icons\white\check.png" />
+    <Content Include="Content\images\metro.icons\white\delete.png" />
+    <Content Include="Content\images\metro.icons\white\download.png" />
+    <Content Include="Content\images\metro.icons\white\edit.png" />
+    <Content Include="Content\images\metro.icons\white\favs.addto.png" />
+    <Content Include="Content\images\metro.icons\white\favs.png" />
+    <Content Include="Content\images\metro.icons\white\ff.png" />
+    <Content Include="Content\images\metro.icons\white\flag.png" />
+    <Content Include="Content\images\metro.icons\white\folder.png" />
+    <Content Include="Content\images\metro.icons\white\heart.png" />
+    <Content Include="Content\images\metro.icons\white\i.png" />
+    <Content Include="Content\images\metro.icons\white\mail.png" />
+    <Content Include="Content\images\metro.icons\white\minus.png" />
+    <Content Include="Content\images\metro.icons\white\next.png" />
+    <Content Include="Content\images\metro.icons\white\overflowdots.png" />
+    <Content Include="Content\images\metro.icons\white\parent.png" />
+    <Content Include="Content\images\metro.icons\white\pause.png" />
+    <Content Include="Content\images\metro.icons\white\phone.png" />
+    <Content Include="Content\images\metro.icons\white\play.png" />
+    <Content Include="Content\images\metro.icons\white\questionmark.png" />
+    <Content Include="Content\images\metro.icons\white\refresh.png" />
+    <Content Include="Content\images\metro.icons\white\rew.png" />
+    <Content Include="Content\images\metro.icons\white\save.png" />
+    <Content Include="Content\images\metro.icons\white\search.png" />
+    <Content Include="Content\images\metro.icons\white\settings.png" />
+    <Content Include="Content\images\metro.icons\white\share.png" />
+    <Content Include="Content\images\metro.icons\white\upload.png" />
+    <Content Include="Content\images\metro.icons\white\video.png" />
+    <Content Include="Content\images\notification.png" />
+    <Content Include="Content\images\overflowdots.png" />
+    <Content Include="Content\images\parent.png" />
+    <Content Include="Content\images\ps3.png" />
+    <Content Include="Content\images\ribbonaddicon.png" />
+    <Content Include="Content\images\ribbonbackground.png" />
+    <Content Include="Content\images\ribboncalendaricon.png" />
+    <Content Include="Content\images\ribbonsearchicon.png" />
+    <Content Include="Content\images\save.png" />
+    <Content Include="Content\images\searchicon.png" />
+    <Content Include="Content\images\smallcheck.png" />
+    <Content Include="Content\images\sofacebook.png" />
+    <Content Include="Content\images\swap.png" />
+    <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="Content\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="Content\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Content\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Content\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Content\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Content\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="Content\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Content\images\up20.png" />
+    <Content Include="Content\images\wii.png" />
+    <Content Include="Content\images\xbox.png" />
+    <Content Include="Content\images\xbox360.png" />
+    <Content Include="Content\screen.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\app\autocomplete.js" />
+    <Content Include="Scripts\app\friends.js" />
+    <Content Include="Scripts\app\gamelibrary.js" />
+    <Content Include="Scripts\app\growl.js" />
+    <Content Include="Scripts\app\profile.js" />
+    <Content Include="Scripts\app\toggle.js" />
+    <Content Include="Scripts\app\preferred.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>preferred.js</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\app\preferred.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>preferred.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\app\toolTip.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>toolTip.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-position.js" />
+    <Content Include="Scripts\jQuery.tmpl.js" />
+    <Content Include="Scripts\jQuery.tmpl.min.js" />
+    <Content Include="Scripts\modit\modit.js" />
+    <Content Include="Scripts\modit\underscore.js" />
+    <Content Include="Web.config" />
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\LogOn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\Register.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Content\fonts\1942-webfont.eot" />
+    <Content Include="Content\fonts\1942-webfont.svg" />
+    <Content Include="Content\fonts\1942-webfont.ttf" />
+    <Content Include="Content\fonts\1942-webfont.woff" />
+    <Content Include="Content\fonts\BOYCOTT_-webfont.eot" />
+    <Content Include="Content\fonts\BOYCOTT_-webfont.svg" />
+    <Content Include="Content\fonts\BOYCOTT_-webfont.ttf" />
+    <Content Include="Content\fonts\BOYCOTT_-webfont.woff" />
+    <Content Include="Content\fonts\capture_it-webfont.eot" />
+    <Content Include="Content\fonts\capture_it-webfont.svg" />
+    <Content Include="Content\fonts\capture_it-webfont.ttf" />
+    <Content Include="Content\fonts\capture_it-webfont.woff" />
+    <Content Include="Content\fonts\junkos_typewriter-webfont.eot" />
+    <Content Include="Content\fonts\junkos_typewriter-webfont.svg" />
+    <Content Include="Content\fonts\junkos_typewriter-webfont.ttf" />
+    <Content Include="Content\fonts\junkos_typewriter-webfont.woff" />
+    <Content Include="App_Code\OakForm.cshtml" />
+    <None Include="Content\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png.bak" />
+    <Content Include="packages.config" />
+    <Content Include="Views\Home\_Library.cshtml" />
+    <Content Include="Views\Home\_Friends.cshtml" />
+    <None Include="sass\screen.scss" />
+    <Content Include="Views\Home\_Games.cshtml" />
+    <None Include="Scripts\app\toolTip.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>toolTip.js</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5848</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

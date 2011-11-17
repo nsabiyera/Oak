@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Login</h2>
+
+@{
+    dynamic form = new DynamicForm(new { Email = "", Password = "" });
+}
+
+@if (ViewBag.Flash != null)
+{
+    @ViewBag.Flash
+}
+
+@using(Html.BeginForm("LogOn", "Account"))
+{
+    @OakForm.Label(form.Email)
+    @OakForm.TextBox(form.Email)
+    @OakForm.Label(form.Password)
+    @OakForm.Password(form.Password)
+    <input type="submit" value="login" />
+}
+
+@Html.ActionLink("register", "Register")

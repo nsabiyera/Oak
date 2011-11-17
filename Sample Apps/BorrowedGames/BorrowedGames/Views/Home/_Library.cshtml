@@ -1,0 +1,38 @@
+﻿<script src="@Url.Content("~/scripts/app/autocomplete.js")"></script>
+<script src="@Url.Content("~/scripts/app/gamelibrary.js")"></script>
+<script src="@Url.Content("~/scripts/app/toggle.js")"></script>
+
+    
+<div id="library" class="hidden modal">
+    <div class="title">Your Game Library <a id="closeLibraryTop" href="javascript:;" style="float: right" class="cancel">close</a></div>
+    <input type="text" id="gameToAdd" placeholder="type here to add game..." style="font-size: 20px" />
+    <div id="games"></div>
+    <div style="margin-top: 50px">
+        <a id="closeLibrary" href="javascript:;" class="cancel">close</a>
+    </div>
+</div>
+    
+<script>
+    $(function () {
+        var searchUrl = '@Url.RouteUrl(new { controller = "Library", action = "Search" })';
+        var addGameUrl = '@Url.RouteUrl(new { controller = "Library", action = "Add" })';
+        var removeGameUrl = '@Url.RouteUrl(new { controller = "Library", action = "Delete" })';
+        var libraryUrl = '@Url.RouteUrl(new { controller = "Library", action = "List" })';
+        gamelibrary.init({
+            searchUrl: searchUrl,
+            addGameUrl: addGameUrl,
+            removeGameUrl: removeGameUrl,
+            libraryUrl: libraryUrl
+        });
+    });
+</script>
+
+<div class="border">
+    <div class="info" id="showLibrary" style="cursor: pointer; padding-left: 30px">
+    @if (ViewBag.HasGames)
+    { <a href="javascript:;" style="text-decoration: none; color: #000000;">view your game library</a> }
+    else
+    { <a href="javascript:;" style="text-decoration: none; color: #000000;">looks like you have no games, click to add</a> }
+    </div>
+</div>
+

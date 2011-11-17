@@ -1,0 +1,19 @@
+﻿<script src="@Url.Content("~/scripts/app/preferred.js")"></script>
+
+<h3>OMG Games!</h3>
+<div id="preferredGames">
+    
+</div>
+
+<script>
+    $(function () {
+        var urls = {};
+
+        urls.preferredGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Preferred" })';
+        urls.notInterestedUrl = '@Url.RouteUrl(new { controller = "Games", action = "NotInterested" })';
+
+        $(function () {
+            preferred.init(urls); 
+        });
+    });
+</script>

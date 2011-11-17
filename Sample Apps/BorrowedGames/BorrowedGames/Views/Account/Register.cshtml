@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+@{
+    dynamic form = new DynamicForm(new Registration());
+}
+
+@if (ViewBag.Flash != null)
+{
+    @ViewBag.Flash
+}
+
+@using(Html.BeginForm("Register", "Account"))
+{
+    <label>Email</label>
+    @OakForm.TextBox(form.Email)
+    <label>Password</label>
+    @OakForm.Password(form.Password)
+    <label>Repeat</label>
+    @OakForm.Password(form.PasswordConfirmation)
+    <input type="submit" value="register" />
+}
