@@ -17,16 +17,33 @@ namespace Oak.Tests.describe_DynamicModels
 
         dynamic player2Id;
 
-        dynamic email1Id;
-
         IEnumerable<dynamic> selectMany;
 
         Players players;
 
         void before_each()
         {
-            players = new Players();
+            CreateSchema();
 
+            players = new Players();
+            
+            new { Name = "Fluff To Ensure Different Id's" }.InsertInto("Players");
+
+            player1Id = new { Name = "Jane" }.InsertInto("Players");
+
+            player2Id = new { Name = "John" }.InsertInto("Players");
+
+            game1Id = new { Title = "Mirror's Edge" }.InsertInto("Games");
+
+            game2Id = new { Title = "Gears of War" }.InsertInto("Games");
+
+            new { PlayerId = player1Id, GameId = game2Id }.InsertInto("Library");
+
+            new { PlayerId = player2Id, GameId = game1Id }.InsertInto("Library");
+        }
+
+        void CreateSchema()
+        {
             seed.PurgeDb();
 
             seed.CreateTable("Players", new dynamic[] 
@@ -47,20 +64,6 @@ namespace Oak.Tests.describe_DynamicModels
                 new { PlayerId = "int" },
                 new { GameId = "int" },
             }).ExecuteNonQuery();
-
-            new { Name = "Fluff To Ensure Different Id's" }.InsertInto("Players");
-
-            player1Id = new { Name = "Jane" }.InsertInto("Players");
-
-            player2Id = new { Name = "John" }.InsertInto("Players");
-
-            game1Id = new { Title = "Mirror's Edge" }.InsertInto("Games");
-
-            game2Id = new { Title = "Gears of War" }.InsertInto("Games");
-
-            new { PlayerId = player1Id, GameId = game2Id }.InsertInto("Library");
-
-            new { PlayerId = player2Id, GameId = game1Id }.InsertInto("Library");
         }
 
         void selecting_many_off_of_collection()
@@ -99,6 +102,53 @@ namespace Oak.Tests.describe_DynamicModels
                 var firstGame = selectMany.First();
 
                 (firstGame.Name as string).should_be("Jane");
+            };
+        }
+
+        void cacheing_for_select_many()
+        {
+            before = () =>
+            {
+                CreateSchema();
+
+                player1Id = new { Name = "Jane" }.InsertInto("Players");
+
+                game1Id = new { Title = "Mirror's Edge" }.InsertInto("Games");
+
+                game2Id = new { Title = "Gears of War" }.InsertInto("Games");
+
+                new { PlayerId = player1Id, GameId = game2Id }.InsertInto("Library");
+
+            };
+            
+            it["maintains cache of select many"] = () =>
+            {
+                var playerCollection = players.All() as dynamic;
+
+                selectMany = playerCollection.Games();
+
+                selectMany.Count().should_be(1);
+
+                new { PlayerId = player1Id, GameId = game1Id }.InsertInto("Library");
+
+                selectMany = playerCollection.Games();
+
+                selectMany.Count().should_be(1);
+            };
+
+            it["allows the discarding of cache"] = () =>
+            {
+                var playerCollection = players.All() as dynamic;
+
+                selectMany = playerCollection.Games();
+
+                selectMany.Count().should_be(1);
+
+                new { PlayerId = player1Id, GameId = game1Id }.InsertInto("Library");
+
+                selectMany = playerCollection.Games(new { discardCache = true });
+
+                selectMany.Count().should_be(2);
             };
         }
     }

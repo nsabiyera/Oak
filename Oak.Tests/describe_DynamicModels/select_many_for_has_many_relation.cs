@@ -130,5 +130,46 @@ namespace Oak.Tests.describe_DynamicModels
 
             it["returns all records from nested relation"] = () => selectMany.Count().should_be(2);
         }
+
+        void cacheing_for_select_many()
+        {
+            before = () =>
+            {
+                user1Id = new { Name = "Jane" }.InsertInto("Users");
+
+                email1Id = new { UserId = user1Id, Address = "jane@example.com" }.InsertInto("Emails");
+
+                new { EmailId = email1Id, Name = "Alias1" }.InsertInto("Aliases");
+
+            };
+            
+            it["maintains cache of select many"] = () =>
+            {
+                var userCollection = users.All() as dynamic;
+
+                selectMany = userCollection.Emails().Aliases();
+
+                selectMany.Count().should_be(1);
+
+                new { EmailId = email1Id, Name = "Alias2" }.InsertInto("Aliases");
+
+                selectMany = userCollection.Emails().Aliases();
+
+                selectMany.Count().should_be(1);
+            };
+
+            it["allows the discarding of cache"] = () =>
+            {
+                var userCollection = users.All() as dynamic;
+
+                selectMany = userCollection.Emails().Aliases();
+
+                new { EmailId = email1Id, Name = "Alias2" }.InsertInto("Aliases");
+
+                selectMany = userCollection.Emails().Aliases(new { discardCache = true });
+
+                selectMany.Count().should_be(2);
+            };
+        }
     }
 }
