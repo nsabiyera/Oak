@@ -29,6 +29,13 @@ namespace Oak.Tests.describe_DynamicModels
                 };
             };
 
+            context["any with no parameters just checks count (which is currently 0)"] = () =>
+            {
+                act = () => resultForAny = models.Any();
+
+                it["return false"] = () => resultForAny.should_be_false();
+            };
+
             context["item exists in list that match multiple properties"] = () =>
             {
                 act = () => resultForAny = models.Any(new { Name = "Jane", Age = 15 });
