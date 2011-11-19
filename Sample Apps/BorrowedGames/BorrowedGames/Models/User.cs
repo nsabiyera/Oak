@@ -92,6 +92,16 @@ namespace BorrowedGames.Models
             return This().Games().Any(new { Id = game.Id });
         }
 
+        public bool HasGames()
+        {
+            return This().Games().Any();
+        }
+
+        public bool HasFriends()
+        {
+            return This().Friends().Any();
+        }
+
         public void MarkGameNotInterested(dynamic gameId)
         {
             notInterestedGames.Insert(new { UserId = This().Id, gameId });
@@ -114,7 +124,7 @@ namespace BorrowedGames.Models
 
         private bool SharesConsole(dynamic console)
         {
-            return This().Games().Any(new { Console = console }) || This().Games().Count() == 0;
+            return This().Games().Any(new { Console = console }) || !HasGames();
         }
 
         public IEnumerable<dynamic> PreferredGames()

@@ -21,6 +21,15 @@
         };
       }
       $toolTip = null;
+      $element.click(function() {
+        if ($toolTip) {
+          return $toolTip.fadeOut(function() {
+            if ($toolTip) {
+              return $toolTip.remove();
+            }
+          });
+        }
+      });
       return $element.hover(function() {
         if (toolTips[key].messageCount > 3) {
           $toolTip = null;

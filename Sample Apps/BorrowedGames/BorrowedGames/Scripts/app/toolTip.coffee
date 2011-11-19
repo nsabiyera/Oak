@@ -18,6 +18,8 @@ this.toolTip =
 
 		$toolTip = null
 
+		$element.click(-> $toolTip.fadeOut(-> $toolTip.remove() if $toolTip) if $toolTip);
+
 		$element.hover(
 			->
 				if toolTips[key].messageCount > 3

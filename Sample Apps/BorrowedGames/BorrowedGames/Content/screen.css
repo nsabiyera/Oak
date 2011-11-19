@@ -197,7 +197,7 @@ body {
   clear: both;
 }
 
-/* line 207, ../sass/screen.scss */
+/* line 205, ../sass/screen.scss */
 #main {
   margin-left: auto;
   margin-right: auto;
@@ -211,19 +211,24 @@ body {
   padding-bottom: 30px;
 }
 
-/* line 221, ../sass/screen.scss */
+/* line 219, ../sass/screen.scss */
 .section {
   border-left: 1px solid silver;
   padding-left: 5px;
 }
 
-/* line 227, ../sass/screen.scss */
+/* line 225, ../sass/screen.scss */
 #banner {
   font-family: 'Boycott';
   color: white;
 }
 
-/* line 233, ../sass/screen.scss */
+/* line 231, ../sass/screen.scss */
+.brand {
+  font-family: 'Boycott';
+}
+
+/* line 236, ../sass/screen.scss */
 nav a {
   text-decoration: none;
   font-size: 20px;
@@ -239,12 +244,12 @@ nav a {
   width: 100px;
 }
 
-/* line 249, ../sass/screen.scss */
+/* line 252, ../sass/screen.scss */
 nav {
   float: right;
 }
 
-/* line 254, ../sass/screen.scss */
+/* line 257, ../sass/screen.scss */
 .notification {
   color: black;
   border-radius: 10px;
@@ -255,31 +260,31 @@ nav {
   border: 1px solid #FAD42E;
 }
 
-/* line 265, ../sass/screen.scss */
+/* line 268, ../sass/screen.scss */
 .seperator {
   width: 100%;
   border-bottom: 1px solid silver;
 }
 
-/* line 271, ../sass/screen.scss */
+/* line 274, ../sass/screen.scss */
 #nav-wrapper {
   height: 60px;
   width: 1045px;
 }
 
-/* line 277, ../sass/screen.scss */
+/* line 280, ../sass/screen.scss */
 h1, h2, h3, h4 {
   border-bottom: 1px solid silver;
   padding: 5px;
 }
 
-/* line 283, ../sass/screen.scss */
+/* line 286, ../sass/screen.scss */
 .toggleSwitchOn {
   background-color: #46629D;
   background-image: url("images/circle20.png");
   background-repeat: no-repeat;
 }
-/* line 289, ../sass/screen.scss */
+/* line 292, ../sass/screen.scss */
 .toggleSwitchOn label {
   font-weight: bold;
   color: #FFFFFF;
@@ -287,13 +292,13 @@ h1, h2, h3, h4 {
   cursor: pointer;
 }
 
-/* line 298, ../sass/screen.scss */
+/* line 301, ../sass/screen.scss */
 .toggleSwitchOff {
   background-color: #E0E5EE;
   background-image: url("images/circle20.png");
   background-repeat: no-repeat;
 }
-/* line 304, ../sass/screen.scss */
+/* line 307, ../sass/screen.scss */
 .toggleSwitchOff label {
   font-weight: bold;
   color: #545454;

@@ -20,11 +20,11 @@ namespace BorrowedGames.Controllers
 
         public dynamic Index()
         {
-            ViewBag.HasGames = (User().Games() as IEnumerable<dynamic>).Count() > 0;
+            ViewBag.HasGames = User().HasGames();
 
             ViewBag.Handle = User().Handle;
 
-            ViewBag.HasFriends = (User().Friends() as IEnumerable<dynamic>).Count() > 0;
+            ViewBag.HasFriends = User().HasFriends();
 
             return View();
         }

@@ -25,6 +25,11 @@ namespace Oak
             return false;
         }
 
+        public bool Any()
+        {
+            return Models.Count > 0;
+        }
+
         public int Count()
         {
             return Models.Count;
