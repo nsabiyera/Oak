@@ -354,11 +354,11 @@ New Ninja:
 Okay. Done.
 
 New Ninja:
-Run `rake` to build the app
-Run `rake server` to start up IIS Express
-Run `rake tests` to run tests
-Run `rake sample` to create sample data and generate schema
-Run `rake -T` if you forget any of this
+Run `rake` to build the app<br/>
+Run `rake server` to start up IIS Express<br/>
+Run `rake tests` to run tests<br/>
+Run `rake sample` to create sample data and generate schema<br/>
+Run `rake -T` if you forget any of this<br/>
 
 New Ninja:
 OMG that was easy.
