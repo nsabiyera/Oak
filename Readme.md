@@ -126,13 +126,14 @@ Here is a "complex" model declaration in Oak:
             new Format("Handle") { With = "^@[a-zA-Z0-9]*$", ErrorMessage = "Your handle can only be alpha numeric." };
 
             yield return
-            new Uniqueness("Handle", users) { ErrorMessage = "The handle is already taken." };
+            new Uniqueness("Handle", users) { ErrorMessage = "The handle is already taken." };  //awesome
         }
 
         //Complex Query Made Easy
         public IEnumerable<dynamic> PreferredGames()
         {
-            var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;
+            //inner join is handled for you
+            var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;  //awesome
 
             var distinctPreferredGames =
                 gamesForFriends
@@ -149,6 +150,42 @@ Here is a "complex" model declaration in Oak:
                     .ThenBy(s => s.Name);
 
             return distinctPreferredGames;
+        }
+       
+        //who needs extension methods?
+        public bool HasGame(dynamic game)
+        {
+            return This().Games().Any(new { Id = game.Id });  //awesome
+        }
+
+        public bool HasGames()
+        {
+            return This().Games().Any();  //awesome
+        }
+
+        public bool HasFriends()
+        {
+            return This().Friends().Any();  //awesome
+        }
+
+        public bool HasGameBeenRequested(dynamic gameId)
+        {
+            return This().GameRequests().Any(new { GameId = gameId });  //awesome
+        }
+
+        public bool OwnsGame(dynamic gameId)
+        {
+            return This().Games().Any(new { Id = gameId });  //awesome
+        }
+
+        public bool PrefersGame(dynamic gameId)
+        {
+            return !This().NotInterestedGames().Any(new { GameId = gameId });  //awesome
+        }
+
+        private bool SharesConsole(dynamic console)
+        {
+            return This().Games().Any(new { Console = console }) || !HasGames();  //awesome
         }
 
         public void AddFriend(dynamic user)
@@ -172,44 +209,9 @@ Here is a "complex" model declaration in Oak:
             gameRequests.Insert(new { UserId = This().Id, gameId, fromUserId });
         }
 
-        public bool HasGame(dynamic game)
-        {
-            return This().Games().Any(new { Id = game.Id });
-        }
-
-        public bool HasGames()
-        {
-            return This().Games().Any();
-        }
-
-        public bool HasFriends()
-        {
-            return This().Friends().Any();
-        }
-
         public void MarkGameNotInterested(dynamic gameId)
         {
             notInterestedGames.Insert(new { UserId = This().Id, gameId });
-        }
-
-        public bool HasGameBeenRequested(dynamic gameId)
-        {
-            return This().GameRequests().Any(new { GameId = gameId });
-        }
-
-        public bool OwnsGame(dynamic gameId)
-        {
-            return This().Games().Any(new { Id = gameId });
-        }
-
-        public bool PrefersGame(dynamic gameId)
-        {
-            return !This().NotInterestedGames().Any(new { GameId = gameId });
-        }
-
-        private bool SharesConsole(dynamic console)
-        {
-            return This().Games().Any(new { Console = console }) || !HasGames();
         }
     }
 
@@ -367,6 +369,17 @@ OMG that was easy.<br/>
 ###A dynamic ModelBinder called **ParamsModelBinder**
 
 Hey look, no need to create ViewModels or Data Transfer Objects any more:
+
+    //global asax
+    protected void Application_Start()
+    {
+        AreaRegistration.RegisterAllAreas();
+
+        RegisterGlobalFilters(GlobalFilters.Filters);
+        RegisterRoutes(RouteTable.Routes);
+
+        ModelBinders.Binders.Add(typeof(object), new ParamsModelBinder()); //boo-ya
+    }
 
     //Blog controller action for updating a blog entry
     [HttpPost]
