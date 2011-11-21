@@ -332,35 +332,35 @@ If only all schema generation was this easy....
 
 Here is a conversation between a new hire and his teammate:
 
-New Dev:
+New Ninja:
 Hey, how I'm new to the dev team how do I get started?
 
-Other Devs:
+Other Ninjas:
 It's easy, you've got ruby, .Net, SqlExpress and IISExpress on your computer right?
 
-New Dev:
+New Ninja:
 Of course! Who wouldn't???
 
-Other Devs:
+Other Ninjas:
 Wonderful. Get lastest.
 
-New Dev:
+New Ninja:
 Okay. Done.
 
-Other Devs:
+Other Ninjas:
 Alright now create your dev and tests database using Management Studio.
 
-New Dev:
+New Ninja:
 Okay. Done.
 
-New Dev:
+New Ninja:
 Run `rake` to build the app
 Run `rake server` to start up IIS Express
 Run `rake tests` to run tests
 Run `rake sample` to create sample data and generate schema
 Run `rake -T` if you forget any of this
 
-New Dev:
+New Ninja:
 OMG that was easy.
 
 ###A dynamic ModelBinder called **ParamsModelBinder**
