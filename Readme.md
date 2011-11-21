@@ -9,7 +9,9 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
 - MIT License
 - Available via Nuget (install-package oak or install-package oak-edge)
 - Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr](http://nspec.org/continuoustesting) (install-package nspec and install-package specwatchr)
-<code>
+
+
+
     class describe_AccountController : _borrowed_games
     {
         AccountController controller;
@@ -55,11 +57,12 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
             context["registration is invalid"] = () =>
             {
                 act = () => result = controller.Register(new { Email = default(string), Password = default(string) });
-                it["returns error stating that email is required."] = () => (result.ViewBag.Flash as string).should_be("Email is required.");
+                it["returns error stating that email is required."] = () => 
+                    (result.ViewBag.Flash as string).should_be("Email is required.");
             };
         }
     }
-</code>
+
 - A Rails inspired implementation of ActiveModel called **DynamicModel**
 
       public class User : DynamicModel
