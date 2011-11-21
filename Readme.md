@@ -10,7 +10,7 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
 - Head over to the [wiki](https://github.com/amirrajan/oak/wiki) for additional details.
 - [Reference Implementations](https://github.com/amirrajan/Oak/tree/master/Sample%20Apps) are included, test driven, awesome 
 - Built ground up [under test](https://github.com/amirrajan/Oak/tree/master/Oak.Tests)
-- Available via Nuget: install-package oak or install-package oak-edge
+- Available via Nuget: **install-package oak or install-package oak-edge**
 
 ###Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr (screen cast)](http://nspec.org/continuoustesting)
 **install-package nspec and install-package specwatchr**
