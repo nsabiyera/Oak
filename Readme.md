@@ -7,6 +7,8 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
 
 ##What Oak?
 - MIT License
+- Head over to the [wiki](https://github.com/amirrajan/oak/wiki) for additional details.
+- [Reference Implementations](https://github.com/amirrajan/Oak/tree/master/Sample%20Apps) are included with the source 
 - Available via Nuget (install-package oak or install-package oak-edge)
 - Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr](http://nspec.org/continuoustesting) (install-package nspec and install-package specwatchr)
 
@@ -323,8 +325,62 @@ If only all schema generation was this easy....
     }
 
 - General dev assistance in creating schema, building, deploying and running tests provided by [rake-dot-net](http://github.com/amirrajan/rake-dot-net) (install-package rake-dot-net)
-- A dynamic ModelBinder called **ParamsModelBinder**
-- A set of razor templates used to render Html: **DynamicForm** **OakForm.cshtml**
-- [Reference Implementations](https://github.com/amirrajan/Oak/tree/master/Sample%20Apps) are included with the source 
+New Dev:
+> Hey, how I'm new to the dev team how do I get started?
 
-Head over to the [wiki](https://github.com/amirrajan/oak/wiki) for additional details.
+Other Devs:
+> It's easy, you've got ruby, .Net, SqlExpress and IISExpress on your computer right?
+
+New Dev:
+> Of course! Who wouldn't???
+
+Other Devs:
+> Wonderful. Get lastest.
+
+New Dev:
+> Okay. Done.
+
+Other Devs:
+> Alright now create your dev and tests database using Management Studio.
+
+New Dev:
+> Okay. Done.
+
+New Dev:
+> Run `rake` to build the app
+> Run `rake server` to start up IIS Express
+> Run `rake tests` to run tests
+> Run `rake sample` to create sample data and generate schema
+> Run `rake -T` if you forget any of this
+
+New Dev:
+> OMG that was easy.
+
+- A dynamic ModelBinder called **ParamsModelBinder**
+
+Hey look, no need to create ViewModels or Data Transfer Objects any more:
+
+    //Blog controller action for updating a blog entry
+    [HttpPost]
+    [ActionName("Edit")]
+    [ValidateInput(false)]
+    public dynamic Update(dynamic @params)
+    {
+        var blog = Blogs.Single(@params.id); //awesome
+
+        blog.Title = @params.title; //awesome
+        blog.Body = @params.body; //awesome
+
+        if(!blog.IsValid())
+        {
+            ViewBag.Flash = blog.FirstError();
+            ViewBag.Blog = blog;
+            return View();
+        }
+
+        Blogs.Save(blog);
+
+        return RedirectToAction("get", new { id = @params.id });
+    }
+
+
