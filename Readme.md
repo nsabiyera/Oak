@@ -65,145 +65,147 @@ Here is a NSpec test for one of the sample apps:
 
 - A Rails inspired implementation of ActiveModel called **DynamicModel**
 
-      public class User : DynamicModel
-      {
-          Users users = new Users();
-          FriendAssociations friendAssociations = new FriendAssociations();
-          Games games = new Games();
-          Library library = new Library();
-          NotInterestedGames notInterestedGames = new NotInterestedGames();
-          GameRequests gameRequests = new GameRequests();
+Here is a how a "complex" model declaration in Oak:
 
-          public User(dynamic dto)
-          {
-              Init(dto);
-          }
+    public class User : DynamicModel
+    {
+        Users users = new Users();
+        FriendAssociations friendAssociations = new FriendAssociations();
+        Games games = new Games();
+        Library library = new Library();
+        NotInterestedGames notInterestedGames = new NotInterestedGames();
+        GameRequests gameRequests = new GameRequests();
 
-          public IEnumerable<dynamic> Associates()
-          {
-              yield return
-              new HasManyThrough(users, through: friendAssociations, named: "Friends") { ForeignKey = "IsFollowing" };
+        public User(dynamic dto)
+        {
+            Init(dto);
+        }
 
-              yield return
-              new HasManyThrough(games, through: library);
+        public IEnumerable<dynamic> Associates()
+        {
+            yield return
+            new HasManyThrough(users, through: friendAssociations, named: "Friends") { ForeignKey = "IsFollowing" };
 
-              yield return
-              new HasMany(library);
+            yield return
+            new HasManyThrough(games, through: library);
 
-              yield return
-              new HasMany(notInterestedGames);
+            yield return
+            new HasMany(library);
 
-              yield return
-              new HasMany(gameRequests);
+            yield return
+            new HasMany(notInterestedGames);
 
-              yield return
-              new HasMany(friendAssociations);
-          }
+            yield return
+            new HasMany(gameRequests);
 
-          public IEnumerable<dynamic> Validates()
-          {
-              yield return
-              new Format("Handle") { With = "^@", ErrorMessage = "Your handle has to start with an '@' sign." };
+            yield return
+            new HasMany(friendAssociations);
+        }
 
-              yield return
-              new Format("Handle") { With = "^[\\S]*$", ErrorMessage = "Your handle can't contain any spaces." };
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return
+            new Format("Handle") { With = "^@", ErrorMessage = "Your handle has to start with an '@' sign." };
 
-              yield return
-              new Exclusion("Handle") { In = new[] { "@nameless" }, ErrorMessage = "You did not specify a handle." };
+            yield return
+            new Format("Handle") { With = "^[\\S]*$", ErrorMessage = "Your handle can't contain any spaces." };
 
-              yield return
-              new Format("Handle") { With = "[a-zA-Z0-9]+", ErrorMessage = "You did not specify a handle." };
+            yield return
+            new Exclusion("Handle") { In = new[] { "@nameless" }, ErrorMessage = "You did not specify a handle." };
 
-              yield return
-              new Format("Handle") { With = "^@[a-zA-Z0-9]*$", ErrorMessage = "Your handle can only be alpha numeric." };
+            yield return
+            new Format("Handle") { With = "[a-zA-Z0-9]+", ErrorMessage = "You did not specify a handle." };
 
-              yield return
-              new Uniqueness("Handle", users) { ErrorMessage = "The handle is already taken." };
-          }
+            yield return
+            new Format("Handle") { With = "^@[a-zA-Z0-9]*$", ErrorMessage = "Your handle can only be alpha numeric." };
+
+            yield return
+            new Uniqueness("Handle", users) { ErrorMessage = "The handle is already taken." };
+        }
 
 
-          public IEnumerable<dynamic> PreferredGames()
-          {
-              var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;
+        public IEnumerable<dynamic> PreferredGames()
+        {
+            var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;
 
-              var distinctPreferredGames =
-                  gamesForFriends
-                      .Where(s => !OwnsGame(s.Id) && PrefersGame(s.Id) && SharesConsole(s.Console))
-                      .Select(game => new
-                      {
-                          game.Id,
-                          game.Name,
-                          game.Console,
-                          Requested = HasGameBeenRequested(game.Id),
-                          Owner = game.User().Select("Id", "Handle")
-                      })
-                      .OrderBy(s => s.Requested ? 0 : 1)
-                      .ThenBy(s => s.Name);
+            var distinctPreferredGames =
+                gamesForFriends
+                    .Where(s => !OwnsGame(s.Id) && PrefersGame(s.Id) && SharesConsole(s.Console))
+                    .Select(game => new
+                    {
+                        game.Id,
+                        game.Name,
+                        game.Console,
+                        Requested = HasGameBeenRequested(game.Id),
+                        Owner = game.User().Select("Id", "Handle")
+                    })
+                    .OrderBy(s => s.Requested ? 0 : 1)
+                    .ThenBy(s => s.Name);
 
-              return distinctPreferredGames;
-          }
+            return distinctPreferredGames;
+        }
 
-          public void AddFriend(dynamic user)
-          {
-              friendAssociations.Insert(new { UserId = This().Id, IsFollowing = user.Id });
-          }
+        public void AddFriend(dynamic user)
+        {
+            friendAssociations.Insert(new { UserId = This().Id, IsFollowing = user.Id });
+        }
 
-          public void RemoveFriend(dynamic friend)
-          {
-              if (friend == null) return;
+        public void RemoveFriend(dynamic friend)
+        {
+            if (friend == null) return;
 
-              var friendAssociation = This().FriendAssociations().First(new { IsFollowing = friend.Id });
+            var friendAssociation = This().FriendAssociations().First(new { IsFollowing = friend.Id });
 
-              if (friendAssociation == null) return;
+            if (friendAssociation == null) return;
 
-              friendAssociations.Delete(friendAssociation.Id);
-          }
+            friendAssociations.Delete(friendAssociation.Id);
+        }
 
-          public void RequestGame(dynamic gameId, dynamic fromUserId)
-          {
-              gameRequests.Insert(new { UserId = This().Id, gameId, fromUserId });
-          }
+        public void RequestGame(dynamic gameId, dynamic fromUserId)
+        {
+            gameRequests.Insert(new { UserId = This().Id, gameId, fromUserId });
+        }
 
-          public bool HasGame(dynamic game)
-          {
-              return This().Games().Any(new { Id = game.Id });
-          }
+        public bool HasGame(dynamic game)
+        {
+            return This().Games().Any(new { Id = game.Id });
+        }
 
-          public bool HasGames()
-          {
-              return This().Games().Any();
-          }
+        public bool HasGames()
+        {
+            return This().Games().Any();
+        }
 
-          public bool HasFriends()
-          {
-              return This().Friends().Any();
-          }
+        public bool HasFriends()
+        {
+            return This().Friends().Any();
+        }
 
-          public void MarkGameNotInterested(dynamic gameId)
-          {
-              notInterestedGames.Insert(new { UserId = This().Id, gameId });
-          }
+        public void MarkGameNotInterested(dynamic gameId)
+        {
+            notInterestedGames.Insert(new { UserId = This().Id, gameId });
+        }
 
-          public bool HasGameBeenRequested(dynamic gameId)
-          {
-              return This().GameRequests().Any(new { GameId = gameId });
-          }
+        public bool HasGameBeenRequested(dynamic gameId)
+        {
+            return This().GameRequests().Any(new { GameId = gameId });
+        }
 
-          public bool OwnsGame(dynamic gameId)
-          {
-              return This().Games().Any(new { Id = gameId });
-          }
+        public bool OwnsGame(dynamic gameId)
+        {
+            return This().Games().Any(new { Id = gameId });
+        }
 
-          public bool PrefersGame(dynamic gameId)
-          {
-              return !This().NotInterestedGames().Any(new { GameId = gameId });
-          }
+        public bool PrefersGame(dynamic gameId)
+        {
+            return !This().NotInterestedGames().Any(new { GameId = gameId });
+        }
 
-          private bool SharesConsole(dynamic console)
-          {
-              return This().Games().Any(new { Console = console }) || !HasGames();
-          }
-      }
+        private bool SharesConsole(dynamic console)
+        {
+            return This().Games().Any(new { Console = console }) || !HasGames();
+        }
+    }
 
 - Schema generation in C# called **Seed**
 
