@@ -3,17 +3,18 @@
 Oak is about getting things done. It's about maintaining a rapid development cycle. It's about having an immediate and addictive feedback loop in place to keep you in the zone. It's about getting developers on board and getting them up and running fast so that they can start contributing. It's about reducing all aspects of development friction.
 
 ##How Oak?
-Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make testing frictionless.  Oak maintains a rapid development cycle by making testing easy and by providing an immediate feedack loop using Growl For Windows.  Oak takes advantage of dynamic C# 4.0 and metaprogramming for your data access.  Initial schema creation, seeding sample data, and regenerating database for other developers is provided directly through controller actions that can be leveraged by tests and rake scripts.  Oak is built on top of ASP.NET MVC, so you don't have to relearn anything, just build upon what you already know.
+Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make testing frictionless.  Oak maintains a rapid development cycle by making testing easy and by providing an immediate feedack loop using Growl For Windows.  Oak takes advantage of dynamic C# 4.0 and metaprogramming for your data access.  Initial schema creation, seeding sample data, and regenerating database for other developers is provided directly through controller actions that can be leveraged by tests and rake scripts.  Oak is built on top of ASP.NET MVC, so you don't have to re-learn anything, just build upon what you already know.
 
 ##What Oak?
 - MIT License
 - Head over to the [wiki](https://github.com/amirrajan/oak/wiki) for additional details.
-- [Reference Implementations](https://github.com/amirrajan/Oak/tree/master/Sample%20Apps) are included with the source 
-- Available via Nuget (install-package oak or install-package oak-edge)
-- Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr](http://nspec.org/continuoustesting) (install-package nspec and install-package specwatchr)
+- [Reference Implementations](https://github.com/amirrajan/Oak/tree/master/Sample%20Apps) are included, test driven, awesome 
+- Available via Nuget **install-package oak or install-package oak-edge**
+- Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr (screen cast)](http://nspec.org/continuoustesting) **install-package nspec and install-package specwatchr**
 
 Here is a NSpec test for one of the sample apps:
 
+    //tests shows user registration
     class describe_AccountController : _borrowed_games
     {
         AccountController controller;
@@ -67,7 +68,7 @@ Here is a NSpec test for one of the sample apps:
 
 - A Rails inspired implementation of ActiveModel called **DynamicModel**
 
-Here is a how a "complex" model declaration in Oak:
+Here is a "complex" model declaration in Oak:
 
     public class User : DynamicModel
     {
@@ -83,6 +84,7 @@ Here is a how a "complex" model declaration in Oak:
             Init(dto);
         }
 
+        //Relationships of User
         public IEnumerable<dynamic> Associates()
         {
             yield return
@@ -104,6 +106,7 @@ Here is a how a "complex" model declaration in Oak:
             new HasMany(friendAssociations);
         }
 
+        //User Validation
         public IEnumerable<dynamic> Validates()
         {
             yield return
@@ -125,7 +128,7 @@ Here is a how a "complex" model declaration in Oak:
             new Uniqueness("Handle", users) { ErrorMessage = "The handle is already taken." };
         }
 
-
+        //Complex Query Made Easy
         public IEnumerable<dynamic> PreferredGames()
         {
             var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;
@@ -325,35 +328,38 @@ If only all schema generation was this easy....
     }
 
 - General dev assistance in creating schema, building, deploying and running tests provided by [rake-dot-net](http://github.com/amirrajan/rake-dot-net) (install-package rake-dot-net)
-New Dev:
+
+Here is a conversation between a new hire and his teammate:
+
+> New Dev:
 > Hey, how I'm new to the dev team how do I get started?
 
-Other Devs:
+> Other Devs:
 > It's easy, you've got ruby, .Net, SqlExpress and IISExpress on your computer right?
 
-New Dev:
+> New Dev:
 > Of course! Who wouldn't???
 
-Other Devs:
+> Other Devs:
 > Wonderful. Get lastest.
 
-New Dev:
+> New Dev:
 > Okay. Done.
 
-Other Devs:
+> Other Devs:
 > Alright now create your dev and tests database using Management Studio.
 
-New Dev:
+> New Dev:
 > Okay. Done.
 
-New Dev:
+> New Dev:
 > Run `rake` to build the app
 > Run `rake server` to start up IIS Express
 > Run `rake tests` to run tests
 > Run `rake sample` to create sample data and generate schema
 > Run `rake -T` if you forget any of this
 
-New Dev:
+> New Dev:
 > OMG that was easy.
 
 - A dynamic ModelBinder called **ParamsModelBinder**
