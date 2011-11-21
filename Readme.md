@@ -209,116 +209,118 @@ Here is a how a "complex" model declaration in Oak:
 
 - Schema generation in C# called **Seed**
 
-      [LocalOnly]
-      public class SeedController : Controller
-      {
-          public Seed Seed { get; set; }
+If only all schema generation was this easy....
 
-          public SeedController()
-          {
-              Seed = new Seed();
-          }
+    [LocalOnly]
+    public class SeedController : Controller
+    {
+        public Seed Seed { get; set; }
 
-          [HttpPost]
-          public ActionResult All()
-          {
-              CreateUsers();
-              CreateGames();
-              CreateLibrary();
-              CreateFriends();
-              CreateNotInterestedGames();
-              CreateGameRequests();
-              AddConsoleToGames();
-              return new EmptyResult();
-          }
+        public SeedController()
+        {
+            Seed = new Seed();
+        }
 
-          private void CreateUsers()
-          {
-              Seed.CreateTable("Users", new dynamic[] 
-              { 
-                  Id(),
-                  new { Email = "nvarchar(1000)" },
-                  new { Password = "nvarchar(100)" },
-                  new { Handle = "nvarchar(1000)" }
-              }).ExecuteNonQuery();
-          }
+        [HttpPost]
+        public ActionResult All()
+        {
+            CreateUsers();
+            CreateGames();
+            CreateLibrary();
+            CreateFriends();
+            CreateNotInterestedGames();
+            CreateGameRequests();
+            AddConsoleToGames();
+            return new EmptyResult();
+        }
 
-          private void CreateGames()
-          {
-              Seed.CreateTable("Games", new dynamic[] {
-                  Id(),
-                  new { Name = "nvarchar(1000)" }
-              }).ExecuteNonQuery();
-          }
+        private void CreateUsers()
+        {
+            Seed.CreateTable("Users", new dynamic[] 
+            { 
+                Id(),
+                new { Email = "nvarchar(1000)" },
+                new { Password = "nvarchar(100)" },
+                new { Handle = "nvarchar(1000)" }
+            }).ExecuteNonQuery();
+        }
 
-          private void CreateLibrary()
-          {
-              Seed.CreateTable("Library", new dynamic[] {
-                  Id(),
-                  UserId(),
-                  GameId(),
-              }).ExecuteNonQuery();
-          }
+        private void CreateGames()
+        {
+            Seed.CreateTable("Games", new dynamic[] {
+                Id(),
+                new { Name = "nvarchar(1000)" }
+            }).ExecuteNonQuery();
+        }
 
-          private void CreateFriends()
-          {
-              Seed.CreateTable("FriendAssociations", new dynamic[] {
-                  Id(),
-                  UserId(),
-                  new { IsFollowing = "int", ForeignKey = "Users(Id)" }
-              }).ExecuteNonQuery();
-          }
+        private void CreateLibrary()
+        {
+            Seed.CreateTable("Library", new dynamic[] {
+                Id(),
+                UserId(),
+                GameId(),
+            }).ExecuteNonQuery();
+        }
 
-          private void CreateNotInterestedGames()
-          {
-              Seed.CreateTable("NotInterestedGames", new dynamic[] { 
-                  Id(),
-                  UserId(),
-                  GameId(),
-              }).ExecuteNonQuery();
-          }
+        private void CreateFriends()
+        {
+            Seed.CreateTable("FriendAssociations", new dynamic[] {
+                Id(),
+                UserId(),
+                new { IsFollowing = "int", ForeignKey = "Users(Id)" }
+            }).ExecuteNonQuery();
+        }
 
-          private void CreateGameRequests()
-          {
-              Seed.CreateTable("GameRequests", new dynamic[] {
-                  Id(),
-                  UserId(),
-                  GameId(),
-                  new { FromUserId = "int", ForeignKey = "Users(Id)" },
-              }).ExecuteNonQuery();
-          }
+        private void CreateNotInterestedGames()
+        {
+            Seed.CreateTable("NotInterestedGames", new dynamic[] { 
+                Id(),
+                UserId(),
+                GameId(),
+            }).ExecuteNonQuery();
+        }
 
-          private void AddConsoleToGames()
-          {
-              Seed.AddColumns("Games", new dynamic[] 
-              { 
-                  new { Console = "nvarchar(255)" }
-              }).ExecuteNonQuery();
-          }
+        private void CreateGameRequests()
+        {
+            Seed.CreateTable("GameRequests", new dynamic[] {
+                Id(),
+                UserId(),
+                GameId(),
+                new { FromUserId = "int", ForeignKey = "Users(Id)" },
+            }).ExecuteNonQuery();
+        }
 
-          private object Id()
-          {
-              return new { Id = "int", Identity = true, PrimaryKey = true };
-          }
+        private void AddConsoleToGames()
+        {
+            Seed.AddColumns("Games", new dynamic[] 
+            { 
+                new { Console = "nvarchar(255)" }
+            }).ExecuteNonQuery();
+        }
 
-          private object UserId()
-          {
-              return new { UserId = "int", ForeignKey = "Users(Id)" };
-          }
+        private object Id()
+        {
+            return new { Id = "int", Identity = true, PrimaryKey = true };
+        }
 
-          private object GameId()
-          {
-              return new { GameId = "int", ForeignKey = "Games(Id)" };
-          }
+        private object UserId()
+        {
+            return new { UserId = "int", ForeignKey = "Users(Id)" };
+        }
 
-          [HttpPost]
-          public ActionResult PurgeDb()
-          {
-              Seed.PurgeDb();
+        private object GameId()
+        {
+            return new { GameId = "int", ForeignKey = "Games(Id)" };
+        }
 
-              return new EmptyResult();
-          }
-      }
+        [HttpPost]
+        public ActionResult PurgeDb()
+        {
+            Seed.PurgeDb();
+
+            return new EmptyResult();
+        }
+    }
 
 - General dev assistance in creating schema, building, deploying and running tests provided by [rake-dot-net](http://github.com/amirrajan/rake-dot-net) (install-package rake-dot-net)
 - A dynamic ModelBinder called **ParamsModelBinder**
