@@ -333,7 +333,7 @@ If only all schema generation was this easy....
 Here is a conversation between a new hire and his teammate:
 
 New Ninja:<br/>
-Hey, how I'm new to the dev team how do I get started?<br/>
+Hey, I'm new to the dev team, how do I get started?<br/>
 
 Other Ninjas:<br/>
 It's easy, you've got ruby, .Net, SqlExpress and IISExpress on your computer right?<br/>
@@ -353,12 +353,13 @@ Alright now create your dev and tests database using Management Studio.<br/>
 New Ninja:<br/>
 Okay. Done.<br/>
 
-New Ninja:<br/>
+Other Ninjas:<br/>
 Run `rake` to build the app<br/>
 Run `rake server` to start up IIS Express<br/>
 Run `rake tests` to run tests<br/>
 Run `rake sample` to create sample data and generate schema<br/>
 Run `rake -T` if you forget any of this<br/>
+Now just go to http://localhost:3000/ to see the website<br/>
 
 New Ninja:<br/>
 OMG that was easy.<br/>
