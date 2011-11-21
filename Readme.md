@@ -9,59 +9,57 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
 - MIT License
 - Available via Nuget (install-package oak or install-package oak-edge)
 - Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr](http://nspec.org/continuoustesting) (install-package nspec and install-package specwatchr)
+    
+    class describe_AccountController : _borrowed_games
+    {
+        AccountController controller;
+        dynamic user;
+        bool authenticated;
 
+        void before_each()
+        {
+            controller = new AccountController();
+            MockSession(controller);
+            controller.Authenticate = s => authenticated = true;
+        }
 
+        void registering_for_site()
+        {
+            context["requesting registration page"] = () =>
+            {
+                act = () => result = controller.Register();
+                it["returns view"] = () => (result as object).should_cast_to<ViewResult>();
+            };
 
-  class describe_AccountController : _borrowed_games
-  {
-      AccountController controller;
-      dynamic user;
-      bool authenticated;
+            context["user registers"] = () =>
+            {
+                act = () => result = controller.Register(new
+                {
+                    Email = "user@example.com",
+                    Password = "password",
+                    PasswordConfirmation = "password"
+                });
 
-      void before_each()
-      {
-          controller = new AccountController();
-          MockSession(controller);
-          controller.Authenticate = s => authenticated = true;
-      }
+                it["logs in user"] = () => (result.Url as string).should_be("/");
+                it["authenticates user"] = () => authenticated.should_be_true();
+                it["sets user in session"] = () => ((decimal)controller.CurrentUser).should_be((decimal)user);
 
-      void registering_for_site()
-      {
-          context["requesting registration page"] = () =>
-          {
-              act = () => result = controller.Register();
-              it["returns view"] = () => (result as object).should_cast_to<ViewResult>();
-          };
+                context["user name is taken"] = () =>
+                {
+                    before = () => GivenUser("user@example.com");
+                    it["return error stating that user name is taken"] = () =>
+                        (result.ViewBag.Flash as string).should_be("Email is unavailable.");
+                };
+            };
 
-          context["user registers"] = () =>
-          {
-              act = () => result = controller.Register(new
-              {
-                  Email = "user@example.com",
-                  Password = "password",
-                  PasswordConfirmation = "password"
-              });
-
-              it["logs in user"] = () => (result.Url as string).should_be("/");
-              it["authenticates user"] = () => authenticated.should_be_true();
-              it["sets user in session"] = () => ((decimal)controller.CurrentUser).should_be((decimal)user);
-
-              context["user name is taken"] = () =>
-              {
-                  before = () => GivenUser("user@example.com");
-                  it["return error stating that user name is taken"] = () =>
-                      (result.ViewBag.Flash as string).should_be("Email is unavailable.");
-              };
-          };
-
-          context["registration is invalid"] = () =>
-          {
-              act = () => result = controller.Register(new { Email = default(string), Password = default(string) });
-              it["returns error stating that email is required."] = () => 
-                  (result.ViewBag.Flash as string).should_be("Email is required.");
-          };
-      }
-  }
+            context["registration is invalid"] = () =>
+            {
+                act = () => result = controller.Register(new { Email = default(string), Password = default(string) });
+                it["returns error stating that email is required."] = () => 
+                    (result.ViewBag.Flash as string).should_be("Email is required.");
+            };
+        }
+    }
 
 - A Rails inspired implementation of ActiveModel called **DynamicModel**
 
