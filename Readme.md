@@ -9,7 +9,9 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
 - MIT License
 - Available via Nuget (install-package oak or install-package oak-edge)
 - Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr](http://nspec.org/continuoustesting) (install-package nspec and install-package specwatchr)
-    
+
+Here is a NSpec test for one of the sample apps:
+
     class describe_AccountController : _borrowed_games
     {
         AccountController controller;
