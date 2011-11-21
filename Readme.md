@@ -10,7 +10,8 @@ Oak does this by leveraging dynamic constructs in C# 4.0. These constructs make 
 - Head over to the [wiki](https://github.com/amirrajan/oak/wiki) for additional details.
 - [Reference Implementations](https://github.com/amirrajan/Oak/tree/master/Sample%20Apps) are included, test driven, awesome 
 - Available via Nuget **install-package oak or install-package oak-edge**
-- Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr (screen cast)](http://nspec.org/continuoustesting) **install-package nspec and install-package specwatchr**
+
+###Continous testing provided by [NSpec](http://nspec.org) and [SpecWatchr (screen cast)](http://nspec.org/continuoustesting) **install-package nspec and install-package specwatchr**
 
 Here is a NSpec test for one of the sample apps:
 
@@ -66,7 +67,7 @@ Here is a NSpec test for one of the sample apps:
         }
     }
 
-- A Rails inspired implementation of ActiveModel called **DynamicModel**
+###A Rails inspired implementation of ActiveModel called **DynamicModel**
 
 Here is a "complex" model declaration in Oak:
 
@@ -212,7 +213,7 @@ Here is a "complex" model declaration in Oak:
         }
     }
 
-- Schema generation in C# called **Seed**
+###Schema generation in C# called **Seed**
 
 If only all schema generation was this easy....
 
@@ -327,42 +328,42 @@ If only all schema generation was this easy....
         }
     }
 
-- General dev assistance in creating schema, building, deploying and running tests provided by [rake-dot-net](http://github.com/amirrajan/rake-dot-net) (install-package rake-dot-net)
+###General dev assistance in creating schema, building, deploying and running tests provided by [rake-dot-net](http://github.com/amirrajan/rake-dot-net) (install-package rake-dot-net)
 
 Here is a conversation between a new hire and his teammate:
 
 New Dev:
-> Hey, how I'm new to the dev team how do I get started?
+Hey, how I'm new to the dev team how do I get started?
 
 Other Devs:
-> It's easy, you've got ruby, .Net, SqlExpress and IISExpress on your computer right?
+It's easy, you've got ruby, .Net, SqlExpress and IISExpress on your computer right?
 
 New Dev:
-> Of course! Who wouldn't???
+Of course! Who wouldn't???
 
 Other Devs:
-> Wonderful. Get lastest.
+Wonderful. Get lastest.
 
 New Dev:
-> Okay. Done.
+Okay. Done.
 
 Other Devs:
-> Alright now create your dev and tests database using Management Studio.
+Alright now create your dev and tests database using Management Studio.
 
 New Dev:
-> Okay. Done.
+Okay. Done.
 
 New Dev:
-> Run `rake` to build the app
-> Run `rake server` to start up IIS Express
-> Run `rake tests` to run tests
-> Run `rake sample` to create sample data and generate schema
-> Run `rake -T` if you forget any of this
+Run `rake` to build the app
+Run `rake server` to start up IIS Express
+Run `rake tests` to run tests
+Run `rake sample` to create sample data and generate schema
+Run `rake -T` if you forget any of this
 
 New Dev:
-> OMG that was easy.
+OMG that was easy.
 
-- A dynamic ModelBinder called **ParamsModelBinder**
+###A dynamic ModelBinder called **ParamsModelBinder**
 
 Hey look, no need to create ViewModels or Data Transfer Objects any more:
 
