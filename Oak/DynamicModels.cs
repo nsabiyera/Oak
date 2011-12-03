@@ -29,6 +29,8 @@ namespace Oak
 
             hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => expando.Add(kvp.Key, kvp.Value));
 
+            if(expando.Count == 1) return expando.First().Value;
+
             return expando;
         }
                
@@ -43,7 +45,7 @@ namespace Oak
 
         public bool Any()
         {
-            return Models.Count > 0;
+            return Models.Any();
         }
 
         public int Count()
@@ -90,13 +92,13 @@ namespace Oak
         {
             result = new List<dynamic>();
 
-            if (Models.Count == 0) return true;
-
-            var association = Models[0].AssociationNamed(collectionName);
+            if (!Models.Any()) return true;
 
             dynamic options = null;
 
-            if(args.Length > 0) options = args[0];
+            if(args.Any()) options = args[0];
+
+            var association = Models[0].AssociationNamed(collectionName);
 
             result = association.SelectManyRelatedTo(Models, options);
 
