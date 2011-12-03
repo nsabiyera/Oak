@@ -64,6 +64,7 @@
     <Compile Include="describe_DynamicModels\expando_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\gemini_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_relation.cs" />
+    <Compile Include="describe_DynamicModels\select_properties_from_collection.cs" />
     <Compile Include="describe_DynamicModels\_dynamic_models.cs" />
     <Compile Include="describe_DynamicModel\Classes\Inventory.cs" />
     <Compile Include="describe_DynamicModel\Classes\InventoryItem.cs" />
