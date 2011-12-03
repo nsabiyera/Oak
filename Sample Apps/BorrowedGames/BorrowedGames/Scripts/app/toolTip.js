@@ -17,18 +17,22 @@
           startingMessage: startingMessage,
           endingMessage: endingMessage,
           currentMessage: startingMessage,
-          messageCount: 0
+          messageCount: 0,
+          disable: function() {
+            return this.messageCount = 4;
+          }
         };
       }
       $toolTip = null;
       $element.click(function() {
         if ($toolTip) {
-          return $toolTip.fadeOut(function() {
+          $toolTip.fadeOut(function() {
             if ($toolTip) {
               return $toolTip.remove();
             }
           });
         }
+        return toolTips[key].disable();
       });
       return $element.hover(function() {
         if (toolTips[key].messageCount > 3) {

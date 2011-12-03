@@ -1,8 +1,5 @@
 (function() {
-  var $addGameToPage, $findGame, $gameElementFor, $preferredGames, $wireUpActionLink, $wireUpNotInterested, gameTemplate, initView;
-  $findGame = function(gameId, userId) {
-    return $("#game" + gameId + "_" + userId);
-  };
+  var $addGameToPage, $gameElementFor, $preferredGames, $setRequested, $wireUpActionLink, $wireUpNotInterested, gameTemplate, initView;
   $preferredGames = null;
   initView = function() {
     return $preferredGames = $("#preferredGames");
@@ -18,12 +15,20 @@
     var $statusLink, $takeAction, game, userId;
     game = $game.game;
     userId = game.Owner.Id;
-    $takeAction = $game.find("#takeAction" + game.Id + "_" + userId);
-    $statusLink = $game.find("#status" + game.Id + "_" + userId);
+    $takeAction = $game.takeActionLink();
+    $statusLink = $game.statusLink();
+    if (game.Requested) {
+      $takeAction.remove();
+      $setRequested($statusLink);
+    }
     $takeAction.click(function() {
-      $statusLink.html("Requested");
-      $statusLink.fadeIn();
-      return $takeAction.fadeOut();
+      return $.post(preferred.urls.requestGameUrl, {
+        gameId: game.Id,
+        followingId: userId
+      }, function() {
+        $takeAction.fadeOut();
+        return $setRequested($statusLink);
+      });
     });
     return toolTip.init($takeAction, "TakeActionToolTip", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
       return $game.offset().left + 100;
@@ -31,23 +36,43 @@
       return $takeAction.offset().top;
     });
   };
+  $setRequested = function($statusLink) {
+    $statusLink.html("Requested");
+    return $statusLink.fadeIn();
+  };
   $wireUpNotInterested = function($game) {
     var $closeLink, game, userId;
     game = $game.game;
     userId = game.Owner.Id;
     $closeLink = $game.find("#closeLink" + game.Id + "_" + userId);
-    $closeLink.click(function() {
-      return $.post(preferred.urls.notInterestedUrl, {
-        gameId: game.Id
-      }, function() {
-        return $game.fadeOut();
+    if (!game.Requested) {
+      $closeLink.click(function() {
+        return $.post(preferred.urls.notInterestedUrl, {
+          gameId: game.Id
+        }, function() {
+          return $game.fadeOut();
+        });
       });
-    });
-    return toolTip.init($closeLink, "CloseLinkToolTip", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
-      return $game.offset().left + 100;
-    }, function() {
-      return $game.offset().top + -25;
-    });
+    }
+    if (game.Requested) {
+      $closeLink.click(function() {
+        return alert("todo");
+      });
+    }
+    if (!game.Requested) {
+      toolTip.init($closeLink, "CloseLinkToolTip", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
+        return $game.offset().left + 100;
+      }, function() {
+        return $game.offset().top + -25;
+      });
+    }
+    if (game.Requested) {
+      return toolTip.init($closeLink, "UndoGameRequest", "Undo game request.", "You get the idea...<br/>Undo game request.", function() {
+        return $game.offset().left + 100;
+      }, function() {
+        return $game.offset().top + -25;
+      });
+    }
   };
   $gameElementFor = function(game) {
     var $game, gameName, searchString, userId;
@@ -66,6 +91,12 @@
       userId: userId
     });
     $game.game = game;
+    $game.takeActionLink = function() {
+      return $game.find("#takeAction" + game.Id + "_" + userId);
+    };
+    $game.statusLink = function() {
+      return $game.find("#status" + game.Id + "_" + userId);
+    };
     return $game;
   };
   this.preferred = {

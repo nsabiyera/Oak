@@ -34,13 +34,11 @@ namespace BorrowedGames.Controllers
         {
             var user = User();
 
-            var originalHandle = user.Handle;
-
             user.Handle = @params.handle.ToLower();
 
             if(user.HasChanged())
             {
-                if (!user.IsValid()) return Status(originalHandle, user.FirstError());
+                if (!user.IsValid()) return Status(user.Changes("Handle").Original, user.FirstError());
 
                 users.Save(user);
             }

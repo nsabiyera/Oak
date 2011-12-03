@@ -15,6 +15,22 @@ namespace Oak
         {
             Models = models.ToList();
         }
+
+        public IEnumerable<dynamic> Select(params string[] properties)
+        {
+            foreach (dynamic model in Models) yield return Select(model, properties);
+        }
+
+        dynamic Select(dynamic model, params string[] properties)
+        {
+            var hash = (model as object).ToDictionary();
+
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+
+            hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => expando.Add(kvp.Key, kvp.Value));
+
+            return expando;
+        }
                
         public bool Any(dynamic options)
         {

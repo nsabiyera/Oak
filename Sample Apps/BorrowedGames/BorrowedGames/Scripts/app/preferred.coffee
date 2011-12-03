@@ -1,5 +1,3 @@
-$findGame = (gameId, userId) -> $("#game#{gameId}_#{userId}")
-
 $preferredGames = null
 
 initView = ->
@@ -19,15 +17,22 @@ $wireUpActionLink = ($game) ->
 
 	userId = game.Owner.Id
 
-	$takeAction = $game.find("#takeAction#{game.Id}_#{userId}")
+	$takeAction = $game.takeActionLink()
 
-	$statusLink = $game.find("#status#{game.Id}_#{userId}")
+	$statusLink = $game.statusLink()
+
+	if game.Requested
+		$takeAction.remove() 
+		$setRequested $statusLink
 
 	$takeAction.click(-> 
-		$statusLink.html("Requested")
-		$statusLink.fadeIn()
-		$takeAction.fadeOut()
+		$.post(preferred.urls.requestGameUrl, 
+		{ gameId: game.Id, followingId: userId },
+		-> 
+			$takeAction.fadeOut()
+			$setRequested $statusLink
 		)
+	)
 
 	toolTip.init(
 		$takeAction,
@@ -37,6 +42,10 @@ $wireUpActionLink = ($game) ->
 		-> $game.offset().left + 100
 		-> $takeAction.offset().top
 	)
+
+$setRequested = ($statusLink) ->
+	$statusLink.html("Requested")
+	$statusLink.fadeIn()
 
 $wireUpNotInterested = ($game) ->
 	game = $game.game
@@ -48,8 +57,13 @@ $wireUpNotInterested = ($game) ->
 	$closeLink.click(->
 		$.post(preferred.urls.notInterestedUrl,
 		{ gameId: game.Id },
-		-> $game.fadeOut()))
+		-> $game.fadeOut())
+	) if !game.Requested
 
+	$closeLink.click(->
+		alert "todo"
+	) if game.Requested
+					
 	toolTip.init(
 		$closeLink,
 		"CloseLinkToolTip",
@@ -57,7 +71,16 @@ $wireUpNotInterested = ($game) ->
 		"You get the idea...<br/>Remove game.",
 		-> $game.offset().left + 100,
 		-> $game.offset().top + -25
-	)
+	) if !game.Requested
+
+	toolTip.init(
+		$closeLink,
+		"UndoGameRequest",
+		"Undo game request.",
+		"You get the idea...<br/>Undo game request.",
+		-> $game.offset().left + 100,
+		-> $game.offset().top + -25
+	) if game.Requested
 		
 $gameElementFor = (game) ->
 	searchString =
@@ -76,6 +99,10 @@ $gameElementFor = (game) ->
 	$game = $.tmpl gameTemplate, { gameId: game.Id, gameName, searchString, owner: game.Owner.Handle, userId }
 	
 	$game.game = game
+
+	$game.takeActionLink = -> $game.find("#takeAction#{game.Id}_#{userId}")
+
+	$game.statusLink = -> $game.find("#status#{game.Id}_#{userId}")
 
 	$game
 

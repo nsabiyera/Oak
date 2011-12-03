@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using NSpec.Domain;
 using System.Reflection;
 using NSpec;
 using NSpec.Domain.Formatters;
+using System.Linq;
 
 [TestFixture]
 public class DebuggerShim
@@ -13,20 +15,36 @@ public class DebuggerShim
     {
         //the specification class you want to test
         //this can be a regular expression
-        var testClassYouWantToDebug = "describe_User";
-        
+        var testClassYouWantToDebug = "describe_AccountController";
+
         //initialize NSpec's specfinder
         var finder = new SpecFinder(
             Assembly.GetExecutingAssembly().Location,
             new Reflector(),
-            testClassYouWantToDebug);
-        
+            "");
+
         //initialize NSpec's builder
+        var tags = new Tags().Parse(testClassYouWantToDebug);
+
         var builder = new ContextBuilder(
-            finder,
+            finder, tags,
             new DefaultConventions());
 
-        //this line runs the tests you specified in the filter
-        new ContextRunner(builder, new ConsoleFormatter()).Run();
+        //initialize the root context
+        var contexts = builder.Contexts();
+
+        //build the tests
+        contexts.Build();
+
+        //run the tests that were found
+        contexts.Run();
+
+        //contexts.Count.Is(1);
+
+        //print the output
+        new ConsoleFormatter().Write(contexts);
+
+        //assert that there aren't any failures
+        contexts.Failures().Count().should_be(0);
     }
 }

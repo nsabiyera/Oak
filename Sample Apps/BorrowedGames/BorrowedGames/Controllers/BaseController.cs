@@ -49,5 +49,10 @@ namespace BorrowedGames.Controllers
         {
             return users.Single(CurrentUser);
         }
+
+        public dynamic Friends()
+        {
+            return User().Friends();
+        }
     }
 }

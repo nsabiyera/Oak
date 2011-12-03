@@ -11,9 +11,10 @@
 
         urls.preferredGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Preferred" })';
         urls.notInterestedUrl = '@Url.RouteUrl(new { controller = "Games", action = "NotInterested" })';
+        urls.requestGameUrl = '@Url.RouteUrl(new { Controller = "Games", action = "RequestGame" })';
 
         $(function () {
-            preferred.init(urls); 
+            preferred.init(urls);
         });
     });
 </script>

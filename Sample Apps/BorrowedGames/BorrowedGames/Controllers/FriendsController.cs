@@ -16,9 +16,9 @@ namespace BorrowedGames.Controllers
 
             if (friend == null) return Json(new { Message = "User with handle " + handle + " doesn't exist.", Added = false });
 
-            if (Friends().Any(s => s.Handle == handle)) return Json(new { Message = "You are already following " + handle + ".", Added = false });
+            if (Friends().Any(new { Handle = handle })) return Json(new { Message = "You are already following " + handle + ".", Added = false });
 
-            users.Single(CurrentUser).AddFriend(friend);
+            User().AddFriend(friend);
 
             return Json(new { Message = "You are now following " + handle + ".", Added = true });
         }
@@ -26,19 +26,16 @@ namespace BorrowedGames.Controllers
         [HttpPost]
         public dynamic Unfollow(string handle)
         {
-            users.Single(CurrentUser).RemoveFriend(users.ForHandle(handle));
+            User().RemoveFriend(users.ForHandle(handle));
 
             return new EmptyResult();
         }
 
         public dynamic List()
         {
-            return Json(Friends().Select(s => s.Handle as string));
-        }
+            var handles = Friends().Select("Handle") as IEnumerable<dynamic>;
 
-        IEnumerable<dynamic> Friends()
-        {
-            return users.Single(CurrentUser).Friends();
+            return Json(handles.Select(s => s.Handle as string));
         }
     }
 }

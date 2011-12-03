@@ -28,7 +28,12 @@ namespace BorrowedGames.Tests.Controllers
 
             context["other users exists"] = () =>
             {
-                before = () => GivenUser("another@example.com", "@you");
+                before = () =>
+                {
+                    var you = GivenUser("another@example.com", "@you");
+                    var existingFriend = GivenUser("friendswithanother@example.com", "@other");
+                    GivenUserIsFollowing(controller.CurrentUser, existingFriend);
+                };
 
                 it["contains new friend"] = () => Friends().should_contain("@you");
 

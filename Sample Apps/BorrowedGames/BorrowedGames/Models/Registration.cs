@@ -8,18 +8,10 @@ namespace BorrowedGames.Models
 {
     public class Registration : DynamicModel
     {
-        Users users;
-
-        public Registration()
-            : this(new { })
-        {
-            
-        }
+        Users users = new Users();
 
         public Registration(dynamic entity)
         {
-            users = new Users();
-
             Init(entity);
         }
 

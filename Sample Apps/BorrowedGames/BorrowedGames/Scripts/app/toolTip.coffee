@@ -13,12 +13,16 @@ this.toolTip =
 			startingMessage,
 			endingMessage,
 			currentMessage: startingMessage,
-			messageCount: 0
+			messageCount: 0,
+			disable: -> @.messageCount = 4
 		} if !toolTips[key]
 
 		$toolTip = null
 
-		$element.click(-> $toolTip.fadeOut(-> $toolTip.remove() if $toolTip) if $toolTip);
+		$element.click(-> 
+			$toolTip.fadeOut(-> $toolTip.remove() if $toolTip) if $toolTip
+			toolTips[key].disable()
+		)
 
 		$element.hover(
 			->
