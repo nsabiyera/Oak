@@ -35,7 +35,7 @@ namespace BorrowedGames.Controllers
         {
             var handles = Friends().Select("Handle") as IEnumerable<dynamic>;
 
-            return Json(handles.Select(s => s.Handle as string));
+            return Json(handles.Select(s => s as string));
         }
     }
 }

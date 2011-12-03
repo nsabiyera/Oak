@@ -15,6 +15,24 @@ namespace Oak
         {
             Models = models.ToList();
         }
+
+        public IEnumerable<dynamic> Select(params string[] properties)
+        {
+            foreach (dynamic model in Models) yield return Select(model, properties);
+        }
+
+        dynamic Select(dynamic model, params string[] properties)
+        {
+            var hash = (model as object).ToDictionary();
+
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+
+            hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => expando.Add(kvp.Key, kvp.Value));
+
+            if(expando.Count == 1) return expando.First().Value;
+
+            return expando;
+        }
                
         public bool Any(dynamic options)
         {
@@ -23,6 +41,11 @@ namespace Oak
             foreach (dynamic model in Models) if (IsMatch(options, model)) return true;
 
             return false;
+        }
+
+        public bool Any()
+        {
+            return Models.Any();
         }
 
         public int Count()
@@ -69,13 +92,13 @@ namespace Oak
         {
             result = new List<dynamic>();
 
-            if (Models.Count == 0) return true;
-
-            var association = Models[0].AssociationNamed(collectionName);
+            if (!Models.Any()) return true;
 
             dynamic options = null;
 
-            if(args.Length > 0) options = args[0];
+            if(args.Any()) options = args[0];
+
+            var association = Models[0].AssociationNamed(collectionName);
 
             result = association.SelectManyRelatedTo(Models, options);
 
