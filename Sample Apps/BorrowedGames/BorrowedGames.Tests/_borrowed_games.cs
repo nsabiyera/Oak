@@ -86,6 +86,18 @@ namespace BorrowedGames.Tests
             GivenUserHasGame(isFollowing, whoHasGame);
         }
 
+        protected void GivenUserHasRequestedGame(int userId, int fromUser, int game)
+        {
+            GivenUserHasFriendWithGame(userId, fromUser, game);
+
+            User(userId).RequestGame(game, fromUser);
+        }
+
+        protected dynamic User(int userId)
+        {
+            return Users.Single(userId);
+        }
+
         protected void GivenUserIsFollowing(int userId, int isFollowing)
         {
             dynamic user = Users.Single(userId);

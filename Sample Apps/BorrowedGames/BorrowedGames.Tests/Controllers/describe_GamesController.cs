@@ -13,7 +13,7 @@ namespace BorrowedGames.Tests.Controllers
     {
         GamesController controller;
 
-        int mirrorsEdgeId, userId, followingId, anotherUserId;
+        int mirrorsEdgeId, userId, followingId, anotherUserId, gearsOfWarId;
 
         void before_each()
         {
@@ -30,6 +30,8 @@ namespace BorrowedGames.Tests.Controllers
             controller.CurrentUser = userId;
 
             mirrorsEdgeId = GivenGame("Mirror's Edge");
+
+            gearsOfWarId = GivenGame("Gears of War");
         }
 
         void retrieving_preferred_games()
@@ -86,7 +88,30 @@ namespace BorrowedGames.Tests.Controllers
             act = () => controller.RequestGame(mirrorsEdgeId, followingId);
 
             it["markes the game as requested"] = () =>
-                    ((bool)FirstPreferredGame().Requested).should_be_true();
+                RequestStatus(mirrorsEdgeId, followingId).should_be_true();
+        }
+
+        void unrequesting_game_for_a_specific_user()
+        {
+            before = () =>
+            {
+                GivenUserHasRequestedGame(userId, fromUser: followingId, game: gearsOfWarId);
+
+                GivenUserHasRequestedGame(userId, fromUser: anotherUserId, game: mirrorsEdgeId);
+
+                GivenUserHasRequestedGame(userId, fromUser: followingId, game: mirrorsEdgeId);
+            };
+
+            act = () => controller.DeleteRequest(mirrorsEdgeId, followingId);
+
+            it["is no longer requested"] = () => RequestStatus(mirrorsEdgeId, followingId).should_be_false();
+
+            it["other requests are unchanged"] = () =>
+            {
+                RequestStatus(mirrorsEdgeId, anotherUserId).should_be_true();
+
+                RequestStatus(gearsOfWarId, followingId).should_be_true();
+            };
         }
 
         dynamic FirstPreferredGame()
@@ -97,6 +122,16 @@ namespace BorrowedGames.Tests.Controllers
         IEnumerable<dynamic> PreferredGames()
         {
             return controller.Preferred().Data;
+        }
+
+        dynamic PreferredGame(int gameId, int userId)
+        {
+            return PreferredGames().First(s => s.Id == gameId && s.Owner.Id == userId);
+        }
+
+        bool RequestStatus(int gameId, int userId)
+        {
+            return PreferredGame(gameId, userId).Requested;
         }
     }
 }

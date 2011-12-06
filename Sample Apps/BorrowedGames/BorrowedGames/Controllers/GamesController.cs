@@ -24,5 +24,11 @@ namespace BorrowedGames.Controllers
         {
             User().RequestGame(gameId, followingId);
         }
+
+        [HttpPost]
+        public void DeleteRequest(int gameId, int followingId)
+        {
+            User().DeleteGameRequest(gameId, followingId);
+        }
     }
 }

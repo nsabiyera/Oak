@@ -52,7 +52,7 @@ namespace BorrowedGames.Models
 
             yield return
             new Format("Handle") { With = "^[\\S]*$", ErrorMessage = "Your handle can't contain any spaces." };
-
+            
             yield return
             new Exclusion("Handle") { In = new[] { "@nameless" }, ErrorMessage = "You did not specify a handle." };
 
@@ -87,6 +87,13 @@ namespace BorrowedGames.Models
             gameRequests.Insert(new { UserId = This().Id, gameId, fromUserId });
         }
 
+        public void DeleteGameRequest(dynamic gameId, dynamic fromUserId)
+        {
+            var requestId = This().GameRequests().First(new { GameId = gameId, FromUserId = fromUserId }).Id;
+
+            gameRequests.Delete(requestId);
+        }
+
         public bool HasGame(dynamic game)
         {
             return This().Games().Any(new { Id = game.Id });
@@ -107,9 +114,9 @@ namespace BorrowedGames.Models
             notInterestedGames.Insert(new { UserId = This().Id, gameId });
         }
 
-        public bool HasGameBeenRequested(dynamic gameId)
+        public bool HasGameBeenRequested(dynamic gameId, dynamic userId)
         {
-            return This().GameRequests().Any(new { GameId = gameId });
+            return This().GameRequests().Any(new { GameId = gameId, FromUserId = userId });
         }
 
         public bool OwnsGame(dynamic gameId)
@@ -139,7 +146,7 @@ namespace BorrowedGames.Models
                         game.Id,
                         game.Name,
                         game.Console,
-                        Requested = HasGameBeenRequested(game.Id),
+                        Requested = HasGameBeenRequested(game.Id, game.User().Id),
                         Owner = game.User().Select("Id", "Handle")
                     })
                     .OrderBy(s => s.Requested ? 0 : 1)
