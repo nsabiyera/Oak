@@ -123,6 +123,22 @@ namespace Oak.Tests.describe_DynamicModels
                     it["result list is empty"] = () => resultForWhere.should_be_empty();
                 };
             };
+
+            context["chaining wheres"] = () =>
+            {
+                before = () =>
+                {
+                    models.Models.Add(new Gemini(new { LastName = "Smith", FirstName = "Jane" }));
+
+                    models.Models.Add(new Gemini(new { LastName = "Smith", FirstName = "John" }));
+
+                    models.Models.Add(new Gemini(new { LastName = "Doe", FirstName = "John" }));
+                };
+
+                act = () => resultForWhere = models.Where(new { LastName = "Smith" }).Where(new { FirstName = "Jane" });
+
+                it["applies first filter then next filter"] = () => resultForWhere.Count().should_be(1);
+            };
         }
 
         void describe_First()
