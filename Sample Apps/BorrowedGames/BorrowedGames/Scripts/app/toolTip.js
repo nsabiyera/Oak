@@ -1,8 +1,8 @@
 (function() {
   var $createToolTip, toolTipTemplate, toolTips;
   toolTipTemplate = '\
-	<div class="border dropshadow title" style="padding: 10px">{{html message}}</div>\
-	';
+  <div class="border dropshadow title" style="padding: 10px">{{html message}}</div>\
+  ';
   toolTips = {};
   $createToolTip = function(message) {
     return $.tmpl(toolTipTemplate, {
@@ -20,6 +20,9 @@
           messageCount: 0,
           disable: function() {
             return this.messageCount = 4;
+          },
+          enable: function() {
+            return this.messageCount = 0;
           }
         };
       }
