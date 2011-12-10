@@ -82,13 +82,13 @@ namespace BorrowedGames.Tests.Controllers
             {
                 GivenUserHasFriendWithGame(userId, isFollowing: followingId, whoHasGame: mirrorsEdgeId);
 
-                ((bool)FirstPreferredGame().Requested).should_be_false();
+                IsRequested(mirrorsEdgeId, userId).should_be_true();
             };
 
             act = () => controller.RequestGame(mirrorsEdgeId, followingId);
 
-            it["markes the game as requested"] = () =>
-                RequestStatus(mirrorsEdgeId, followingId).should_be_true();
+            it["marks the game as requested"] = () =>
+                IsRequested(mirrorsEdgeId, followingId).should_be_true();
         }
 
         void unrequesting_game_for_a_specific_user()
@@ -104,13 +104,27 @@ namespace BorrowedGames.Tests.Controllers
 
             act = () => controller.DeleteRequest(mirrorsEdgeId, followingId);
 
-            it["is no longer requested"] = () => RequestStatus(mirrorsEdgeId, followingId).should_be_false();
+            it["is no longer requested"] = () => IsRequested(mirrorsEdgeId, followingId).should_be_false();
 
             it["other requests are unchanged"] = () =>
             {
-                RequestStatus(mirrorsEdgeId, anotherUserId).should_be_true();
+                IsRequested(mirrorsEdgeId, anotherUserId).should_be_true();
 
-                RequestStatus(gearsOfWarId, followingId).should_be_true();
+                IsRequested(gearsOfWarId, followingId).should_be_true();
+            };
+        }
+
+        void retrieving_requested_games()
+        {
+            before = () => GivenUserHasRequestedGame(userId, fromUser: followingId, game: mirrorsEdgeId);
+
+            it["lists requested games"] = () => RequestedGames().should_contain(s => s.Name == "Mirror's Edge");
+
+            context["user has preferred games (games that haven't been requested)"] = () =>
+            {
+                before = () => GivenUserHasFriendWithGame(userId, isFollowing: followingId, whoHasGame: gearsOfWarId);
+
+                it["doesn't contain games that haven't been requested yet"] = () => RequestedGames().should_not_contain(s => s.Name == "Gears of War");
             };
         }
 
@@ -124,14 +138,21 @@ namespace BorrowedGames.Tests.Controllers
             return controller.Preferred().Data;
         }
 
-        dynamic PreferredGame(int gameId, int userId)
+        IEnumerable<dynamic> RequestedGames()
         {
-            return PreferredGames().First(s => s.Id == gameId && s.Owner.Id == userId);
+            return controller.Requested().Data;
         }
 
-        bool RequestStatus(int gameId, int userId)
+        dynamic PreferredGame(int gameId, int userId)
         {
-            return PreferredGame(gameId, userId).Requested;
+            return PreferredGames().FirstOrDefault(s => s.Id == gameId && s.Owner.Id == userId);
+        }
+
+        bool IsRequested(int gameId, int userId)
+        {
+            if (PreferredGame(gameId, userId) == null) return true;
+
+            else return false;
         }
     }
 }

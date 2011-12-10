@@ -114,14 +114,24 @@ namespace BorrowedGames.Models
             notInterestedGames.Insert(new { UserId = This().Id, gameId });
         }
 
-        public bool HasGameBeenRequested(dynamic gameId, dynamic userId)
+        public bool HasGameBeenRequested(dynamic game)
         {
-            return This().GameRequests().Any(new { GameId = gameId, FromUserId = userId });
+            return This().GameRequests().Any(new { GameId = game.Id, FromUserId = game.User().Id });
+        }
+
+        public bool HasNotBeenRequested(dynamic game)
+        {
+            return !HasGameBeenRequested(game);
         }
 
         public bool OwnsGame(dynamic gameId)
         {
             return This().Games().Any(new { Id = gameId });
+        }
+
+        public bool DoesNotOwnGame(dynamic gameId)
+        {
+            return !OwnsGame(gameId);
         }
 
         public bool PrefersGame(dynamic gameId)
@@ -133,24 +143,34 @@ namespace BorrowedGames.Models
         {
             return This().Games().Any(new { Console = console }) || !HasGames();
         }
+            
+        public IEnumerable<dynamic> RequestedGames()
+        {
+            return GamesFriendsHave().Where(s => HasGameBeenRequested(s));
+        }
+
+        public IEnumerable<dynamic> GamesFriendsHave()
+        {
+            return This().Friends().Games() as IEnumerable<dynamic>;
+        }
 
         public IEnumerable<dynamic> PreferredGames()
         {
-            var gamesForFriends = This().Friends().Games() as IEnumerable<dynamic>;
-
             var distinctPreferredGames =
-                gamesForFriends
-                    .Where(s => !OwnsGame(s.Id) && PrefersGame(s.Id) && SharesConsole(s.Console))
+                GamesFriendsHave()
+                    .Where(s =>
+                        DoesNotOwnGame(s.Id) && 
+                        PrefersGame(s.Id) && 
+                        SharesConsole(s.Console) && 
+                        HasNotBeenRequested(s))
                     .Select(game => new
                     {
                         game.Id,
                         game.Name,
                         game.Console,
-                        Requested = HasGameBeenRequested(game.Id, game.User().Id),
                         Owner = game.User().Select("Id", "Handle")
                     })
-                    .OrderBy(s => s.Requested ? 0 : 1)
-                    .ThenBy(s => s.Name);
+                    .OrderBy(s => s.Name);
 
             return distinctPreferredGames;
         }

@@ -10,6 +10,11 @@ namespace BorrowedGames.Models
     {
         Users users = new Users();
 
+        public Registration()
+            : this(new { })
+        {
+        }
+
         public Registration(dynamic entity)
         {
             Init(entity);

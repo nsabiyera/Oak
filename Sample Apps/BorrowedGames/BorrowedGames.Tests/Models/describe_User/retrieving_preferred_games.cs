@@ -80,8 +80,8 @@ namespace BorrowedGames.Tests.Models.describe_User
                 user.RequestGame(gearsOfWarXBOX360Id, anotherUserId);
             };
 
-            it["requested games show up first"] = () => 
-                ((string)FirstPreferredGame().Name).should_be("Gears of War");
+            it["requested games do not show up (they are no longer considered preferred)"] = () =>
+                PreferredGames().Any(s => s.Name == "Gears of War").should_be_false();
         }
 
         void the_same_preferred_games_exist_accross_multiple_friends()

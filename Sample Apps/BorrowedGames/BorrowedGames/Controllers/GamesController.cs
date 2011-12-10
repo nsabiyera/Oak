@@ -30,5 +30,10 @@ namespace BorrowedGames.Controllers
         {
             User().DeleteGameRequest(gameId, followingId);
         }
+
+        public dynamic Requested()
+        {
+            return Json(User().RequestedGames());
+        }
     }
 }
