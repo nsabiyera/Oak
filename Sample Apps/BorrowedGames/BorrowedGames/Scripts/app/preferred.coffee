@@ -35,77 +35,48 @@ gameElementFor = (game) ->
   
   $game.closeLink = -> $game.find("#closeLink#{game.Id}_#{userId}")
 
-  bindStatus $game
+  wireUpGameEventHandlers $game
 
-  $game.UpdateState()
+  return $game
 
-  $game
-
-bindStatus = ($game) ->
+wireUpGameEventHandlers = ($game) ->
   game = $game.game
   takeAction = $game.takeActionLink()
   statusLink = $game.statusLink()
   closeLink = $game.closeLink()
   userId = $game.game.Owner.Id
 
-  $game.Status = ->
-    return "Requested" if $game.game.Requested
-    return "Preferred"
-
-  $game.UpdateState = ->
-    $game[$game.Status()]()
-
-  $game.Requested = ->
-    takeAction.hide()
-    takeAction.remove()
-    statusLink.html("Requested")
-    statusLink.fadeIn()
-    closeLink.unbind('click')
-    closeLink.click(-> alert("todo"))
-    toolTip.init(
-      closeLink,
-      "UndoRequest",
-      "Click to undo game request.",
-      "You get the idea...<br/>Click to undo game request.",
-      -> $game.offset().left + 100,
-      -> $game.offset().top + -25
+  takeAction.click(->
+    $.post(preferred.urls.requestGameUrl,
+    { gameId: game.Id, followingId: userId },
+    ->
+      $game.fadeOut(-> alert("todo: after fade out you'll see a section populated with requested games"))
     )
+  )
 
-  $game.Preferred = ->
-    takeAction.click(->
-      $.post(preferred.urls.requestGameUrl,
-      { gameId: game.Id, followingId: userId },
-      ->
-        takeAction.fadeOut()
-        $game.game.Requested = true
-        $game.UpdateState()
-      )
-    )
+  toolTip.init(
+    takeAction,
+    "RequestGame",
+    "Click here to request the game.",
+    "You get the idea...<br/>Request game.",
+    -> $game.offset().left + 100
+    -> takeAction.offset().top
+  )
 
+  toolTip.init(
+    closeLink,
+    "NotInterested",
+    "Not interested?<br/>Click to remove it.",
+    "You get the idea...<br/>Remove game.",
+    -> $game.offset().left + 100,
+    -> $game.offset().top + -25
+  )
 
-    toolTip.init(
-      takeAction,
-      "RequestGame",
-      "Click here to request the game.",
-      "You get the idea...<br/>Request game.",
-      -> $game.offset().left + 100
-      -> takeAction.offset().top
-    )
-
-    toolTip.init(
-      closeLink,
-      "NotInterested",
-      "Not interested?<br/>Click to remove it.",
-      "You get the idea...<br/>Remove game.",
-      -> $game.offset().left + 100,
-      -> $game.offset().top + -25
-    )
-
-    closeLink.click(->
-      $.post(preferred.urls.notInterestedUrl,
-      { gameId: game.Id },
-      -> $game.fadeOut())
-    )
+  closeLink.click(->
+    $.post(preferred.urls.notInterestedUrl,
+    { gameId: game.Id },
+    -> $game.fadeOut())
+  )
 
 
 this.preferred =
