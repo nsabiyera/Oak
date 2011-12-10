@@ -23,7 +23,7 @@ namespace BorrowedGames.Tests.Controllers
 
             userId = GivenUser("user@example.com");
 
-            followingId = GivenUser("following@example.com");
+            followingId = GivenUser("following@example.com", "@following");
 
             anotherUserId = GivenUser("another@example.com");
 
@@ -118,13 +118,18 @@ namespace BorrowedGames.Tests.Controllers
         {
             before = () => GivenUserHasRequestedGame(userId, fromUser: followingId, game: mirrorsEdgeId);
 
-            it["lists requested games"] = () => RequestedGames().should_contain(s => s.Name == "Mirror's Edge");
+            it["lists requested games"] = () =>
+                RequestedGames().should_contain(s => s.Name == "Mirror's Edge");
+
+            it["gives user associated with game"] = () => 
+                RequestedGames().should_contain(s => s.Owner.Handle == "@following");
 
             context["user has preferred games (games that haven't been requested)"] = () =>
             {
                 before = () => GivenUserHasFriendWithGame(userId, isFollowing: followingId, whoHasGame: gearsOfWarId);
 
-                it["doesn't contain games that haven't been requested yet"] = () => RequestedGames().should_not_contain(s => s.Name == "Gears of War");
+                it["doesn't contain games that haven't been requested yet"] = () => 
+                    RequestedGames().should_not_contain(s => s.Name == "Gears of War");
             };
         }
 

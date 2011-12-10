@@ -1,8 +1,12 @@
 ﻿<script src="@Url.Content("~/scripts/app/preferred.js")"></script>
+<script src="@Url.Content("~/scripts/app/requested.js")"></script>
 
 <h3>OMG Games!</h3>
-<div id="preferredGames">
-    
+<div id="requestedGames">
+</div>
+<div class="border">
+  <div id="preferredGames">
+  </div>
 </div>
 
 <script>
@@ -12,9 +16,11 @@
         urls.preferredGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Preferred" })';
         urls.notInterestedUrl = '@Url.RouteUrl(new { controller = "Games", action = "NotInterested" })';
         urls.requestGameUrl = '@Url.RouteUrl(new { Controller = "Games", action = "RequestGame" })';
+        urls.requestedGamesUrl = '@Url.RouteUrl(new { Controller = "Games", action = "Requested" })';
 
         $(function () {
             preferred.init(urls);
+            requested.init(urls);
         });
     });
 </script>

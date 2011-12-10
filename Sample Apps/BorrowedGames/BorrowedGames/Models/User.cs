@@ -146,7 +146,15 @@ namespace BorrowedGames.Models
             
         public IEnumerable<dynamic> RequestedGames()
         {
-            return GamesFriendsHave().Where(s => HasGameBeenRequested(s));
+            return GamesFriendsHave()
+                .Where(s => HasGameBeenRequested(s))
+                .Select(game => new
+                {
+                    game.Id,
+                    game.Name,
+                    game.Console,
+                    Owner = game.User().Select("Id", "Handle")
+                });
         }
 
         public IEnumerable<dynamic> GamesFriendsHave()

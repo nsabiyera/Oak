@@ -30,9 +30,6 @@
     $game.takeActionLink = function() {
       return $game.find("#takeAction" + game.Id + "_" + userId);
     };
-    $game.statusLink = function() {
-      return $game.find("#status" + game.Id + "_" + userId);
-    };
     $game.closeLink = function() {
       return $game.find("#closeLink" + game.Id + "_" + userId);
     };
@@ -40,10 +37,9 @@
     return $game;
   };
   wireUpGameEventHandlers = function($game) {
-    var closeLink, game, statusLink, takeAction, userId;
+    var closeLink, game, takeAction, userId;
     game = $game.game;
     takeAction = $game.takeActionLink();
-    statusLink = $game.statusLink();
     closeLink = $game.closeLink();
     userId = $game.game.Owner.Id;
     takeAction.click(function() {
@@ -52,7 +48,7 @@
         followingId: userId
       }, function() {
         return $game.fadeOut(function() {
-          return alert("todo: after fade out you'll see a section populated with requested games");
+          return requested.getRequestedGames();
         });
       });
     });
@@ -92,7 +88,11 @@
           clear: "both"
         }));
         if (!games.length) {
-          return preferredGames.html("Games you don't own (that your friends have) will show up here.");
+          return preferredGames.html('\
+          <div class="info" id="showFriends" style="padding-left: 30px">\
+            Games you don\'t own (that your friends have) will show up here.\
+          </div>\
+          ');
         }
       });
     }
@@ -100,7 +100,6 @@
   gameTemplate = '\
   <div id="game${gameId}_${userId}" class="border dropshadow" style="float: left; width: 100px; height: 160px">\
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">\
-      <span id="status${gameId}_${userId}" style="float: left; font-size: 15px; display: none; color: #EC7600;" class="brand"></span>\
       <a href="javascript:;" id="closeLink${gameId}_${userId}" \
          style="text-decoration: none; color: black; float: right; padding-left: 15px" \
          class="cancel">&nbsp;</a>\

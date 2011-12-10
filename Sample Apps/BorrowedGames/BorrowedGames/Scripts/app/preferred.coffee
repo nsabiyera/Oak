@@ -31,8 +31,6 @@ gameElementFor = (game) ->
 
   $game.takeActionLink = -> $game.find("#takeAction#{game.Id}_#{userId}")
 
-  $game.statusLink = -> $game.find("#status#{game.Id}_#{userId}")
-  
   $game.closeLink = -> $game.find("#closeLink#{game.Id}_#{userId}")
 
   wireUpGameEventHandlers $game
@@ -42,7 +40,6 @@ gameElementFor = (game) ->
 wireUpGameEventHandlers = ($game) ->
   game = $game.game
   takeAction = $game.takeActionLink()
-  statusLink = $game.statusLink()
   closeLink = $game.closeLink()
   userId = $game.game.Owner.Id
 
@@ -50,7 +47,7 @@ wireUpGameEventHandlers = ($game) ->
     $.post(preferred.urls.requestGameUrl,
     { gameId: game.Id, followingId: userId },
     ->
-      $game.fadeOut(-> alert("todo: after fade out you'll see a section populated with requested games"))
+      $game.fadeOut(-> requested.getRequestedGames())
     )
   )
 
@@ -97,14 +94,19 @@ this.preferred =
 
         preferredGames.append $("<div />").css(clear: "both")
 
-        preferredGames.html("Games you don't own (that your friends have) will show up here.") if(!games.length)
+        preferredGames.html(
+          '
+          <div class="info" id="showFriends" style="padding-left: 30px">
+            Games you don\'t own (that your friends have) will show up here.
+          </div>
+          '
+        ) if(!games.length)
       )
 
 gameTemplate =
   '
   <div id="game${gameId}_${userId}" class="border dropshadow" style="float: left; width: 100px; height: 160px">
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">
-      <span id="status${gameId}_${userId}" style="float: left; font-size: 15px; display: none; color: #EC7600;" class="brand"></span>
       <a href="javascript:;" id="closeLink${gameId}_${userId}" 
          style="text-decoration: none; color: black; float: right; padding-left: 15px" 
          class="cancel">&nbsp;</a>
