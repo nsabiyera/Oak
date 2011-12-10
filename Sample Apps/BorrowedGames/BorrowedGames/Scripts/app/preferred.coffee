@@ -82,6 +82,7 @@ bindStatus = ($game) ->
       )
     )
 
+
     toolTip.init(
       takeAction,
       "RequestGame",
