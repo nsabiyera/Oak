@@ -10,7 +10,14 @@ namespace BorrowedGames.Controllers
     {
         public dynamic Preferred()
         {
-            return Json(User().PreferredGames());
+            return Json(AddNotInterestedLink(User().PreferredGames().ToList()));
+        }
+
+        public IEnumerable<dynamic> AddNotInterestedLink(List<dynamic> games)
+        {
+            games.ForEach(s => s.NotInterested = "/Games/NotInterested/?gameId=" + s.Id);
+
+            return games;
         }
 
         [HttpPost]

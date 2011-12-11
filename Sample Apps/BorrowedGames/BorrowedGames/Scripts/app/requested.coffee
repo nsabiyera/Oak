@@ -27,7 +27,9 @@ this.requested =
       @urls.requestedGamesUrl,
       (games) ->
         requestedGames.html ''
+        requestedGames.hide()
         addGameToPage(game) for game in games
+        requestedGames.fadeIn()
     )
 
 gameTemplate =

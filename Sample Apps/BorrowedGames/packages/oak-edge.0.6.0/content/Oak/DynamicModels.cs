@@ -43,6 +43,11 @@ namespace Oak
             return false;
         }
 
+        public List<dynamic> ToList()
+        {
+            return new List<dynamic>(Models);
+        }
+
         public bool Any()
         {
             return Models.Any();

@@ -70,8 +70,8 @@ wireUpGameEventHandlers = ($game) ->
   )
 
   closeLink.click(->
-    $.post(preferred.urls.notInterestedUrl,
-    { gameId: game.Id },
+    $.post(game.NotInterested,
+    { },
     -> $game.fadeOut())
   )
 

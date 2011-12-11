@@ -63,9 +63,7 @@
       return $game.offset().top + -25;
     });
     return closeLink.click(function() {
-      return $.post(preferred.urls.notInterestedUrl, {
-        gameId: game.Id
-      }, function() {
+      return $.post(game.NotInterested, {}, function() {
         return $game.fadeOut();
       });
     });

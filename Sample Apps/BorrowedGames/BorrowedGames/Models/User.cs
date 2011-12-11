@@ -166,20 +166,21 @@ namespace BorrowedGames.Models
                         SharesConsole(s.Console) && 
                         HasNotBeenRequested(s))
                     .Select(UserGame)
-                    .OrderBy(s => s.Name);
+                    .OrderBy(s => s.Name)
+                    .ToModels();
 
             return distinctPreferredGames;
         }
 
         private dynamic UserGame(dynamic game)
         {
-            return new
+            return new Gemini(new
             {
                 game.Id,
                 game.Name,
                 game.Console,
                 Owner = game.User().Select("Id", "Handle")
-            };
+            });
         }
     }
 }

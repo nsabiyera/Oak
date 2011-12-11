@@ -25,14 +25,14 @@
     },
     getRequestedGames: function() {
       return $.getJSON(this.urls.requestedGamesUrl, function(games) {
-        var game, _i, _len, _results;
+        var game, _i, _len;
         requestedGames.html('');
-        _results = [];
+        requestedGames.hide();
         for (_i = 0, _len = games.length; _i < _len; _i++) {
           game = games[_i];
-          _results.push(addGameToPage(game));
+          addGameToPage(game);
         }
-        return _results;
+        return requestedGames.fadeIn();
       });
     }
   };

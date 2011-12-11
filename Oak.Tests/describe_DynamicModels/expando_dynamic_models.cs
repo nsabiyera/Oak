@@ -140,6 +140,44 @@ namespace Oak.Tests.describe_DynamicModels
                 it["applies first filter then next filter"] = () => resultForWhere.Count().should_be(1);
             };
         }
+        
+        void describe_ToList()
+        {
+            before = () =>
+            {
+                models.Models.Add(new Gemini(new { LastName = "Smith", FirstName = "Jane" }));
+
+                models.Models.Add(new Gemini(new { LastName = "Smith", FirstName = "John" }));
+
+                models.Models.Add(new Gemini(new { LastName = "Doe", FirstName = "John" }));
+            };
+
+            it["converts IEnumerable to a list"] = () =>
+            {
+                var list = models.ToList();
+
+                (list as List<dynamic>).should_contain(models.First() as object);
+            };
+        }
+
+        object[] listToConvert;
+        void describe_ToModels()
+        {
+            before = () =>
+            {
+                listToConvert = new object[] 
+                {
+                    new Gemini(new { LastName = "Smith", FirstName = "Jane" })
+                };
+            };
+
+            it["converts enumerable to dynamic models"] = () =>
+            {
+                var list = listToConvert.ToModels();
+
+                (list as object).should_cast_to<DynamicModels>();
+            };
+        }
 
         void describe_First()
         {

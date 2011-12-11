@@ -70,5 +70,10 @@ namespace System
 
             foreach (var item in temp) action(item);
         }
+
+        public static DynamicModels ToModels(this IEnumerable<dynamic> enumerable)
+        {
+            return new DynamicModels(enumerable);
+        }
     }
 }
