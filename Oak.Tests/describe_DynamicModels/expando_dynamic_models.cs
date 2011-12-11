@@ -176,5 +176,41 @@ namespace Oak.Tests.describe_DynamicModels
                 it["returns first record"] = () => ((string)((dynamic)resultForFirst).Name).should_be("Jane");
             };
         }
+
+        void describe_Last()
+        {
+            context["last taking in a 'where clause'"] = () =>
+            {
+                before = () => models = new DynamicModels(new List<ExpandoObject>());
+
+                act = () => resultForFirst = models.Last(new { Name = "Jane" });
+
+                context["no items in list"] = () =>
+                {
+                    it["result is null"] = () => resultForFirst.should_be(null);
+                };
+
+                context["items exist in list that match"] = () =>
+                {
+                    before = () => models.Models.Add(new Gemini(new { Name = "Jane" }));
+
+                    it["returns item"] = () => ((string)((dynamic)resultForFirst).Name).should_be("Jane");
+                };
+            };
+
+            context["last doesn't take in a 'where clause'"] = () =>
+            {
+                before = () =>
+                {
+                    models = new DynamicModels(new List<ExpandoObject>());
+
+                    models.Models.Add(new Gemini(new { Name = "Jane" }));
+                };
+
+                act = () => resultForFirst = models.Last();
+
+                it["returns first record"] = () => ((string)((dynamic)resultForFirst).Name).should_be("Jane");
+            };
+        }
     }
 }
