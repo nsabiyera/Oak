@@ -147,14 +147,8 @@ namespace BorrowedGames.Models
         public IEnumerable<dynamic> RequestedGames()
         {
             return GamesFriendsHave()
-                .Where(s => HasGameBeenRequested(s))
-                .Select(game => new
-                {
-                    game.Id,
-                    game.Name,
-                    game.Console,
-                    Owner = game.User().Select("Id", "Handle")
-                });
+                .Where(HasGameBeenRequested)
+                .Select(UserGame);
         }
 
         public IEnumerable<dynamic> GamesFriendsHave()
@@ -171,16 +165,21 @@ namespace BorrowedGames.Models
                         PrefersGame(s.Id) && 
                         SharesConsole(s.Console) && 
                         HasNotBeenRequested(s))
-                    .Select(game => new
-                    {
-                        game.Id,
-                        game.Name,
-                        game.Console,
-                        Owner = game.User().Select("Id", "Handle")
-                    })
+                    .Select(UserGame)
                     .OrderBy(s => s.Name);
 
             return distinctPreferredGames;
+        }
+
+        private dynamic UserGame(dynamic game)
+        {
+            return new
+            {
+                game.Id,
+                game.Name,
+                game.Console,
+                Owner = game.User().Select("Id", "Handle")
+            };
         }
     }
 }

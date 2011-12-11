@@ -184,7 +184,7 @@ namespace Oak
 
             if (!IsPolymorphicFunction(member)) return base.TryInvokeMember(binder, args, out result);
 
-            result = InvokePolymorphicFunction(member, args);
+            result = InvokePolymorphicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
 
             return true;
         }
@@ -194,13 +194,37 @@ namespace Oak
             return (member is DynamicFunctionWithParam) || (member is DynamicMethodWithParam);
         }
 
-        public virtual dynamic InvokePolymorphicFunction(dynamic member, object[] args)
+        public virtual dynamic InvokePolymorphicFunction(dynamic member, object[] args, string[] argNames)
         {
-            if ((member is DynamicFunctionWithParam)) return member.Invoke(args.FirstOrDefault());
+            Func<dynamic> function = () =>
+            {
+                member.Invoke(args.FirstOrDefault());
 
-            member.Invoke(args.FirstOrDefault());
+                return null;
+            };
 
-            return null;
+            if (member is DynamicFunctionWithParam) function = () => member.Invoke(args.FirstOrDefault());
+
+            return function();
+        }
+
+        dynamic ToDynamicParam(object[] args, string[] argNames)
+        {
+            if (AllParametersAreNamed(args, argNames))
+            {
+                var expando = new ExpandoObject() as IDictionary<string, object>;
+
+                for (int i = 0; i < args.Count(); i++) expando.Add(argNames[i], args[i]);
+
+                return expando;
+            }
+
+            return args.FirstOrDefault();
+        }
+
+        private bool AllParametersAreNamed(object[] args, IEnumerable<string> argNames)
+        {
+            return args.Count() == argNames.Count();
         }
     }
 }

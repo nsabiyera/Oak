@@ -63,6 +63,11 @@ namespace Oak
             return Models.LastOrDefault();
         }
 
+        public dynamic Last(dynamic options)
+        {
+            return Where(options as object).LastOrDefault();
+        }
+
         public dynamic First(dynamic options)
         {
             return Where(options as object).FirstOrDefault();

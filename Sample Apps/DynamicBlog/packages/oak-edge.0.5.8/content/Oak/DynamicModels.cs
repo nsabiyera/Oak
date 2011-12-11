@@ -58,16 +58,30 @@ namespace Oak
             return Models.FirstOrDefault();
         }
 
+        public dynamic Last()
+        {
+            return Models.LastOrDefault();
+        }
+
+        public dynamic Last(dynamic options)
+        {
+            return Where(options as object).LastOrDefault();
+        }
+
         public dynamic First(dynamic options)
         {
             return Where(options as object).FirstOrDefault();
         }
 
-        public IEnumerable<dynamic> Where(dynamic options)
+        public DynamicModels Where(dynamic options)
         {
             options = (options as object).ToExpando();
 
-            foreach (dynamic model in Models) if (IsMatch(options, model)) yield return model;
+            var results = new List<dynamic>();
+
+            foreach (dynamic model in Models) if (IsMatch(options, model)) results.Add(model);
+
+            return new DynamicModels(results);
         }
 
         private bool IsMatch(IDictionary<string, dynamic> options, dynamic model)
