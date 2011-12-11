@@ -98,11 +98,11 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                         new { UserId = userId, GameId = gearsOfWarGameId }.InsertInto("Library");
 
-                        var cachedCount = (user.Games() as IEnumerable<dynamic>).Count();
+                        int cachedCount = user.Games().Count();
 
                         cachedCount.should_be(1);
 
-                        var newCount = (user.Games(new { discardCache = true }) as IEnumerable<dynamic>).Count();
+                        int newCount = user.Games(new { discardCache = true }).Count();
 
                         newCount.should_be(2);
                     };
@@ -166,13 +166,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     it["game is associated with user"] = () =>
                     {
-                        var gameLibrary = (user.Games(new { discardCache = true }) as IEnumerable<dynamic>);
+                        var gameLibrary = user.Games(new { discardCache = true });
 
-                        gameLibrary.Count().should_be(2);
+                        ((int)gameLibrary.Count()).should_be(2);
 
-                        var firstGame = gameLibrary.Last();
+                        var game = gameLibrary.Last();
 
-                        (firstGame.Title as string).should_be("Final Fantasy VII");
+                        (game.Title as string).should_be("Final Fantasy VII");
                     };
                 };
             };
@@ -211,7 +211,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         public dynamic FirstFriendOf(dynamic userId)
         {
-            return (users.Single(userId).Friends() as IEnumerable<dynamic>).First();
+            return users.Single(userId).Friends().First();
         }
     }
 }
