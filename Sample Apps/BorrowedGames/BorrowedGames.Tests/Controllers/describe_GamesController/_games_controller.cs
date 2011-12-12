@@ -18,6 +18,8 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             MockSession(controller);
 
+            MockRouting(controller);
+
             userId = GivenUser("user@example.com");
 
             followingId = GivenUser("following@example.com", "@following");

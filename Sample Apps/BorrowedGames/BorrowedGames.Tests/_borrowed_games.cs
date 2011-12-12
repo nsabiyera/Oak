@@ -5,6 +5,10 @@ using Oak.Controllers;
 using System.Collections.Generic;
 using BorrowedGames.Controllers;
 using BorrowedGames.Models;
+using System.Web.Routing;
+using Moq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace BorrowedGames.Tests
 {
@@ -72,6 +76,26 @@ namespace BorrowedGames.Tests
             controller.SetSessionValue = SetSessionValue;
 
             controller.GetSessionValue = GetSessionValue;
+        }
+
+        public void MockRouting(BaseController controller)
+        {
+            var routes = new RouteCollection();
+            MvcApplication.RegisterRoutes(routes);
+
+            var request = new Mock<HttpRequestBase>(MockBehavior.Strict);
+            request.SetupGet(x => x.ApplicationPath).Returns("/");
+            request.SetupGet(x => x.Url).Returns(new Uri("", UriKind.Relative));
+            request.SetupGet(x => x.ServerVariables).Returns(new System.Collections.Specialized.NameValueCollection());
+
+            var response = new Mock<HttpResponseBase>();
+            response.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns<string>((s) => s);
+
+            var context = new Mock<HttpContextBase>(MockBehavior.Strict);
+            context.SetupGet(x => x.Request).Returns(request.Object);
+            context.SetupGet(x => x.Response).Returns(response.Object);
+
+            controller.Url = new UrlHelper(new RequestContext(context.Object, new RouteData()), routes);
         }
 
         protected void GivenUserHasGame(dynamic userId, dynamic gameId)

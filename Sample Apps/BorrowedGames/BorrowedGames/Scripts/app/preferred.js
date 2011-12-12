@@ -43,10 +43,7 @@
     closeLink = $game.closeLink();
     userId = $game.game.Owner.Id;
     takeAction.click(function() {
-      return $.post(preferred.urls.requestGameUrl, {
-        gameId: game.Id,
-        followingId: userId
-      }, function() {
+      return $.post(game.RequestGame, {}, function() {
         return $game.fadeOut(function() {
           return requested.getRequestedGames();
         });

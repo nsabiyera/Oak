@@ -10,12 +10,16 @@ namespace BorrowedGames.Controllers
     {
         public dynamic Preferred()
         {
-            return Json(AddNotInterestedLink(User().PreferredGames().ToList()));
+            return Json(AddHyperMediaLinks(User().PreferredGames().ToList()));
         }
 
-        public IEnumerable<dynamic> AddNotInterestedLink(List<dynamic> games)
+        public IEnumerable<dynamic> AddHyperMediaLinks(List<dynamic> games)
         {
-            games.ForEach(s => s.NotInterested = "/Games/NotInterested/?gameId=" + s.Id);
+            games.ForEach(s => 
+            {
+                s.NotInterested = Url.RouteUrl(new { controller = "Games", action = "NotInterested", gameId = s.Id });
+                s.RequestGame = Url.RouteUrl(new { controller = "Games", action = "RequestGame", gameId = s.Id, followingId = s.Owner.Id });
+            });
 
             return games;
         }

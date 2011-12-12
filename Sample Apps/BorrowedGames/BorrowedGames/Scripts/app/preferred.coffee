@@ -44,10 +44,9 @@ wireUpGameEventHandlers = ($game) ->
   userId = $game.game.Owner.Id
 
   takeAction.click(->
-    $.post(preferred.urls.requestGameUrl,
-    { gameId: game.Id, followingId: userId },
-    ->
-      $game.fadeOut(-> requested.getRequestedGames())
+    $.post(game.RequestGame,
+    { },
+    -> $game.fadeOut(-> requested.getRequestedGames())
     )
   )
 
