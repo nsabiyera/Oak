@@ -33,7 +33,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 it["contains a hypermedia link to request game"] = () =>
                 {
                     int gameId = FirstPreferredGame().Id;
-                    (FirstPreferredGame().RequestGame as string).should_be("/Games/RequestGame?gameId=" + gameId + "&followingId=" + followingId);
+                    (FirstPreferredGame().WantGame as string).should_be("/Games/WantGame?gameId=" + gameId + "&followingId=" + followingId);
                 };
 
                 context["user owns a game that a friend has"] = () =>

@@ -1,7 +1,7 @@
-requestedGames = null
+wantedGames = null
 
 initView = ->
-  requestedGames = $("#requestedGames")
+  wantedGames = $("#wantedGames")
 
 addGameToPage = (game) ->
   gameName = game.Name
@@ -12,24 +12,24 @@ addGameToPage = (game) ->
 
   $game = $.tmpl gameTemplate, { gameName, owner: game.Owner.Handle }
 
-  requestedGames.append $game
+  wantedGames.append $game
 
-this.requested =
+this.wanted =
   init: (urls) ->
     initView()
 
     @urls = urls
 
-    @getRequestedGames()
+    @getWantedGames()
 
-  getRequestedGames: ->
+  getWantedGames: ->
     $.getJSON(
-      @urls.requestedGamesUrl,
+      @urls.wantedGamesUrl,
       (games) ->
-        requestedGames.html ''
-        requestedGames.hide()
+        wantedGames.html ''
+        wantedGames.hide()
         addGameToPage(game) for game in games
-        requestedGames.fadeIn()
+        wantedGames.fadeIn()
     )
 
 gameTemplate =

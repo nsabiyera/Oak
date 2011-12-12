@@ -17,7 +17,7 @@ namespace BorrowedGames.Models
 
         NotInterestedGames notInterestedGames = new NotInterestedGames();
 
-        GameRequests gameRequests = new GameRequests();
+        WantedGames wantedGames = new WantedGames();
 
         public User(dynamic dto)
         {
@@ -39,7 +39,7 @@ namespace BorrowedGames.Models
             new HasMany(notInterestedGames);
 
             yield return
-            new HasMany(gameRequests);
+            new HasMany(wantedGames, named: "Wants");
 
             yield return
             new HasMany(friendAssociations);
@@ -82,16 +82,16 @@ namespace BorrowedGames.Models
             friendAssociations.Delete(friendAssociation.Id);
         }
 
-        public void RequestGame(dynamic gameId, dynamic fromUserId)
+        public void WantGame(dynamic gameId, dynamic fromUserId)
         {
-            gameRequests.Insert(new { UserId = This().Id, gameId, fromUserId });
+            wantedGames.Insert(new { UserId = This().Id, gameId, fromUserId });
         }
 
-        public void DeleteGameRequest(dynamic gameId, dynamic fromUserId)
+        public void DeleteWantedGame(dynamic gameId, dynamic fromUserId)
         {
-            var requestId = This().GameRequests().First(new { GameId = gameId, FromUserId = fromUserId }).Id;
+            var requestId = This().Wants().First(new { GameId = gameId, FromUserId = fromUserId }).Id;
 
-            gameRequests.Delete(requestId);
+            wantedGames.Delete(requestId);
         }
 
         public bool HasGame(dynamic game)
@@ -114,14 +114,14 @@ namespace BorrowedGames.Models
             notInterestedGames.Insert(new { UserId = This().Id, gameId });
         }
 
-        public bool HasGameBeenRequested(dynamic game)
+        public bool GameIsWanted(dynamic game)
         {
-            return This().GameRequests().Any(new { GameId = game.Id, FromUserId = game.User().Id });
+            return This().Wants().Any(new { GameId = game.Id, FromUserId = game.User().Id });
         }
 
         public bool HasNotBeenRequested(dynamic game)
         {
-            return !HasGameBeenRequested(game);
+            return !GameIsWanted(game);
         }
 
         public bool OwnsGame(dynamic gameId)
@@ -144,32 +144,32 @@ namespace BorrowedGames.Models
             return This().Games().Any(new { Console = console }) || !HasGames();
         }
             
-        public IEnumerable<dynamic> RequestedGames()
+        public IEnumerable<dynamic> WantedGames()
         {
             return GamesFriendsHave()
-                .Where(HasGameBeenRequested)
+                .Where(GameIsWanted)
                 .Select(UserGame);
         }
 
         public IEnumerable<dynamic> GamesFriendsHave()
         {
-            return This().Friends().Games() as IEnumerable<dynamic>;
+            return This().Friends().Games();
         }
 
         public IEnumerable<dynamic> PreferredGames()
         {
-            var distinctPreferredGames =
+            var preferredGames =
                 GamesFriendsHave()
                     .Where(s =>
-                        DoesNotOwnGame(s.Id) && 
-                        PrefersGame(s.Id) && 
-                        SharesConsole(s.Console) && 
+                        DoesNotOwnGame(s.Id) &&
+                        PrefersGame(s.Id) &&
+                        SharesConsole(s.Console) &&
                         HasNotBeenRequested(s))
                     .Select(UserGame)
                     .OrderBy(s => s.Name)
-                    .ToModels();
+                    .ToList();
 
-            return distinctPreferredGames;
+            return preferredGames;
         }
 
         private dynamic UserGame(dynamic game)

@@ -48,12 +48,12 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
             return controller.Preferred().Data;
         }
 
-        public IEnumerable<dynamic> RequestedGames()
+        public IEnumerable<dynamic> WantedGames()
         {
-            return controller.Requested().Data;
+            return controller.Wanted().Data;
         }
 
-        public bool IsRequested(int gameId, int userId)
+        public bool IsWanted(int gameId, int userId)
         {
             if (PreferredGame(gameId, userId) == null) return true;
 

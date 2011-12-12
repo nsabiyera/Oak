@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="Controllers\describe_AccountController.cs" />
     <Compile Include="Controllers\describe_FriendsController.cs" />
-    <Compile Include="Controllers\describe_GamesController\requested_games.cs" />
+    <Compile Include="Controllers\describe_GamesController\wanted_games.cs" />
     <Compile Include="Controllers\describe_GamesController\not_interested_games.cs" />
     <Compile Include="Controllers\describe_GamesController\preferred_games.cs" />
     <Compile Include="Controllers\describe_GamesController\_games_controller.cs" />

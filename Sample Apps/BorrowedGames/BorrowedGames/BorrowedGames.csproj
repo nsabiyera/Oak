@@ -321,14 +321,14 @@
     <Content Include="Scripts\app\gamelibrary.js" />
     <Content Include="Scripts\app\growl.js" />
     <Content Include="Scripts\app\profile.js" />
-    <Content Include="Scripts\app\requested.coffee">
+    <Content Include="Scripts\app\wanted.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
-      <LastGenOutput>requested.js</LastGenOutput>
+      <LastGenOutput>wanted.js</LastGenOutput>
     </Content>
-    <Content Include="Scripts\app\requested.js">
+    <Content Include="Scripts\app\wanted.js">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>requested.coffee</DependentUpon>
+      <DependentUpon>wanted.coffee</DependentUpon>
     </Content>
     <Content Include="Scripts\app\toggle.js" />
     <Content Include="Scripts\app\preferred.coffee">

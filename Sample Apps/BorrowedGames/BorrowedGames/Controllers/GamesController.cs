@@ -10,15 +10,32 @@ namespace BorrowedGames.Controllers
     {
         public dynamic Preferred()
         {
-            return Json(AddHyperMediaLinks(User().PreferredGames().ToList()));
+            return Json(AddHyperMediaLinks(User().PreferredGames()));
+        }
+
+        public dynamic Wanted()
+        {
+            return Json(User().WantedGames());
         }
 
         public IEnumerable<dynamic> AddHyperMediaLinks(List<dynamic> games)
         {
-            games.ForEach(s => 
+            games.ForEach(s =>
             {
-                s.NotInterested = Url.RouteUrl(new { controller = "Games", action = "NotInterested", gameId = s.Id });
-                s.RequestGame = Url.RouteUrl(new { controller = "Games", action = "RequestGame", gameId = s.Id, followingId = s.Owner.Id });
+                s.NotInterested = Url.RouteUrl(new
+                {
+                    controller = "Games",
+                    action = "NotInterested",
+                    gameId = s.Id
+                });
+
+                s.WantGame = Url.RouteUrl(new
+                {
+                    controller = "Games",
+                    action = "WantGame",
+                    gameId = s.Id,
+                    followingId = s.Owner.Id
+                });
             });
 
             return games;
@@ -29,22 +46,17 @@ namespace BorrowedGames.Controllers
         {
             User().MarkGameNotInterested(gameId);
         }
-        
+
         [HttpPost]
-        public void RequestGame(int gameId, int followingId)
+        public void WantGame(int gameId, int followingId)
         {
-            User().RequestGame(gameId, followingId);
+            User().WantGame(gameId, followingId);
         }
 
         [HttpPost]
-        public void DeleteRequest(int gameId, int followingId)
+        public void DeleteWant(int gameId, int followingId)
         {
-            User().DeleteGameRequest(gameId, followingId);
-        }
-
-        public dynamic Requested()
-        {
-            return Json(User().RequestedGames());
+            User().DeleteWantedGame(gameId, followingId);
         }
     }
 }

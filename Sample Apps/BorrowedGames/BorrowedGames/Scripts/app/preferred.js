@@ -43,13 +43,13 @@
     closeLink = $game.closeLink();
     userId = $game.game.Owner.Id;
     takeAction.click(function() {
-      return $.post(game.RequestGame, {}, function() {
+      return $.post(game.WantGame, {}, function() {
         return $game.fadeOut(function() {
-          return requested.getRequestedGames();
+          return wanted.getWantedGames();
         });
       });
     });
-    toolTip.init(takeAction, "RequestGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
+    toolTip.init(takeAction, "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
       return $game.offset().left + 100;
     }, function() {
       return takeAction.offset().top;

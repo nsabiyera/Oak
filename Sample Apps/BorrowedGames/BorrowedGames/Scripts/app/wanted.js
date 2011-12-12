@@ -1,8 +1,8 @@
 (function() {
-  var addGameToPage, gameTemplate, initView, requestedGames;
-  requestedGames = null;
+  var addGameToPage, gameTemplate, initView, wantedGames;
+  wantedGames = null;
   initView = function() {
-    return requestedGames = $("#requestedGames");
+    return wantedGames = $("#wantedGames");
   };
   addGameToPage = function(game) {
     var $game, gameName;
@@ -15,24 +15,24 @@
       gameName: gameName,
       owner: game.Owner.Handle
     });
-    return requestedGames.append($game);
+    return wantedGames.append($game);
   };
-  this.requested = {
+  this.wanted = {
     init: function(urls) {
       initView();
       this.urls = urls;
-      return this.getRequestedGames();
+      return this.getWantedGames();
     },
-    getRequestedGames: function() {
-      return $.getJSON(this.urls.requestedGamesUrl, function(games) {
+    getWantedGames: function() {
+      return $.getJSON(this.urls.wantedGamesUrl, function(games) {
         var game, _i, _len;
-        requestedGames.html('');
-        requestedGames.hide();
+        wantedGames.html('');
+        wantedGames.hide();
         for (_i = 0, _len = games.length; _i < _len; _i++) {
           game = games[_i];
           addGameToPage(game);
         }
-        return requestedGames.fadeIn();
+        return wantedGames.fadeIn();
       });
     }
   };

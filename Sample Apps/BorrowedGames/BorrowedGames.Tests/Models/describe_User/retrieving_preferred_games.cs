@@ -77,7 +77,7 @@ namespace BorrowedGames.Tests.Models.describe_User
 
                 GivenUserIsFollowingTwoPeopleWhoHaveDifferentGames();
 
-                user.RequestGame(gearsOfWarXBOX360Id, anotherUserId);
+                user.WantGame(gearsOfWarXBOX360Id, anotherUserId);
             };
 
             it["requested games do not show up (they are no longer considered preferred)"] = () =>

@@ -6,7 +6,7 @@ using Massive;
 
 namespace BorrowedGames.Models
 {
-    public class GameRequests : DynamicRepository
+    public class WantedGames : DynamicRepository
     {
     }
 }

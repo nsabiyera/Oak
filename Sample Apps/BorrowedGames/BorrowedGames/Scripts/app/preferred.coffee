@@ -44,15 +44,15 @@ wireUpGameEventHandlers = ($game) ->
   userId = $game.game.Owner.Id
 
   takeAction.click(->
-    $.post(game.RequestGame,
+    $.post(game.WantGame,
     { },
-    -> $game.fadeOut(-> requested.getRequestedGames())
+    -> $game.fadeOut(-> wanted.getWantedGames())
     )
   )
 
   toolTip.init(
     takeAction,
-    "RequestGame",
+    "WantGame",
     "Click here to request the game.",
     "You get the idea...<br/>Request game.",
     -> $game.offset().left + 100

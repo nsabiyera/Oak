@@ -110,11 +110,11 @@ namespace BorrowedGames.Tests
             GivenUserHasGame(isFollowing, whoHasGame);
         }
 
-        protected void GivenUserHasRequestedGame(int userId, int fromUser, int game)
+        protected void GivenUserWantsGame(int userId, int fromUser, int game)
         {
             GivenUserHasFriendWithGame(userId, fromUser, game);
 
-            User(userId).RequestGame(game, fromUser);
+            User(userId).WantGame(game, fromUser);
         }
 
         protected dynamic User(int userId)

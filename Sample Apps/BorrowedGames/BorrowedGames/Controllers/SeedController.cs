@@ -48,7 +48,7 @@ namespace Oak.Controllers
 
             CreateNotInterestedGames();
 
-            CreateGameRequests();
+            CreateWantedGames();
 
             AddConsoleToGames();
 
@@ -101,9 +101,9 @@ namespace Oak.Controllers
             }).ExecuteNonQuery();
         }
 
-        private void CreateGameRequests()
+        private void CreateWantedGames()
         {
-            Seed.CreateTable("GameRequests", new dynamic[] {
+            Seed.CreateTable("WantedGames", new dynamic[] {
                 Id(),
                 UserId(),
                 GameId(),
