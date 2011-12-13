@@ -1,7 +1,17 @@
 ﻿<script src="@Url.Content("~/scripts/app/preferred.js")"></script>
 <script src="@Url.Content("~/scripts/app/wanted.js")"></script>
 
-<h3>OMG Games!</h3>
+<h3>Requested games (mockup)</h3>
+<div class="border">
+    <div class="info">No one is requesting any games from you.</div>
+</div>
+<div class="border">
+    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
+        <a class="check" href="javascript:alert('todo');">I have given him the game</a>
+    </div>
+    <div style="width: 60%; font-size: 20px">@@amirrajan is requesting<br /> Star Wars: The Force Unleashed (XBOX360)</div>
+</div>
+<h3>Games you have access to</h3>
 <div id="wantedGames">
 </div>
 <div class="border">
@@ -15,8 +25,8 @@
 
         urls.preferredGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Preferred" })';
         urls.notInterestedUrl = '@Url.RouteUrl(new { controller = "Games", action = "NotInterested" })';
-        urls.wantGameUrl = '@Url.RouteUrl(new { Controller = "Games", action = "WantGame" })';
-        urls.wantedGamesUrl = '@Url.RouteUrl(new { Controller = "Games", action = "Wanted" })';
+        urls.wantedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Wanted" })';
+        urls.requestedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Requested" })';
 
         $(function () {
             preferred.init(urls);

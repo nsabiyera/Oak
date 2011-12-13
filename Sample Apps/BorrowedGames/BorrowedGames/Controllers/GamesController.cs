@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BorrowedGames.Models;
+using Oak;
 
 namespace BorrowedGames.Controllers
 {
     public class GamesController : BaseController
     {
+        WantedGames wantedGames = new WantedGames();
+
         public dynamic Preferred()
         {
             return Json(AddHyperMediaLinks(User().PreferredGames()));
@@ -16,6 +20,13 @@ namespace BorrowedGames.Controllers
         public dynamic Wanted()
         {
             return Json(User().WantedGames());
+        }
+
+        public dynamic Requested()
+        {
+            dynamic requested = wantedGames.All(where: "FromUserId = @0", args: new object[] { CurrentUser });
+
+            return Json(requested.Games());
         }
 
         public IEnumerable<dynamic> AddHyperMediaLinks(List<dynamic> games)

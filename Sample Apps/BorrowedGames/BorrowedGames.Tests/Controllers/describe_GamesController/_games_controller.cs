@@ -10,7 +10,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
     {
         public GamesController controller;
 
-        public int mirrorsEdgeId, userId, followingId, anotherUserId, gearsOfWarId;
+        public int mirrorsEdgeId, currentUserId, friendId, anotherFriendId, gearsOfWarId;
 
         void before_each()
         {
@@ -20,13 +20,13 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             MockRouting(controller);
 
-            userId = GivenUser("user@example.com");
+            currentUserId = GivenUser("user@example.com");
 
-            followingId = GivenUser("following@example.com", "@following");
+            friendId = GivenUser("following@example.com", "@following");
 
-            anotherUserId = GivenUser("another@example.com");
+            anotherFriendId = GivenUser("another@example.com");
 
-            controller.CurrentUser = userId;
+            controller.CurrentUser = currentUserId;
 
             mirrorsEdgeId = GivenGame("Mirror's Edge");
 
@@ -41,6 +41,16 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
         public dynamic FirstPreferredGame()
         {
             return PreferredGames().First();
+        }
+
+        public dynamic FirstRequestedGame()
+        {
+            return RequestedGames().First();
+        }
+
+        public IEnumerable<dynamic> RequestedGames()
+        {
+            return controller.Requested().Data;
         }
 
         public IEnumerable<dynamic> PreferredGames()

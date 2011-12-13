@@ -15,7 +15,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             context["given user has preferred games"] = () =>
             {
-                before = () => GivenUserHasFriendWithGame(userId, isFollowing: followingId, whoHasGame: mirrorsEdgeId);
+                before = () => GivenUserHasFriendWithGame(currentUserId, isFollowing: friendId, whoHasGame: mirrorsEdgeId);
 
                 it["games marked as not interested do not show up on preferred games list"] = () =>
                     PreferredGames().Count().should_be(0);

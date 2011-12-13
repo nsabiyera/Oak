@@ -15,7 +15,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             context["given user is following a user who has games"] = () =>
             {
-                before = () => GivenUserHasFriendWithGame(userId, followingId, mirrorsEdgeId);
+                before = () => GivenUserHasFriendWithGame(currentUserId, friendId, mirrorsEdgeId);
 
                 it["contains a list of preferred games"] = () =>
                 {
@@ -33,12 +33,12 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 it["contains a hypermedia link to request game"] = () =>
                 {
                     int gameId = FirstPreferredGame().Id;
-                    (FirstPreferredGame().WantGame as string).should_be("/Games/WantGame?gameId=" + gameId + "&followingId=" + followingId);
+                    (FirstPreferredGame().WantGame as string).should_be("/Games/WantGame?gameId=" + gameId + "&followingId=" + friendId);
                 };
 
                 context["user owns a game that a friend has"] = () =>
                 {
-                    before = () => GivenUserHasGame(userId, mirrorsEdgeId);
+                    before = () => GivenUserHasGame(currentUserId, mirrorsEdgeId);
 
                     it["doesn't contain game"] = () => PreferredGames().Count().should_be(0);
                 };

@@ -23,13 +23,13 @@ namespace BorrowedGames.Tests.Controllers
 
             it["marks the game as requested"] = () =>
             {
-                GivenUserHasFriendWithGame(userId, isFollowing: followingId, whoHasGame: mirrorsEdgeId);
+                GivenUserHasFriendWithGame(currentUserId, isFollowing: friendId, whoHasGame: mirrorsEdgeId);
 
-                IsWanted(mirrorsEdgeId, userId).should_be_true();
+                IsWanted(mirrorsEdgeId, currentUserId).should_be_true();
 
-                controller.WantGame(mirrorsEdgeId, followingId);
+                controller.WantGame(mirrorsEdgeId, friendId);
 
-                IsWanted(mirrorsEdgeId, followingId).should_be_true();
+                IsWanted(mirrorsEdgeId, friendId).should_be_true();
             };
         }
 
@@ -37,28 +37,28 @@ namespace BorrowedGames.Tests.Controllers
         {
             before = () =>
             {
-                GivenUserWantsGame(userId, fromUser: followingId, game: gearsOfWarId);
+                GivenUserWantsGame(currentUserId, fromUser: friendId, game: gearsOfWarId);
 
-                GivenUserWantsGame(userId, fromUser: anotherUserId, game: mirrorsEdgeId);
+                GivenUserWantsGame(currentUserId, fromUser: anotherFriendId, game: mirrorsEdgeId);
 
-                GivenUserWantsGame(userId, fromUser: followingId, game: mirrorsEdgeId);
+                GivenUserWantsGame(currentUserId, fromUser: friendId, game: mirrorsEdgeId);
             };
 
-            act = () => controller.DeleteWant(mirrorsEdgeId, followingId);
+            act = () => controller.DeleteWant(mirrorsEdgeId, friendId);
 
-            it["is no longer requested"] = () => IsWanted(mirrorsEdgeId, followingId).should_be_false();
+            it["is no longer requested"] = () => IsWanted(mirrorsEdgeId, friendId).should_be_false();
 
             it["other requests are unchanged"] = () =>
             {
-                IsWanted(mirrorsEdgeId, anotherUserId).should_be_true();
+                IsWanted(mirrorsEdgeId, anotherFriendId).should_be_true();
 
-                IsWanted(gearsOfWarId, followingId).should_be_true();
+                IsWanted(gearsOfWarId, friendId).should_be_true();
             };
         }
 
         void retrieving_requested_games()
         {
-            before = () => GivenUserWantsGame(userId, fromUser: followingId, game: mirrorsEdgeId);
+            before = () => GivenUserWantsGame(currentUserId, fromUser: friendId, game: mirrorsEdgeId);
 
             it["lists requested games"] = () =>
                 WantedGames().should_contain(s => s.Name == "Mirror's Edge");
@@ -68,7 +68,7 @@ namespace BorrowedGames.Tests.Controllers
 
             context["user has preferred games (games that haven't been requested)"] = () =>
             {
-                before = () => GivenUserHasFriendWithGame(userId, isFollowing: followingId, whoHasGame: gearsOfWarId);
+                before = () => GivenUserHasFriendWithGame(currentUserId, isFollowing: friendId, whoHasGame: gearsOfWarId);
 
                 it["doesn't contain games that haven't been requested yet"] = () => 
                     WantedGames().should_not_contain(s => s.Name == "Gears of War");

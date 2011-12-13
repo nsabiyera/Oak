@@ -111,7 +111,7 @@ div.modal input
 	font-size: 17px;
 }
 
-.edit, .delete, .info, .cancel, .add, .up, .down
+.edit, .delete, .info, .cancel, .add, .up, .down, .check
 {
 	background-position: left center;
 	background-repeat: no-repeat;
@@ -154,6 +154,11 @@ div.modal input
 .down
 {
 	background-image: url('images/down20.png');
+}
+
+.check
+{
+	background-image: url('images/check20.png');	
 }
 
 .border

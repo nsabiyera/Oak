@@ -84,7 +84,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Models\Friends.cs" />
-    <Compile Include="Models\GameRequests.cs" />
+    <Compile Include="Models\WantedGame.cs" />
+    <Compile Include="Models\WantedGames.cs" />
     <Compile Include="Models\Games.cs" />
     <Compile Include="Models\Library.cs" />
     <Compile Include="Controllers\SeedController.cs" />
@@ -137,6 +138,8 @@
     <Content Include="Content\images\calendaricon.png" />
     <Content Include="Content\images\cancel.png" />
     <Content Include="Content\images\cancel20.png" />
+    <Content Include="Content\images\check.png" />
+    <Content Include="Content\images\check20.png" />
     <Content Include="Content\images\circle20.png" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\delete20.png" />
