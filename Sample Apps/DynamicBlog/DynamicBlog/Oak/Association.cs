@@ -31,9 +31,14 @@ namespace Oak
             return mixWith.GetType().GetMethod("Associates") != null;
         }
 
-        public dynamic AssociationNamed(dynamic name)
+        public dynamic AssociationNamed(dynamic collectionName)
         {
-            return referencedAssociations.FirstOrDefault(s => s.Named == name);
+            return referencedAssociations.FirstOrDefault(s => s.Named == collectionName || s.Named == Singularize(collectionName));
+        }
+
+        public string Singularize(string collectionName)
+        {
+            return collectionName.Substring(0, collectionName.Length - 1);
         }
     }
 
@@ -416,6 +421,20 @@ namespace Oak
             model.SetUnTrackedMember(
                 Named,
                 new DynamicFunction(() => Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName))));
+        }
+
+        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        {
+            List<dynamic> collection = new List<dynamic>();
+
+            models.ForEach(s => 
+            {
+                var belongsTo = s.GetMember(Named)();
+                belongsTo.SetMember(s.GetType().Name, new DynamicFunction(() => s));
+                collection.Add(belongsTo);
+            });
+
+            return new DynamicModels(collection);
         }
     }
 }
