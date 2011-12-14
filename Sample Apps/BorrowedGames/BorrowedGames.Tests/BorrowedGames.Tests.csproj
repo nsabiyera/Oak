@@ -77,6 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="rake-dot-net-usage.txt" />
+    <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="specwatchr-usage.txt" />
   </ItemGroup>
   <ItemGroup>

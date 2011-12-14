@@ -323,6 +323,11 @@
     <Content Include="Scripts\app\friends.js" />
     <Content Include="Scripts\app\gamelibrary.js" />
     <Content Include="Scripts\app\growl.js" />
+    <Content Include="Scripts\app\game.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>game.coffee</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\profile.js" />
     <Content Include="Scripts\app\wanted.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
@@ -348,11 +353,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>toolTip.coffee</DependentUpon>
     </Content>
+    <Content Include="Scripts\backbone.js" />
+    <Content Include="Scripts\backbone.min.js" />
+    <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery-position.js" />
     <Content Include="Scripts\jQuery.tmpl.js" />
     <Content Include="Scripts\jQuery.tmpl.min.js" />
     <Content Include="Scripts\modit\modit.js" />
     <Content Include="Scripts\modit\underscore.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-1.4.4.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />
@@ -411,6 +423,10 @@
     <Content Include="Views\Home\_Friends.cshtml" />
     <None Include="sass\screen.scss" />
     <Content Include="Views\Home\_Games.cshtml" />
+    <None Include="Scripts\app\game.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>game.js</LastGenOutput>
+    </None>
     <None Include="Scripts\app\toolTip.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
       <LastGenOutput>toolTip.js</LastGenOutput>
