@@ -10,6 +10,8 @@ namespace Oak.Tests.describe_DynamicModels.Classes
     {
         Emails emails = new Emails();
 
+        Profiles profiles = new Profiles();
+
         public User(dynamic dto)
         {
             Init(dto);
@@ -18,6 +20,8 @@ namespace Oak.Tests.describe_DynamicModels.Classes
         public IEnumerable<dynamic> Associates()
         {
             yield return new HasMany(emails);
+
+            yield return new HasOne(profiles);
         }
     }
 }

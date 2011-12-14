@@ -33,7 +33,11 @@ namespace Oak
 
         public dynamic AssociationNamed(dynamic collectionName)
         {
-            return referencedAssociations.FirstOrDefault(s => s.Named == collectionName || s.Named == Singularize(collectionName));
+            var association = referencedAssociations.FirstOrDefault(s => s.Named == collectionName || s.Named == Singularize(collectionName));
+
+            if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
+
+            return association;
         }
 
         public string Singularize(string collectionName)
@@ -346,8 +350,16 @@ namespace Oak
         public string ForeignKey { get; set; }
 
         public HasOne(DynamicRepository repository)
+            : this(repository, null)
+        {
+
+        }
+
+        public HasOne(DynamicRepository repository, string named)
         {
             this.Repository = repository;
+
+            Named = named ?? Singular(Repository);
         }
 
         public void Init(DynamicModel model)
@@ -355,8 +367,22 @@ namespace Oak
             string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
 
             model.SetUnTrackedMember(
-                Singular(Repository),
+                Named,
                 new DynamicFunction(() => Repository.SingleWhere(foreignKeyName + " = @0", model.GetMember(Id()))));
+        }
+
+        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        {
+            List<dynamic> collection = new List<dynamic>();
+
+            models.ForEach(s =>
+            {
+                var hasOne = s.GetMember(Named)();
+                hasOne.SetMember(s.GetType().Name, new DynamicFunction(() => s));
+                collection.Add(hasOne);
+            });
+
+            return new DynamicModels(collection);
         }
     }
 
