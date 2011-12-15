@@ -1,5 +1,5 @@
 (function() {
-  var _base, _base2, _base3;
+  var gameTemplate, _base, _base2, _base3;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -42,10 +42,10 @@
     PreferredGamesView.prototype.render = function() {
       if (this.preferredGames.length === 0) {
         $(this.el).html('\
-				<div class="info" id="showFriends" style="padding-left: 30px">\
-					Games you don\'t own (that your friends have) will show up here.\
-				</div>\
-				');
+        <div class="info" id="showFriends" style="padding-left: 30px">\
+          Games you don\'t own (that your friends have) will show up here.\
+        </div>\
+        ');
       } else {
         $(this.el).empty();
         this.preferredGames.each(__bind(function(library) {
@@ -69,9 +69,33 @@
       return _.bindAll(this, 'render');
     };
     PreferredGameView.prototype.render = function() {
-      $(this.el).html(this.model.get("Name") + ": " + this.model.get("WantGame"));
+      var game;
+      game = $.tmpl(gameTemplate, {});
+      $(this.el).html(game);
+      $(this.el).append($("<div />").css({
+        clear: "both"
+      }));
       return this;
     };
     return PreferredGameView;
   })();
+  gameTemplate = '\
+  <div id="game${gameId}_${userId}" class="border dropshadow" style="float: left; width: 100px; height: 160px">\
+    <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">\
+      <a href="javascript:;" id="closeLink${gameId}_${userId}" \
+         style="text-decoration: none; color: black; float: right; padding-left: 15px" \
+         class="cancel">&nbsp;</a>\
+      <div style="clear: both">&nbsp;</div>\
+    </div>\
+    <div style="font-size: 12px; height: 70px; padding-bottom: 3px">\
+      <a style="color: black;" href="${searchString}" target="_blank">${gameName}</a><br/>\
+    </div>\
+    <div style="font-size: 12px; height: 30px; padding-bottom: 3px">\
+      ${owner}\
+    </div>\
+    <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">\
+      <a href="javascript:;" id="takeAction${gameId}_${userId}" style="font-size: 12px">request game</a>\
+    </div>\
+  </div>\
+  ';
 }).call(this);
