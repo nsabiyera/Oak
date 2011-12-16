@@ -1,6 +1,5 @@
-﻿<script src="@Url.Content("~/scripts/app/preferred.js")"></script>
-<script src="@Url.Content("~/scripts/app/wanted.js")"></script>
-<script src="@Url.Content("~/scripts/app/game.js")"></script>
+﻿<script src="@Url.Content("~/scripts/app/wanted.js")"></script>
+<script src="@Url.Content("~/scripts/app/preferred.js")"></script>
 <!--
 <h3>Requested games (mockup)</h3>
 <div class="border">
@@ -32,10 +31,6 @@
 
         wanted.init(urls);
 
-        var view = new preferredGamesView();
-
-        view.initialize()
-
-        $("#preferredGames").html(view.el);
+        preferred.init(urls, $("#preferredGames"));
     });
 </script>

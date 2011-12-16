@@ -323,10 +323,10 @@
     <Content Include="Scripts\app\friends.js" />
     <Content Include="Scripts\app\gamelibrary.js" />
     <Content Include="Scripts\app\growl.js" />
-    <Content Include="Scripts\app\game.js">
+    <Content Include="Scripts\app\preferred.js">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>game.coffee</DependentUpon>
+      <DependentUpon>preferred.coffee</DependentUpon>
     </Content>
     <Content Include="Scripts\app\profile.js" />
     <Content Include="Scripts\app\wanted.coffee">
@@ -339,15 +339,6 @@
       <DependentUpon>wanted.coffee</DependentUpon>
     </Content>
     <Content Include="Scripts\app\toggle.js" />
-    <Content Include="Scripts\app\preferred.coffee">
-      <Generator>CoffeeScriptGenerator</Generator>
-      <LastGenOutput>preferred.js</LastGenOutput>
-    </Content>
-    <Content Include="Scripts\app\preferred.js">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>preferred.coffee</DependentUpon>
-    </Content>
     <Content Include="Scripts\app\toolTip.js">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -423,9 +414,9 @@
     <Content Include="Views\Home\_Friends.cshtml" />
     <None Include="sass\screen.scss" />
     <Content Include="Views\Home\_Games.cshtml" />
-    <None Include="Scripts\app\game.coffee">
+    <None Include="Scripts\app\preferred.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
-      <LastGenOutput>game.js</LastGenOutput>
+      <LastGenOutput>preferred.js</LastGenOutput>
     </None>
     <None Include="Scripts\app\toolTip.coffee">
       <Generator>CoffeeScriptGenerator</Generator>

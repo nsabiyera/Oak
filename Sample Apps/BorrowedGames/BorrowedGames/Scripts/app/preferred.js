@@ -1,99 +1,133 @@
 (function() {
-  var addGameToPage, gameElementFor, gameTemplate, initView, preferredGames, setRequested, wireUpGameEventHandlers;
-  preferredGames = null;
-  initView = function() {
-    return preferredGames = $("#preferredGames");
-  };
-  addGameToPage = function(game) {
-    var $game;
-    $game = gameElementFor(game);
-    return preferredGames.append($game);
-  };
-  setRequested = function($game) {};
-  gameElementFor = function(game) {
-    var $game, gameName, searchString, userId;
-    searchString = "http://www.google.com/search?q=" + encodeURIComponent(game.Name + " ") + "site:gamespot.com&btnI=3564";
-    userId = game.Owner.Id;
-    gameName = game.Name;
-    if (game.Name.length > 45) {
-      gameName = game.Name.substring(0, 40) + "... ";
-    }
-    gameName += " (" + game.Console + ")";
-    $game = $.tmpl(gameTemplate, {
-      gameId: game.Id,
-      gameName: gameName,
-      searchString: searchString,
-      owner: game.Owner.Handle,
-      userId: userId
-    });
-    $game.game = game;
-    $game.takeActionLink = function() {
-      return $game.find("#takeAction" + game.Id + "_" + userId);
-    };
-    $game.closeLink = function() {
-      return $game.find("#closeLink" + game.Id + "_" + userId);
-    };
-    wireUpGameEventHandlers($game);
-    return $game;
-  };
-  wireUpGameEventHandlers = function($game) {
-    var closeLink, game, takeAction, userId;
-    game = $game.game;
-    takeAction = $game.takeActionLink();
-    closeLink = $game.closeLink();
-    userId = $game.game.Owner.Id;
-    takeAction.click(function() {
-      return $.post(game.WantGame, {}, function() {
-        return $game.fadeOut(function() {
-          return wanted.getWantedGames();
-        });
-      });
-    });
-    toolTip.init(takeAction, "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
-      return $game.offset().left + 100;
-    }, function() {
-      return takeAction.offset().top;
-    });
-    toolTip.init(closeLink, "NotInterested", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
-      return $game.offset().left + 100;
-    }, function() {
-      return $game.offset().top + -25;
-    });
-    return closeLink.click(function() {
-      return $.post(game.NotInterested, {}, function() {
-        return $game.fadeOut();
-      });
-    });
-  };
+  var libraries, library, preferredGameView, preferredGamesUrl, preferredGamesView;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  preferredGamesUrl = "";
   this.preferred = {
-    init: function(urls) {
-      initView();
-      this.urls = urls;
-      return this.getPreferredGames();
+    init: function(urls, div) {
+      preferredGamesUrl = urls.preferredGamesUrl;
+      this.view = new preferredGamesView();
+      this.view.initialize();
+      return div.html(this.view.el);
     },
     getPreferredGames: function() {
-      return $.getJSON(this.urls.preferredGamesUrl, function(games) {
-        var game, _i, _len;
-        preferredGames.html('');
-        for (_i = 0, _len = games.length; _i < _len; _i++) {
-          game = games[_i];
-          addGameToPage(game);
-        }
-        preferredGames.append($("<div />").css({
-          clear: "both"
-        }));
-        if (!games.length) {
-          return preferredGames.html('\
-          <div class="info" id="showFriends" style="padding-left: 30px">\
-            Games you don\'t own (that your friends have) will show up here.\
-          </div>\
-          ');
-        }
-      });
+      return this.view.refresh();
     }
   };
-  gameTemplate = '\
-  <div id="game${gameId}_${userId}" class="border dropshadow" style="float: left; width: 100px; height: 160px">\
+  library = Backbone.Model.extend({
+    reviewUrl: function() {
+      return "http://www.google.com/search?q=" + encodeURIComponent(this.name() + " ") + "site:gamespot.com&btnI=3564";
+    },
+    name: function() {
+      return this.get("Name");
+    },
+    console: function() {
+      return this.get("Console");
+    },
+    shortName: function() {
+      var name;
+      name = this.name();
+      if (name > 45) {
+        name = name.substring(0, 40) + "... ";
+      }
+      return name += " (" + this.console() + ")";
+    },
+    notInterested: function() {
+      return $.post(this.get("NotInterested"), {}, __bind(function() {
+        this.deleted = true;
+        return this.change();
+      }, this));
+    },
+    wantGame: function() {
+      return $.post(this.get("WantGame"), {}, __bind(function() {
+        this.wanted = true;
+        wanted.getWantedGames();
+        return this.change();
+      }, this));
+    },
+    deleted: false,
+    wanted: false
+  });
+  libraries = Backbone.Collection.extend({
+    model: library,
+    url: function() {
+      return preferredGamesUrl;
+    }
+  });
+  preferredGamesView = Backbone.View.extend({
+    initialize: function() {
+      _.bindAll(this, 'render');
+      this.preferredGames = new libraries();
+      this.preferredGames.bind('reset', this.render);
+      return this.preferredGames.fetch();
+    },
+    refresh: function() {
+      return this.preferredGames.fetch();
+    },
+    render: function() {
+      $(this.el).empty();
+      if (this.preferredGames.length === 0) {
+        return $(this.el).html('\
+        <div class="info" id="showFriends" style="padding-left: 30px">\
+          Games you don\'t own (that your friends have) will show up here.\
+        </div>\
+        ');
+      } else {
+        this.preferredGames.each(__bind(function(library) {
+          var view;
+          view = new preferredGameView({
+            model: library
+          });
+          view.initialize();
+          return $(this.el).append(view.render().el);
+        }, this));
+        return $(this.el).append($("<div />").css({
+          clear: "both"
+        }));
+      }
+    }
+  });
+  preferredGameView = Backbone.View.extend({
+    className: 'gameBox',
+    initialize: function() {
+      _.bindAll(this, "render", "apply");
+      return this.model.bind('change', this.apply);
+    },
+    apply: function() {
+      if (this.model.deleted || this.model.wanted) {
+        return $(this.el).fadeOut();
+      }
+    },
+    events: {
+      "click .cancel": "notInterested",
+      "click .request": "wantGame"
+    },
+    notInterested: function() {
+      return this.model.notInterested();
+    },
+    wantGame: function() {
+      return this.model.wantGame();
+    },
+    render: function() {
+      var game, requestLink;
+      game = $.tmpl(this.gameTemplate, {
+        gameName: this.model.shortName(),
+        searchString: this.model.reviewUrl()
+      });
+      $(this.el).html(game);
+      requestLink = game.find(".request");
+      toolTip.init(requestLink, "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
+        return game.offset().left + 100;
+      }, function() {
+        return requestLink.offset().top;
+      });
+      toolTip.init(game.find(".cancel"), "NotInterested", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
+        return game.offset().left + 100;
+      }, function() {
+        return game.offset().top + -25;
+      });
+      return this;
+    },
+    gameTemplate: '\
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">\
       <a href="javascript:;" id="closeLink${gameId}_${userId}" \
          style="text-decoration: none; color: black; float: right; padding-left: 15px" \
@@ -107,8 +141,8 @@
       ${owner}\
     </div>\
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">\
-      <a href="javascript:;" id="takeAction${gameId}_${userId}" style="font-size: 12px">request game</a>\
+      <a href="javascript:;" class="request" style="font-size: 12px">request game</a>\
     </div>\
-  </div>\
-  ';
+    '
+  });
 }).call(this);
