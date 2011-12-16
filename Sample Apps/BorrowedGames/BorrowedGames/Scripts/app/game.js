@@ -1,86 +1,115 @@
 (function() {
-  var gameTemplate, _base, _base2, _base3;
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  window.BG || (window.BG = {});
-  (_base = window.BG).Models || (_base.Models = {});
-  (_base2 = window.BG).Views || (_base2.Views = {});
-  (_base3 = window.BG).Collections || (_base3.Collections = {});
-  BG.Models.Library = (function() {
-    __extends(Library, Backbone.Model);
-    function Library() {
-      Library.__super__.constructor.apply(this, arguments);
-    }
-    return Library;
-  })();
-  BG.Collections.Libraries = (function() {
-    __extends(Libraries, Backbone.Collection);
-    function Libraries() {
-      Libraries.__super__.constructor.apply(this, arguments);
-    }
-    Libraries.prototype.model = BG.Models.Library;
-    Libraries.prototype.url = "/games/preferred";
-    return Libraries;
-  })();
-  BG.Views.PreferredGamesView = (function() {
-    __extends(PreferredGamesView, Backbone.View);
-    function PreferredGamesView() {
-      PreferredGamesView.__super__.constructor.apply(this, arguments);
-    }
-    PreferredGamesView.prototype.initialize = function() {
+  var libraries, library, preferredGameView;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  library = Backbone.Model.extend({
+    reviewUrl: function() {
+      return "http://www.google.com/search?q=" + encodeURIComponent(this.name() + " ") + "site:gamespot.com&btnI=3564";
+    },
+    name: function() {
+      return this.get("Name");
+    },
+    console: function() {
+      return this.get("Console");
+    },
+    shortName: function() {
+      var name;
+      name = this.name();
+      if (name > 45) {
+        name = name.substring(0, 40) + "... ";
+      }
+      return name += " (" + this.console() + ")";
+    },
+    notInterested: function() {
+      return $.post(this.get("NotInterested"), {}, __bind(function() {
+        this.deleted = true;
+        return this.change();
+      }, this));
+    },
+    wantGame: function() {
+      return $.post(this.get("WantGame"), {}, __bind(function() {
+        this.wanted = true;
+        return this.change();
+      }, this));
+    },
+    deleted: false,
+    wanted: false
+  });
+  libraries = Backbone.Collection.extend({
+    model: library,
+    url: "/games/preferred"
+  });
+  this.preferredGamesView = Backbone.View.extend({
+    initialize: function() {
       _.bindAll(this, 'render');
-      this.preferredGames = new BG.Collections.Libraries;
+      this.preferredGames = new libraries();
       this.preferredGames.bind('reset', this.render);
       return this.preferredGames.fetch();
-    };
-    PreferredGamesView.prototype.render = function() {
+    },
+    render: function() {
+      $(this.el).empty();
       if (this.preferredGames.length === 0) {
-        $(this.el).html('\
+        return $(this.el).html('\
         <div class="info" id="showFriends" style="padding-left: 30px">\
           Games you don\'t own (that your friends have) will show up here.\
         </div>\
         ');
       } else {
-        $(this.el).empty();
         this.preferredGames.each(__bind(function(library) {
           var view;
-          view = new BG.Views.PreferredGameView({
+          view = new preferredGameView({
             model: library
           });
+          view.initialize();
           return $(this.el).append(view.render().el);
         }, this));
+        return $(this.el).append($("<div />").css({
+          clear: "both"
+        }));
       }
-      return this;
-    };
-    return PreferredGamesView;
-  })();
-  BG.Views.PreferredGameView = (function() {
-    __extends(PreferredGameView, Backbone.View);
-    function PreferredGameView() {
-      PreferredGameView.__super__.constructor.apply(this, arguments);
     }
-    PreferredGameView.prototype.initialize = function() {
-      return _.bindAll(this, 'render');
-    };
-    PreferredGameView.prototype.render = function() {
-      var game;
-      game = $.tmpl(gameTemplate, {});
+  });
+  preferredGameView = Backbone.View.extend({
+    className: 'gameBox',
+    initialize: function() {
+      _.bindAll(this, "render", "apply");
+      return this.model.bind('change', this.apply);
+    },
+    apply: function() {
+      if (this.model.deleted || this.model.wanted) {
+        return $(this.el).fadeOut();
+      }
+    },
+    events: {
+      "click .cancel": "notInterested",
+      "click .request": "wantGame"
+    },
+    notInterested: function() {
+      return this.model.notInterested();
+    },
+    wantGame: function() {
+      return this.model.wantGame();
+    },
+    render: function() {
+      var game, requestLink;
+      game = $.tmpl(this.gameTemplate, {
+        gameName: this.model.shortName(),
+        searchString: this.model.reviewUrl()
+      });
       $(this.el).html(game);
-      $(this.el).append($("<div />").css({
-        clear: "both"
-      }));
+      requestLink = game.find(".request");
+      toolTip.init(requestLink, "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
+        return game.offset().left + 100;
+      }, function() {
+        return requestLink.offset().top;
+      });
+      toolTip.init(game.find(".cancel"), "NotInterested", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
+        return game.offset().left + 100;
+      }, function() {
+        return game.offset().top + -25;
+      });
       return this;
-    };
-    return PreferredGameView;
-  })();
-  gameTemplate = '\
-  <div id="game${gameId}_${userId}" class="border dropshadow" style="float: left; width: 100px; height: 160px">\
+    },
+    gameTemplate: '\
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">\
       <a href="javascript:;" id="closeLink${gameId}_${userId}" \
          style="text-decoration: none; color: black; float: right; padding-left: 15px" \
@@ -94,8 +123,8 @@
       ${owner}\
     </div>\
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">\
-      <a href="javascript:;" id="takeAction${gameId}_${userId}" style="font-size: 12px">request game</a>\
+      <a href="javascript:;" class="request" style="font-size: 12px">request game</a>\
     </div>\
-  </div>\
-  ';
+    '
+  });
 }).call(this);

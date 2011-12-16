@@ -32,8 +32,10 @@
 
         wanted.init(urls);
 
-        var view = new BG.Views.PreferredGamesView();
+        var view = new preferredGamesView();
 
-        $("#preferredGames").html(view.render().el);
+        view.initialize()
+
+        $("#preferredGames").html(view.el);
     });
 </script>

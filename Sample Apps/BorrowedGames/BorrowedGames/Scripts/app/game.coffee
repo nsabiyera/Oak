@@ -1,28 +1,50 @@
-window.BG ||= { }
+library = Backbone.Model.extend
+  reviewUrl: -> "http://www.google.com/search?q=" + encodeURIComponent(@name() + " ") + "site:gamespot.com&btnI=3564"
 
-window.BG.Models ||= { }
+  name: -> @get("Name")
 
-window.BG.Views ||= { }
+  console: -> @get("Console")
 
-window.BG.Collections ||= { }
+  shortName: ->
+    name = @name()
+    
+    name = name.substring(0, 40) + "... " if name > 45
 
-class BG.Models.Library extends Backbone.Model
+    name += " (" + @console() + ")"
 
-class BG.Collections.Libraries extends Backbone.Collection
-  model: BG.Models.Library
+  notInterested: ->
+    $.post(@get("NotInterested"), { }, =>
+      @deleted = true
+      @change()
+    )
+
+  wantGame: ->
+    $.post(@get("WantGame"), { }, =>
+      @wanted = true
+      @change()
+    )
+
+  deleted: false
+
+  wanted: false
+
+libraries = Backbone.Collection.extend
+  model: library
   url: "/games/preferred"
 
-class BG.Views.PreferredGamesView extends Backbone.View
+this.preferredGamesView = Backbone.View.extend
   initialize: ->
     _.bindAll this, 'render'
 
-    @preferredGames = new BG.Collections.Libraries
+    @preferredGames = new libraries()
 
     @preferredGames.bind 'reset', @render
 
     @preferredGames.fetch()
 
   render: ->
+    $(@el).empty()
+
     if(@preferredGames.length == 0)
       $(@el).html(
         '
@@ -31,31 +53,66 @@ class BG.Views.PreferredGamesView extends Backbone.View
         </div>
         '
       )
-
     else
-      $(@el).empty()
       @preferredGames.each (library) =>
-        view = new BG.Views.PreferredGameView
+
+        view = new preferredGameView
           model: library
+        
+        view.initialize()
+
         $(@el).append view.render().el
 
-    return this
+      $(@el).append($("<div />").css({ clear: "both" }))
 
-class BG.Views.PreferredGameView extends Backbone.View
+preferredGameView = Backbone.View.extend
+  className: 'gameBox'
+
   initialize: ->
-    _.bindAll this, 'render'
+    _.bindAll this, "render", "apply"
+
+    @model.bind 'change', @apply
+
+  apply: ->
+    $(@el).fadeOut() if(@model.deleted || @model.wanted)
+
+  events:
+    "click .cancel": "notInterested"
+    "click .request": "wantGame"
+
+  notInterested: -> @model.notInterested()
+
+  wantGame: -> @model.wantGame()
 
   render: ->
-    game = $.tmpl(gameTemplate, { })
+    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), searchString: @model.reviewUrl() })
+
     $(@el).html(game)
 
-    $(@el).append($("<div />").css({ clear: "both" }))
+    requestLink = game.find(".request")
+
+    toolTip.init(
+      requestLink,
+      "WantGame",
+      "Click here to request the game.",
+      "You get the idea...<br/>Request game.",
+      -> game.offset().left + 100
+      -> requestLink.offset().top
+    )
+
+    toolTip.init(
+      game.find(".cancel"),
+      "NotInterested",
+      "Not interested?<br/>Click to remove it.",
+      "You get the idea...<br/>Remove game.",
+      -> game.offset().left + 100,
+      -> game.offset().top + -25
+    )
 
     return this
 
-gameTemplate =
-  '
-  <div id="game${gameId}_${userId}" class="border dropshadow" style="float: left; width: 100px; height: 160px">
+  gameTemplate:
+    '
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">
       <a href="javascript:;" id="closeLink${gameId}_${userId}" 
          style="text-decoration: none; color: black; float: right; padding-left: 15px" 
@@ -69,7 +126,6 @@ gameTemplate =
       ${owner}
     </div>
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">
-      <a href="javascript:;" id="takeAction${gameId}_${userId}" style="font-size: 12px">request game</a>
+      <a href="javascript:;" class="request" style="font-size: 12px">request game</a>
     </div>
-  </div>
-  '
+    '

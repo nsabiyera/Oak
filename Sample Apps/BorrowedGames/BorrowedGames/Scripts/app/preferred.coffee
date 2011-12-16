@@ -9,7 +9,6 @@ addGameToPage = (game) ->
   preferredGames.append $game
 
 setRequested = ($game) ->
- 
     
 gameElementFor = (game) ->
   searchString =
@@ -73,7 +72,6 @@ wireUpGameEventHandlers = ($game) ->
     { },
     -> $game.fadeOut())
   )
-
 
 this.preferred =
   init: (urls) ->
