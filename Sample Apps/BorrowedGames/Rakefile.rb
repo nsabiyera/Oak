@@ -75,6 +75,8 @@ task :tests => :build do |t, args|
   
   command = @test_runner_command + " --tag #{ args[:tag] }" if args[:tag]
 
+  command = command + " --failfast" if args[:failfast]
+
   puts "Could not find the NSpec test runner at location #{ @test_runner_path }, update your dev.yml to point to the correct runner location" if !File.exists? @test_runner_path
   
   sh command if File.exists? @test_runner_path

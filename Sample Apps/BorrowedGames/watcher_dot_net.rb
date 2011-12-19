@@ -283,7 +283,7 @@ class NSpecRunner < TestRunner
   end
 
   def test_cmd dll, name
-    return "\"#{NSpecRunner.nspec_path}\" \"#{dll}\" \"#{name}\""
+    return "\"#{NSpecRunner.nspec_path}\" \"#{dll}\" \"#{name}\" --failfast"
   end
   
   def inconclusive
