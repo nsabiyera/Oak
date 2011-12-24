@@ -1,0 +1,669 @@
+(in C:/Development/Oak)
+"C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe" "Oak.sln" /verbosity:quiet /nologo
+
+
+describe DynamicForm
+  creating element meta data for a regular class
+    property being converted is a string
+      the Value property is set to the class's property value
+      the Id property is set to the class's 
+    property being converted is an int
+      the Value property is set to the class's property value
+  creating element meta data for a gemini
+    property being converted is a string
+      the Value property is set to the gemini's property value
+  creating element meta data for a nested gemini
+    property being converted is a newly defined property on top level gemini
+      the Value property is set to the newly defined property value
+  creating element meta data for a dynamic model
+    property is a property that has been added via validation constraint
+      the Value property is set to the property defined by the validation constraint
+      value is not considered as part of the element meta data hash (used by OakForm.cshtml)
+    property is a property that has been added as a virtual property
+      the Value property is set to the virtual property defined by the validation constraint
+  creating element data out of hash
+    creates element metadata
+  creating element meta data out of constructor initializer
+    name is specified
+      creates element metadata
+    name and value are specified
+      creates element metadata
+  accessing a property that doesnt exist on a regular class
+    throws a friendly exception
+  accessing a property that doesnt exist on a Gemini
+    throws a friendly exception
+  concatenating html attributes
+    retains value of dynamic model
+    throws a friendly exception when constructing element meta data for a property that doesn't exist
+    adding id override
+      the id is overridden with the one specified
+      id property should not be contained in hash (used by OakForm.cshtml)
+    added value attribute
+      Title property has value
+        the title is set to the entity's title
+      Title property doesn't have a value
+        the title is set to the value from the hash
+
+ dynamic models
+  select many for belongs to relation
+    select many off of collection
+      returns associated entities as collection
+  select many for has many through relation
+    selecting many off of collection
+      returns all emails for all users
+      links back to the specific player the query originated from
+    selecting many from nested relation
+      returns all emails for all users
+    cacheing for select many
+      maintains cache of select many
+      allows the discarding of cache
+  expando dynamic models
+    describe Any
+      matching single property
+        no items in list
+          any returns false
+        items exist in list that match
+          any returns true
+      item exists in list that match multiple properties
+        entry exists where all properties match
+          any returns true
+        entry exists where all properties do not match
+          any returns false
+    describe Where
+      matching single property
+        no items in list
+          result list is empty
+        items exist in list that match
+          returns item
+      item exists in list that match multiple properties
+        entry exists where all properties match
+          returns item
+        entry exists where all properties do not match
+          result list is empty
+      chaining wheres
+        applies first filter then next filter
+    describe ToList
+      converts IEnumerable to a list
+    describe ToModels
+      converts enumerable to dynamic models
+    describe First
+      first taking in a 'where clause'
+        no items in list
+          result is null
+        items exist in list that match
+          returns item
+      first doesn't take in a 'where clause'
+        returns first record
+    describe Last
+      last taking in a 'where clause'
+        no items in list
+          result is null
+        items exist in list that match
+          returns item
+      last doesn't take in a 'where clause'
+        returns first record
+  gemini dynamic models
+    describe Any
+      matching single property
+        no items in list
+          any returns false
+        items exist in list that match
+          any returns true
+      any with no parameters just checks count (which is currently 0)
+        return false
+      item exists in list that match multiple properties
+        entry exists where all properties match
+          any returns true
+        entry exists where all properties do not match
+          any returns false
+    describe Count
+      reports count
+    describe Where
+      matching single property
+        no items in list
+          result list is empty
+        items exist in list that match
+          returns item
+      item exists in list that match multiple properties
+        entry exists where all properties match
+          returns item
+        entry exists where all properties do not match
+          result list is empty
+    describe First
+      no items in list
+        result is null
+      items exist in list that match
+        returns item
+  select many for has many relation
+    selecting many off of collection
+      returns all emails for all users
+    select many for collection with where clause
+      where clause returns records
+        returns all emails for all users
+        links back to the specific user the query originated from
+      where clause returns no records
+        returns an empty list
+    select many from nested relations
+      returns all records from nested relation
+    cacheing for select many
+      maintains cache of select many
+      allows the discarding of cache
+  select many for has one relation
+    select many off of collection
+      returns associated entities as collection
+  select many for has one through relation
+    describe select many off of collection
+      returns associated enties as collection
+  select properties from collection
+    it creates a projection for empty list
+    it creates a projection for populated list for single parameter
+    it creates a projection for populated list for multiple parameters
+
+core behavior for dynamic model
+  root properties
+    adding properties to dynamic model
+      the property is defined on dynamic model
+      property exists as a root property
+      responds to newly defined property
+  root methods
+    adding methods to dynamic model
+      the property is defined on dynamic model
+      method exists on root
+      responds to newly defined method
+  redefining methods
+    method is redefined
+      behaves using redefined behavior
+      exists replaces virtual method
+      responds to redefined method
+  describe method list
+    dynamic model has methods and properties defined on root and virtual level
+      contains both defined methods
+  deleting members
+    dynamic model has methods and properties definded on root and virtual level
+      both methods are deleted
+  setting members
+    setting a single tracked member
+      sets tracked member
+      leaves the number of tracked members unchanged
+    setting a single untracked member
+      sets untracked member
+      leaves the number of tracked members unchanged
+    setting multiple members (tracked and untracked)
+      sets tracked member
+      sets untracked member
+      leaves the number of tracked members unchanged
+  selecting properties
+    only responds to properties that were selected
+
+belongs to
+  describe retrieval of belongs to
+    given blogs that have many comments
+      retrieving a blog associated with a comment
+        returns blog associated with comment
+  describe unconventional schema
+    given foreign key does not match convention
+      retrieving a blog associated with a comment
+        returns blog associated with comment
+    given primary key does not match convention
+      retrieving a blog associated with a comment
+        returns blog associated with comment
+
+has many
+  describe has many
+    given blogs that have many comments
+      retrieving comments for blog
+        has two comments
+        comments are cached for an instance of blog
+      retrieving comments for blog by another name
+        has two comments
+      retriving comment ids for blog
+        has ids for comment
+      retriving comment ids for blog by another name
+        has ids for comment
+      retrieving comments for other blog
+        has one comments
+  newing up has many association for blog
+    building a comment for a blog
+      sets the blog id for comment
+      is of type defined in projection
+    building a comment for a blog with attributes
+      sets additional attributes
+      is of type defined in projection
+    building a comment where the blog id is specified
+      overrides the id
+  saving association that has been newed up through parent entity
+    uncached blog should have saved comments
+
+has many through
+  describe has many through
+    given users have a library of games (user has games through library)
+      retriving games for user's library
+        contains game for user
+      cacheing
+        games are cached until cache is discarded
+      retrieving game ids for user's library
+        contains game for user
+  newing up has many association
+    building a game for user
+      creates a game of type defined in projection
+      saving newly created game
+        saves game
+        saving game doesn't automatically associate the has many through
+      saving association through library and game
+        game is associated with user
+  has many naming customization
+    given users have users through friends
+      user named (@me) has friend (@you)
+
+has one
+  describe has one
+    given author with profile
+      retrieving author
+        author should have profile
+  describe unconventional schema
+    given foreign key does not match convention
+      retrieving author
+        author should have profile
+
+has one through
+  describe has one through
+    a store has one supplier through distribution channels
+      retrieves has one through
+
+core behavior for tracking changes
+  tracking changes after new instantiation of model
+    has no changes
+    property has no changes
+    methods added are untracked, so that they are ignored by persistance
+    changing dynamic model
+      original values are unchanged
+      has changes
+      lists changes
+      gives changes for property
+  tracking changes when model is initialized with dto
+    has no changes
+    list of changes is empty
+    changing dynamic model
+      has changes
+      lists changes
+      gives changes for property
+    setting dynamic model property to what it already is
+      isn't considered a change
+  deleting a property
+    has changes
+    lists changes
+    different property is added
+      has changes
+
+length
+  validating length of with types that dont have length property
+    property does not contain a length property
+      should throw an exception
+  validating length of
+    title is not long enough
+      is not valid
+    title is exact length
+      is valid
+    title is greater than length
+      is valid
+    author is greater than length
+      is not valid
+    author is exact length
+      is valid
+    author is less than length
+      is valid
+    publish not in range
+      is not valid
+    publish is minimum in range
+      is valid
+    publish is in range
+      is valid
+    publish is maximum in range
+      is valid
+    publish is above range
+      is not valid
+    version is below value
+      is not valid
+    version is above value
+      is not valid
+    version is equal to value
+      is valid
+    isnull is null
+      is not valid
+
+numericality
+  validating numericality of
+    average points is not a number
+      is not valid
+    average points is a number
+      is valid
+    age is not a number
+      is not valid
+    age is not an integer
+      is not valid
+    age is an integer
+      is valid
+    height in inches is not a number
+      is not valid
+    height in inches is a number
+      is valid
+    height in inches is a number but less than lower threshold
+      is not valid
+    height in inches is a number but equal to lower threshold
+      is not valid
+    height in inches is a number and is greather than lower threshold
+      is valid
+    weight in pounds is not a number
+      is not valid
+    weight in pounds is a number but less than threshold
+      is not valid
+    weight in pounds is a number and is equal to threshold
+      is valid
+    weight in pounds is a number and is greater than threshold
+      is valid
+    number of fingers is not a number
+      is not valid
+    number of fingers is a number but less than threshold
+      is not valid
+    number of fingers is a number but greater than threshold
+      is not valid
+    number of fingers is a number and equal to threshold
+      is valid
+    height in inches is a number but greater than upper threshold
+      is not valid
+    height in inches is a number but equal to upper threshold
+      is not valid
+    height in inches is a number and less than upper threshold
+      is valid
+    weight in pounds is a number but greater than upper threshold
+      is not valid
+    weight in pounds is a number and equal to upper threshold
+      is valid
+    weight in pounds is a number and less than upper threshold
+      is valid
+    lucky even number is not a number
+      is not valid
+    lucky even number is a number but is not even
+      is not valid
+    lucky even number is a number and is even
+      is valid
+    lucky odd number is not a number
+      is not valid
+    lucky odd number is a number but is not odd
+      is not valid
+    lucky odd number is a number and is odd
+      is valid
+
+saving dynamic model
+  saving model
+    new model
+      saves item
+    setting a property to null on a model that exists
+      retains null value
+
+acceptance
+  validating acceptance
+    terms of service is set to true
+      the specific property is valid
+      the object is valid
+    terms of service is set to false
+      is valid
+    acceptance criteria is a string match for 'TypedOutAcceptance'
+      user types out I Accept
+        is valid
+  error message
+    Terms of service has default error message and has not been accepted.
+      error message reads 'TermsOfService is invalid.'
+    Typed out acceptances has customized error message and is not valid
+      error message reads 'You have not typed out the acceptence. Type I Accept.'
+
+core validation
+  describe first error
+    both title and body are not specified in Book
+      contains 2 errors
+      first error should be Title is required
+    title is specified but body is not
+      contains 1 error
+      first error should be Body is required
+  case insensitive valdation
+    setting the title with a lower case T and body with lower case b
+      is still valid
+  describe property location
+    initialization of entity with properties not defined in validation
+      it exists on gemini object as opposed to virtual
+  virtual properties for validation
+    when validation is mixed in to a dynamic model
+      the properties added for validation are virtual, so that they are not included in persistance by DynamicRepository
+  a dynamic model with no validates method
+    does not respond to validation mix in
+  validation provides with if clause
+    a order has a payment type that can be card
+      payment type is card and cardnumber is not specified
+        is invalid
+        is has error message
+      payment type is card and cardnumber is specified
+        is valid
+      payment type is not card and cardnumber is not specified
+        is valid because it disregards card number
+  validation provides with unless clause
+    a order has an item type that can be a digital item
+      the item type is 'physical' and the address is not specified
+        is invalid
+        is has error message
+      the item type is 'physical' and the address is specified
+        is valid
+      the item type is 'digital' and the address is not specified
+        is valid because it disregards address
+
+exclusion
+  validating exclusions
+    UserName matches the user name 'admin'
+      is not valid
+    UserName matches the user name 'administrator'
+      is not valid
+    UserName does not match an entry in the exclusion list
+      is valid
+
+inclusion
+  validating inclusion
+    coffee size is not a valid size
+      is invalid
+    coffee is valid size
+      is valid
+
+presence
+  validating presense of
+    title is empty
+      is not valid
+    body is populated, but title is empty
+      is not valid
+    title and body is populated
+      is valid
+    book is initialized with title and body are both set to default(string)
+      is invalid
+
+confirmation
+  confirming password is entered
+    the confirmation property is not considered for persistance, but is still accessible
+    given emails match
+      is valid
+    given emails do not match
+      is invalid
+    loading property on initialization
+      the confrimation property is not considered for persistance, but is still accessible
+
+format
+  validating format
+    product code does not match format of all characters
+      is invalid
+    product code matches format of all characters
+      is valid
+    product code is null
+      is invalid
+
+uniqueness
+  describe uniqueness
+    email associated with users is not taken
+      user is valid
+    email associated with users is taken
+      user is valid
+    email that is taken belongs to current user
+      users is valid because the taken email belongs to current user
+
+describe DynamicToJson
+  describe expando to json
+    converts expando
+  describe gemini to json
+    converts gemini
+  describe dynamic model to json
+    converts dynamic model
+  describe collection
+    converts collection
+  describe can be converted
+    expando should evaluate to: True
+    gemini should evaluate to: True
+    dynamic model should evaluate to: True
+    anonymous type should evaluate to: True
+    string should evaluate to: False
+    list containing convertable types should evaluate to: True
+    list of string should evaluate to: False
+    list containing gemini's and anonymous types should evaluate to: True
+    list containing convertable types and non convertable types should evaluate to: False
+    empty list should evaluate to: True
+  describe anonymous type to json
+    converts properties of anonymous type
+  converting anonymous types that have defferred execution
+    executes deferred statement and serializes result
+  coverting list string
+    executes deferred statement and serializes result
+  converting list numeric
+    executes deferred statement and serializes result
+  converting list of boolean
+    executes deferred statement and serializes result
+  converting nested object
+    converts whole object graph
+
+describe Gemini
+  specify initializing gemini with null does not throw error
+  describe responds to
+    responds to property with exact casing
+    it responds to property with case insensitive
+    it doesn't respond to property
+  describe methods
+    it contains a record for each method defined
+  deleting members
+    given a member is defined
+      no longer responds to member
+    member deletion is case insensitive (title)
+      no longer responds to member
+    member deletion is case insensitive (TITLE)
+      no longer responds to member
+    member is not defined
+      ignores deletion
+  describe get value for property
+    retrieves value with exact casing
+    retrieves value with exact case insensitive
+    throws invalid op if property doesn't exist
+  when retrieving property from gemini
+    calls values for geminied entity
+    calls value for geminied entity even if property's first letter doesn't match case
+    calls value for geminied entity even if property's first letter is capilized, but underlying property is lowercase
+    ignores case for geminied entity
+  when setting property of gemini
+    sets property on underlying expando
+    sets property of underlying expando even if property's first letter doesn't match case
+    sets property of underlying expando even if property's first letter is capitalized, but underlying property is lowercase
+    ignores case for geminied entity
+    sets property to a new value if the property doesn't exist
+  inherited geminied with defined methods
+    calls underlying property
+    sets underlying property
+    calls defined method
+    calls defined property
+  double inheritance
+    calls methods on root gemini with
+    calls method on first gemini
+    calls method on top most gemini
+  given a blog
+    given that the dynamic blogged is wrapped with a gemini
+      base properties are still accessible
+      base properties are still settable
+      new properites provided by BlogEntry gemini are available
+      properites defined in the gemini override base properties
+  working with parameterless gemini that defines properites in the constructor
+    properties are accessible
+    tacking on properties after the fact is allowed
+      new prop is accessible
+    tacking on methods after the fact is allowed
+      new method is accessible
+  setting members
+    setting a single member
+      sets member
+    setting multiple members
+      sets multiple members
+  calling dynamically defined methods
+    method is defined as a dynamic function that takes in one dynamic parameter
+      calls method with parameter specified
+      calls method with even if parameter is not specified
+    method is defined as a dynamic method that takes in one dynamic parameter
+      calls method with parameter specified
+      calls method with even if parameter is not specified
+
+describe DynamicParams
+  describe casting assumptions
+    evaluating form collection for potential Int id candidate
+      name ends in Id
+        comparing key's value with an int passes
+      name ends in Id but isn't an int
+        keeps original value
+      values with leading zero's is supplied
+        converts to int
+      name ends in ID
+        comparing key's value with an int passes
+      name contains ID
+        disregards conversion
+    evaluating form collection for potential Guid id candidate
+      name ends in Id
+        comparing key's value with a guid passes
+      name ends in ID
+        comparing key's value with a guid passes
+
+ seed
+  when adding columns
+    add int column
+      creates the alter table statement
+    add not null int column
+      creates the alter table statement
+    add two int columns
+      creates the alter table statement
+    column with default value
+      creates the alter table statement
+    two columns with default values
+      creates the alter table statement
+    add date column with default value of GETDATE
+      creates the alter table statement
+    add guid column with default value of newid
+      creates the alter table statement
+    add foreign key column
+      creates the alter table statement
+  when creating table
+    table with a string column
+      the command contains create table with column and type
+    column has a null definition
+      the command creates column as not null
+    column has default value
+      the command creates column with default value
+    table with two columns
+      contains both columns in create script
+    primary key column
+      contains primary key definition
+    identity column
+      contains identity definition
+    foreign key column
+      contains identity definition
+    generating a table where column is an identity column and primary key
+      contains identity definition
+    generating a table with identity column and another column
+      contains both columns and the primary key constraint
+
+301 Examples, 0 Failed, 0 Pending
