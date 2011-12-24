@@ -9,7 +9,6 @@ this.preferred =
     
   getPreferredGames: -> @view.refresh()
 
-
 library = Backbone.Model.extend
   reviewUrl: -> "http://www.google.com/search?q=" + encodeURIComponent(@name() + " ") + "site:gamespot.com&btnI=3564"
 

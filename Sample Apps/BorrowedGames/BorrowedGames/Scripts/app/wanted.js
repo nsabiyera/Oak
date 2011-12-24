@@ -1,6 +1,32 @@
 (function() {
-  var addGameToPage, gameTemplate, initView, wantedGames;
-  wantedGames = null;
+  var addGameToPage, gameTemplate, initView, wantedGame, wantedGames, wantedGamesUrl, wantedGamesView;
+  wantedGamesUrl = "";
+  this.wanted = {
+    init: function(urls, div) {
+      wantedGamesUrl = urls.wantedGamesUrl;
+      this.view = new wantedGamesView();
+      this.view.initialize();
+      return div.html(this.view.el);
+    },
+    getWantedGames: function() {
+      return this.view.refresh();
+    }
+  };
+  wantedGame = Backbone.Model.extend();
+  wantedGames = Backbone.Collection.extend({
+    model: wantedGame,
+    url: function() {
+      return wantedGamesUrl;
+    }
+  });
+  wantedGamesView = Backbone.View.extend({
+    initialize: function() {
+      _.bindAll(this, 'render');
+      this.wantedGames = new wantedGames();
+      this.wantedGames.bind('reset', this.render);
+      return this.wantedGames.fetch();
+    }
+  });
   initView = function() {
     return wantedGames = $("#wantedGames");
   };
@@ -16,25 +42,6 @@
       owner: game.Owner.Handle
     });
     return wantedGames.append($game);
-  };
-  this.wanted = {
-    init: function(urls) {
-      initView();
-      this.urls = urls;
-      return this.getWantedGames();
-    },
-    getWantedGames: function() {
-      return $.getJSON(this.urls.wantedGamesUrl, function(games) {
-        var game, _i, _len;
-        wantedGames.html('');
-        wantedGames.hide();
-        for (_i = 0, _len = games.length; _i < _len; _i++) {
-          game = games[_i];
-          addGameToPage(game);
-        }
-        return wantedGames.fadeIn();
-      });
-    }
   };
   gameTemplate = '\
   <div class="border">\
