@@ -65,24 +65,23 @@
     },
     render: function() {
       $(this.el).empty();
+      this.preferredGames.each(__bind(function(library) {
+        var view;
+        view = new preferredGameView({
+          model: library
+        });
+        view.initialize();
+        return $(this.el).append(view.render().el);
+      }, this));
+      $(this.el).append($("<div />").css({
+        clear: "both"
+      }));
       if (this.preferredGames.length === 0) {
         return $(this.el).html('\
         <div class="info" id="showFriends" style="padding-left: 30px">\
           Games you don\'t own (that your friends have) will show up here.\
         </div>\
         ');
-      } else {
-        this.preferredGames.each(__bind(function(library) {
-          var view;
-          view = new preferredGameView({
-            model: library
-          });
-          view.initialize();
-          return $(this.el).append(view.render().el);
-        }, this));
-        return $(this.el).append($("<div />").css({
-          clear: "both"
-        }));
       }
     }
   });

@@ -20,6 +20,9 @@
     console: function() {
       return this.get("Console");
     },
+    owner: function() {
+      return this.get("Owner").Handle;
+    },
     shortName: function() {
       var name;
       name = this.name();
@@ -36,6 +39,7 @@
     }
   });
   wantedGamesView = Backbone.View.extend({
+    tagName: "span",
     initialize: function() {
       _.bindAll(this, 'render');
       this.wantedGames = new wantedGames();
@@ -43,43 +47,44 @@
       return this.wantedGames.fetch();
     },
     refresh: function() {
-      return this.wantedGames.refresh();
+      return this.wantedGames.fetch();
+    },
+    addGame: function(game) {
+      var view;
+      view = new wantedGameView({
+        model: game
+      });
+      view.initialize();
+      view.render();
+      return $(this.el).append(view.el);
     },
     render: function() {
       $(this.el).empty();
-      if (this.wantedGames.length !== 0) {
-        return this.wantedGames.each(__bind(function(game) {
-          var view;
-          view = new wantedGameView({
-            model: game
-          });
-          view.initialize();
-          view.render();
-          return $(this.el).append(view.el);
-        }, this));
-      }
+      return this.wantedGames.each(__bind(function(game) {
+        return this.addGame(game);
+      }, this));
     }
   });
   wantedGameView = Backbone.View.extend({
+    className: 'border',
     initialize: function() {
       return _.bindAll(this, "render");
     },
     render: function() {
       var game;
       game = $.tmpl(this.gameTemplate, {
-        gameName: this.model.shortName()
+        gameName: this.model.shortName(),
+        owner: this.model.owner()
       });
       $(this.el).html(game);
       return this;
     },
     gameTemplate: '\
-    <div class="border">\
-      <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">\
-        Requested\
-      </span>\
-      <div style="font-size: 20px">${gameName}</div>\
-      <div>${owner}</div>\
-    </div>\
+    <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">\
+      Requested\
+    </span>\
+    <div style="font-size: 20px">${gameName}</div>\
+    <div>${owner}</div>\
     '
   });
 }).call(this);

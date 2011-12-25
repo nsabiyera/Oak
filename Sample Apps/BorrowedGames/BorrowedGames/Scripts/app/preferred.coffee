@@ -60,6 +60,16 @@ preferredGamesView = Backbone.View.extend
   render: ->
     $(@el).empty()
 
+    @preferredGames.each (library) =>
+      view = new preferredGameView
+        model: library
+      
+      view.initialize()
+
+      $(@el).append view.render().el
+
+    $(@el).append($("<div />").css({ clear: "both" }))
+
     if(@preferredGames.length == 0)
       $(@el).html(
         '
@@ -68,17 +78,6 @@ preferredGamesView = Backbone.View.extend
         </div>
         '
       )
-    else
-      @preferredGames.each (library) =>
-
-        view = new preferredGameView
-          model: library
-        
-        view.initialize()
-
-        $(@el).append view.render().el
-
-      $(@el).append($("<div />").css({ clear: "both" }))
 
 preferredGameView = Backbone.View.extend
   className: 'gameBox'
@@ -144,4 +143,3 @@ preferredGameView = Backbone.View.extend
       <a href="javascript:;" class="request" style="font-size: 12px">request game</a>
     </div>
     '
-

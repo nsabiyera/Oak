@@ -3,8 +3,11 @@ wantedGamesUrl = ""
 this.wanted =
   init: (urls, div) ->
     wantedGamesUrl = urls.wantedGamesUrl
+
     @view = new wantedGamesView()
+
     @view.initialize()
+    
     div.html(@view.el)
 
   getWantedGames: -> @view.refresh()
@@ -13,6 +16,8 @@ wantedGame = Backbone.Model.extend
   name: -> @get("Name")
 
   console: -> @get("Console")
+
+  owner: -> @get("Owner").Handle
 
   shortName: ->
     name = @name()
@@ -23,9 +28,12 @@ wantedGame = Backbone.Model.extend
 
 wantedGames = Backbone.Collection.extend
   model: wantedGame
+
   url: -> wantedGamesUrl
 
 wantedGamesView = Backbone.View.extend
+  tagName: "span"
+
   initialize: ->
     _.bindAll this, 'render'
 
@@ -36,27 +44,31 @@ wantedGamesView = Backbone.View.extend
     @wantedGames.fetch()
 
   refresh: ->
-    @wantedGames.refresh()
+    @wantedGames.fetch()
+
+  addGame: (game) ->
+    view = new wantedGameView
+      model: game
+
+    view.initialize()
+
+    view.render()
+
+    $(@el).append view.el
 
   render: ->
     $(@el).empty()
 
-    if(@wantedGames.length != 0)
-      @wantedGames.each (game) =>
-        view = new wantedGameView
-          model: game
-
-        view.initialize()
-        view.render()
-
-        $(@el).append view.el
+    @wantedGames.each (game) => @addGame(game)
 
 wantedGameView = Backbone.View.extend
+  className: 'border'
+
   initialize: ->
     _.bindAll this, "render"
 
   render: ->
-    game = $.tmpl(@gameTemplate, { gameName: @model.shortName() })
+    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
     $(@el).html(game)
 
@@ -64,11 +76,9 @@ wantedGameView = Backbone.View.extend
 
   gameTemplate:
     '
-    <div class="border">
-      <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
-        Requested
-      </span>
-      <div style="font-size: 20px">${gameName}</div>
-      <div>${owner}</div>
-    </div>
+    <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
+      Requested
+    </span>
+    <div style="font-size: 20px">${gameName}</div>
+    <div>${owner}</div>
     '
