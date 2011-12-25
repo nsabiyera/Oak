@@ -29,7 +29,7 @@
         urls.wantedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Wanted" })';
         urls.requestedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Requested" })';
 
-        wanted.init(urls);
+        wanted.init(urls, $("#wantedGames"));
 
         preferred.init(urls, $("#preferredGames"));
     });

@@ -9,7 +9,17 @@ this.wanted =
 
   getWantedGames: -> @view.refresh()
 
-wantedGame = Backbone.Model.extend()
+wantedGame = Backbone.Model.extend
+  name: -> @get("Name")
+
+  console: -> @get("Console")
+
+  shortName: ->
+    name = @name()
+    
+    name = name.substring(0, 40) + "... " if name > 45
+
+    name += " (" + @console() + ")"
 
 wantedGames = Backbone.Collection.extend
   model: wantedGame
@@ -24,6 +34,9 @@ wantedGamesView = Backbone.View.extend
     @wantedGames.bind 'reset', @render
 
     @wantedGames.fetch()
+
+  refresh: ->
+    @wantedGames.refresh()
 
   render: ->
     $(@el).empty()
@@ -43,33 +56,19 @@ wantedGameView = Backbone.View.extend
     _.bindAll this, "render"
 
   render: ->
+    game = $.tmpl(@gameTemplate, { gameName: @model.shortName() })
+
+    $(@el).html(game)
+
+    return this
 
   gameTemplate:
     '
     <div class="border">
-      <span id="status${gameId}_${userId}" style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
+      <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
         Requested
       </span>
       <div style="font-size: 20px">${gameName}</div>
       <div>${owner}</div>
     </div>
     '
-
-
-initView = ->
-  wantedGames = $("#wantedGames")
-
-addGameToPage = (game) ->
-  gameName = game.Name
-
-  gameName = game.Name.substring(0, 40) + "... " if game.Name.length > 45
-
-  gameName += " (" + game.Console + ")"
-
-  $game = $.tmpl gameTemplate, { gameName, owner: game.Owner.Handle }
-
-  wantedGames.append $game
-
-
-gameTemplate =
-
