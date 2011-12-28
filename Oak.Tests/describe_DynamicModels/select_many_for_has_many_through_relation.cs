@@ -70,7 +70,7 @@ namespace Oak.Tests.describe_DynamicModels
         {
             act = () => selectMany = (players.All() as dynamic).Games();
 
-            it["returns all emails for all users"] = () =>
+            it["returns all games for all players"] = () =>
             {
                 selectMany.Count().should_be(2);
 
@@ -95,7 +95,7 @@ namespace Oak.Tests.describe_DynamicModels
         {
             act = () => selectMany = (players.All() as dynamic).Games().Players();
 
-            it["returns all emails for all users"] = () =>
+            it["returns all players through games"] = () =>
             {
                 selectMany.Count().should_be(2);
 
