@@ -53,9 +53,14 @@ namespace BorrowedGames.Controllers
                 return View();
             }
 
-            users.Insert(registration);
+            registration.Register();
 
             return LogOn(new { @params.Email, @params.Password, RedirectUrl = "/" });
+        }
+
+        public void LogOff()
+        {
+            FormsAuthentication.SignOut();
         }
 
         public dynamic Register()

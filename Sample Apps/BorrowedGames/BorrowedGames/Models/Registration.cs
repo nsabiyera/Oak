@@ -40,5 +40,10 @@ namespace BorrowedGames.Models
             yield return
             new Confirmation("Password") { ErrorMessage = "Passwords do not match." };
         }
+
+        public void Register()
+        {
+            users.Insert(this);
+        }
     }
 }

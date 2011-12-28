@@ -31,6 +31,8 @@ let click_with_text (text : string) =
 
 let title _ = browser.Title
 
+let close _ = browser.Close()
+
 let quit _ = browser.Quit()
 
 let equals value1 value2 =
