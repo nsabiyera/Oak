@@ -8,6 +8,16 @@ using System.Diagnostics;
 
 namespace Oak
 {
+    public static class HelpfulExtensions
+    {
+        public static void ForEach(this object enumerable, Action<dynamic> action)
+        {
+            dynamic temp = enumerable;
+
+            foreach (var item in temp) action(item);
+        }
+    }
+
     public delegate dynamic DynamicFunction();
 
     public delegate dynamic DynamicFunctionWithParam(dynamic parameter);

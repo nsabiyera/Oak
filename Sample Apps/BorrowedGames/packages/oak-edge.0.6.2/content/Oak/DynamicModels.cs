@@ -7,6 +7,14 @@ using System.Dynamic;
 
 namespace Oak
 {
+    public static class DynamicModelExtensions
+    {
+        public static DynamicModels ToModels(this IEnumerable<dynamic> enumerable)
+        {
+            return new DynamicModels(enumerable);
+        }
+    }
+
     public class DynamicModels : Gemini, IEnumerable<object>
     {
         public List<dynamic> Models { get; set; }

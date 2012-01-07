@@ -38,7 +38,6 @@ namespace System
             var result = new ExpandoObject();
             var d = result as IDictionary<string, object>; //work with the Expando as a Dictionary
             if (o.GetType() == typeof(ExpandoObject)) return o; //shouldn't have to... but just in case
-            if (o is DynamicModel) return ((DynamicModel)o).TrackedProperties();
             if (o is Gemini) return ((Gemini)o).Expando;
             if (o.GetType() == typeof(NameValueCollection) || o.GetType().IsSubclassOf(typeof(NameValueCollection)))
             {
@@ -62,18 +61,6 @@ namespace System
         public static IDictionary<string, object> ToDictionary(this object thingy)
         {
             return (IDictionary<string, object>)thingy.ToExpando();
-        }
-
-        public static void ForEach(this object enumerable, Action<dynamic> action)
-        {
-            dynamic temp = enumerable;
-
-            foreach (var item in temp) action(item);
-        }
-
-        public static DynamicModels ToModels(this IEnumerable<dynamic> enumerable)
-        {
-            return new DynamicModels(enumerable);
         }
     }
 }

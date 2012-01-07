@@ -357,7 +357,7 @@ namespace Massive
         public virtual DbCommand CreateInsertCommand(object o)
         {
             DbCommand result = null;
-            var expando = o.ToExpando();
+            var expando = GetAttributesToSave(o);
             var settings = (IDictionary<string, object>)expando;
             var sbKeys = new StringBuilder();
             var sbVals = new StringBuilder();
@@ -386,7 +386,7 @@ namespace Massive
         /// </summary>
         public virtual DbCommand CreateUpdateCommand(object o, object key)
         {
-            var expando = o.ToExpando();
+            var expando = GetAttributesToSave(o);
             var settings = (IDictionary<string, object>)expando;
             var sbKeys = new StringBuilder();
             var stub = "UPDATE {0} SET {1} WHERE {2} = @{3}";
@@ -414,6 +414,14 @@ namespace Massive
             else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
             return result;
         }
+
+        public virtual dynamic GetAttributesToSave(object o)
+        {
+            if (o is DynamicModel) return ((DynamicModel)o).TrackedProperties();
+
+            return o.ToExpando();
+        }
+
         /// <summary>
         /// Removes one or more records from the DB according to the passed-in WHERE
         /// </summary>
