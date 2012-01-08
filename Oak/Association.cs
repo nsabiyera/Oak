@@ -454,6 +454,8 @@ namespace Oak
 
         public string PrimaryKey { get; set; }
 
+        public dynamic BelongsToModel { get; set; }
+
         public BelongsTo(DynamicRepository repository)
         {
             this.Repository = repository;
@@ -462,15 +464,9 @@ namespace Oak
 
         public void Init(DynamicModel model)
         {
-            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
-
-            string primaryKeyName = string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey;
-
-            string whereClause = string.Format("{0} = @0", primaryKeyName);
-
             model.SetUnTrackedMember(
                 Named,
-                new DynamicFunction(() => Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName))));
+                new DynamicFunctionWithParam((options) => GetBelongsToModelOrCache(model, options)));
         }
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
@@ -479,12 +475,29 @@ namespace Oak
 
             models.ForEach(s => 
             {
-                var belongsTo = s.GetMember(Named)();
+                var belongsTo = s.GetMember(Named)(new { discardCache = false });
                 belongsTo.SetMember(s.GetType().Name, new DynamicFunction(() => s));
                 collection.Add(belongsTo);
             });
 
             return new DynamicModels(collection);
+        }
+
+        public dynamic GetBelongsToModelOrCache(DynamicModel model, dynamic options)
+        {
+            if (DiscardCache(options)) BelongsToModel = null;
+
+            if (BelongsToModel != null) return BelongsToModel;
+
+            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
+
+            string primaryKeyName = string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey;
+
+            string whereClause = string.Format("{0} = @0", primaryKeyName);
+
+            BelongsToModel = Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName));
+
+            return BelongsToModel;
         }
     }
 }
