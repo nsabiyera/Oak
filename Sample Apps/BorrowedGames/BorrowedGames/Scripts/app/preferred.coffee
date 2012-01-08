@@ -47,7 +47,7 @@ libraries = Backbone.Collection.extend
 preferredGamesView = Backbone.View.extend
   initialize: ->
     _.bindAll this, 'render'
-)
+
     @preferredGames = new libraries()
 
     @preferredGames.bind 'reset', @render
