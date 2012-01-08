@@ -7,6 +7,8 @@ using NSpec;
 namespace BorrowedGames.Tests.Controllers.describe_GamesController
 {
     [Tag("describe_GamesController")]
+    [Tag("describe_User")]
+    [Tag("describe_WantedGame")]
     class requested_games : _games_controller
     {
         void retrieving_requested_games()
