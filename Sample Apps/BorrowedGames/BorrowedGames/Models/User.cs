@@ -148,7 +148,8 @@ namespace BorrowedGames.Models
         {
             return GamesFriendsHave()
                 .Where(GameIsWanted)
-                .Select(UserGame);
+                .Select(UserGame)
+                .ToList();
         }
 
         public IEnumerable<dynamic> GamesFriendsHave()

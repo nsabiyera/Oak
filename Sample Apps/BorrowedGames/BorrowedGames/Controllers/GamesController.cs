@@ -14,12 +14,12 @@ namespace BorrowedGames.Controllers
 
         public dynamic Preferred()
         {
-            return Json(AddHyperMediaLinks(User().PreferredGames()));
+            return Json(AddHyperMediaLinksForPreferred(User().PreferredGames()));
         }
 
         public dynamic Wanted()
         {
-            return Json(User().WantedGames());
+            return Json(AddHyperMediaLinksForWanted(User().WantedGames()));
         }
 
         public dynamic Requested()
@@ -29,7 +29,7 @@ namespace BorrowedGames.Controllers
             return Json(requested.Games());
         }
 
-        public IEnumerable<dynamic> AddHyperMediaLinks(List<dynamic> games)
+        public IEnumerable<dynamic> AddHyperMediaLinksForPreferred(List<dynamic> games)
         {
             games.ForEach(s =>
             {
@@ -44,6 +44,22 @@ namespace BorrowedGames.Controllers
                 {
                     controller = "Games",
                     action = "WantGame",
+                    gameId = s.Id,
+                    followingId = s.Owner.Id
+                });
+            });
+
+            return games;
+        }
+
+        public IEnumerable<dynamic> AddHyperMediaLinksForWanted(List<dynamic> games)
+        {
+            games.ForEach(s => 
+            {
+                s.DeleteWant = Url.RouteUrl(new
+                {
+                    controller = "Games",
+                    action = "DeleteWant",
                     gameId = s.Id,
                     followingId = s.Owner.Id
                 });

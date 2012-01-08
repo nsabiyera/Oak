@@ -14,13 +14,6 @@ namespace BorrowedGames.Tests.Controllers
     {
         void wanting_game()
         {
-            before = () =>
-            {
-                
-            };
-
-            //act = () => 
-
             it["marks the game as requested"] = () =>
             {
                 GivenUserHasFriendWithGame(currentUserId, isFollowing: friendId, whoHasGame: mirrorsEdgeId);
@@ -56,7 +49,7 @@ namespace BorrowedGames.Tests.Controllers
             };
         }
 
-        void retrieving_requested_games()
+        void retrieving_wanted_games()
         {
             before = () => GivenUserWantsGame(currentUserId, fromUser: friendId, game: mirrorsEdgeId);
 
@@ -65,6 +58,9 @@ namespace BorrowedGames.Tests.Controllers
 
             it["gives user associated with game"] = () => 
                 WantedGames().should_contain(s => s.Owner.Handle == "@following");
+
+            it["contains hypermedia link to undo the request of the game"] = () =>
+                (WantedGames().First().DeleteWant as string).should_be("/Games/DeleteWant?gameId=" + mirrorsEdgeId + "&followingId=" + friendId);
 
             context["user has preferred games (games that haven't been requested)"] = () =>
             {
