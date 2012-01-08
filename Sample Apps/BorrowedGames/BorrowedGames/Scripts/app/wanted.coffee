@@ -27,7 +27,10 @@ wantedGame = Backbone.Model.extend
     name += " (" + @console() + ")"
 
   undoRequest: ->
-    alert @shortName()
+    $.post(@get("DeleteWant"), { }, =>
+      preferred.getPreferredGames()
+      @change()
+    )
 
 wantedGames = Backbone.Collection.extend
   model: wantedGame
@@ -68,7 +71,12 @@ wantedGameView = Backbone.View.extend
   className: 'border'
 
   initialize: ->
-    _.bindAll this, "render"
+    _.bindAll this, "render", "apply"
+
+    @model.bind 'change', @apply
+
+  apply: ->
+    $(@el).fadeOut()
 
   events:
     "click .cancel": "undoRequest"

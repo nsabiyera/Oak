@@ -32,7 +32,10 @@
       return name += " (" + this.console() + ")";
     },
     undoRequest: function() {
-      return alert(this.shortName());
+      return $.post(this.get("DeleteWant"), {}, __bind(function() {
+        preferred.getPreferredGames();
+        return this.change();
+      }, this));
     }
   });
   wantedGames = Backbone.Collection.extend({
@@ -71,7 +74,11 @@
   wantedGameView = Backbone.View.extend({
     className: 'border',
     initialize: function() {
-      return _.bindAll(this, "render");
+      _.bindAll(this, "render", "apply");
+      return this.model.bind('change', this.apply);
+    },
+    apply: function() {
+      return $(this.el).fadeOut();
     },
     events: {
       "click .cancel": "undoRequest"
