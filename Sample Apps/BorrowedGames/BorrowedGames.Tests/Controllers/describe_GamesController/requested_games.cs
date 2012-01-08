@@ -15,7 +15,11 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
             {
                 before = () => GivenUserWantsGame(friendId, fromUser: currentUserId, game: mirrorsEdgeId);
 
-                it["contains the friends request for game"] = () => ((int)FirstRequestedGame().Id).should_be(mirrorsEdgeId);
+                it["contains the friends request for game"] = () => 
+                    ((int)FirstRequestedGame().Id).should_be(mirrorsEdgeId);
+
+                it["contains the handle of the friend that requested the game"] = () => 
+                    ((string)FirstRequestedGame().Owner.Handle).should_be("@current");
             };
 
             context["user has games, but none have been requested"] = () =>

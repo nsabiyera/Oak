@@ -20,7 +20,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             MockRouting(controller);
 
-            currentUserId = GivenUser("user@example.com");
+            currentUserId = GivenUser("user@example.com", "@current");
 
             friendId = GivenUser("following@example.com", "@following");
 

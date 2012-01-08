@@ -68,7 +68,7 @@ namespace BorrowedGames.Models
 
         public void AddFriend(dynamic user)
         {
-            friendAssociations.Insert(new { UserId = This().Id, IsFollowing = user.Id });
+            friendAssociations.Insert(This().FriendAssociations().New(new { IsFollowing = user.Id }));
         }
 
         public void RemoveFriend(dynamic friend)
@@ -84,7 +84,7 @@ namespace BorrowedGames.Models
 
         public void WantGame(dynamic gameId, dynamic fromUserId)
         {
-            wantedGames.Insert(new { UserId = This().Id, gameId, fromUserId });
+            wantedGames.Insert(This().Wants().New(new { gameId, fromUserId }));
         }
 
         public void DeleteWantedGame(dynamic gameId, dynamic fromUserId)
@@ -111,7 +111,7 @@ namespace BorrowedGames.Models
 
         public void MarkGameNotInterested(dynamic gameId)
         {
-            notInterestedGames.Insert(new { UserId = This().Id, gameId });
+            notInterestedGames.Insert(This().NotInterestedGames().New(new { gameId }));
         }
 
         public bool GameIsWanted(dynamic game)
@@ -148,6 +148,13 @@ namespace BorrowedGames.Models
         {
             return GamesFriendsHave()
                 .Where(GameIsWanted)
+                .Select(UserGame)
+                .ToList();
+        }
+
+        public IEnumerable<dynamic> RequestedGames()
+        {
+            return wantedGames.All(where: "FromUserId = @0", args: new object[] { This().Id })
                 .Select(UserGame)
                 .ToList();
         }

@@ -10,26 +10,40 @@ namespace BorrowedGames.Controllers
 {
     public class GamesController : BaseController
     {
-        WantedGames wantedGames = new WantedGames();
-
         public dynamic Preferred()
         {
-            return Json(AddHyperMediaLinksForPreferred(User().PreferredGames()));
+            return Json(LinksForPreferredGames(User().PreferredGames()));
         }
 
         public dynamic Wanted()
         {
-            return Json(AddHyperMediaLinksForWanted(User().WantedGames()));
+            return Json(LinksForWantedGames(User().WantedGames()));
         }
 
         public dynamic Requested()
         {
-            dynamic requested = wantedGames.All(where: "FromUserId = @0", args: new object[] { CurrentUser });
-
-            return Json(requested.Games());
+            return Json(User().RequestedGames());
         }
 
-        public IEnumerable<dynamic> AddHyperMediaLinksForPreferred(List<dynamic> games)
+        [HttpPost]
+        public void NotInterested(int gameId)
+        {
+            User().MarkGameNotInterested(gameId);
+        }
+
+        [HttpPost]
+        public void WantGame(int gameId, int followingId)
+        {
+            User().WantGame(gameId, followingId);
+        }
+
+        [HttpPost]
+        public void DeleteWant(int gameId, int followingId)
+        {
+            User().DeleteWantedGame(gameId, followingId);
+        }
+
+        public IEnumerable<dynamic> LinksForPreferredGames(List<dynamic> games)
         {
             games.ForEach(s =>
             {
@@ -52,7 +66,7 @@ namespace BorrowedGames.Controllers
             return games;
         }
 
-        public IEnumerable<dynamic> AddHyperMediaLinksForWanted(List<dynamic> games)
+        public IEnumerable<dynamic> LinksForWantedGames(List<dynamic> games)
         {
             games.ForEach(s => 
             {
@@ -66,24 +80,6 @@ namespace BorrowedGames.Controllers
             });
 
             return games;
-        }
-
-        [HttpPost]
-        public void NotInterested(int gameId)
-        {
-            User().MarkGameNotInterested(gameId);
-        }
-
-        [HttpPost]
-        public void WantGame(int gameId, int followingId)
-        {
-            User().WantGame(gameId, followingId);
-        }
-
-        [HttpPost]
-        public void DeleteWant(int gameId, int followingId)
-        {
-            User().DeleteWantedGame(gameId, followingId);
         }
     }
 }
