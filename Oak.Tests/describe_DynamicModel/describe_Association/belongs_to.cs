@@ -19,9 +19,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         dynamic comment;
 
+        Blogs blogs;
+
         void before_each()
         {
             seed = new Seed();
+
+            seed.PurgeDb();
         }
 
         void describe_retrieval_of_belongs_to()
@@ -30,8 +34,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             {
                 before = () =>
                 {
-                    seed.PurgeDb();
-
                     comments = new Comments();
 
                     CreateConventionalBlogTable();
@@ -47,14 +49,51 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             };
         }
 
+        void describe_cacheing()
+        {
+            context["given belongs to has been accessed already"] = () =>
+            {
+                before = () =>
+                {
+                    blogs = new Blogs();
+
+                    comments = new Comments();
+
+                    CreateConventionalBlogTable();
+
+                    CreateConventionalCommentTable();
+
+                    blogId = new { Title = "Some Blog", Body = "Lorem Ipsum" }.InsertInto("Blogs");
+
+                    commentId = new { BlogId = blogId, Text = "Comment 1" }.InsertInto("Comments");
+                };
+
+                act = () =>
+                {
+                    comment = comments.Single(commentId);
+
+                    comment.Blog();
+                };
+
+                context["belongs to props are changed from external source"] = () =>
+                {
+                    act = () => blogs.Update(new { Title = "Other Title" }, blogId as object);
+
+                    it["belongs to properties in comments remain unchanged"] = () =>
+                        (comment.Blog().Title as string).should_be("Some Blog");
+
+                    it["discarded cache updates properties"] = () =>
+                        (comment.Blog(new { discardCache = true }).Title as string).should_be("Other Title");
+                };
+            };
+        }
+
         void describe_unconventional_schema()
         {
             context["given foreign key does not match convention"] = () =>
             {
                 before = () =>
                 {
-                    seed.PurgeDb();
-
                     comments = new UnconventionalComments();
 
                     CreateConventionalBlogTable();
