@@ -26,6 +26,9 @@ wantedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
+  undoRequest: ->
+    alert @shortName()
+
 wantedGames = Backbone.Collection.extend
   model: wantedGame
 
@@ -67,15 +70,35 @@ wantedGameView = Backbone.View.extend
   initialize: ->
     _.bindAll this, "render"
 
+  events:
+    "click .cancel": "undoRequest"
+
+  undoRequest: -> @model.undoRequest()
+
   render: ->
     game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
     $(@el).html(game)
 
+    toolTip.init(
+      game.find(".cancel"),
+      "UndoRequest",
+      "Don't want the game?<br/>Click to undo request.",
+      "You get the idea...<br/>Undo request.",
+      -> game.find(".cancel").offset().left - 125,
+      -> game.find(".cancel").offset().top - 75
+    )
+
     return this
 
   gameTemplate:
     '
+  <div class="menubar">
+    <a href="javascript:;"
+       style="text-decoration: none; color: black; float: right; padding-left: 15px"
+       class="cancel">&nbsp;</a>
+    <div style="clear: both">&nbsp;</div>
+  </div>
     <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
       Requested
     </span>

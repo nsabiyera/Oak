@@ -47,7 +47,7 @@ libraries = Backbone.Collection.extend
 preferredGamesView = Backbone.View.extend
   initialize: ->
     _.bindAll this, 'render'
-
+)
     @preferredGames = new libraries()
 
     @preferredGames.bind 'reset', @render
@@ -127,8 +127,8 @@ preferredGameView = Backbone.View.extend
 
   gameTemplate:
     '
-    <div style="padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px silver solid; height: 20px">
-      <a href="javascript:;" id="closeLink${gameId}_${userId}" 
+    <div class="menubar">
+      <a href="javascript:;" 
          style="text-decoration: none; color: black; float: right; padding-left: 15px" 
          class="cancel">&nbsp;</a>
       <div style="clear: both">&nbsp;</div>

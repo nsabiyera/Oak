@@ -81,7 +81,7 @@
             view.handleTextBox.val('');
             growl.info(d.Message, view.handleTextBox.offset().top - 5);
 
-            refreshPreferredGames();
+            refreshGames();
         });
     }
 
@@ -113,7 +113,7 @@
 
             $friend.fadeOut('fast', function () { $friend.remove(); });
 
-            refreshPreferredGames();
+            refreshGames();
         });
     }
 
@@ -131,8 +131,17 @@
         });
     }
 
+    function refreshGames() {
+      refreshPreferredGames();
+      refreshWantedGames();
+    }
+
     function refreshPreferredGames() {
         preferred.getPreferredGames();
+    }
+
+    function refreshWantedGames() {
+        wanted.getWantedGames();
     }
 
     this.exports(init);

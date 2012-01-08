@@ -39,6 +39,14 @@ div.modal.shown {
 }
 
 /* line 46, ../sass/screen.scss */
+div.menubar {
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px silver solid;
+  height: 20px;
+}
+
+/* line 54, ../sass/screen.scss */
 .title {
   margin: 3px;
   margin-bottom: 10px;
@@ -49,24 +57,24 @@ div.modal.shown {
   border-radius: 5px;
 }
 
-/* line 57, ../sass/screen.scss */
+/* line 65, ../sass/screen.scss */
 div.dropshadow {
   -webkit-box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* line 62, ../sass/screen.scss */
+/* line 70, ../sass/screen.scss */
 div.modal input {
   display: block;
   width: 100%;
 }
 
-/* line 68, ../sass/screen.scss */
+/* line 76, ../sass/screen.scss */
 .current {
   background-color: #46629D;
   color: #ffffff;
 }
 
-/* line 74, ../sass/screen.scss */
+/* line 82, ../sass/screen.scss */
 .button {
   text-decoration: none;
   padding: 3px;
@@ -76,12 +84,12 @@ div.modal input {
   color: White;
 }
 
-/* line 84, ../sass/screen.scss */
+/* line 92, ../sass/screen.scss */
 .button:hover {
   color: black;
 }
 
-/* line 89, ../sass/screen.scss */
+/* line 97, ../sass/screen.scss */
 .growlwrapper {
   width: 520px;
   border-radius: 5px;
@@ -92,7 +100,7 @@ div.modal input {
   -webkit-box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* line 100, ../sass/screen.scss */
+/* line 108, ../sass/screen.scss */
 .growlinfo {
   width: 520px;
   border-radius: 5px;
@@ -107,7 +115,7 @@ div.modal input {
   font-size: 17px;
 }
 
-/* line 115, ../sass/screen.scss */
+/* line 123, ../sass/screen.scss */
 .edit, .delete, .info, .cancel, .add, .up, .down, .check {
   background-position: left center;
   background-repeat: no-repeat;
@@ -117,47 +125,47 @@ div.modal input {
   color: black;
 }
 
-/* line 125, ../sass/screen.scss */
+/* line 133, ../sass/screen.scss */
 .edit {
   background-image: url("images/edit20.png");
 }
 
-/* line 130, ../sass/screen.scss */
+/* line 138, ../sass/screen.scss */
 .delete {
   background-image: url("images/delete20.png");
 }
 
-/* line 135, ../sass/screen.scss */
+/* line 143, ../sass/screen.scss */
 .info {
   background-image: url("images/info20.png");
 }
 
-/* line 140, ../sass/screen.scss */
+/* line 148, ../sass/screen.scss */
 .cancel {
   background-image: url("images/cancel20.png");
 }
 
-/* line 145, ../sass/screen.scss */
+/* line 153, ../sass/screen.scss */
 .add {
   background-image: url("images/add20.png");
 }
 
-/* line 150, ../sass/screen.scss */
+/* line 158, ../sass/screen.scss */
 .up {
   background-image: url("images/up20.png");
 }
 
-/* line 155, ../sass/screen.scss */
+/* line 163, ../sass/screen.scss */
 .down {
   background-image: url("images/down20.png");
 }
 
-/* line 160, ../sass/screen.scss */
+/* line 168, ../sass/screen.scss */
 .check {
   background-image: url("images/check20.png");
 }
 
-/* line 165, ../sass/screen.scss */
+/* line 173, ../sass/screen.scss */
 .border {
   margin: 5px;
   border: solid 1px silver;
@@ -165,7 +173,7 @@ div.modal input {
   padding: 5px;
 }
 
-/* line 173, ../sass/screen.scss */
+/* line 181, ../sass/screen.scss */
 .gameBox {
   margin: 5px;
   border: solid 1px silver;
@@ -177,19 +185,19 @@ div.modal input {
   height: 160px;
 }
 
-/* line 185, ../sass/screen.scss */
+/* line 193, ../sass/screen.scss */
 .autocomplete {
   width: 556px;
   border: solid 1px silver;
   background-color: White;
 }
 
-/* line 192, ../sass/screen.scss */
+/* line 200, ../sass/screen.scss */
 .hidden {
   display: none;
 }
 
-/* line 197, ../sass/screen.scss */
+/* line 205, ../sass/screen.scss */
 body {
   margin-left: auto;
   margin-right: auto;
@@ -199,7 +207,7 @@ body {
   font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
 }
 
-/* line 207, ../sass/screen.scss */
+/* line 215, ../sass/screen.scss */
 .box {
   float: left;
   border: solid 1px silver;
@@ -209,12 +217,12 @@ body {
   padding: 3px;
 }
 
-/* line 217, ../sass/screen.scss */
+/* line 225, ../sass/screen.scss */
 .clear {
   clear: both;
 }
 
-/* line 222, ../sass/screen.scss */
+/* line 230, ../sass/screen.scss */
 #main {
   margin-left: auto;
   margin-right: auto;
@@ -228,24 +236,24 @@ body {
   padding-bottom: 30px;
 }
 
-/* line 236, ../sass/screen.scss */
+/* line 244, ../sass/screen.scss */
 .section {
   border-left: 1px solid silver;
   padding-left: 5px;
 }
 
-/* line 242, ../sass/screen.scss */
+/* line 250, ../sass/screen.scss */
 #banner {
   font-family: 'Boycott';
   color: white;
 }
 
-/* line 248, ../sass/screen.scss */
+/* line 256, ../sass/screen.scss */
 .brand {
   font-family: 'Boycott';
 }
 
-/* line 253, ../sass/screen.scss */
+/* line 261, ../sass/screen.scss */
 nav a {
   text-decoration: none;
   font-size: 20px;
@@ -261,12 +269,12 @@ nav a {
   width: 100px;
 }
 
-/* line 269, ../sass/screen.scss */
+/* line 277, ../sass/screen.scss */
 nav {
   float: right;
 }
 
-/* line 274, ../sass/screen.scss */
+/* line 282, ../sass/screen.scss */
 .notification {
   color: black;
   border-radius: 10px;
@@ -277,31 +285,31 @@ nav {
   border: 1px solid #FAD42E;
 }
 
-/* line 285, ../sass/screen.scss */
+/* line 293, ../sass/screen.scss */
 .seperator {
   width: 100%;
   border-bottom: 1px solid silver;
 }
 
-/* line 291, ../sass/screen.scss */
+/* line 299, ../sass/screen.scss */
 #nav-wrapper {
   height: 60px;
   width: 1045px;
 }
 
-/* line 297, ../sass/screen.scss */
+/* line 305, ../sass/screen.scss */
 h1, h2, h3, h4 {
   border-bottom: 1px solid silver;
   padding: 5px;
 }
 
-/* line 303, ../sass/screen.scss */
+/* line 311, ../sass/screen.scss */
 .toggleSwitchOn {
   background-color: #46629D;
   background-image: url("images/circle20.png");
   background-repeat: no-repeat;
 }
-/* line 309, ../sass/screen.scss */
+/* line 317, ../sass/screen.scss */
 .toggleSwitchOn label {
   font-weight: bold;
   color: #FFFFFF;
@@ -309,13 +317,13 @@ h1, h2, h3, h4 {
   cursor: pointer;
 }
 
-/* line 318, ../sass/screen.scss */
+/* line 326, ../sass/screen.scss */
 .toggleSwitchOff {
   background-color: #E0E5EE;
   background-image: url("images/circle20.png");
   background-repeat: no-repeat;
 }
-/* line 324, ../sass/screen.scss */
+/* line 332, ../sass/screen.scss */
 .toggleSwitchOff label {
   font-weight: bold;
   color: #545454;

@@ -30,6 +30,9 @@
         name = name.substring(0, 40) + "... ";
       }
       return name += " (" + this.console() + ")";
+    },
+    undoRequest: function() {
+      return alert(this.shortName());
     }
   });
   wantedGames = Backbone.Collection.extend({
@@ -70,6 +73,12 @@
     initialize: function() {
       return _.bindAll(this, "render");
     },
+    events: {
+      "click .cancel": "undoRequest"
+    },
+    undoRequest: function() {
+      return this.model.undoRequest();
+    },
     render: function() {
       var game;
       game = $.tmpl(this.gameTemplate, {
@@ -77,9 +86,20 @@
         owner: this.model.owner()
       });
       $(this.el).html(game);
+      toolTip.init(game.find(".cancel"), "UndoRequest", "Don't want the game?<br/>Click to undo request.", "You get the idea...<br/>Undo request.", function() {
+        return game.find(".cancel").offset().left - 125;
+      }, function() {
+        return game.find(".cancel").offset().top - 75;
+      });
       return this;
     },
     gameTemplate: '\
+  <div class="menubar">\
+    <a href="javascript:;"\
+       style="text-decoration: none; color: black; float: right; padding-left: 15px"\
+       class="cancel">&nbsp;</a>\
+    <div style="clear: both">&nbsp;</div>\
+  </div>\
     <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">\
       Requested\
     </span>\
