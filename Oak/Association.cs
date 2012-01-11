@@ -52,6 +52,8 @@ namespace Oak
 
         public DynamicRepository Repository { get; set; }
 
+        public dynamic Model { get; set; }
+
         public string TableName
         {
             get { return Repository.TableName; }
@@ -351,8 +353,6 @@ namespace Oak
 
         public dynamic HasOneModel { get; set; }
 
-        public dynamic Model { get; set; }
-
         public HasOne(DynamicRepository repository)
             : this(repository, null)
         {
@@ -424,15 +424,29 @@ namespace Oak
 
         public void Init(DynamicModel model)
         {
-            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
-
             model.SetUnTrackedMember(
                 Singular(Repository),
-                Query(foreignKeyName, 
-                    Repository.GetType().Name, 
-                    through.GetType().Name, 
-                    ForeignKeyFor(Repository), 
-                    model));
+                new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
+        }
+
+        public string ForeignKeyName(DynamicModel model)
+        {
+            return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
+        }
+
+        public dynamic GetModelOrCache(DynamicModel model, dynamic options)
+        {
+            if (DiscardCache(options)) Model = null;
+
+            if (Model != null) return Model;
+
+            Model = Query(ForeignKeyName(model),
+                Repository.GetType().Name,
+                through.GetType().Name,
+                ForeignKeyFor(Repository),
+                model)();
+
+            return Model;
         }
 
         private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
@@ -457,7 +471,7 @@ namespace Oak
 
             models.ForEach(s =>
             {
-                var hasOne = s.GetMember(Named)();
+                var hasOne = s.GetMember(Named)(new { discardCache = false });
                 hasOne.SetMember(s.GetType().Name, new DynamicFunction(() => s));
                 collection.Add(hasOne);
             });
@@ -471,8 +485,6 @@ namespace Oak
         public string ForeignKey { get; set; }
 
         public string PrimaryKey { get; set; }
-
-        public dynamic Model { get; set; }
 
         public BelongsTo(DynamicRepository repository)
         {
