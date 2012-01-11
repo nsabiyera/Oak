@@ -21,7 +21,7 @@ namespace DynamicBlog.Controllers
         {
             Blogs = new Blogs();
         }
-
+            
         public dynamic Index()
         {
             ViewBag.Blogs = Blogs.All();

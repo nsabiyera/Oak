@@ -100,7 +100,12 @@ namespace Oak
 
             if (TryGetMember(property, out result)) return result;
 
-            throw new InvalidOperationException("This instance of type " + this.GetType().Name + " does not respond to the property " + property + ".");
+            throw new InvalidOperationException(
+                "This instance of type " + 
+                this.GetType().Name + 
+                " does not respond to the property " + 
+                property + 
+                ".  These are the members that exist on this instance: " + string.Join(", ", Hash().Select(s => s.Key + " (" + s.Value.GetType().Name + ")")));
         }
 
         public virtual void SetMember(string property, object value)
@@ -211,9 +216,31 @@ namespace Oak
                 return null;
             };
 
-            if (member is DynamicFunctionWithParam) function = () => member.Invoke(args.FirstOrDefault());
+            if (member is DynamicFunctionWithParam)
+            {
+                var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+
+                if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+
+                function = () => member.Invoke(argsToInvokeWith);
+            };
 
             return function();
+        }
+
+        private dynamic GetNamedArgs(object[] args, string[] argNames)
+        {
+            var namedArgs = new Gemini();
+
+            argNames.Zip(args.Skip(args.Length - argNames.Length),
+                    (argName, argValue) => new
+                    {
+                        name = argName,
+                        value = argValue
+                    })
+                .ForEach(arg => namedArgs.SetMember(arg.name, arg.value));
+
+            return namedArgs;
         }
 
         dynamic ToDynamicParam(object[] args, string[] argNames)
