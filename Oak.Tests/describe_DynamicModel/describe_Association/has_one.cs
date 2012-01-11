@@ -121,6 +121,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     it["the reference via has one relation remains unchanged"] = () =>
                         (author.Profile().Email as string).should_be("user@example.com");
+
+                    it["accessing property after discarding cache shows update"] = () =>
+                        (author.Profile(discardCache: true).Email as string).should_be("user2@example.com");
                 };
             };
         }
