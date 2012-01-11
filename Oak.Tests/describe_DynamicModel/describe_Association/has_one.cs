@@ -13,6 +13,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         dynamic authors;
 
+        dynamic profiles;
+
         dynamic profileId;
 
         dynamic authorId;
@@ -24,7 +26,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             seed = new Seed();
         }
 
-        void describe_has_one() //TODO: this for unconventional foreign keys
+        void describe_has_one()
         {
             context["given author with profile"] = () =>
             {
@@ -35,6 +37,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     authors = new Authors();
 
                     CreateConventionalAuthorsTable();
+
                     CreateConventionalProfilesTable();
 
                     authorId = new { Name = "Amir" }.InsertInto("Authors");
@@ -80,6 +83,44 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     act = () => author = authors.Single(authorId);
                     
                     it["author should have profile"] = () => (author.Profile().Email as string).should_be("test@test.com");
+                };
+            };
+        }
+
+        void describe_cacheing()
+        {
+            context["given has one relation, has been accessed already"] = () =>
+            {
+                before = () =>
+                {
+                    seed.PurgeDb();
+
+                    authors = new Authors();
+
+                    profiles = new Profiles();
+
+                    CreateConventionalAuthorsTable();
+
+                    CreateConventionalProfilesTable();
+
+                    authorId = new { Name = "Amir" }.InsertInto("Authors");
+
+                    profileId = new { Email = "user@example.com", AuthorId = authorId }.InsertInto("Profiles");
+                };
+
+                act = () =>
+                {
+                    author = authors.Single(authorId);
+
+                    author.Profile();
+                };
+
+                context["has one relation is changed from an external source"] = () =>
+                {
+                    act = () => profiles.Update(new { Email = "user2@example.com" }, profileId);
+
+                    it["the reference via has one relation remains unchanged"] = () =>
+                        (author.Profile().Email as string).should_be("user@example.com");
                 };
             };
         }
