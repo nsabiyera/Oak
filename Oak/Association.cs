@@ -349,6 +349,10 @@ namespace Oak
     {
         public string ForeignKey { get; set; }
 
+        public dynamic HasOneModel { get; set; }
+
+        public dynamic Model { get; set; }
+
         public HasOne(DynamicRepository repository)
             : this(repository, null)
         {
@@ -364,11 +368,14 @@ namespace Oak
 
         public void Init(DynamicModel model)
         {
-            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
-
             model.SetUnTrackedMember(
                 Named,
-                new DynamicFunction(() => Repository.SingleWhere(foreignKeyName + " = @0", model.GetMember(Id()))));
+                new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
+        }
+
+        public string ForeignKeyName(DynamicModel model)
+        {
+            return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
         }
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
@@ -377,12 +384,23 @@ namespace Oak
 
             models.ForEach(s =>
             {
-                var hasOne = s.GetMember(Named)();
+                var hasOne = s.GetMember(Named)(new { discardCache = false });
                 hasOne.SetMember(s.GetType().Name, new DynamicFunction(() => s));
                 collection.Add(hasOne);
             });
 
             return new DynamicModels(collection);
+        }
+
+        public dynamic GetModelOrCache(DynamicModel model, dynamic options)
+        {
+            if (DiscardCache(options)) Model = null;
+
+            if (Model != null) return Model;
+
+            Model = Repository.SingleWhere(ForeignKeyName(model) + " = @0", model.GetMember(Id()));
+
+            return Model;
         }
     }
 
@@ -454,7 +472,7 @@ namespace Oak
 
         public string PrimaryKey { get; set; }
 
-        public dynamic BelongsToModel { get; set; }
+        public dynamic Model { get; set; }
 
         public BelongsTo(DynamicRepository repository)
         {
@@ -466,7 +484,7 @@ namespace Oak
         {
             model.SetUnTrackedMember(
                 Named,
-                new DynamicFunctionWithParam((options) => GetBelongsToModelOrCache(model, options)));
+                new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
@@ -483,11 +501,11 @@ namespace Oak
             return new DynamicModels(collection);
         }
 
-        public dynamic GetBelongsToModelOrCache(DynamicModel model, dynamic options)
+        public dynamic GetModelOrCache(DynamicModel model, dynamic options)
         {
-            if (DiscardCache(options)) BelongsToModel = null;
+            if (DiscardCache(options)) Model = null;
 
-            if (BelongsToModel != null) return BelongsToModel;
+            if (Model != null) return Model;
 
             string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
 
@@ -495,9 +513,9 @@ namespace Oak
 
             string whereClause = string.Format("{0} = @0", primaryKeyName);
 
-            BelongsToModel = Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName));
+            Model = Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName));
 
-            return BelongsToModel;
+            return Model;
         }
     }
 }
