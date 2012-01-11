@@ -83,7 +83,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         (comment.Blog().Title as string).should_be("Some Blog");
 
                     it["discarded cache updates properties"] = () =>
-                        (comment.Blog(new { discardCache = true }).Title as string).should_be("Other Title");
+                        (comment.Blog(discardCache: true).Title as string).should_be("Other Title");
                 };
             };
         }

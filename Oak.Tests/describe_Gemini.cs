@@ -79,11 +79,14 @@ namespace Oak.Tests
 
         void describe_get_value_for_property()
         {
-            it["retrieves value with exact casing"] = () => (Gemini().GetMember("Title") as string).should_be("Some Name");
+            it["retrieves value with exact casing"] = () => 
+                (Gemini().GetMember("Title") as string).should_be("Some Name");
 
-            it["retrieves value with exact case insensitive"] = () => (Gemini().GetMember("title") as string).should_be("Some Name");
+            it["retrieves value with exact case insensitive"] = () => 
+                (Gemini().GetMember("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = expect<InvalidOperationException>("This instance of type Gemini does not respond to the property FooBar.", () => Gemini().GetMember("FooBar"));
+            it["throws invalid op if property doesn't exist"] = 
+                expect<InvalidOperationException>("This instance of type Gemini does not respond to the property FooBar.  These are the members that exist on this instance: Title (String), body (String), BodySummary (String)", () => Gemini().GetMember("FooBar"));
         }
 
         void when_retrieving_property_from_gemini()
@@ -277,6 +280,22 @@ namespace Oak.Tests
                     dynamic newGemini = gemini.CreateNewGemini();
 
                     (newGemini as object).should_not_be_null();
+                };
+
+                it["calls method with parameters specified as named parameters"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini(FirstName: "Amir");
+
+                    (newGemini.FirstName as string).should_be("Amir");
+                };
+
+                it["ignores unnamed parameters if name parameters have been specified"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini("Unnamed", FirstName: "Amir", LastName: "Rajan");
+
+                    (newGemini.FirstName as string).should_be("Amir");
+
+                    (newGemini.LastName as string).should_be("Rajan");
                 };
             };
 
