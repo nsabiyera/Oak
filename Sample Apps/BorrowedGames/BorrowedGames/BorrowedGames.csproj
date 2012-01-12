@@ -84,6 +84,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Models\Friends.cs" />
+    <Compile Include="Models\NotInterestedGame.cs" />
     <Compile Include="Models\WantedGame.cs" />
     <Compile Include="Models\WantedGames.cs" />
     <Compile Include="Models\Games.cs" />

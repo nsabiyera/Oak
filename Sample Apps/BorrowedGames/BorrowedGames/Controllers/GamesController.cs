@@ -25,6 +25,11 @@ namespace BorrowedGames.Controllers
             return Json(User().RequestedGames());
         }
 
+        public dynamic NotInterested()
+        {
+            return Json(LinksForNotInterestedGames(User().NotInterestedGames()));
+        }
+
         [HttpPost]
         public void NotInterested(int gameId)
         {
@@ -43,7 +48,13 @@ namespace BorrowedGames.Controllers
             User().DeleteWantedGame(gameId, followingId);
         }
 
-        public IEnumerable<dynamic> LinksForPreferredGames(List<dynamic> games)
+        [HttpPost]
+        public void UndoNotInterested(int gameId)
+        {
+            User().UndoNotInterestedGame(gameId);
+        }
+
+        public IEnumerable<dynamic> LinksForPreferredGames(IEnumerable<dynamic> games)
         {
             games.ForEach(s =>
             {
@@ -66,7 +77,7 @@ namespace BorrowedGames.Controllers
             return games;
         }
 
-        public IEnumerable<dynamic> LinksForWantedGames(List<dynamic> games)
+        public IEnumerable<dynamic> LinksForWantedGames(IEnumerable<dynamic> games)
         {
             games.ForEach(s => 
             {
@@ -76,6 +87,21 @@ namespace BorrowedGames.Controllers
                     action = "DeleteWant",
                     gameId = s.Id,
                     followingId = s.Owner.Id
+                });
+            });
+
+            return games;
+        }
+
+        public IEnumerable<dynamic> LinksForNotInterestedGames(IEnumerable<dynamic> games)
+        {
+            games.ForEach(s => 
+            {
+                s.UndoNotInterested = Url.RouteUrl(new
+                {
+                    controller = "Games",
+                    action = "UndoNotInterested",
+                    gameId = s.Id
                 });
             });
 

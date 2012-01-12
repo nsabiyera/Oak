@@ -87,11 +87,24 @@ namespace BorrowedGames.Models
             wantedGames.Insert(This().Wants().New(new { gameId, fromUserId }));
         }
 
+        public void UndoNotInterestedGame(dynamic gameId)
+        {
+            notInterestedGames.Delete(GameInNotInterestedList(gameId).Id);
+        }
+
+        public dynamic GameInNotInterestedList(dynamic gameId)
+        {
+            return This().NotInterestedGames().First(new { GameId = gameId });
+        }
+
         public void DeleteWantedGame(dynamic gameId, dynamic fromUserId)
         {
-            var requestId = This().Wants().First(new { GameId = gameId, FromUserId = fromUserId }).Id;
+            wantedGames.Delete(GameInWantedList(gameId, fromUserId).Id);
+        }
 
-            wantedGames.Delete(requestId);
+        public dynamic GameInWantedList(dynamic gameId, dynamic fromUserId)
+        {
+            return This().Wants().First(new { GameId = gameId, FromUserId = fromUserId });
         }
 
         public bool HasGame(dynamic game)

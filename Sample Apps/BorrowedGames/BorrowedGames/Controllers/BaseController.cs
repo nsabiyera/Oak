@@ -35,14 +35,9 @@ namespace BorrowedGames.Controllers
 
         public dynamic CurrentUser
         {
-            get
-            {
-                return GetSessionValue("CurrentUser");
-            }
-            set
-            {
-                SetSessionValue("CurrentUser", value);
-            }
+            get { return GetSessionValue("CurrentUser"); }
+
+            set { SetSessionValue("CurrentUser", value); }
         }
 
         public new dynamic User()

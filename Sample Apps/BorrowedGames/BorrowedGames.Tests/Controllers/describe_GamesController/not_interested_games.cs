@@ -21,5 +21,34 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                     PreferredGames().Count().should_be(0);
             };
         }
+
+        void retrieving_not_interested_games()
+        {
+            context["a game is marked as not interested"] = () => 
+            {
+                act = () => controller.NotInterested(mirrorsEdgeId);
+
+                it["the list of not interested games contains the game that was marked"] = () =>
+                    (FirstNotInterestedGame().Name as string).should_be("Mirror's Edge");
+
+                it["the games contain links to undo the not interested action"] = () =>
+                    (FirstNotInterestedGame().UndoNotInterested as string).should_be("/Games/UndoNotInterested?gameId=" + mirrorsEdgeId);
+            };
+        }
+
+        void undo_not_interested_game()
+        {
+            act = () =>
+            {
+                controller.NotInterested(mirrorsEdgeId);
+
+                (FirstNotInterestedGame().Name as string).should_be("Mirror's Edge");
+
+                controller.UndoNotInterested(mirrorsEdgeId);
+            };
+
+            it["the game is removed from the not interested list"] = () =>
+                NotInterestedGames().should_be_empty();
+        }
     }
 }
