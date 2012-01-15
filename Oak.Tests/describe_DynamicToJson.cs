@@ -7,6 +7,19 @@ using System.Dynamic;
 
 namespace Oak.Tests
 {
+    public class SomeDynamicModel : DynamicModel
+    {
+        public SomeDynamicModel(dynamic dto)
+        {
+            Init(dto);
+        }
+
+        public string Name
+        {
+            get { return "SomeName"; }
+        }
+    }
+
     class describe_DynamicToJson : nspec
     {
         dynamic objectToConvert;
@@ -251,6 +264,21 @@ namespace Oak.Tests
             it["converts whole object graph"] = () =>
             {
                 jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
+            };
+        }
+
+        void converting_dynamic_model()
+        {
+            before = () =>
+            {
+                objectToConvert = new SomeDynamicModel(new { Id = 20, Title = "SomeTitle" });
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["includes both properties from hash and properties defined on dynamic model"] = () =>
+            {
+                jsonString.should_be(@"{ ""Id"": 20, ""Title"": ""SomeTitle"", ""Name"": ""SomeName"" }");
             };
         }
     }

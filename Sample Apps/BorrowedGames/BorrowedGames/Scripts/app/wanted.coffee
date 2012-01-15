@@ -34,7 +34,6 @@ wantedGame = Backbone.Model.extend
 
 wantedGames = Backbone.Collection.extend
   model: wantedGame
-
   url: -> wantedGamesUrl
 
 wantedGamesView = Backbone.View.extend
@@ -52,6 +51,11 @@ wantedGamesView = Backbone.View.extend
   refresh: ->
     @wantedGames.fetch()
 
+  render: ->
+    $(@el).empty()
+
+    @wantedGames.each (game) => @addGame(game)
+
   addGame: (game) ->
     view = new wantedGameView
       model: game
@@ -61,11 +65,6 @@ wantedGamesView = Backbone.View.extend
     view.render()
 
     $(@el).append view.el
-
-  render: ->
-    $(@el).empty()
-
-    @wantedGames.each (game) => @addGame(game)
 
 wantedGameView = Backbone.View.extend
   className: 'border'

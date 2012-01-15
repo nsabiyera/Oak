@@ -103,10 +103,8 @@ preferredGameView = Backbone.View.extend
 
     $(@el).html(game)
 
-    requestLink = game.find(".request")
-
     toolTip.init(
-      requestLink,
+      game.find(".request"),
       "WantGame",
       "Click here to request the game.",
       "You get the idea...<br/>Request game.",

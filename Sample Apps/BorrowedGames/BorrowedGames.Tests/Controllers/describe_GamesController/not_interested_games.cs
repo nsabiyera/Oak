@@ -6,7 +6,7 @@ using NSpec;
 
 namespace BorrowedGames.Tests.Controllers.describe_GamesController
 {
-    [Tag("describe_User,describe_GamesController")]
+    [Tag("describe_User,describe_GamesController,describe_NotInterestedGame")]
     class not_interested_games : _games_controller
     {
         void marking_a_game_as_not_interested()

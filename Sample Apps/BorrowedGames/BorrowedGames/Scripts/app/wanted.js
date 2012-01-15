@@ -55,6 +55,12 @@
     refresh: function() {
       return this.wantedGames.fetch();
     },
+    render: function() {
+      $(this.el).empty();
+      return this.wantedGames.each(__bind(function(game) {
+        return this.addGame(game);
+      }, this));
+    },
     addGame: function(game) {
       var view;
       view = new wantedGameView({
@@ -63,12 +69,6 @@
       view.initialize();
       view.render();
       return $(this.el).append(view.el);
-    },
-    render: function() {
-      $(this.el).empty();
-      return this.wantedGames.each(__bind(function(game) {
-        return this.addGame(game);
-      }, this));
     }
   });
   wantedGameView = Backbone.View.extend({

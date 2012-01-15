@@ -1,5 +1,6 @@
 ﻿<script src="@Url.Content("~/scripts/app/wanted.js")"></script>
 <script src="@Url.Content("~/scripts/app/preferred.js")"></script>
+<script src="@Url.Content("~/scripts/app/unwanted.js")"></script>
 <!--
 <h3>Requested games (mockup)</h3>
 <div class="border">
@@ -18,6 +19,8 @@
 <div class="border">
   <div id="preferredGames">
   </div>
+  <div id="unwantedGames">
+  </div>
 </div>
 
 <script>
@@ -28,9 +31,12 @@
         urls.notInterestedUrl = '@Url.RouteUrl(new { controller = "Games", action = "NotInterested" })';
         urls.wantedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Wanted" })';
         urls.requestedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Requested" })';
+        urls.unwantedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Requested" })';
 
         wanted.init(urls, $("#wantedGames"));
 
         preferred.init(urls, $("#preferredGames"));
+
+        unwanted.init(urls, $("#unwantedGames"));
     });
 </script>

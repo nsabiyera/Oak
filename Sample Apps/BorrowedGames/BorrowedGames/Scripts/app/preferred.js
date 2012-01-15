@@ -107,14 +107,13 @@
       return this.model.wantGame();
     },
     render: function() {
-      var game, requestLink;
+      var game;
       game = $.tmpl(this.gameTemplate, {
         gameName: this.model.shortName(),
         searchString: this.model.reviewUrl()
       });
       $(this.el).html(game);
-      requestLink = game.find(".request");
-      toolTip.init(requestLink, "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
+      toolTip.init(game.find(".request"), "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
         return game.offset().left + 100;
       }, function() {
         return requestLink.offset().top;
