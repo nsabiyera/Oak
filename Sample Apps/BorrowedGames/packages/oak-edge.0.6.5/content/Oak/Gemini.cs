@@ -14,6 +14,13 @@ namespace Oak
 
             foreach (var item in temp) action(item);
         }
+
+        public static void ForEach<T>(this object enumerable, Action<T> action)
+        {
+            dynamic temp = enumerable;
+
+            foreach (var item in temp) action(item);
+        }
     }
 
     public delegate dynamic DynamicFunction();

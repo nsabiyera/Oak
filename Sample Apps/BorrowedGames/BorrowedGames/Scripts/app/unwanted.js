@@ -1,5 +1,5 @@
 (function() {
-  var unwantedGame, unwantedGames, unwantedGamesUrl, unwantedGamesView;
+  var unwantedGame, unwantedGameView, unwantedGames, unwantedGamesUrl, unwantedGamesView;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   unwantedGamesUrl = "";
   this.unwanted = {
@@ -57,35 +57,35 @@
       }, this));
     }
   });
-  ({
-    unwantedGameView: Backbone.View.extend({
-      initialize: function() {
-        _.bindAll(this, "render");
-        return this.model.bind('change', this.apply);
-      },
-      apply: function() {
-        return $(this.el).fadeOut();
-      },
-      events: {
-        "click .cancel": "undo"
-      },
-      undo: function() {
-        return this.model.undo();
-      },
-      render: function() {
-        var game;
-        game = $.tmpl(this.gameTemplate, {
-          gameName: this.model.shortName()
-        });
-        $(this.el).html(game);
-        toolTip.init(game.find(".cancel"), "UndoUnwantedGame", "Want to give the game another shot? Remove it from quranteen.", "You get the idea...<br/>Remove it from quranteen.", function() {
-          return game.offset().left + 100;
-        }, function() {
-          return game.offset().top + -25;
-        });
-        return this;
-      },
-      gameTemplate: '\
+  unwantedGameView = Backbone.View.extend({
+    initialize: function() {
+      _.bindAll(this, "render");
+      return this.model.bind('change', this.apply);
+    },
+    apply: function() {
+      return $(this.el).fadeOut();
+    },
+    events: {
+      "click .cancel": "undo"
+    },
+    undo: function() {
+      return this.model.undo();
+    },
+    render: function() {
+      var game;
+      alert(this.model.shortName());
+      game = $.tmpl(this.gameTemplate, {
+        gameName: this.model.shortName()
+      });
+      $(this.el).html(game);
+      toolTip.init(game.find(".cancel"), "UndoUnwantedGame", "Want to give the game another shot? Remove it from quranteen.", "You get the idea...<br/>Remove it from quranteen.", function() {
+        return game.offset().left + 100;
+      }, function() {
+        return game.offset().top + -25;
+      });
+      return this;
+    },
+    gameTemplate: '\
     <div class="menubar">\
       <a href="javascript:;" \
          style="text-decoration: none; color: black; float: right; padding-left: 15px" \
@@ -102,6 +102,5 @@
       <a href="javascript:;" class="request" style="font-size: 12px">request game</a>\
     </div>\
     '
-    })
   });
 }).call(this);

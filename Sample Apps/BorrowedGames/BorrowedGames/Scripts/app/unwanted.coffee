@@ -53,7 +53,7 @@ unwantedGamesView = Backbone.View.extend
 
       $(@el).append view.render().el
 
-unwantedGameView: Backbone.View.extend
+unwantedGameView = Backbone.View.extend
   initialize: ->
     _.bindAll this, "render"
 
@@ -68,6 +68,8 @@ unwantedGameView: Backbone.View.extend
   undo: -> @model.undo()
 
   render: ->
+    alert(@model.shortName())
+
     game = $.tmpl(@gameTemplate, { gameName: @model.shortName() })
 
     $(@el).html(game)
