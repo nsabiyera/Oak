@@ -10,7 +10,7 @@ this.unwanted =
 
     div.html(@view.el)
 
-  getUnWantedGames: -> @view.refresh()
+  getUnwantedGames: -> @view.refresh()
 
 unwantedGame = Backbone.Model.extend
   name: -> @get("Name")
@@ -18,12 +18,17 @@ unwantedGame = Backbone.Model.extend
   shortName: ->
     name = @name()
     
-    name = name.substring(0, 40) + "... " if name > 45
+    name = name.substring(0, 20) + "... " if name.length > 21
 
     name += " (" + @console() + ")"
 
+  console: -> @get("Console")
+
   undo: ->
-    alert(@get("UndoNotInterested"))
+    $.post(@get("UndoNotInterested"), { }, =>
+      preferred.getPreferredGames()
+      @change()
+    )
 
 unwantedGames = Backbone.Collection.extend
   model: unwantedGame
@@ -45,15 +50,23 @@ unwantedGamesView = Backbone.View.extend
   render: ->
     $(@el).empty()
 
-    @unwantedGames.each (game) =>
-      view = new unwantedGameView
-        model: game
+    @unwantedGames.each (game) => @addGame(game)
+    
+    $(@el).append($("<div />").css({ clear: "both" }))
 
-      view.initialize()
+  addGame: (game) ->
+    view = new unwantedGameView
+      model: game
 
-      $(@el).append view.render().el
+    view.initialize()
+
+    view.render()
+
+    $(@el).append view.el
 
 unwantedGameView = Backbone.View.extend
+  className: 'gameBoxSmall'
+
   initialize: ->
     _.bindAll this, "render"
 
@@ -68,8 +81,6 @@ unwantedGameView = Backbone.View.extend
   undo: -> @model.undo()
 
   render: ->
-    alert(@model.shortName())
-
     game = $.tmpl(@gameTemplate, { gameName: @model.shortName() })
 
     $(@el).html(game)
@@ -77,8 +88,8 @@ unwantedGameView = Backbone.View.extend
     toolTip.init(
       game.find(".cancel"),
       "UndoUnwantedGame",
-      "Want to give the game another shot? Remove it from quranteen.",
-      "You get the idea...<br/>Remove it from quranteen.",
+      "Want to give the game another shot?<br/>Remove it from qurantine.",
+      "You get the idea...<br/>Remove it from qurantine.",
       -> game.offset().left + 100,
       -> game.offset().top + -25
     )
@@ -94,12 +105,6 @@ unwantedGameView = Backbone.View.extend
       <div style="clear: both">&nbsp;</div>
     </div>
     <div style="font-size: 12px; height: 70px; padding-bottom: 3px">
-      <a style="color: black;" href="${searchString}" target="_blank">${gameName}</a><br/>
-    </div>
-    <div style="font-size: 12px; height: 30px; padding-bottom: 3px">
-      ${owner}
-    </div>
-    <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">
-      <a href="javascript:;" class="request" style="font-size: 12px">request game</a>
+      ${gameName}<br/>
     </div>
     '

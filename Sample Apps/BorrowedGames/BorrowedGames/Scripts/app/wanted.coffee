@@ -22,7 +22,7 @@ wantedGame = Backbone.Model.extend
   shortName: ->
     name = @name()
     
-    name = name.substring(0, 40) + "... " if name > 45
+    name = name.substring(0, 40) + "... " if name.length > 41
 
     name += " (" + @console() + ")"
 

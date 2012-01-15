@@ -9,7 +9,7 @@
       this.view.initialize();
       return div.html(this.view.el);
     },
-    getUnWantedGames: function() {
+    getUnwantedGames: function() {
       return this.view.refresh();
     }
   };
@@ -20,13 +20,19 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name > 45) {
-        name = name.substring(0, 40) + "... ";
+      if (name.length > 21) {
+        name = name.substring(0, 20) + "... ";
       }
       return name += " (" + this.console() + ")";
     },
+    console: function() {
+      return this.get("Console");
+    },
     undo: function() {
-      return alert(this.get("UndoNotInterested"));
+      return $.post(this.get("UndoNotInterested"), {}, __bind(function() {
+        preferred.getPreferredGames();
+        return this.change();
+      }, this));
     }
   });
   unwantedGames = Backbone.Collection.extend({
@@ -47,17 +53,25 @@
     },
     render: function() {
       $(this.el).empty();
-      return this.unwantedGames.each(__bind(function(game) {
-        var view;
-        view = new unwantedGameView({
-          model: game
-        });
-        view.initialize();
-        return $(this.el).append(view.render().el);
+      this.unwantedGames.each(__bind(function(game) {
+        return this.addGame(game);
       }, this));
+      return $(this.el).append($("<div />").css({
+        clear: "both"
+      }));
+    },
+    addGame: function(game) {
+      var view;
+      view = new unwantedGameView({
+        model: game
+      });
+      view.initialize();
+      view.render();
+      return $(this.el).append(view.el);
     }
   });
   unwantedGameView = Backbone.View.extend({
+    className: 'gameBoxSmall',
     initialize: function() {
       _.bindAll(this, "render");
       return this.model.bind('change', this.apply);
@@ -73,12 +87,11 @@
     },
     render: function() {
       var game;
-      alert(this.model.shortName());
       game = $.tmpl(this.gameTemplate, {
         gameName: this.model.shortName()
       });
       $(this.el).html(game);
-      toolTip.init(game.find(".cancel"), "UndoUnwantedGame", "Want to give the game another shot? Remove it from quranteen.", "You get the idea...<br/>Remove it from quranteen.", function() {
+      toolTip.init(game.find(".cancel"), "UndoUnwantedGame", "Want to give the game another shot?<br/>Remove it from qurantine.", "You get the idea...<br/>Remove it from qurantine.", function() {
         return game.offset().left + 100;
       }, function() {
         return game.offset().top + -25;
@@ -93,13 +106,7 @@
       <div style="clear: both">&nbsp;</div>\
     </div>\
     <div style="font-size: 12px; height: 70px; padding-bottom: 3px">\
-      <a style="color: black;" href="${searchString}" target="_blank">${gameName}</a><br/>\
-    </div>\
-    <div style="font-size: 12px; height: 30px; padding-bottom: 3px">\
-      ${owner}\
-    </div>\
-    <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">\
-      <a href="javascript:;" class="request" style="font-size: 12px">request game</a>\
+      ${gameName}<br/>\
     </div>\
     '
   });

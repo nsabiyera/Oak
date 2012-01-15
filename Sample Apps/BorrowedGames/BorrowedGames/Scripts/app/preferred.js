@@ -26,7 +26,7 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name > 45) {
+      if (name.length > 41) {
         name = name.substring(0, 40) + "... ";
       }
       return name += " (" + this.console() + ")";
@@ -34,6 +34,7 @@
     notInterested: function() {
       return $.post(this.get("NotInterested"), {}, __bind(function() {
         this.deleted = true;
+        unwanted.getUnwantedGames();
         return this.change();
       }, this));
     },

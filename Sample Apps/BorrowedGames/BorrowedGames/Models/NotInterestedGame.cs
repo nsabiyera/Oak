@@ -22,5 +22,10 @@ namespace BorrowedGames.Models
         {
             get { return This().Game().Name; }
         }
+
+        public string Console
+        {
+            get { return This().Game().Console; }
+        }
     }
 }

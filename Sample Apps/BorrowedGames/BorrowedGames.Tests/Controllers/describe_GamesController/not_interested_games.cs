@@ -33,6 +33,9 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
                 it["the games contain links to undo the not interested action"] = () =>
                     (FirstNotInterestedGame().UndoNotInterested as string).should_be("/Games/UndoNotInterested?gameId=" + mirrorsEdgeId);
+
+                it["the games contain console information"] = () =>
+                    (FirstNotInterestedGame().Console as string).should_be("XBOX360");
             };
         }
 

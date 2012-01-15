@@ -186,18 +186,29 @@ div.modal input {
 }
 
 /* line 193, ../sass/screen.scss */
+.gameBoxSmall {
+  margin: 5px;
+  border: solid 1px silver;
+  border-radius: 5px;
+  padding: 5px;
+  float: left;
+  width: 100px;
+  height: 80px;
+}
+
+/* line 204, ../sass/screen.scss */
 .autocomplete {
   width: 556px;
   border: solid 1px silver;
   background-color: White;
 }
 
-/* line 200, ../sass/screen.scss */
+/* line 211, ../sass/screen.scss */
 .hidden {
   display: none;
 }
 
-/* line 205, ../sass/screen.scss */
+/* line 216, ../sass/screen.scss */
 body {
   margin-left: auto;
   margin-right: auto;
@@ -207,7 +218,7 @@ body {
   font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
 }
 
-/* line 215, ../sass/screen.scss */
+/* line 226, ../sass/screen.scss */
 .box {
   float: left;
   border: solid 1px silver;
@@ -217,12 +228,12 @@ body {
   padding: 3px;
 }
 
-/* line 225, ../sass/screen.scss */
+/* line 236, ../sass/screen.scss */
 .clear {
   clear: both;
 }
 
-/* line 230, ../sass/screen.scss */
+/* line 241, ../sass/screen.scss */
 #main {
   margin-left: auto;
   margin-right: auto;
@@ -236,24 +247,24 @@ body {
   padding-bottom: 30px;
 }
 
-/* line 244, ../sass/screen.scss */
+/* line 255, ../sass/screen.scss */
 .section {
   border-left: 1px solid silver;
   padding-left: 5px;
 }
 
-/* line 250, ../sass/screen.scss */
+/* line 261, ../sass/screen.scss */
 #banner {
   font-family: 'Boycott';
   color: white;
 }
 
-/* line 256, ../sass/screen.scss */
+/* line 267, ../sass/screen.scss */
 .brand {
   font-family: 'Boycott';
 }
 
-/* line 261, ../sass/screen.scss */
+/* line 272, ../sass/screen.scss */
 nav a {
   text-decoration: none;
   font-size: 20px;
@@ -269,12 +280,12 @@ nav a {
   width: 100px;
 }
 
-/* line 277, ../sass/screen.scss */
+/* line 288, ../sass/screen.scss */
 nav {
   float: right;
 }
 
-/* line 282, ../sass/screen.scss */
+/* line 293, ../sass/screen.scss */
 .notification {
   color: black;
   border-radius: 10px;
@@ -285,31 +296,31 @@ nav {
   border: 1px solid #FAD42E;
 }
 
-/* line 293, ../sass/screen.scss */
+/* line 304, ../sass/screen.scss */
 .seperator {
   width: 100%;
   border-bottom: 1px solid silver;
 }
 
-/* line 299, ../sass/screen.scss */
+/* line 310, ../sass/screen.scss */
 #nav-wrapper {
   height: 60px;
   width: 1045px;
 }
 
-/* line 305, ../sass/screen.scss */
+/* line 316, ../sass/screen.scss */
 h1, h2, h3, h4 {
   border-bottom: 1px solid silver;
   padding: 5px;
 }
 
-/* line 311, ../sass/screen.scss */
+/* line 322, ../sass/screen.scss */
 .toggleSwitchOn {
   background-color: #46629D;
   background-image: url("images/circle20.png");
   background-repeat: no-repeat;
 }
-/* line 317, ../sass/screen.scss */
+/* line 328, ../sass/screen.scss */
 .toggleSwitchOn label {
   font-weight: bold;
   color: #FFFFFF;
@@ -317,13 +328,13 @@ h1, h2, h3, h4 {
   cursor: pointer;
 }
 
-/* line 326, ../sass/screen.scss */
+/* line 337, ../sass/screen.scss */
 .toggleSwitchOff {
   background-color: #E0E5EE;
   background-image: url("images/circle20.png");
   background-repeat: no-repeat;
 }
-/* line 332, ../sass/screen.scss */
+/* line 343, ../sass/screen.scss */
 .toggleSwitchOff label {
   font-weight: bold;
   color: #545454;
