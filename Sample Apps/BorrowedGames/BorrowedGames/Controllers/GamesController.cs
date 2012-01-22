@@ -101,7 +101,7 @@ namespace BorrowedGames.Controllers
                 {
                     controller = "Games",
                     action = "UndoNotInterested",
-                    gameId = s.Id
+                    gameId = s.GameId
                 });
             });
 

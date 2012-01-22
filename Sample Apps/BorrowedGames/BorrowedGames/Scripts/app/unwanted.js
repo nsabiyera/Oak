@@ -73,7 +73,7 @@
   unwantedGameView = Backbone.View.extend({
     className: 'gameBoxSmall',
     initialize: function() {
-      _.bindAll(this, "render");
+      _.bindAll(this, "render", "apply");
       return this.model.bind('change', this.apply);
     },
     apply: function() {

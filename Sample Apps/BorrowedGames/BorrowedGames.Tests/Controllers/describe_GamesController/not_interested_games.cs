@@ -26,13 +26,13 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
         {
             context["a game is marked as not interested"] = () => 
             {
-                act = () => controller.NotInterested(mirrorsEdgeId);
+                act = () => controller.NotInterested(gearsOfWarId);
 
                 it["the list of not interested games contains the game that was marked"] = () =>
-                    (FirstNotInterestedGame().Name as string).should_be("Mirror's Edge");
+                    (FirstNotInterestedGame().Name as string).should_be("Gears of War");
 
                 it["the games contain links to undo the not interested action"] = () =>
-                    (FirstNotInterestedGame().UndoNotInterested as string).should_be("/Games/UndoNotInterested?gameId=" + mirrorsEdgeId);
+                    (FirstNotInterestedGame().UndoNotInterested as string).should_be("/Games/UndoNotInterested?gameId=" + gearsOfWarId);
 
                 it["the games contain console information"] = () =>
                     (FirstNotInterestedGame().Console as string).should_be("XBOX360");

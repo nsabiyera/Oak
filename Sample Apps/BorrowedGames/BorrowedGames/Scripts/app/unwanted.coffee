@@ -68,12 +68,12 @@ unwantedGameView = Backbone.View.extend
   className: 'gameBoxSmall'
 
   initialize: ->
-    _.bindAll this, "render"
+    _.bindAll this, "render", "apply"
 
     @model.bind 'change', @apply
 
   apply: ->
-     $(@el).fadeOut()
+    $(@el).fadeOut()
 
   events:
     "click .cancel": "undo"
