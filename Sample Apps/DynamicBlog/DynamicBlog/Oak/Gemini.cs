@@ -216,24 +216,5 @@ namespace Oak
 
             return function();
         }
-
-        dynamic ToDynamicParam(object[] args, string[] argNames)
-        {
-            if (AllParametersAreNamed(args, argNames))
-            {
-                var expando = new ExpandoObject() as IDictionary<string, object>;
-
-                for (int i = 0; i < args.Count(); i++) expando.Add(argNames[i], args[i]);
-
-                return expando;
-            }
-
-            return args.FirstOrDefault();
-        }
-
-        private bool AllParametersAreNamed(object[] args, IEnumerable<string> argNames)
-        {
-            return args.Length == argNames.Count();
-        }
     }
 }
