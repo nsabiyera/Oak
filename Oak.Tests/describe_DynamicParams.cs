@@ -35,7 +35,7 @@ namespace Oak.Tests
                 {
                     before = () => nameValueCollection.Add("PersonId", "123");
 
-                    it["comparing key's value with an int passes"] = () => 
+                    it["comparing key's value with an int passes"] = () =>
                         ((int)asDynamic.PersonId).should_be(123);
                 };
 
