@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using System.Dynamic;
+using System.Reflection;
 
 namespace Oak.Tests
 {
@@ -138,7 +139,7 @@ namespace Oak.Tests
             };
         }
 
-        void inherited_geminied_with_defined_methods()
+        void inherited_gemini_with_defined_methods()
         {
             act = () => inheritedGemini = new InheritedGemini(blog);
 
@@ -323,6 +324,28 @@ namespace Oak.Tests
             };
         }
 
+        void inherited_gemini_with_private_dynamic_methods_and_functions()
+        {
+            act = () => inheritedGemini = new PrivateGemini();
+
+            it["private functions that take in no parameters and return dynamic are publicly accessible"] = () =>
+                (inheritedGemini.HelloString() as string).should_be("hello");
+
+            it["private functions that take in dynamic and return dynamic are publicly accessible"] = () =>
+            {
+                var asGemini = inheritedGemini as Gemini;
+
+                var methodInfo = asGemini.GetType().GetMethod("Hello", asGemini.PrivateFlags());
+
+                asGemini.IsDynamicFunctionWithParam(methodInfo, methodInfo.GetParameters().ToList()).should_be_true();
+
+                (inheritedGemini.Members() as IEnumerable<string>).should_contain("Hello");
+
+                (inheritedGemini.Hello("Jane") as string).should_be("hello Jane");
+            };
+
+        }
+
         Gemini Gemini()
         {
             return gemini as Gemini;
@@ -393,6 +416,19 @@ namespace Oak.Tests
         {
             Expando.FirstName = "";
             Expando.LastName = "";
+        }
+    }
+
+    public class PrivateGemini  : Gemini
+    {
+        dynamic HelloString()
+        {
+            return "hello";
+        }
+
+        dynamic Hello(dynamic name)
+        {
+            return "hello " + name;
         }
     }
 }
