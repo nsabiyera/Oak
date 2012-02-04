@@ -328,22 +328,50 @@ namespace Oak.Tests
         {
             act = () => inheritedGemini = new PrivateGemini();
 
-            it["private functions that take in no parameters and return dynamic are publicly accessible"] = () =>
+            it["private function that take in no parameters and return dynamic are publicly accessible"] = () =>
                 (inheritedGemini.HelloString() as string).should_be("hello");
 
-            it["private functions that take in dynamic and return dynamic are publicly accessible"] = () =>
-            {
-                var asGemini = inheritedGemini as Gemini;
-
-                var methodInfo = asGemini.GetType().GetMethod("Hello", asGemini.PrivateFlags());
-
-                asGemini.IsDynamicFunctionWithParam(methodInfo, methodInfo.GetParameters().ToList()).should_be_true();
-
-                (inheritedGemini.Members() as IEnumerable<string>).should_contain("Hello");
-
+            it["private function that take in dynamic and return dynamic are publicly accessible"] = () =>
                 (inheritedGemini.Hello("Jane") as string).should_be("hello Jane");
+
+            it["private delegate that take in dynamic can interperet generic parameters"] = () =>
+                (inheritedGemini.HelloFullName(firstName: "Jane", lastName: "Doe") as string).should_be("hello Jane Doe");
+
+            it["private method that takes in no parameters is publically accessible"] = () =>
+            {
+                inheritedGemini.Alter();
+
+                ((bool)inheritedGemini.Altered).should_be_true();
             };
 
+            it["private method that takes in dynamic parameter is publically accessible"] = () =>
+            {
+                inheritedGemini.SetAltered(true);
+
+                ((bool)inheritedGemini.Altered).should_be_true();
+
+                inheritedGemini.SetAltered(false);
+
+                ((bool)inheritedGemini.Altered).should_be_false();
+            };
+
+            it["private function that return enumerable of dynamic is publically accessible"] = () =>
+                (inheritedGemini.Names() as IEnumerable<dynamic>).should_contain("name1");
+
+            it["private function that takes a parameter and returns enumerable of dynamic is publically accessible"] = () =>
+                (inheritedGemini.NamesWithPrefix("hi") as IEnumerable<dynamic>).should_contain("hiname1");
+
+            it["private delegate (returning enumerable) that take in dynamic can interperet generic parameters"] = () =>
+                (inheritedGemini.NamesWithArgs(prefix: "hi") as IEnumerable<dynamic>).should_contain("hiname1");
+
+            it["private members can be redefined"] = () =>
+            {
+                (inheritedGemini.HelloString() as string).should_be("hello");
+
+                inheritedGemini.HelloString = "booya";
+
+                (inheritedGemini.HelloString as string).should_be("booya");
+            };
         }
 
         Gemini Gemini()
@@ -421,6 +449,8 @@ namespace Oak.Tests
 
     public class PrivateGemini  : Gemini
     {
+        public bool Altered;
+
         dynamic HelloString()
         {
             return "hello";
@@ -429,6 +459,36 @@ namespace Oak.Tests
         dynamic Hello(dynamic name)
         {
             return "hello " + name;
+        }
+
+        dynamic HelloFullName(dynamic fullName)
+        {
+            return "hello " + fullName.firstName + " " + fullName.lastName;
+        }
+
+        void Alter()
+        {
+            Altered = true;
+        }
+
+        void SetAltered(dynamic value)
+        {
+            Altered = value;
+        }
+
+        IEnumerable<dynamic> Names()
+        {
+            return new[] { "name1", "name2" };
+        }
+
+        IEnumerable<dynamic> NamesWithPrefix(dynamic prefix)
+        {
+            return Names().Select(s => prefix + s);
+        }
+
+        IEnumerable<dynamic> NamesWithArgs(dynamic args)
+        {
+            return Names().Select(s => args.prefix + s);
         }
     }
 }

@@ -20,8 +20,8 @@ namespace Oak
             this.valueProvider = valueProvider;
 
             Hash()
-                .Where(s => s.Key.ToLower().EndsWith("id"))
                 .ToList()
+                .Where(s => s.Key.ToLower().EndsWith("id"))
                 .ForEach(kvp => SetMember(kvp.Key, IntOrOriginal(kvp.Value)));
         }
 
