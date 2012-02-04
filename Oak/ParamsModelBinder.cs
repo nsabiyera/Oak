@@ -21,6 +21,7 @@ namespace Oak
 
             Hash()
                 .Where(s => s.Key.ToLower().EndsWith("id"))
+                .ToList()
                 .ForEach(kvp => SetMember(kvp.Key, IntOrOriginal(kvp.Value)));
         }
 
