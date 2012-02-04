@@ -30,6 +30,8 @@ namespace Oak
 
     public delegate void DynamicMethodWithParam(dynamic parameter);
 
+    public delegate dynamic DynamicMethod();
+
     [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
@@ -64,16 +66,35 @@ namespace Oak
             if (IsDynamicFunction(method, parameters)) TrySetMember(method.Name, DynamicFunctionFor(method));
 
             if (IsDynamicFunctionWithParam(method, parameters)) TrySetMember(method.Name, DynamicFunctionWithParamFor(method));
+
+            if (IsDynamicMethod(method, parameters)) TrySetMember(method.Name, DynamicMethodFor(method));
+
+            if (IsDynamicMethodWithParam(method, parameters)) TrySetMember(method.Name, DynamicMethodWithParamFor(method));
         }
 
         public DynamicFunction DynamicFunctionFor(MethodInfo method)
         {
-            return new DynamicFunction(() => Method(method.Name).Invoke(this, null));
+            return new DynamicFunction(() => method.Invoke(this, null));
+        }
+
+        private DynamicFunctionWithParam DynamicMethodWithParamFor(MethodInfo method)
+        {
+            return new DynamicFunctionWithParam((arg) => 
+            {
+                method.Invoke(this, new[] { arg });
+
+                return null;
+            });
         }
 
         public DynamicFunctionWithParam DynamicFunctionWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) => Method(method.Name).Invoke(this, new[] { arg }));
+            return new DynamicFunctionWithParam((arg) => method.Invoke(this, new[] { arg }));
+        }
+
+        private DynamicMethod DynamicMethodFor(MethodInfo method)
+        {
+            return new DynamicMethod(() => method.Invoke(this, null));
         }
 
         public BindingFlags PrivateFlags()
@@ -88,7 +109,7 @@ namespace Oak
 
         public  bool IsDynamicFunction(MethodInfo method, List<ParameterInfo> parameters)
         {
-            if (method.ReturnType != typeof(object)) return false;
+            if (method.ReturnType != typeof(object) && method.ReturnType != typeof(IEnumerable<dynamic>)) return false;
 
             if (parameters.Any()) return false;
 
@@ -97,11 +118,29 @@ namespace Oak
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)
         {
-            if (method.ReturnType != typeof(object)) return false;
+            if (method.ReturnType != typeof(object) && method.ReturnType != typeof(IEnumerable<dynamic>)) return false;
 
-            if (parameters.Count == 0) return false;
+            if (parameters.Count != 1) return false;
 
-            if (parameters.Count > 1) return false;
+            if (parameters.Any(s => s.ParameterType != typeof(object))) return false;
+
+            return true;
+        }
+
+        public bool IsDynamicMethod(MethodInfo method, List<ParameterInfo> parameters)
+        {
+            if (method.ReturnType != typeof(void)) return false;
+
+            if (parameters.Any()) return false;
+
+            return true;
+        }
+
+        public bool IsDynamicMethodWithParam(MethodInfo method, List<ParameterInfo> parameters)
+        {
+            if (method.ReturnType != typeof(void)) return false;
+
+            if (parameters.Count != 1) return false;
 
             if (parameters.Any(s => s.ParameterType != typeof(object))) return false;
 
@@ -112,17 +151,15 @@ namespace Oak
         {
             return this.GetType()
                 .GetMethods(PrivateFlags())
-                .Where(s => 
-                {
-                    var parameters = s.GetParameters().ToList();
-
-                    return IsDynamicDelegate(s, parameters);
-                });
+                .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList()));
         }
 
         public bool IsDynamicDelegate(MethodInfo method, List<ParameterInfo> parameters)
         {
-            return IsDynamicFunction(method, parameters) || IsDynamicFunctionWithParam(method, parameters);
+            return IsDynamicFunction(method, parameters) || 
+                IsDynamicFunctionWithParam(method, parameters) || 
+                IsDynamicMethod(method, parameters) ||
+                IsDynamicMethodWithParam(method, parameters);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -256,7 +293,7 @@ namespace Oak
 
         public virtual IDictionary<string, object> Hash()
         {
-            return (Expando as IDictionary<string, object>);
+            return Expando as IDictionary<string, object>;
         }
 
         public virtual void DeleteMember(string member)
