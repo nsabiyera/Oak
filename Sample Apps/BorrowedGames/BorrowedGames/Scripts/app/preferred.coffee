@@ -4,7 +4,6 @@ this.preferred =
   init: (urls, div) ->
     preferredGamesUrl = urls.preferredGamesUrl
     @view = new preferredGamesView()
-    @view.initialize()
     div.html(@view.el)
     
   getPreferredGames: -> @view.refresh()
@@ -64,8 +63,6 @@ preferredGamesView = Backbone.View.extend
     @preferredGames.each (library) =>
       view = new preferredGameView
         model: library
-      
-      view.initialize()
 
       $(@el).append view.render().el
 

@@ -6,8 +6,6 @@ this.unwanted =
 
     @view = new unwantedGamesView()
 
-    @view.initialize()
-
     div.html(@view.el)
 
   getUnwantedGames: -> @view.refresh()
@@ -57,8 +55,6 @@ unwantedGamesView = Backbone.View.extend
   addGame: (game) ->
     view = new unwantedGameView
       model: game
-
-    view.initialize()
 
     view.render()
 

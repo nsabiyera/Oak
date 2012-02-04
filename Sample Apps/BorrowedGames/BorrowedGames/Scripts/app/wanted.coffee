@@ -6,8 +6,6 @@ this.wanted =
 
     @view = new wantedGamesView()
 
-    @view.initialize()
-    
     div.html(@view.el)
 
   getWantedGames: -> @view.refresh()
@@ -59,8 +57,6 @@ wantedGamesView = Backbone.View.extend
   addGame: (game) ->
     view = new wantedGameView
       model: game
-
-    view.initialize()
 
     view.render()
 

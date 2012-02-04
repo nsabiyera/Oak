@@ -6,7 +6,6 @@
     init: function(urls, div) {
       wantedGamesUrl = urls.wantedGamesUrl;
       this.view = new wantedGamesView();
-      this.view.initialize();
       return div.html(this.view.el);
     },
     getWantedGames: function() {
@@ -66,7 +65,6 @@
       view = new wantedGameView({
         model: game
       });
-      view.initialize();
       view.render();
       return $(this.el).append(view.el);
     }

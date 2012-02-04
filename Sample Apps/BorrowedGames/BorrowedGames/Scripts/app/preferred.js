@@ -6,7 +6,6 @@
     init: function(urls, div) {
       preferredGamesUrl = urls.preferredGamesUrl;
       this.view = new preferredGamesView();
-      this.view.initialize();
       return div.html(this.view.el);
     },
     getPreferredGames: function() {
@@ -71,7 +70,6 @@
         view = new preferredGameView({
           model: library
         });
-        view.initialize();
         return $(this.el).append(view.render().el);
       }, this));
       $(this.el).append($("<div />").css({
