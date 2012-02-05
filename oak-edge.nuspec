@@ -2,12 +2,12 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>0.7.2</version> 
+    <version>0.7.3</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic Hotness. Simply put...oak is a clone of ActiveModel (Ruby on Rails inspired) that can be used with ASP.NET MVC.  The nuget package 'oak' is the stable release, this one is the latest release fresh off the presses.</description> 
     <language>en-US</language>
     <licenseUrl>http://www.github.com/amirrajan/Oak</licenseUrl>
-    <tags>dynamic mvc migrations rails aspnetmvc</tags>
+    <tags>dynamic mvc migrations rails aspnetmvc oak</tags>
   </metadata>
   <files>
     <file src="Oak/App_Code/OakForm.cshtml" target="content/App_Code/OakForm.cshtml" />

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Data.SqlClient;
 using System.Data;
-using Massive;
 using System.Diagnostics;
 
 namespace Oak
@@ -47,15 +43,6 @@ namespace Oak
             sqlCommand.Connection.Open();
             sqlCommand.CommandText = String.Format(query);
             return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
-        }
-
-        public static object InsertInto(this object o, string table, ConnectionProfile connectionProfile = null)
-        {
-            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
-
-            DynamicRepository dynamicModel = new DynamicRepository(connectionProfile, table, "Id");
-
-            return dynamicModel.Insert(o);
         }
     }
 }
