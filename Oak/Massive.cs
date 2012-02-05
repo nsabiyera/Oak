@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Oak;
 using System.Diagnostics;
+using Massive;
 
 //thank you Rob Conery for this awesome file https://github.com/robconery/massive
 
@@ -639,6 +640,21 @@ namespace Massive
             }
 
             return true;
+        }
+    }
+}
+
+namespace Oak
+{
+    public static class DataAccessHelpers
+    {
+        public static object InsertInto(this object o, string table, ConnectionProfile connectionProfile = null)
+        {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
+
+            DynamicRepository dynamicModel = new DynamicRepository(connectionProfile, table, "Id");
+
+            return dynamicModel.Insert(o);
         }
     }
 }

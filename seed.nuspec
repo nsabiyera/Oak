@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>seed</id> 
+    <version>1.0.2</version> 
+    <authors>Amir Rajan</authors>
+    <description>Dsl for generating sql that creates schema and inserts records.</description> 
+    <language>en-US</language>
+    <licenseUrl>http://www.github.com/amirrajan/Oak</licenseUrl>
+    <tags>migrations schema oak</tags>
+  </metadata>
+  <files>
+    <file src="Oak/ConnectionProfile.cs" target="content/Oak/ConnectionProfile.cs" />
+    <file src="Oak/Query.cs" target="content/Oak/Query.cs" />
+    <file src="Oak/Seed.cs" target="content/Oak/Seed.cs" />
+  </files>
+</package>
+
