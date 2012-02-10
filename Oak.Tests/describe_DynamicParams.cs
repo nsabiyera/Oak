@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using System.Collections.Specialized;
+using Massive;
 
 namespace Oak.Tests
 {
@@ -12,6 +13,8 @@ namespace Oak.Tests
         DynamicParams dynamicParams;
 
         NameValueCollection nameValueCollection;
+
+        Seed seed;
 
         dynamic asDynamic;
 
@@ -89,6 +92,35 @@ namespace Oak.Tests
                     it["comparing key's value with a guid passes"] = () =>
                         ((Guid)asDynamic.PersonId).should_be(Guid.Empty);
                 };
+            };
+        }
+
+        void saving_dynamic_params()
+        {
+            before = () =>
+            {
+                seed = new Seed();
+
+                seed.PurgeDb();
+
+                seed.CreateTable("Blogs", new dynamic[] 
+                { 
+                    new { Id = "int", Identity = true, PrimaryKey = true },
+                    new { Title = "nvarchar(255)" }
+                }).ExecuteNonQuery();
+
+                nameValueCollection.Add("Title", "Some Title");
+            };
+
+            it["persists saveable values to the database"] = () =>
+            {
+                var blogs = new DynamicRepository("Blogs");
+
+                var blogId = blogs.Insert(asDynamic);
+
+                var blog = blogs.Single(blogId);
+
+                (blog.Title as string).should_be("Some Title");
             };
         }
     }
