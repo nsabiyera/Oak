@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Dynamic;
-using Massive;
 using System.Diagnostics;
 
 namespace Oak
@@ -31,7 +30,7 @@ namespace Oak
 
         public dynamic This()
         {
-            return this as dynamic;
+            return this;
         }
 
         public Gemini()
@@ -40,14 +39,11 @@ namespace Oak
 
         }
 
-        public Gemini(object dto)
+        public Gemini(object value)
         {
-            if (dto == null) dto = new ExpandoObject();
+            if (value == null) value = new ExpandoObject();
 
-            if (dto is ExpandoObject)
-                Expando = dto;
-            else
-                Expando = dto.ToExpando();
+            Expando = value is ExpandoObject ? value : value.ToExpando();
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -57,7 +53,7 @@ namespace Oak
 
         public virtual bool RespondsTo(string property)
         {
-            object result = null;
+            object result;
 
             return TryGetMember(property, out result);
         }
@@ -98,11 +94,11 @@ namespace Oak
 
         public virtual dynamic GetMember(string property)
         {
-            object result = null;
+            object result;
 
             if (TryGetMember(property, out result)) return result;
 
-            throw new InvalidOperationException("This instance of type " + this.GetType().Name + " does not respond to the property " + property + ".");
+            throw new InvalidOperationException(string.Format( "This instance of type {0} does not respond to the property {1}.", GetType().Name, property ));
         }
 
         public virtual void SetMember(string property, object value)
@@ -110,16 +106,19 @@ namespace Oak
             TrySetMember(property, value);
         }
 
-        public virtual void SetMembers(object o)
+        public virtual void SetMembers(object value)
         {
-            var dictionary = o.ToDictionary();
+            var dictionary = value.ToDictionary();
 
             foreach (var item in dictionary) SetMember(item.Key, item.Value);
         }
 
-        string Capitalized(string s)
+        string Capitalized(string value)
         {
-            return s[0].ToString().ToUpper() + s.Substring(1);
+            if(value == null) throw new ArgumentException("value");
+            if(value.Length == 0) return value;
+            if(value.Length == 1) return value.ToUpper();
+            return value[0].ToString( CultureInfo.InvariantCulture ).ToUpper() + value.Substring(1);
         }
 
         string Fuzzy(IDictionary<string, object> dictionary, string name)
@@ -216,25 +215,6 @@ namespace Oak
             if (member is DynamicFunctionWithParam) function = () => member.Invoke(args.FirstOrDefault());
 
             return function();
-        }
-
-        dynamic ToDynamicParam(object[] args, string[] argNames)
-        {
-            if (AllParametersAreNamed(args, argNames))
-            {
-                var expando = new ExpandoObject() as IDictionary<string, object>;
-
-                for (int i = 0; i < args.Count(); i++) expando.Add(argNames[i], args[i]);
-
-                return expando;
-            }
-
-            return args.FirstOrDefault();
-        }
-
-        private bool AllParametersAreNamed(object[] args, IEnumerable<string> argNames)
-        {
-            return args.Count() == argNames.Count();
         }
     }
 }
