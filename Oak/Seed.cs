@@ -143,6 +143,18 @@ namespace Oak
                 "drop table {0} ".With(reader["table_name"]).ExecuteNonQuery(ConnectionProfile);
             }
         }
+
+        public void Export(string exportPath, IEnumerable<Func<string>> scripts)
+        {
+            int order = 1;
+
+            scripts.ForEach<Func<string>>(s =>
+            {
+                System.IO.File.WriteAllText(System.IO.Path.Combine(exportPath, order + " - " + s.Method.Name + ".sql"), s());
+
+                order++;
+            });
+        }
     }
 }
 
