@@ -34,24 +34,42 @@ namespace Oak.Controllers
         /// AlterSampleTable() and AdHocChange()...you'll want to replace 
         /// this with your own set of methods.
         /// </summary>
-        [HttpPost]
-        public ActionResult All()
+        public IEnumerable<Func<string>> Scripts()
         {
-            CreateSampleTable();
+            yield return CreateSampleTable;
 
-            CreateAnotherSampleTable();
+            yield return CreateAnotherSampleTable;
 
-            AlterSampleTable();
+            yield return AlterSampleTable;
 
-            AdHocChange();
-
-            return new EmptyResult();
+            //yield additional Func<string>'s for each additional script
         }
 
         [HttpPost]
         public ActionResult PurgeDb()
         {
             Seed.PurgeDb();
+
+            return new EmptyResult();
+        }
+
+        /// <summary>
+        /// Execute this command to write all the scripts to sql files.
+        /// </summary>
+        [HttpPost]
+        public ActionResult Export()
+        {
+            var exportPath = Server.MapPath("~");
+
+            Seed.Export(exportPath, Scripts());
+
+            return Content("Scripts executed to: " + exportPath);
+        }
+
+        [HttpPost]
+        public ActionResult All()
+        {
+            Scripts().ForEach<Func<string>>(s => s().ExecuteNonQuery());
 
             return new EmptyResult();
         }
@@ -74,34 +92,34 @@ namespace Oak.Controllers
         }
 
         //here is a sample of how to create a table
-        private void CreateSampleTable()
+        private string CreateSampleTable()
         {
-            Seed.CreateTable("SampleTable", new dynamic[] 
+            return Seed.CreateTable("SampleTable", new dynamic[] 
             { 
                 new { Id = "uniqueidentifier", PrimaryKey = true },
                 new { Foo = "nvarchar(max)", Default = "Hello" },
                 new { Bar = "int", Nullable = false }
-            }).ExecuteNonQuery();
+            });
         }
 
         //here is another sample of how to create a table
-        private void CreateAnotherSampleTable()
+        private string CreateAnotherSampleTable()
         {
-            Seed.CreateTable("AnotherSampleTable", new dynamic[] 
+            return Seed.CreateTable("AnotherSampleTable", new dynamic[] 
             { 
                 new { Id = "int", Identity = true, PrimaryKey = true },
                 new { Foo = "nvarchar(max)", Default = "Hello", Nullable = false },
-            }).ExecuteNonQuery();
+            });
         }
 
         //here is a sample of how to alter a table
-        private void AlterSampleTable()
+        private string AlterSampleTable()
         {
-            Seed.AddColumns("SampleTable", new dynamic[] 
+            return Seed.AddColumns("SampleTable", new dynamic[] 
             {
                 new { AnotherColumn = "bigint" },
                 new { YetAnotherColumn = "nvarchar(max)" }
-            }).ExecuteNonQuery();
+            });
         }
 
         //different ad hoc queries
@@ -109,7 +127,8 @@ namespace Oak.Controllers
         {
             //hey look, you can just do an ad hoc read
             var reader = "select * from SampleTable".ExecuteReader();
-            while(reader.Read())
+
+            while (reader.Read())
             {
                 //do stuff here
             }
