@@ -135,6 +135,22 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
             };
+
+            context["setting delegate members"] = () =>
+            {
+                act = () => loan = new Loan(new
+                {
+                    Email = "user@example.com",
+                    SayHello = new DynamicFunction(() => "hello"),
+                    SayBye = new Func<string>(() => "bye")
+                });
+
+                it["delegate members are not tracked because they cannot be saved"] = () => 
+                    Model().TrackedHash().Any(s => s.Key == "SayHello").should_be_false();
+
+                it["delegate members are not tracked because they cannot be saved"] = () => 
+                    Model().TrackedHash().Any(s => s.Key == "SayBye").should_be_false();
+            };
         }
 
         void selecting_properties()
