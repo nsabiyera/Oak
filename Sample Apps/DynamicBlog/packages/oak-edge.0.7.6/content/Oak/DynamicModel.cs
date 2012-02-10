@@ -53,7 +53,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            TrackProperty(binder.Name);
+            TrackProperty(binder.Name, value);
 
             return base.TrySetMember(binder, value);
         }
@@ -76,7 +76,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            TrackProperty(property);
+            TrackProperty(property, value);
 
             base.SetMember(property, value);
         }
@@ -117,8 +117,10 @@ namespace Oak
             return ExpandoFor(UnTrackedHash());
         }
 
-        public void TrackProperty(string property)
+        public void TrackProperty(string property, object value)
         {
+            if (value is Delegate) return;
+
             if (!untrackedProperties.Contains(property)) trackedProperties.Add(property);
         }
 

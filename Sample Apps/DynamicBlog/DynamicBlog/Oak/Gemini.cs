@@ -296,6 +296,25 @@ namespace Oak
             return Expando as IDictionary<string, object>;
         }
 
+        public virtual IDictionary<string, object> HashExcludingDelegates()
+        {
+            var dictionary = new Dictionary<string, object>();
+
+            var delegates = Delegates();
+
+            Hash().ForEach<KeyValuePair<string, object>>(s => 
+            {
+                if (!delegates.Contains(s)) dictionary.Add(s.Key, s.Value);
+            });
+
+            return dictionary;
+        }
+
+        public virtual IEnumerable<KeyValuePair<string, object>> Delegates()
+        {
+            return Hash().Where(s => s.Value is Delegate).ToList();
+        }
+
         public virtual void DeleteMember(string member)
         {
             Hash().Remove(Fuzzy(Hash(), member));

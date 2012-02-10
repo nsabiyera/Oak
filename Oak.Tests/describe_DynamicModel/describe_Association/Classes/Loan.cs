@@ -8,10 +8,16 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         Customers customers;
 
         public Loan()
+            : this(new { })
+        {
+
+        }
+
+        public Loan(dynamic dto)
         {
             customers = new Customers();
 
-            Init();
+            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()
