@@ -136,6 +136,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
     <Compile Include="describe_DynamicToJson.cs" />
+    <Compile Include="describe_Gemini\accessing_property.cs" />
     <Compile Include="describe_Gemini\Classes\AliasGemini.cs" />
     <Compile Include="describe_Gemini\Classes\BlogEntry.cs" />
     <Compile Include="describe_Gemini\Classes\InheritedGemini.cs" />
@@ -143,7 +144,14 @@
     <Compile Include="describe_Gemini\Classes\MethodMissingGemini.cs" />
     <Compile Include="describe_Gemini\Classes\ParameterlessGemini.cs" />
     <Compile Include="describe_Gemini\Classes\PrivateGemini.cs" />
+    <Compile Include="describe_Gemini\deleting_members.cs" />
+    <Compile Include="describe_Gemini\describe_constructions.cs" />
+    <Compile Include="describe_Gemini\describe_get_member.cs" />
+    <Compile Include="describe_Gemini\describe_methods.cs" />
     <Compile Include="describe_Gemini\describe_responds_to.cs" />
+    <Compile Include="describe_Gemini\gemini_methods.cs" />
+    <Compile Include="describe_Gemini\inheritance_of_gemini.cs" />
+    <Compile Include="describe_Gemini\setting_member.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_DynamicParams.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
