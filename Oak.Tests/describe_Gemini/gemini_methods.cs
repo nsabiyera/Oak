@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NSpec;
+using System.Dynamic;
+using System.Reflection;
+using Oak.Tests.describe_Gemini.Classes;
+
+namespace Oak.Tests.describe_Gemini
+{
+    class gemini_methods : _describe_Gemini
+    {
+        void calling_dynamically_defined_methods()
+        {
+            context["method is defined as a dynamic function that takes in one dynamic parameter"] = () =>
+            {
+                act = () =>
+                {
+                    gemini = new ParameterlessGemini();
+                    gemini.CreateNewGemini = new DynamicFunctionWithParam(d => new Gemini(d));
+                };
+
+                it["calls method with parameter specified"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini(new { FirstName = "Amir" });
+
+                    (newGemini.FirstName as string).should_be("Amir");
+                };
+
+                it["calls method with even if parameter is not specified"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini();
+
+                    (newGemini as object).should_not_be_null();
+                };
+
+                it["calls method with parameters specified as named parameters"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini(FirstName: "Amir");
+
+                    (newGemini.FirstName as string).should_be("Amir");
+                };
+
+                it["ignores unnamed parameters if name parameters have been specified"] = () =>
+                {
+                    dynamic newGemini = gemini.CreateNewGemini("Unnamed", FirstName: "Amir", LastName: "Rajan");
+
+                    (newGemini.FirstName as string).should_be("Amir");
+
+                    (newGemini.LastName as string).should_be("Rajan");
+                };
+            };
+
+            context["method is defined as a dynamic method that takes in one dynamic parameter"] = () =>
+            {
+                act = () =>
+                {
+                    gemini = new ParameterlessGemini();
+                    gemini.AlterGemini = new DynamicMethodWithParam(d => gemini.Property = d ?? "Default");
+                };
+
+                it["calls method with parameter specified"] = () =>
+                {
+                    gemini.AlterGemini("Other");
+
+                    (gemini.Property as string).should_be("Other");
+                };
+
+                it["calls method with even if parameter is not specified"] = () =>
+                {
+                    gemini.AlterGemini();
+
+                    (gemini.Property as string).should_be("Default");
+                };
+            };
+        }
+
+        void method_aliasing()
+        {
+            it["methods can be aliased"] = () =>
+            {
+                dynamic aliasGemini = new AliasGemini();
+
+                (aliasGemini.SayHello() as string).should_be(aliasGemini.Hello() as string);
+            };
+        }
+
+        void method_missing()
+        {
+            it["method missing is called if method doesn't exist but method missing is defined"] = () =>
+            {
+                dynamic methodMissingGemini = new MethodMissingGemini();
+
+                var result = methodMissingGemini.ThisIsAMissingMethod(parameter1: "Test", parameter2: "Test2") as string;
+
+                result.should_be("ThisIsAMissingMethod parameter1: Test parameter2: Test2");
+            };
+        }
+
+    }
+}
