@@ -149,9 +149,23 @@ namespace Oak
 
         public IEnumerable<MethodInfo> DynamicDelegates()
         {
-            return this.GetType()
-                .GetMethods(PrivateFlags())
-                .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList()));
+            List<MethodInfo> delegates = 
+                this.GetType()
+                    .GetMethods(PrivateFlags())
+                    .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
+
+            var baseType = this.GetType().BaseType;
+
+            while (baseType != typeof(Gemini) && baseType != typeof(object))
+            {
+                delegates.AddRange(
+                    baseType.GetMethods(PrivateFlags())
+                    .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())));
+
+                baseType = baseType.BaseType;
+            }
+
+            return delegates;
         }
 
         public bool IsDynamicDelegate(MethodInfo method, List<ParameterInfo> parameters)
