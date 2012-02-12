@@ -7,19 +7,29 @@ namespace Oak
 {
     public class DynamicModel : Gemini
     {
+        private object dto;
+
         private bool initialized;
 
         List<string> trackedProperties;
 
         List<string> untrackedProperties;
 
-        public DynamicModel()
+        public DynamicModel(object dto)
         {
+            this.dto = dto;
+
             initialized = false;
 
             trackedProperties = new List<string>();
 
             untrackedProperties = new List<string>();
+        }
+
+        public DynamicModel()
+            : this(new { })
+        {
+
         }
 
         public virtual dynamic Init()
@@ -44,39 +54,39 @@ namespace Oak
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
             return base.TryGetMember(binder, out result);
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
-            TrackProperty(binder.Name);
+            TrackProperty(binder.Name, value);
 
             return base.TrySetMember(binder, value);
         }
 
         public override dynamic GetMember(string property)
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
             return base.GetMember(property);
         }
 
         public override bool RespondsTo(string property)
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
             return base.RespondsTo(property);
         }
 
         public override void SetMember(string property, object value)
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
-            TrackProperty(property);
+            TrackProperty(property, value);
 
             base.SetMember(property, value);
         }
@@ -90,45 +100,57 @@ namespace Oak
 
         public override IEnumerable<string> Members()
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
             return base.Members().ToList();
         }
 
         public override void DeleteMember(string member)
         {
-            ThrowIfNotInitialized();
+            InitIfNeeded();
 
             base.DeleteMember(member);
         }
 
-        private void ThrowIfNotInitialized()
+        public virtual dynamic InitIfNeeded()
         {
-            if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statement in your constructors.");
+            if (!initialized) Init(dto);
+
+            return this;
         }
 
         public ExpandoObject TrackedProperties()
         {
+            InitIfNeeded();
+
             return ExpandoFor(TrackedHash());
         }
 
         public ExpandoObject UnTrackedProperties()
         {
+            InitIfNeeded();
+
             return ExpandoFor(UnTrackedHash());
         }
 
-        public void TrackProperty(string property)
+        public void TrackProperty(string property, object value)
         {
+            if (value is Delegate) return;
+
             if (!untrackedProperties.Contains(property)) trackedProperties.Add(property);
         }
 
         public IDictionary<string, object> TrackedHash()
         {
+            InitIfNeeded();
+
             return HashContaining(trackedProperties);
         }
 
         public IDictionary<string, object> UnTrackedHash()
         {
+            InitIfNeeded();
+
             return HashContaining(untrackedProperties);
         }
 
@@ -157,6 +179,20 @@ namespace Oak
             args.ForEach(s => expando.Add(s, GetMember(s)));
 
             return new Gemini(expando);
+        }
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            InitIfNeeded();
+
+            return base.TryInvokeMember(binder, args, out result);
+        }
+
+        public override IDictionary<string, object> Hash()
+        {
+            InitIfNeeded();
+
+            return base.Hash();
         }
     }
 }

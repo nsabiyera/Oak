@@ -47,54 +47,70 @@ namespace Oak.Tests.describe_Gemini
                 (inheritedGemini.LastLetter() as string).should_be("e");
         }
 
-        void inherited_gemini_with_private_dynamic_methods_and_functions()
+        void private_dynamic_methods_and_functions()
         {
-            act = () => inheritedGemini = new PrivateGemini();
+            act = () => gemini = new PrivateGemini();
 
             it["private function that take in no parameters and return dynamic are publicly accessible"] = () =>
-                (inheritedGemini.HelloString() as string).should_be("hello");
+                (gemini.HelloString() as string).should_be("hello");
 
             it["private function that take in dynamic and return dynamic are publicly accessible"] = () =>
-                (inheritedGemini.Hello("Jane") as string).should_be("hello Jane");
+                (gemini.Hello("Jane") as string).should_be("hello Jane");
 
             it["private delegate that take in dynamic can interperet generic parameters"] = () =>
-                (inheritedGemini.HelloFullName(firstName: "Jane", lastName: "Doe") as string).should_be("hello Jane Doe");
+                (gemini.HelloFullName(firstName: "Jane", lastName: "Doe") as string).should_be("hello Jane Doe");
 
             it["private method that takes in no parameters is publically accessible"] = () =>
             {
-                inheritedGemini.Alter();
+                gemini.Alter();
 
-                ((bool)inheritedGemini.Altered).should_be_true();
+                ((bool)gemini.Altered).should_be_true();
             };
 
             it["private method that takes in dynamic parameter is publically accessible"] = () =>
             {
-                inheritedGemini.SetAltered(true);
+                gemini.SetAltered(true);
 
-                ((bool)inheritedGemini.Altered).should_be_true();
+                ((bool)gemini.Altered).should_be_true();
 
-                inheritedGemini.SetAltered(false);
+                gemini.SetAltered(false);
 
-                ((bool)inheritedGemini.Altered).should_be_false();
+                ((bool)gemini.Altered).should_be_false();
             };
 
             it["private function that return enumerable of dynamic is publically accessible"] = () =>
-                (inheritedGemini.Names() as IEnumerable<dynamic>).should_contain("name1");
+                (gemini.Names() as IEnumerable<dynamic>).should_contain("name1");
 
             it["private function that takes a parameter and returns enumerable of dynamic is publically accessible"] = () =>
-                (inheritedGemini.NamesWithPrefix("hi") as IEnumerable<dynamic>).should_contain("hiname1");
+                (gemini.NamesWithPrefix("hi") as IEnumerable<dynamic>).should_contain("hiname1");
 
             it["private delegate (returning enumerable) that take in dynamic can interperet generic parameters"] = () =>
-                (inheritedGemini.NamesWithArgs(prefix: "hi") as IEnumerable<dynamic>).should_contain("hiname1");
+                (gemini.NamesWithArgs(prefix: "hi") as IEnumerable<dynamic>).should_contain("hiname1");
 
             it["private members can be redefined"] = () =>
             {
-                (inheritedGemini.HelloString() as string).should_be("hello");
+                (gemini.HelloString() as string).should_be("hello");
 
-                inheritedGemini.HelloString = "booya";
+                gemini.HelloString = "booya";
 
-                (inheritedGemini.HelloString as string).should_be("booya");
+                (gemini.HelloString as string).should_be("booya");
             };
+        }
+
+        void inheriting_gemini_that_has_private_methods()
+        {
+            act = () => gemini = new InheritedPrivateGemini();
+
+            it["methods defined on base class are publically defined on inherited class"] = () =>
+                (gemini.HelloString() as string).should_be("hello");
+        }
+
+        void double_inherited_gemini_that_has_private_methods()
+        {
+            act = () => gemini = new DoubleInheritedPrivateGemini();
+
+            it["methods defined on base class are publically defined on inherited class"] = () =>
+                (gemini.HelloString() as string).should_be("hello");
         }
     }
 }

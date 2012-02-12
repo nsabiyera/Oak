@@ -8,6 +8,16 @@ using System.Reflection;
 
 namespace Oak.Tests.describe_Gemini.Classes
 {
+    public class InheritedPrivateGemini : PrivateGemini
+    {
+        
+    }
+
+    public class DoubleInheritedPrivateGemini : InheritedPrivateGemini
+    {
+        
+    }
+
     public class PrivateGemini : Gemini
     {
         public bool Altered;

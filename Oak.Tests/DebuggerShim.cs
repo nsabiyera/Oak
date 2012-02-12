@@ -13,7 +13,7 @@ namespace DynamicBlog.Tests
         [Test]
         public void debug()
         {
-            var testClassYouWantToDebug = "describe_DynamicParams";
+            var testClassYouWantToDebug = "inheritance_of_gemini";
 
             var finder = new SpecFinder(
                 Assembly.GetExecutingAssembly().Location,

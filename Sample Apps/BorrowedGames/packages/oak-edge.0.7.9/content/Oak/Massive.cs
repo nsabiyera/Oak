@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Oak;
 using System.Diagnostics;
+using Massive;
 
 //thank you Rob Conery for this awesome file https://github.com/robconery/massive
 
@@ -128,17 +129,21 @@ namespace Massive
         /// <summary>
         /// Creates a new Expando from a Form POST - white listed against the columns in the DB
         /// </summary>
-        public dynamic CreateFrom(NameValueCollection coll) {
+        public dynamic CreateFrom(NameValueCollection coll)
+        {
             dynamic result = new ExpandoObject();
             var dc = (IDictionary<string, object>)result;
             var schema = Schema;
             //loop the collection, setting only what's in the Schema
-            foreach (var item in coll.Keys) {
+            foreach (var item in coll.Keys)
+            {
                 var exists = schema.Any(x => x.COLUMN_NAME.ToLower() == item.ToString().ToLower());
-                if (exists) {
+                if (exists)
+                {
                     var key = item.ToString();
                     var val = coll[key];
-                    if (!String.IsNullOrEmpty(val)) {
+                    if (!String.IsNullOrEmpty(val))
+                    {
                         //what to do here? If it's empty... set it to NULL?
                         //if it's a string value - let it go through if it's NULLABLE?
                         //Empty? WTF?
@@ -152,16 +157,24 @@ namespace Massive
         /// <summary>
         /// Gets a default value for the column
         /// </summary>
-        public dynamic DefaultValue(dynamic column) {
+        public dynamic DefaultValue(dynamic column)
+        {
             dynamic result = null;
             string def = column.COLUMN_DEFAULT;
-            if (String.IsNullOrEmpty(def)) {
+            if (String.IsNullOrEmpty(def))
+            {
                 result = null;
-            } else if (def == "getdate()" || def == "(getdate())") {
+            }
+            else if (def == "getdate()" || def == "(getdate())")
+            {
                 result = DateTime.Now.ToShortDateString();
-            } else if (def == "newid()") {
+            }
+            else if (def == "newid()")
+            {
                 result = Guid.NewGuid().ToString();
-            } else {
+            }
+            else
+            {
                 result = def.Replace("(", "").Replace(")", "");
             }
             return result;
@@ -169,11 +182,14 @@ namespace Massive
         /// <summary>
         /// Creates an empty Expando set with defaults from the DB
         /// </summary>
-        public dynamic Prototype {
-            get {
+        public dynamic Prototype
+        {
+            get
+            {
                 dynamic result = new ExpandoObject();
                 var schema = Schema;
-                foreach (dynamic column in schema) {
+                foreach (dynamic column in schema)
+                {
                     var dc = (IDictionary<string, object>)result;
                     dc.Add(column.COLUMN_NAME, DefaultValue(column));
                 }
@@ -307,7 +323,8 @@ namespace Massive
             return Execute(new DbCommand[] { command });
         }
 
-        public virtual int Execute(string sql, params object[] args) {
+        public virtual int Execute(string sql, params object[] args)
+        {
             return Execute(CreateCommand(sql, null, args));
         }
         /// <summary>
@@ -418,6 +435,8 @@ namespace Massive
         public virtual dynamic GetAttributesToSave(object o)
         {
             if (o is DynamicModel) return ((DynamicModel)o).TrackedProperties();
+
+            if (o is Gemini) return ((Gemini)o).HashExcludingDelegates();
 
             return o.ToExpando();
         }
@@ -630,15 +649,33 @@ namespace Massive
                 sql = "SELECT " + columns + " FROM " + TableName + where;
             }
 
-            if (justOne) {
+            if (justOne)
+            {
                 //return a single record
                 result = Query(sql + orderBy, whereArgs.ToArray()).FirstOrDefault();
-            } else {
+            }
+            else
+            {
                 //return lots
                 result = Query(sql + orderBy, whereArgs.ToArray());
             }
 
             return true;
+        }
+    }
+}
+
+namespace Oak
+{
+    public static class DataAccessHelpers
+    {
+        public static object InsertInto(this object o, string table, ConnectionProfile connectionProfile = null)
+        {
+            if (connectionProfile == null) connectionProfile = new ConnectionProfile();
+
+            DynamicRepository dynamicModel = new DynamicRepository(connectionProfile, table, "Id");
+
+            return dynamicModel.Insert(o);
         }
     }
 }
