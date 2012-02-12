@@ -374,6 +374,28 @@ namespace Oak.Tests
             };
         }
 
+        void method_aliasing()
+        {
+            it["methods can be aliased"] = () =>
+            {
+                dynamic aliasGemini = new AliasGemini();
+
+                (aliasGemini.SayHello() as string).should_be(aliasGemini.Hello() as string);
+            };
+        }
+
+        void method_missing()
+        {
+            it["method missing is called if method doesn't exist but method missing is defined"] = () =>
+            {
+                dynamic methodMissingGemini = new MethodMissingGemini();
+
+                var result = methodMissingGemini.ThisIsAMissingMethod(parameter1: "Test", parameter2: "Test2") as string;
+
+                result.should_be("ThisIsAMissingMethod parameter1: Test parameter2: Test2");
+            };
+        }
+
         Gemini Gemini()
         {
             return gemini as Gemini;
@@ -489,6 +511,36 @@ namespace Oak.Tests
         IEnumerable<dynamic> NamesWithArgs(dynamic args)
         {
             return Names().Select(s => args.prefix + s);
+        }
+    }
+
+    public class AliasGemini : Gemini
+    {
+        public AliasGemini()
+        {
+            This().Hello = This().SayHello;    
+        }
+
+        dynamic SayHello()
+        {
+            return "Hello";
+        }
+    }
+
+    public class MethodMissingGemini : Gemini
+    {
+        public MethodMissingGemini()
+        {
+
+        }
+
+        dynamic MethodMissing(dynamic args)
+        {
+            return args.Name + " " + 
+                args.ParameterNames[0] + ": " + 
+                args.Parameters[0] + " " + 
+                args.ParameterNames[1] + ": " + 
+                args.Parameters[1];
         }
     }
 }

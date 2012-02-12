@@ -79,7 +79,7 @@ namespace Oak
 
         private DynamicFunctionWithParam DynamicMethodWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) => 
+            return new DynamicFunctionWithParam((arg) =>
             {
                 method.Invoke(this, new[] { arg });
 
@@ -102,12 +102,12 @@ namespace Oak
             return BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
         }
 
-        public  MethodInfo Method(string name)
+        public MethodInfo Method(string name)
         {
             return (this).GetType().GetMethod(name, PrivateFlags());
         }
 
-        public  bool IsDynamicFunction(MethodInfo method, List<ParameterInfo> parameters)
+        public bool IsDynamicFunction(MethodInfo method, List<ParameterInfo> parameters)
         {
             if (method.ReturnType != typeof(object) && method.ReturnType != typeof(IEnumerable<dynamic>)) return false;
 
@@ -156,8 +156,8 @@ namespace Oak
 
         public bool IsDynamicDelegate(MethodInfo method, List<ParameterInfo> parameters)
         {
-            return IsDynamicFunction(method, parameters) || 
-                IsDynamicFunctionWithParam(method, parameters) || 
+            return IsDynamicFunction(method, parameters) ||
+                IsDynamicFunctionWithParam(method, parameters) ||
                 IsDynamicMethod(method, parameters) ||
                 IsDynamicMethodWithParam(method, parameters);
         }
@@ -302,7 +302,7 @@ namespace Oak
 
             var delegates = Delegates();
 
-            Hash().ForEach<KeyValuePair<string, object>>(s => 
+            Hash().ForEach<KeyValuePair<string, object>>(s =>
             {
                 if (!delegates.Contains(s)) dictionary.Add(s.Key, s.Value);
             });
@@ -324,7 +324,23 @@ namespace Oak
         {
             result = null;
 
-            if (!Hash().ContainsKey(binder.Name)) return false;
+            if (!Hash().ContainsKey(binder.Name))
+            {
+                if (Hash().ContainsKey("MethodMissing"))
+                {
+                    result = This().MethodMissing(
+                        new Gemini(new
+                        {
+                            Name = binder.Name,
+                            Parameters = args,
+                            ParameterNames = binder.CallInfo.ArgumentNames.ToArray()
+                        }));
+
+                    return true;
+                }
+
+                return false;
+            }
 
             var member = Hash()[binder.Name];
 
