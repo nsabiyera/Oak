@@ -56,12 +56,19 @@ namespace Oak
 
             else Expando = dto.ToExpando();
 
-            foreach (var method in DynamicDelegates()) AddDynamicMember(method);
+            foreach (var method in DynamicDelegates())
+            {
+                AddDynamicMember(method);
+
+                ExecutePartialConstructor(method);
+            }
         }
 
         private void AddDynamicMember(MethodInfo method)
         {
             var parameters = method.GetParameters().ToList();
+
+            if (IsPartialConstructor(method)) return;
 
             if (IsDynamicFunction(method, parameters)) TrySetMember(method.Name, DynamicFunctionFor(method));
 
@@ -409,6 +416,18 @@ namespace Oak
         private bool AllParametersAreNamed(object[] args, IEnumerable<string> argNames)
         {
             return args.Count() == argNames.Count();
+        }
+
+        private void ExecutePartialConstructor(MethodInfo method)
+        {
+            if (!IsPartialConstructor(method)) return;
+                
+            method.Invoke(this, null);
+        }
+
+        private bool IsPartialConstructor(MethodInfo method)
+        {
+            return method.Name.StartsWith("__") && method.Name.EndsWith("__");
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Oak.Tests
                     it["no longer responds to member"] = () => Gemini().RespondsTo("Title").should_be_false();
                 };
             });
-            
+
 
             context["member is not defined"] = () =>
             {
@@ -80,13 +80,13 @@ namespace Oak.Tests
 
         void describe_get_value_for_property()
         {
-            it["retrieves value with exact casing"] = () => 
+            it["retrieves value with exact casing"] = () =>
                 (Gemini().GetMember("Title") as string).should_be("Some Name");
 
-            it["retrieves value with exact case insensitive"] = () => 
+            it["retrieves value with exact case insensitive"] = () =>
                 (Gemini().GetMember("title") as string).should_be("Some Name");
 
-            it["throws invalid op if property doesn't exist"] = 
+            it["throws invalid op if property doesn't exist"] =
                 expect<InvalidOperationException>("This instance of type Gemini does not respond to the property FooBar.  These are the members that exist on this instance: Title (String), body (String), BodySummary (String)", () => Gemini().GetMember("FooBar"));
         }
 
@@ -384,6 +384,25 @@ namespace Oak.Tests
             };
         }
 
+        void partial_constructors()
+        {
+            before = () => gemini = new AliasGeminiAccrossPartials();
+
+            it["method can be aliased using __method__ pattern in partial classes (partial constructors)"] = () =>
+            {
+                (gemini.SayHello() as string).should_be(gemini.Hello() as string);
+
+                (gemini.SayHello() as string).should_be(gemini.HelloAgain() as string);
+
+                (gemini.SayHello() as string).should_be(gemini.YetAnotherHello() as string);
+            };
+
+            it["partial constructors are not added as members of gemini"] = () =>
+            {
+                ((bool)gemini.RespondsTo("__AliasAnotherHello__")).should_be_false();
+            };
+        }
+
         void method_missing()
         {
             it["method missing is called if method doesn't exist but method missing is defined"] = () =>
@@ -428,9 +447,9 @@ namespace Oak.Tests
     {
         public InheritedInheritedGemini(object o)
             : base(o)
-    	{
-    				
-    	}
+        {
+
+        }
 
         public string LastLetter()
         {
@@ -469,7 +488,7 @@ namespace Oak.Tests
         }
     }
 
-    public class PrivateGemini  : Gemini
+    public class PrivateGemini : Gemini
     {
         public bool Altered;
 
@@ -518,7 +537,7 @@ namespace Oak.Tests
     {
         public AliasGemini()
         {
-            This().Hello = This().SayHello;    
+            This().Hello = This().SayHello;
         }
 
         dynamic SayHello()
@@ -527,7 +546,7 @@ namespace Oak.Tests
         }
     }
 
-    public class MethodMissingGemini : Gemini
+    public partial class MethodMissingGemini : Gemini
     {
         public MethodMissingGemini()
         {
@@ -536,11 +555,40 @@ namespace Oak.Tests
 
         dynamic MethodMissing(dynamic args)
         {
-            return args.Name + " " + 
-                args.ParameterNames[0] + ": " + 
-                args.Parameters[0] + " " + 
-                args.ParameterNames[1] + ": " + 
+            return args.Name + " " +
+                args.ParameterNames[0] + ": " +
+                args.Parameters[0] + " " +
+                args.ParameterNames[1] + ": " +
                 args.Parameters[1];
+        }
+    }
+
+    public partial class AliasGeminiAccrossPartials : Gemini
+    {
+        public AliasGeminiAccrossPartials()
+        {
+            This().Hello = This().SayHello;
+        }
+
+        dynamic SayHello()
+        {
+            return "Hello";
+        }
+    }
+
+    public partial class AliasGeminiAccrossPartials : Gemini
+    {
+        void __AliasAnotherHello__()
+        {
+            This().HelloAgain = This().SayHello;
+        }
+    }
+
+    public partial class AliasGeminiAccrossPartials : Gemini
+    {
+        void __AliasYetAnotherHello__()
+        {
+            This().YetAnotherHello = This().SayHello;
         }
     }
 }
