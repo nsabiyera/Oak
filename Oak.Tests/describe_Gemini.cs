@@ -384,25 +384,6 @@ namespace Oak.Tests
             };
         }
 
-        void partial_constructors()
-        {
-            before = () => gemini = new AliasGeminiAccrossPartials();
-
-            it["method can be aliased using __method__ pattern in partial classes (partial constructors)"] = () =>
-            {
-                (gemini.SayHello() as string).should_be(gemini.Hello() as string);
-
-                (gemini.SayHello() as string).should_be(gemini.HelloAgain() as string);
-
-                (gemini.SayHello() as string).should_be(gemini.YetAnotherHello() as string);
-            };
-
-            it["partial constructors are not added as members of gemini"] = () =>
-            {
-                ((bool)gemini.RespondsTo("__AliasAnotherHello__")).should_be_false();
-            };
-        }
-
         void method_missing()
         {
             it["method missing is called if method doesn't exist but method missing is defined"] = () =>
@@ -560,35 +541,6 @@ namespace Oak.Tests
                 args.Parameters[0] + " " +
                 args.ParameterNames[1] + ": " +
                 args.Parameters[1];
-        }
-    }
-
-    public partial class AliasGeminiAccrossPartials : Gemini
-    {
-        public AliasGeminiAccrossPartials()
-        {
-            This().Hello = This().SayHello;
-        }
-
-        dynamic SayHello()
-        {
-            return "Hello";
-        }
-    }
-
-    public partial class AliasGeminiAccrossPartials : Gemini
-    {
-        void __AliasAnotherHello__()
-        {
-            This().HelloAgain = This().SayHello;
-        }
-    }
-
-    public partial class AliasGeminiAccrossPartials : Gemini
-    {
-        void __AliasYetAnotherHello__()
-        {
-            This().YetAnotherHello = This().SayHello;
         }
     }
 }
