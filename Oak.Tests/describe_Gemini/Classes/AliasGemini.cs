@@ -12,7 +12,7 @@ namespace Oak.Tests.describe_Gemini.Classes
     {
         public AliasGemini()
         {
-            This().Hello = This().SayHello;
+            _.Hello = _.SayHello;
         }
 
         dynamic SayHello()

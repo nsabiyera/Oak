@@ -20,7 +20,7 @@ namespace Oak.Tests.describe_Gemini
                 (Gemini().GetMember("title") as string).should_be("Some Name");
 
             it["throws invalid op if property doesn't exist"] =
-                expect<InvalidOperationException>("This instance of type Gemini does not respond to the property FooBar.  These are the members that exist on this instance: Title (String), body (String), BodySummary (String)", () => Gemini().GetMember("FooBar"));
+                expect<InvalidOperationException>("This instance of type Gemini does not respond to the property FooBar.  These are the members that exist on this instance: Title (String), body (String), BodySummary (String), get__ (DynamicFunction)", () => Gemini().GetMember("FooBar"));
         }
     }
 }
