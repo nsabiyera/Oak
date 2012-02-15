@@ -19,15 +19,15 @@ namespace Oak
 
         public MixInChanges(dynamic dynamicModel)
         {
-            @this = dynamicModel;
-
-            originalValues = new Dictionary<string, object>(dynamicModel.TrackedHash());
-
             dynamicModel.SetMember("HasChanged", new DynamicFunctionWithParam(HasChanged));
 
             dynamicModel.SetMember("Original", new DynamicFunctionWithParam(Original));
 
             dynamicModel.SetMember("Changes", new DynamicFunctionWithParam(Changes));
+
+            originalValues = new Dictionary<string, object>(dynamicModel.Hash());
+
+            @this = dynamicModel;
         }
 
         public dynamic Changes(dynamic property)
