@@ -37,9 +37,12 @@ namespace Oak
     {
         public dynamic Expando { get; set; }
 
-        public dynamic This()
+        protected dynamic _
         {
-            return this as dynamic;
+            get
+            {
+                return this as dynamic;
+            }
         }
 
         public Gemini()
@@ -149,7 +152,7 @@ namespace Oak
 
         public IEnumerable<MethodInfo> DynamicDelegates()
         {
-            List<MethodInfo> delegates = 
+            List<MethodInfo> delegates =
                 this.GetType()
                     .GetMethods(PrivateFlags())
                     .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
@@ -342,7 +345,7 @@ namespace Oak
             {
                 if (Hash().ContainsKey("MethodMissing"))
                 {
-                    result = This().MethodMissing(
+                    result = _.MethodMissing(
                         new Gemini(new
                         {
                             Name = binder.Name,

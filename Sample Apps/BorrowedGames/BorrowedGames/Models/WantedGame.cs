@@ -15,9 +15,9 @@ namespace BorrowedGames.Models
             Init(dto);
         }
 
-        public string Name { get { return This().Game().Name; } }
+        public string Name { get { return _.Game().Name; } }
 
-        public string Console { get { return This().Game().Console; } }
+        public string Console { get { return _.Game().Console; } }
 
         public IEnumerable<dynamic> Associates()
         {

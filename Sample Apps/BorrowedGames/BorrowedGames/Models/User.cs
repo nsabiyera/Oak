@@ -68,14 +68,14 @@ namespace BorrowedGames.Models
 
         public void AddFriend(dynamic user)
         {
-            friendAssociations.Insert(This().FriendAssociations().New(new { IsFollowing = user.Id }));
+            friendAssociations.Insert(_.FriendAssociations().New(new { IsFollowing = user.Id }));
         }
 
         public void RemoveFriend(dynamic friend)
         {
             if (friend == null) return;
 
-            var friendAssociation = This().FriendAssociations().First(new { IsFollowing = friend.Id });
+            var friendAssociation = _.FriendAssociations().First(new { IsFollowing = friend.Id });
 
             if (friendAssociation == null) return;
 
@@ -84,7 +84,7 @@ namespace BorrowedGames.Models
 
         public void WantGame(dynamic gameId, dynamic fromUserId)
         {
-            wantedGames.Insert(This().Wants().New(new { gameId, fromUserId }));
+            wantedGames.Insert(_.Wants().New(new { gameId, fromUserId }));
         }
 
         public void UndoNotInterestedGame(dynamic gameId)
@@ -94,7 +94,7 @@ namespace BorrowedGames.Models
 
         public dynamic GameInNotInterestedList(dynamic gameId)
         {
-            return This().NotInterestedGames().First(new { GameId = gameId });
+            return _.NotInterestedGames().First(new { GameId = gameId });
         }
 
         public void DeleteWantedGame(dynamic gameId, dynamic fromUserId)
@@ -104,32 +104,32 @@ namespace BorrowedGames.Models
 
         public dynamic GameInWantedList(dynamic gameId, dynamic fromUserId)
         {
-            return This().Wants().First(new { GameId = gameId, FromUserId = fromUserId });
+            return _.Wants().First(new { GameId = gameId, FromUserId = fromUserId });
         }
 
         public bool HasGame(dynamic game)
         {
-            return This().Games().Any(new { Id = game.Id });
+            return _.Games().Any(new { Id = game.Id });
         }
 
         public bool HasGames()
         {
-            return This().Games().Any();
+            return _.Games().Any();
         }
 
         public bool HasFriends()
         {
-            return This().Friends().Any();
+            return _.Friends().Any();
         }
 
         public void MarkGameNotInterested(dynamic gameId)
         {
-            notInterestedGames.Insert(This().NotInterestedGames().New(new { gameId }));
+            notInterestedGames.Insert(_.NotInterestedGames().New(new { gameId }));
         }
 
         public bool GameIsWanted(dynamic game)
         {
-            return This().Wants().Any(new { GameId = game.Id, FromUserId = game.User().Id });
+            return _.Wants().Any(new { GameId = game.Id, FromUserId = game.User().Id });
         }
 
         public bool HasNotBeenRequested(dynamic game)
@@ -139,22 +139,22 @@ namespace BorrowedGames.Models
 
         public bool OwnsGame(dynamic gameId)
         {
-            return This().Games().Any(new { Id = gameId });
+            return _.Games().Any(new { Id = gameId });
         }
 
-        public bool DoesNotOwnGame(dynamic gameId)
+        bool DoesNotOwnGame(dynamic gameId)
         {
             return !OwnsGame(gameId);
         }
 
         public bool PrefersGame(dynamic gameId)
         {
-            return !This().NotInterestedGames().Any(new { GameId = gameId });
+            return !_.NotInterestedGames().Any(new { GameId = gameId });
         }
 
         private bool SharesConsole(dynamic console)
         {
-            return This().Games().Any(new { Console = console }) || !HasGames();
+            return _.Games().Any(new { Console = console }) || !HasGames();
         }
             
         public IEnumerable<dynamic> WantedGames()
@@ -167,14 +167,14 @@ namespace BorrowedGames.Models
 
         public IEnumerable<dynamic> RequestedGames()
         {
-            return wantedGames.All(where: "FromUserId = @0", args: new object[] { This().Id })
+            return wantedGames.All(where: "FromUserId = @0", args: new object[] { _.Id })
                 .Select(UserGame)
                 .ToList();
         }
 
         public IEnumerable<dynamic> GamesFriendsHave()
         {
-            return This().Friends().Games();
+            return _.Friends().Games();
         }
 
         public IEnumerable<dynamic> PreferredGames()

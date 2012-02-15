@@ -119,7 +119,12 @@ namespace Oak
 
         public void TrackProperty(string property, object value)
         {
-            if (value is Delegate) return;
+            if (value is Delegate)
+            {
+                if (!untrackedProperties.Contains(property)) untrackedProperties.Add(property);
+
+                return;
+            }
 
             if (!untrackedProperties.Contains(property)) trackedProperties.Add(property);
         }
