@@ -25,11 +25,11 @@ namespace Oak
 
             if (HasValidationCapabilities(mixWith))
             {
-                mixWith.SetUnTrackedMember("Errors", new DynamicFunction(Errors));
+                mixWith.SetMember("Errors", new DynamicFunction(Errors));
 
-                mixWith.SetUnTrackedMember("IsValid", new DynamicFunctionWithParam(IsValid));
+                mixWith.SetMember("IsValid", new DynamicFunctionWithParam(IsValid));
 
-                mixWith.SetUnTrackedMember("FirstError", new DynamicFunction(FirstError));
+                mixWith.SetMember("FirstError", new DynamicFunction(FirstError));
 
                 IEnumerable<dynamic> validationRules = @this.Validates();
 
@@ -112,17 +112,17 @@ namespace Oak
 
         public virtual void Init(dynamic entity) 
         {
-            AddTrackedProperty(entity, Property);
+            AddProperty(entity, Property);
         }
 
-        public void AddTrackedProperty(dynamic entity, string property)
+        public void AddProperty(dynamic entity, string property)
         {
             if (!entity.RespondsTo(property)) entity.SetMember(property, null);
         }
 
         public void AddUnTrackedProperty(dynamic entity, string property)
         {
-            if (!entity.RespondsTo(property)) entity.SetUnTrackedMember(property, null);
+            
         }
 
         public virtual string Message()
@@ -175,7 +175,7 @@ namespace Oak
         {
             base.Init(entity as object);
 
-            AddUnTrackedProperty(entity, Property + "Confirmation");
+            if (!entity.RespondsTo(Property + "Confirmation")) entity.SetUnTrackedMember(Property + "Confirmation", null);
         }
 
         public bool Validate(dynamic entity)

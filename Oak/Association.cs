@@ -20,10 +20,11 @@ namespace Oak
             foreach (dynamic association in associations)
             {
                 referencedAssociations.Add(association);
+
                 association.Init(mixWith);
             }
 
-            mixWith.SetUnTrackedMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
+            mixWith.SetMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
         }
 
         public bool SupportsAssociations(DynamicModel mixWith)
@@ -127,9 +128,9 @@ namespace Oak
 
         private void AddAssociationMethods(DynamicModel model, string fromColumn, string toTable)
         {
-            model.SetUnTrackedMember(Named, Query(fromColumn, model));
+            model.SetMember(Named, Query(fromColumn, model));
 
-            model.SetUnTrackedMember(Singular(Named) + "Ids", QueryIds(fromColumn, model));
+            model.SetMember(Singular(Named) + "Ids", QueryIds(fromColumn, model));
         }
 
         private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
@@ -259,11 +260,11 @@ namespace Oak
 
         private void AddAssociationMethod(DynamicModel model)
         {
-            model.SetUnTrackedMember(
+            model.SetMember(
                 Named,
                 Query(model));
 
-            model.SetUnTrackedMember(
+            model.SetMember(
                 Singular(Named) + "Ids",
                 QueryIds(model));
         }
@@ -368,7 +369,7 @@ namespace Oak
 
         public void Init(DynamicModel model)
         {
-            model.SetUnTrackedMember(
+            model.SetMember(
                 Named,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
@@ -424,7 +425,7 @@ namespace Oak
 
         public void Init(DynamicModel model)
         {
-            model.SetUnTrackedMember(
+            model.SetMember(
                 Singular(Repository),
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
@@ -494,7 +495,7 @@ namespace Oak
 
         public void Init(DynamicModel model)
         {
-            model.SetUnTrackedMember(
+            model.SetMember(
                 Named,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
