@@ -53,12 +53,12 @@ namespace Oak
             }));
         }
 
-        public static void Open<T>(Func<dynamic, dynamic> extension)
+        public static void Extend<T>(Func<dynamic, dynamic> extension)
         {
             Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), extension));
         }
 
-        public static void Open<T>(Action<dynamic> extension)
+        public static void Extend<T>(Action<dynamic> extension)
         {
             Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), (i) => { extension(i); return null; }));
         }
