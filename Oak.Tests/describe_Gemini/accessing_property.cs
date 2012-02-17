@@ -46,5 +46,37 @@ namespace Oak.Tests.describe_Gemini
                 it["new method is accessible"] = () => (gemini.NewProp("hello") as string).should_be("HELLO");
             };
         }
+
+        void selecting_properties()
+        {
+            before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
+
+            act = () => gemini = gemini.Select("Term", "Amount");
+
+            it["only responds to properties that were selected"] = () =>
+            {
+                ((bool)gemini.RespondsTo("Term")).should_be(true);
+
+                ((bool)gemini.RespondsTo("Amount")).should_be(true);
+
+                ((bool)gemini.RespondsTo("Interest")).should_be(false);
+            };
+        }
+
+        void excluding_properties()
+        {
+            before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
+
+            act = () => gemini = gemini.Exclude("Interest");
+
+            it["only responds to properties that were selected"] = () =>
+            {
+                ((bool)gemini.RespondsTo("Term")).should_be(true);
+
+                ((bool)gemini.RespondsTo("Amount")).should_be(true);
+
+                ((bool)gemini.RespondsTo("Interest")).should_be(false);
+            };
+        }
     }
 }

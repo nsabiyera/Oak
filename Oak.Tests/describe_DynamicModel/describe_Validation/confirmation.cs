@@ -2,18 +2,33 @@
 using System.Linq;
 using NSpec;
 using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
+using Massive;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
+    public class Persons : DynamicRepository
+    {
+
+    }
+
     class confirmation : nspec
     {
+        Seed seed;  
+
         dynamic person;
 
         bool isValid;
 
+        Persons persons;
+
         void before_each()
         {
+            seed = new Seed();
+            seed.PurgeDb();
+
             person = new Person();
+
+            persons = new Persons();
 
             person.Email = "user@example.com";
             person.EmailConfirmation = "user@example.com";
@@ -44,42 +59,33 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
                 it["is invalid"] = () => isValid.should_be_false();
             };
-
-            it["the confirmation property is not considered for persistance, but is still accessible"] = () =>
-            {
-                (person.EmailConfirmation as string).should_be("user@example.com");
-
-                (person as DynamicModel).has_the_untracked_property("EmailConfirmation");
-
-                (person as DynamicModel).does_not_have_the_tracked_property("EmailConfirmation");
-            };
-
-            context["loading property on initialization"] = () =>
-            {
-                before = () => person = new Person(new { Email = "user@example.com", EmailConfirmation = "user@example.com" });
-
-                it["the confrimation property is not considered for persistance, but is still accessible"] = () =>
-                {
-                    (person.EmailConfirmation as string).should_be("user@example.com");
-
-                    (person as DynamicModel).has_the_untracked_property("EmailConfirmation");
-
-                    (person as DynamicModel).does_not_have_the_tracked_property("EmailConfirmation");
-                };
-            };
-        }
-    }
-
-    static class confirmation_extensions
-    {
-        public static void has_the_untracked_property(this DynamicModel model, string property)
-        {
-            (model.UnTrackedProperties() as IDictionary<string, object>).Keys.ToList().should_contain(property);
         }
 
-        public static void does_not_have_the_tracked_property(this DynamicModel model, string property)
+        void saving_something_that_has_confirmation_to_the_database()
         {
-            (model.TrackedProperties() as IDictionary<string, object>).Keys.ToList().should_not_contain(property);
+            before = () =>
+            {
+                seed.CreateTable("Persons", new dynamic[]
+                { 
+                    new { Id = "int", PrimaryKey = true, Identity = true },
+                    new { Email = "nvarchar(255)" }
+                }).ExecuteNonQuery();
+            };
+
+            act = () =>
+            {
+                person.Email = "user@example.com";
+                person.EmailConfirmation = "user@example.com";
+            };
+
+            it["requires the exclusion of confirmation properties"] = () =>
+            {
+                persons.Insert(person.Exclude("EmailConfirmation"));
+
+                var firstPerson = persons.All().First();
+
+                (firstPerson.Email as string).should_be(person.Email as string);
+            };
         }
     }
 }

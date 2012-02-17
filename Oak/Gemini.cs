@@ -492,5 +492,28 @@ namespace Oak
         {
             return args.Count() == argNames.Count();
         }
+
+        public virtual dynamic Select(params string[] args)
+        {
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+
+            args.ForEach(s => expando.Add(s, GetMember(s)));
+
+            return new Gemini(expando);
+        }
+
+        public virtual dynamic Exclude(params string[] args)
+        {
+            var expando = (Hash() as IDictionary<string, object>).ToList();
+
+            var dictionary = new ExpandoObject() as IDictionary<string, object>;
+
+            expando.ForEach(s => 
+            {
+                if (!args.Contains(s.Key as string)) dictionary.Add(s.Key as string, GetMember(s.Key));
+            });
+
+            return new Gemini(dictionary);
+        }
     }
 }
