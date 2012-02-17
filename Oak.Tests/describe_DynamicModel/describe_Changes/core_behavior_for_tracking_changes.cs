@@ -25,13 +25,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
             it["methods added are untracked, so that they are ignored by persistance"] = () =>
             {
-                var keys = (person.UnTrackedProperties() as IDictionary<string, object>).Keys.ToList();
+                var keys = (person.TrackedProperties() as IDictionary<string, object>).Keys.ToList();
 
-                keys.should_contain("HasChanged");
+                keys.should_not_contain("HasChanged");
 
-                keys.should_contain("Original");
+                keys.should_not_contain("Original");
 
-                keys.should_contain("Changes");
+                keys.should_not_contain("Changes");
             };
 
             context["changing dynamic model"] = () =>
