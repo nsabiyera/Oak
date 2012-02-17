@@ -120,11 +120,6 @@ namespace Oak
             if (!entity.RespondsTo(property)) entity.SetMember(property, null);
         }
 
-        public void AddUnTrackedProperty(dynamic entity, string property)
-        {
-            
-        }
-
         public virtual string Message()
         {
             if (!string.IsNullOrEmpty(ErrorMessage)) return ErrorMessage;
@@ -175,7 +170,7 @@ namespace Oak
         {
             base.Init(entity as object);
 
-            if (!entity.RespondsTo(Property + "Confirmation")) entity.SetUnTrackedMember(Property + "Confirmation", null);
+            AddProperty(entity, Property + "Confirmation");
         }
 
         public bool Validate(dynamic entity)

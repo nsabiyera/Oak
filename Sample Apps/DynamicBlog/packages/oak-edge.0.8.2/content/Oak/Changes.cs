@@ -17,17 +17,17 @@ namespace Oak
             return @this.Hash();
         }
 
-        public MixInChanges(dynamic dynamicModel)
+        public MixInChanges(dynamic gemini)
         {
-            dynamicModel.SetMember("HasChanged", new DynamicFunctionWithParam(HasChanged));
+            gemini.SetMember("HasChanged", new DynamicFunctionWithParam(HasChanged));
 
-            dynamicModel.SetMember("Original", new DynamicFunctionWithParam(Original));
+            gemini.SetMember("Original", new DynamicFunctionWithParam(Original));
 
-            dynamicModel.SetMember("Changes", new DynamicFunctionWithParam(Changes));
+            gemini.SetMember("Changes", new DynamicFunctionWithParam(Changes));
 
-            originalValues = new Dictionary<string, object>(dynamicModel.Hash());
+            originalValues = new Dictionary<string, object>(gemini.Hash());
 
-            @this = dynamicModel;
+            @this = gemini;
         }
 
         public dynamic Changes(dynamic property)

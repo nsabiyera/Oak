@@ -43,7 +43,7 @@ namespace BorrowedGames.Models
 
         public void Register()
         {
-            users.Insert(this);
+            users.Insert(this.Exclude("PasswordConfirmation"));
         }
     }
 }
