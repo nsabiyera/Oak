@@ -1,6 +1,8 @@
 ﻿using NSpec;
 using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 using Oak.Tests.describe_Validation.Classes;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
@@ -90,15 +92,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                     model = new Book();
                 };
 
-                it["the properties added for validation are virtual, so that they are not included in persistance by DynamicRepository"] = () =>
+                it["the properties added for validation are delegates, so that they are not included in persistance by DynamicRepository"] = () =>
                 {
-                    var virtualProperties = (model as DynamicModel).UnTrackedHash().Keys;
+                    var trackedProperties = ((model as DynamicModel).TrackedProperties() as IDictionary<string, object>).Keys;
 
-                    virtualProperties.should_contain("Errors");
+                    trackedProperties.should_not_contain("Errors");
 
-                    virtualProperties.should_contain("IsValid");
+                    trackedProperties.should_not_contain("IsValid");
 
-                    virtualProperties.should_contain("FirstError");
+                    trackedProperties.should_not_contain("FirstError");
                 };
             };
         }
@@ -114,13 +116,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             it["does not respond to validation mix in"] = () =>
             {
-                var virtualProperties = (model as DynamicModel).UnTrackedHash().Keys;
+                var trackedProperties = ((model as DynamicModel).TrackedProperties() as IDictionary<string, object>).Keys;
 
-                virtualProperties.should_not_contain("Errors");
+                trackedProperties.should_not_contain("Errors");
 
-                virtualProperties.should_not_contain("IsValid");
+                trackedProperties.should_not_contain("IsValid");
 
-                virtualProperties.should_not_contain("FirstError");
+                trackedProperties.should_not_contain("FirstError");
             };
         }
 
