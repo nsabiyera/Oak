@@ -24,7 +24,7 @@ namespace Oak
             Models = models.ToList();
         }
 
-        public IEnumerable<dynamic> Select(params string[] properties)
+        public new IEnumerable<dynamic> Select(params string[] properties)
         {
             foreach (dynamic model in Models) yield return Select(model, properties);
         }

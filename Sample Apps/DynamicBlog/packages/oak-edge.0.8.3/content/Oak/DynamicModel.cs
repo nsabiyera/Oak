@@ -11,15 +11,11 @@ namespace Oak
 
         List<string> trackedProperties;
 
-        List<string> untrackedProperties;
-
         public DynamicModel()
         {
             initialized = false;
 
             trackedProperties = new List<string>();
-
-            untrackedProperties = new List<string>();
         }
 
         public virtual dynamic Init()
@@ -81,18 +77,11 @@ namespace Oak
             base.SetMember(property, value);
         }
 
-        public virtual void SetUnTrackedMember(string property, object value)
-        {
-            untrackedProperties.Add(property);
-
-            base.SetMember(property, value);
-        }
-
         public override IEnumerable<string> Members()
         {
             ThrowIfNotInitialized();
 
-            return base.Members().ToList();
+            return base.Members();
         }
 
         public override void DeleteMember(string member)
@@ -112,31 +101,16 @@ namespace Oak
             return ExpandoFor(TrackedHash());
         }
 
-        public ExpandoObject UnTrackedProperties()
-        {
-            return ExpandoFor(UnTrackedHash());
-        }
-
         public void TrackProperty(string property, object value)
         {
-            if (value is Delegate)
-            {
-                if (!untrackedProperties.Contains(property)) untrackedProperties.Add(property);
+            if (value is Delegate) return;
 
-                return;
-            }
-
-            if (!untrackedProperties.Contains(property)) trackedProperties.Add(property);
+            trackedProperties.Add(property);
         }
 
         public IDictionary<string, object> TrackedHash()
         {
             return HashContaining(trackedProperties);
-        }
-
-        public IDictionary<string, object> UnTrackedHash()
-        {
-            return HashContaining(untrackedProperties);
         }
 
         private ExpandoObject ExpandoFor(IDictionary<string, object> dictionary)

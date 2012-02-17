@@ -81,7 +81,7 @@ namespace Oak
         {
             ThrowIfNotInitialized();
 
-            return base.Members().ToList();
+            return base.Members();
         }
 
         public override void DeleteMember(string member)
