@@ -107,35 +107,6 @@ namespace Oak.Tests.describe_DynamicModel
 
         void setting_members()
         {
-            context["setting a single tracked member"] = () =>
-            {
-                act = () => loan.SetMember("Email", "user@example.com");
-
-                it["sets tracked member"] = () => (loan.Email as string).should_be("user@example.com");
-
-                it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
-            };
-
-            context["setting a single untracked member"] = () =>
-            {
-                act = () => loan.SetMember("EmailConfirmation", "user@example.com");
-
-                it["sets untracked member"] = () => (loan.EmailConfirmation as string).should_be("user@example.com");
-
-                it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
-            };
-
-            context["setting multiple members (tracked and untracked)"] = () =>
-            {
-                act = () => loan.SetMembers(new { Email = "user@example.com", EmailConfirmation = "user2@example.com" });
-
-                it["sets tracked member"] = () => (loan.Email as string).should_be("user@example.com");
-
-                it["sets untracked member"] = () => (loan.EmailConfirmation as string).should_be("user2@example.com");
-
-                it["leaves the number of tracked members unchanged"] = () => Model().TrackedHash().Count.should_be(1);
-            };
-
             context["setting delegate members"] = () =>
             {
                 act = () => loan = new Loan(new
@@ -150,22 +121,6 @@ namespace Oak.Tests.describe_DynamicModel
 
                 it["delegate members are not tracked because they cannot be saved"] = () => 
                     Model().TrackedHash().Any(s => s.Key == "SayBye").should_be_false();
-            };
-        }
-
-        void selecting_properties()
-        {
-            before = () => loan.SetMembers(new { Term = 10, Amount = 100000, Interest = .30 });
-
-            act = () => loan = loan.Select("Term", "Amount");
-
-            it["only responds to properties that were selected"] = () =>
-            {
-                ((bool)loan.RespondsTo("Term")).should_be(true);
-
-                ((bool)loan.RespondsTo("Amount")).should_be(true);
-
-                ((bool)loan.RespondsTo("Interest")).should_be(false);
             };
         }
 
