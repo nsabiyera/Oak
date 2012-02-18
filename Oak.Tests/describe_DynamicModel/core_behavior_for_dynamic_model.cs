@@ -117,10 +117,10 @@ namespace Oak.Tests.describe_DynamicModel
                 });
 
                 it["delegate members are not tracked because they cannot be saved"] = () => 
-                    Model().TrackedHash().Any(s => s.Key == "SayHello").should_be_false();
+                    Model().HashExcludingDelegates().Any(s => s.Key == "SayHello").should_be_false();
 
-                it["delegate members are not tracked because they cannot be saved"] = () => 
-                    Model().TrackedHash().Any(s => s.Key == "SayBye").should_be_false();
+                it["delegate members are not tracked because they cannot be saved"] = () =>
+                    Model().HashExcludingDelegates().Any(s => s.Key == "SayBye").should_be_false();
             };
         }
 

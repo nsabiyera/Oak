@@ -94,7 +94,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
                 it["the properties added for validation are delegates, so that they are not included in persistance by DynamicRepository"] = () =>
                 {
-                    var trackedProperties = ((model as DynamicModel).TrackedProperties() as IDictionary<string, object>).Keys;
+                    var trackedProperties = ((model as DynamicModel).HashExcludingDelegates() as IDictionary<string, object>).Keys;
 
                     trackedProperties.should_not_contain("Errors");
 
@@ -114,7 +114,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             it["does not respond to validation mix in"] = () =>
             {
-                var trackedProperties = ((model as DynamicModel).TrackedProperties() as IDictionary<string, object>).Keys;
+                var trackedProperties = ((model as DynamicModel).HashExcludingDelegates() as IDictionary<string, object>).Keys;
 
                 trackedProperties.should_not_contain("Errors");
 

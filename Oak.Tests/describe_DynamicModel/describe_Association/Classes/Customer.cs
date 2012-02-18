@@ -7,13 +7,16 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
     public class Customer : DynamicModel
     {
-        Suppliers suppliers = new Suppliers();
+        public Suppliers suppliers;
 
-        DistributionChannels distributionChannel = new DistributionChannels();
+        public DistributionChannels distributionChannel;
 
         public Customer(object dto)
             : base(dto)
         {
+            suppliers = new Suppliers();
+
+            distributionChannel = new DistributionChannels();
         }
 
         public IEnumerable<dynamic> Associates()
