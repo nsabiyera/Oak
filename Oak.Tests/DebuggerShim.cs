@@ -4,27 +4,21 @@ using NSpec.Domain;
 using System.Reflection;
 using NSpec;
 using NSpec.Domain.Formatters;
+using System.Linq;
 
-namespace DynamicBlog.Tests
+//[TestFixture]
+public class DebuggerShim
 {
-    [TestFixture]
-    public class DebuggerShim
+    //[Test]
+    public void debug()
     {
-        [Test]
-        public void debug()
-        {
-            var testClassYouWantToDebug = "core_behavior_for_tracking_changes";
+        var tagOrClassName = "class_or_tag_you_want_to_debug";
 
-            var finder = new SpecFinder(
-                Assembly.GetExecutingAssembly().Location,
-                new Reflector(),
-                testClassYouWantToDebug);
+        var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 
-            var builder = new ContextBuilder(
-                finder,
-                new DefaultConventions());
+        var contexts = invocation.Run();
 
-            new ContextRunner(builder, new ConsoleFormatter()).Run();
-        }
+        //assert that there aren't any failures
+        contexts.Failures().Count().should_be(0);
     }
 }

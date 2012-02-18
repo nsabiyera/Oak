@@ -32,3 +32,8 @@ desc "run nspec tests"
 task :tests => :build do
   sh @test_runner_command
 end
+
+desc "run nspec tests"
+task :wip => :build do
+  sh @test_runner_command + " --tag wip"
+end
