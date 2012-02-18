@@ -151,6 +151,7 @@
   <ItemGroup>
     <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="App_Code\OakForm.cshtml" />
   </ItemGroup>

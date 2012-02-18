@@ -32,20 +32,22 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
 
-    //[DebuggerNonUserCode]
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         private bool initialized;
-
-        private MethodInfo initialization = null;
 
         private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> Includes = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
 
         private static List<KeyValuePair<Type, Action<dynamic>>> MethodHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
+        private List<Type> types = new List<Type>();
+
+        private static List<KeyValuePair<Type, Action<dynamic>>> ClassHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
+
         public dynamic Expando { get; set; }
 
-        public static void Include<A, B>()
+        public static void Extend<A, B>()
         {
             Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(A), (i) =>
             {
@@ -65,6 +67,11 @@ namespace Oak
         public static void Extend<T>(Action<dynamic> extension)
         {
             Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), (i) => { extension(i); return null; }));
+        }
+
+        public static void Initialized<T>(Action<dynamic> callback)
+        {
+            ClassHooks.Add(new KeyValuePair<Type, Action<dynamic>>(typeof(T), callback));
         }
 
         public static void MethodDefined<T>(Action<dynamic> extension)
@@ -93,8 +100,6 @@ namespace Oak
 
             foreach (var method in DynamicDelegates()) AddDynamicMember(method);
 
-            var types = new List<Type>();
-
             var currentType = this.GetType();
 
             while (currentType != typeof(object))
@@ -122,9 +127,7 @@ namespace Oak
         {
             var parameters = method.GetParameters().ToList();
 
-            if (method.Name == "Initialize") initialization = method;
-
-            else if (IsDynamicFunction(method, parameters)) TrySetMember(method.Name, DynamicFunctionFor(method));
+            if (IsDynamicFunction(method, parameters)) TrySetMember(method.Name, DynamicFunctionFor(method));
 
             else if (IsDynamicFunctionWithParam(method, parameters)) TrySetMember(method.Name, DynamicFunctionWithParamFor(method));
 
@@ -150,7 +153,10 @@ namespace Oak
 
         public DynamicFunctionWithParam DynamicFunctionWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) => method.Invoke(this, new[] { arg }));
+            return new DynamicFunctionWithParam((arg) => 
+            {
+                return method.Invoke(this, new[] { arg });
+            });
         }
 
         private DynamicMethod DynamicMethodFor(MethodInfo method)
@@ -293,7 +299,9 @@ namespace Oak
 
             var throwAway = new object();
 
-            if (initialization != null) initialization.Invoke(this, null);
+            var hooks = ClassHooks.Where(s => types.Contains(s.Key));
+
+            foreach (var hook in hooks) hook.Value(this);
         }
 
         public virtual dynamic GetMember(string property)
@@ -402,7 +410,7 @@ namespace Oak
 
         public virtual IDictionary<string, object> HashExcludingDelegates()
         {
-            var dictionary = new Dictionary<string, object>();
+            var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
             var delegates = Delegates();
 
@@ -430,39 +438,41 @@ namespace Oak
 
             result = null;
 
-            if (!Hash().ContainsKey(binder.Name))
-            {
-                if (Hash().ContainsKey("MethodMissing"))
-                {
-                    result = _.MethodMissing(
-                        new Gemini(new
-                        {
-                            Name = binder.Name,
-                            Parameters = args,
-                            ParameterNames = binder.CallInfo.ArgumentNames.ToArray()
-                        }));
+            if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
 
-                    return true;
-                }
+            var member = GetMember(binder.Name);
 
-                return false;
-            }
+            if (!DynamicFunction(member)) return base.TryInvokeMember(binder, args, out result);
 
-            var member = Hash()[binder.Name];
-
-            if (!IsPolymorphicFunction(member)) return base.TryInvokeMember(binder, args, out result);
-
-            result = InvokePolymorphicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
+            result = InvokeDynamicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
 
             return true;
         }
 
-        public virtual bool IsPolymorphicFunction(object member)
+        public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+        {
+            if (RespondsTo("MethodMissing"))
+            {
+                result = _.MethodMissing(
+                    new Gemini(new
+                    {
+                        Name = binder.Name,
+                        Parameters = args,
+                        ParameterNames = binder.CallInfo.ArgumentNames.ToArray()
+                    }));
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool DynamicFunction(object member)
         {
             return (member is DynamicFunctionWithParam) || (member is DynamicMethodWithParam);
         }
 
-        public virtual dynamic InvokePolymorphicFunction(dynamic member, object[] args, string[] argNames)
+        public virtual dynamic InvokeDynamicFunction(dynamic member, object[] args, string[] argNames)
         {
             Func<dynamic> function = () =>
             {

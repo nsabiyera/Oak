@@ -434,7 +434,7 @@ namespace Massive
 
         public virtual dynamic GetAttributesToSave(object o)
         {
-            if (o is DynamicModel) return ((DynamicModel)o).TrackedProperties();
+            if (o is DynamicModel) return ((DynamicModel)o).HashExcludingDelegates();
 
             if (o is Gemini) return ((Gemini)o).HashExcludingDelegates();
 

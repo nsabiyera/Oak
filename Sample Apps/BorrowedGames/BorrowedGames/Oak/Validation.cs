@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Oak
 {
-    public class MixInValidation
+    public class Validations
     {
         dynamic @this;
 
@@ -15,7 +15,7 @@ namespace Oak
 
         List<dynamic> errors;
 
-        public MixInValidation(DynamicModel mixWith)
+        public Validations(dynamic mixWith)
         {
             rules = new List<dynamic>();
 
@@ -42,7 +42,7 @@ namespace Oak
             }
         }
 
-        public bool HasValidationCapabilities(DynamicModel mixWith)
+        public bool HasValidationCapabilities(dynamic mixWith)
         {
             return mixWith.GetType().GetMethod("Validates") != null;
         }
@@ -369,7 +369,7 @@ namespace Oak
         
         public bool IgnoreNull { get; set; }
         
-        public bool Validate(DynamicModel entity)
+        public bool Validate(dynamic entity)
         {
             dynamic value = entity.GetMember(Property);
 

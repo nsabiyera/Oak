@@ -7,11 +7,11 @@ using System.Dynamic;
 
 namespace Oak
 {
-    public class MixInAssociation
+    public class Associations
     {
         List<dynamic> referencedAssociations = new List<dynamic>();
 
-        public MixInAssociation(DynamicModel mixWith)
+        public Associations(DynamicModel mixWith)
         {
             if (!SupportsAssociations(mixWith)) return;
 
