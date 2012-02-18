@@ -13,9 +13,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes.Classes
 
         }
 
-        public Person(dynamic dto)
+        public Person(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
     }
 }

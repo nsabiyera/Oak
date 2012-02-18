@@ -9,9 +9,10 @@ namespace Oak.Tests.describe_DynamicModels.Classes
 
         Warehouses warehouses = new Warehouses();
 
-        public Store(dynamic dto)
+        public Store(object dto)
+            : base(dto)
         {
-            Init(dto);
+
         }
 
         public IEnumerable<dynamic> Associates()

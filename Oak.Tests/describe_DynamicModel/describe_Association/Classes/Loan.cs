@@ -5,7 +5,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
     public class Loan : DynamicModel
     {
-        Customers customers;
+        Customers customers = new Customers();
 
         public Loan()
             : this(new { })
@@ -13,11 +13,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         }
 
-        public Loan(dynamic dto)
+        public Loan(object dto)
+            : base(dto)
         {
-            customers = new Customers();
 
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()

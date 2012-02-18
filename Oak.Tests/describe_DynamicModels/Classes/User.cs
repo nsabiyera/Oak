@@ -12,9 +12,9 @@ namespace Oak.Tests.describe_DynamicModels.Classes
 
         Profiles profiles = new Profiles();
 
-        public User(dynamic dto)
+        public User(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()

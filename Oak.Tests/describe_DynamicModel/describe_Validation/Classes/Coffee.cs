@@ -4,10 +4,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 {
     public class Coffee : DynamicModel
     {
-        public Coffee()
-        {
-            Init();
-        }
+        public Coffee() { }
 
         public IEnumerable<dynamic> Validates()
         {

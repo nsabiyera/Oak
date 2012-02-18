@@ -110,8 +110,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             before = () =>
             {
                 model = new DynamicModel();
-
-                model.Init();
             };
 
             it["does not respond to validation mix in"] = () =>

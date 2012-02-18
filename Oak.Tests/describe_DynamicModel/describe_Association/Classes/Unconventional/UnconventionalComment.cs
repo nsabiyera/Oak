@@ -7,19 +7,17 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
     public class UnconventionalComment : DynamicModel
     {
-        Blogs blogs;
+        Blogs blogs = new Blogs();
 
-        public UnconventionalComment(dynamic dto)
+        public UnconventionalComment(object dto)
+            : base(dto)
         {
-            blogs = new Blogs();
 
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return
-                new BelongsTo(blogs) { ForeignKey = "fkBlogId" };
+            yield return new BelongsTo(blogs) { ForeignKey = "fkBlogId" };
         }
     }
 }

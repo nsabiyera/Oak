@@ -5,27 +5,20 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
     public class User : DynamicModel
     {
-        Games games;
+        Games games = new Games();
 
-        Library library;
+        Library library = new Library();
 
-        Users users;
+        Users users = new Users();
 
-        Friends friends;
+        Friends friends = new Friends();
 
         public User() : this(new { }) { }
 
-        public User(dynamic entity)
+        public User(object entity)
+            : base(entity)
         {
-            games = new Games();
 
-            library = new Library();
-
-            users = new Users();
-
-            friends = new Friends();
-
-            Init(entity);
         }
 
         public IEnumerable<dynamic> Associates()

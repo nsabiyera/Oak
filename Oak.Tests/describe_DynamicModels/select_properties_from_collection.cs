@@ -21,7 +21,7 @@ namespace Oak.Tests.describe_DynamicModels
         {
             models = new DynamicModels(new List<dynamic>() 
             { 
-                new DynamicModel().Init(new { Name = "Jane" }),
+                new DynamicModel(new { Name = "Jane" }),
                 new { Name = "Jane" },
                 new Gemini(new { Name = "Jane" })
             });

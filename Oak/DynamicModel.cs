@@ -7,16 +7,12 @@ namespace Oak
 {
     public class DynamicModel : Gemini
     {
-        private bool initialized;
-
-        List<string> trackedProperties;
+        List<string> trackedProperties = new List<string>();
 
         public DynamicModel(object dto)
             : base(dto)
         {
-            initialized = false;
 
-            trackedProperties = new List<string>();
         }
 
         public DynamicModel()
@@ -30,20 +26,20 @@ namespace Oak
             Init(new Gemini(Expando));
         }
 
-        public virtual dynamic Init()
+        dynamic Init()
         {
             return Init(new { });
         }
 
-        public virtual dynamic Init(object dto)
+        dynamic Init(object dto)
         {
-            initialized = true;
-
             new MixInValidation(this);
 
             new MixInAssociation(this);
 
-            foreach (var item in dto.ToDictionary()) SetMember(item.Key, item.Value);
+            var dtoMembers = dto.ToDictionary().ToList();
+
+            foreach (var item in dtoMembers) SetMember(item.Key, item.Value);
 
             new MixInChanges(this);
 

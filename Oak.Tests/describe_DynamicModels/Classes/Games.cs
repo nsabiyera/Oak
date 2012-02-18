@@ -12,9 +12,9 @@ namespace Oak.Tests.describe_DynamicModels.Classes
 
         Players players = new Players();
 
-        public Game(dynamic dto)
+        public Game(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()

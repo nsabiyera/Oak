@@ -9,9 +9,9 @@ namespace Oak.Tests
 {
     public class SomeDynamicModel : DynamicModel
     {
-        public SomeDynamicModel(dynamic dto)
+        public SomeDynamicModel(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public string Name
@@ -74,7 +74,7 @@ namespace Oak.Tests
         {
             before = () =>
             {
-                objectToConvert = new DynamicModel().Init(new
+                objectToConvert = new DynamicModel(new
                 {
                     Id = 15,
                     String = "hello",
@@ -103,7 +103,7 @@ namespace Oak.Tests
                 objectToConvert = new List<dynamic>
                 {
                     expando,
-                    new DynamicModel().Init(new { Id = 2 }),
+                    new DynamicModel(new { Id = 2 }),
                     new Gemini(new { Id = 3 }),
                 };
             };

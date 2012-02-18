@@ -5,8 +5,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
     public class LegalDocument : DynamicModel
     {
         public LegalDocument()
+            : base(new { })
         {
-            Init();
         }
 
         public IEnumerable<dynamic> Validates()

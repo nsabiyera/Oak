@@ -6,8 +6,8 @@ namespace Oak.Tests.describe_Validation.Classes
     public class Order : DynamicModel
     {
         public Order()
+            : base(new { })
         {
-            Init();
         }
 
         public IEnumerable<dynamic> Validates()

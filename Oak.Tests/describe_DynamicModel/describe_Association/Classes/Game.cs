@@ -5,9 +5,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
     public class Game : DynamicModel
     {
-        public Game(dynamic dto)
+        public Game(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
     }
 }
