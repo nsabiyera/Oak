@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 {
@@ -9,9 +10,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
         {
         }
 
-        public Person(dynamic dto)
+        public Person(object dto)
+            : base(dto)
         {
-            Init(dto);
+
         }
 
         public IEnumerable<dynamic> Validates()

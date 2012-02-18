@@ -9,7 +9,6 @@ using Oak.Tests.describe_Gemini.Classes;
 
 namespace Oak.Tests.describe_Gemini
 {
-    [Tag("wip")]
     class _describe_Gemini : nspec
     {   
         public dynamic blog;
