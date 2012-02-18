@@ -11,11 +11,23 @@ namespace Oak
 
         List<string> trackedProperties;
 
-        public DynamicModel()
+        public DynamicModel(object dto)
+            : base(dto)
         {
             initialized = false;
 
             trackedProperties = new List<string>();
+        }
+
+        public DynamicModel()
+            : this(new { })
+        {
+
+        }
+
+        void Initialize()
+        {
+            Init(new Gemini(Expando));
         }
 
         public virtual dynamic Init()
@@ -38,62 +50,18 @@ namespace Oak
             return this;
         }
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            ThrowIfNotInitialized();
-
-            return base.TryGetMember(binder, out result);
-        }
-
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            ThrowIfNotInitialized();
-
             TrackProperty(binder.Name, value);
 
             return base.TrySetMember(binder, value);
         }
 
-        public override dynamic GetMember(string property)
-        {
-            ThrowIfNotInitialized();
-
-            return base.GetMember(property);
-        }
-
-        public override bool RespondsTo(string property)
-        {
-            ThrowIfNotInitialized();
-
-            return base.RespondsTo(property);
-        }
-
         public override void SetMember(string property, object value)
         {
-            ThrowIfNotInitialized();
-
             TrackProperty(property, value);
 
             base.SetMember(property, value);
-        }
-
-        public override IEnumerable<string> Members()
-        {
-            ThrowIfNotInitialized();
-
-            return base.Members();
-        }
-
-        public override void DeleteMember(string member)
-        {
-            ThrowIfNotInitialized();
-
-            base.DeleteMember(member);
-        }
-
-        private void ThrowIfNotInitialized()
-        {
-            if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statement in your constructors.");
         }
 
         public ExpandoObject TrackedProperties()

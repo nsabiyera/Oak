@@ -32,7 +32,7 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
 
-    [DebuggerNonUserCode]
+    //[DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> Includes = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
@@ -67,6 +67,8 @@ namespace Oak
         {
             MethodHooks.Add(new KeyValuePair<Type, Action<dynamic>>(typeof(T), extension));
         }
+
+        bool initialized;
 
         protected dynamic _
         {
@@ -113,6 +115,8 @@ namespace Oak
 
                 (result.ToExpando() as IDictionary<string, object>).ToList().ForEach(s => SetMember(s.Key, s.Value));
             }
+
+            initialized = false;
         }
 
         private void AddDynamicMember(MethodInfo method)
@@ -246,6 +250,27 @@ namespace Oak
 
         public bool TryGetMember(string name, out object result)
         {
+            InitializeIfNeeded();
+
+            return TryGetMemberCore(name, out result);
+        }
+
+        private void InitializeIfNeeded()
+        {
+            if (initialized) return;
+
+            initialized = true;
+
+            var throwAway = new object();
+
+            if (TryGetMemberCore("Initialize", out throwAway))
+            {
+                _.Initialize();
+            }
+        }
+
+        private bool TryGetMemberCore(string name, out object result)
+        {
             var dictionary = Hash();
 
             if (dictionary.ContainsKey(name))
@@ -328,6 +353,8 @@ namespace Oak
 
         public bool TrySetMember(string property, object value, bool suppress = false)
         {
+            InitializeIfNeeded();
+
             var dictionary = Hash();
 
             if (dictionary.ContainsKey(property))
@@ -404,6 +431,8 @@ namespace Oak
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
+            InitializeIfNeeded();
+
             result = null;
 
             if (!Hash().ContainsKey(binder.Name))
