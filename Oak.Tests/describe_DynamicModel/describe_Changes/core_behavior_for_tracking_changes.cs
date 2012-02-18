@@ -131,7 +131,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
             };
         }
 
-        [Tag("wip")]
         void change_tracking_can_be_added_directly_to_gemini()
         {
             before = () =>
