@@ -6,9 +6,9 @@ using System.Dynamic;
 
 namespace Oak
 {
-    public class MixInChanges
+    public class Changes
     {
-        DynamicModel @this;
+        dynamic @this;
 
         IDictionary<string, dynamic> originalValues;
 
@@ -17,20 +17,20 @@ namespace Oak
             return @this.Hash();
         }
 
-        public MixInChanges(dynamic gemini)
+        public Changes(dynamic gemini)
         {
             gemini.SetMember("HasChanged", new DynamicFunctionWithParam(HasChanged));
 
             gemini.SetMember("Original", new DynamicFunctionWithParam(Original));
 
-            gemini.SetMember("Changes", new DynamicFunctionWithParam(Changes));
+            gemini.SetMember("Changes", new DynamicFunctionWithParam(GetChanges));
 
             originalValues = new Dictionary<string, object>(gemini.Hash());
 
             @this = gemini;
         }
 
-        public dynamic Changes(dynamic property)
+        public dynamic GetChanges(dynamic property)
         {
             if (property != null) return ChangesFor(property);
 
@@ -80,7 +80,7 @@ namespace Oak
         {
             if (property != null) return HasPropertyChanged(property);
 
-            return (Changes(property) as IDictionary<string, object>).Any();
+            return (GetChanges(property) as IDictionary<string, object>).Any();
         }
 
         public dynamic HasPropertyChanged(dynamic property)
