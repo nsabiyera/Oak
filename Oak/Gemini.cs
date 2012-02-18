@@ -32,7 +32,7 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
 
-    //[DebuggerNonUserCode]
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         private bool initialized;
