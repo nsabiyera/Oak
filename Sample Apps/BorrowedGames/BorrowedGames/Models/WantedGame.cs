@@ -10,9 +10,9 @@ namespace BorrowedGames.Models
 
         Users users = new Users();
 
-        public WantedGame(dynamic dto)
+        public WantedGame(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public string Name { get { return _.Game().Name; } }

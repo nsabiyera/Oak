@@ -19,9 +19,9 @@ namespace BorrowedGames.Models
 
         WantedGames wantedGames = new WantedGames();
 
-        public User(dynamic dto)
+        public User(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()

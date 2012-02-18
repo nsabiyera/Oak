@@ -10,19 +10,16 @@ namespace DynamicBlog.Models
 {
     public class Blog : DynamicModel
     {
-        Comments comments;
+        Comments comments = new Comments();
 
         public Blog()
             : this(new { })
         {
-
         }
 
         public Blog(object dto)
+            : base(dto)
         {
-            comments = new Comments();
-
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Validates()

@@ -15,9 +15,9 @@ namespace BorrowedGames.Models
         {
         }
 
-        public Registration(dynamic entity)
+        public Registration(object entity)
+            : base(entity)
         {
-            Init(entity);
         }
 
         public IEnumerable<dynamic> Validates()

@@ -8,9 +8,9 @@ namespace BorrowedGames.Models
     {
         Games games = new Games();
 
-        public NotInterestedGame(dynamic dto)
+        public NotInterestedGame(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()

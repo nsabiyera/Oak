@@ -135,9 +135,9 @@ namespace DynamicBlog.Tests
 
         }
 
-        public Person(dynamic dto)
+        public Person(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Validates()

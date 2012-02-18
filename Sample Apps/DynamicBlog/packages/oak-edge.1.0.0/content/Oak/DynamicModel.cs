@@ -7,93 +7,57 @@ namespace Oak
 {
     public class DynamicModel : Gemini
     {
-        private bool initialized;
+        List<string> trackedProperties = new List<string>();
 
-        List<string> trackedProperties;
-
-        public DynamicModel()
+        public DynamicModel(object dto)
+            : base(dto)
         {
-            initialized = false;
 
-            trackedProperties = new List<string>();
         }
 
-        public virtual dynamic Init()
+        public DynamicModel()
+            : this(new { })
+        {
+
+        }
+
+        void Initialize()
+        {
+            Init(new Gemini(Expando));
+        }
+
+        dynamic Init()
         {
             return Init(new { });
         }
 
-        public virtual dynamic Init(object dto)
+        dynamic Init(object dto)
         {
-            initialized = true;
-
             new MixInValidation(this);
 
             new MixInAssociation(this);
 
-            foreach (var item in dto.ToDictionary()) SetMember(item.Key, item.Value);
+            var dtoMembers = dto.ToDictionary().ToList();
+
+            foreach (var item in dtoMembers) SetMember(item.Key, item.Value);
 
             new MixInChanges(this);
 
             return this;
         }
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            ThrowIfNotInitialized();
-
-            return base.TryGetMember(binder, out result);
-        }
-
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            ThrowIfNotInitialized();
-
             TrackProperty(binder.Name, value);
 
             return base.TrySetMember(binder, value);
         }
 
-        public override dynamic GetMember(string property)
-        {
-            ThrowIfNotInitialized();
-
-            return base.GetMember(property);
-        }
-
-        public override bool RespondsTo(string property)
-        {
-            ThrowIfNotInitialized();
-
-            return base.RespondsTo(property);
-        }
-
         public override void SetMember(string property, object value)
         {
-            ThrowIfNotInitialized();
-
             TrackProperty(property, value);
 
             base.SetMember(property, value);
-        }
-
-        public override IEnumerable<string> Members()
-        {
-            ThrowIfNotInitialized();
-
-            return base.Members();
-        }
-
-        public override void DeleteMember(string member)
-        {
-            ThrowIfNotInitialized();
-
-            base.DeleteMember(member);
-        }
-
-        private void ThrowIfNotInitialized()
-        {
-            if (!initialized) throw new InvalidOperationException("DynamicModel must be initialized.  Call the Init method as the LAST statement in your constructors.");
         }
 
         public ExpandoObject TrackedProperties()
