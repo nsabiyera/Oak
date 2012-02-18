@@ -7,9 +7,9 @@ namespace Oak.Tests.describe_DynamicModels.Classes
     {
         Posts posts = new Posts();
 
-        public Comment(dynamic dto)
+        public Comment(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()

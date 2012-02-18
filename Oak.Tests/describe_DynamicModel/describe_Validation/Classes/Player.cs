@@ -9,9 +9,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
         {
         }
 
-        public Player(dynamic dto)
+        public Player(object dto)
+            : base(dto)
         {
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Validates()

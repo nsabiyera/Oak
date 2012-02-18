@@ -6,7 +6,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
     {
         public Product()
         {
-            Init();
+
         }
 
         public IEnumerable<dynamic> Validates()

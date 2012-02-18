@@ -8,19 +8,16 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 {
     public class UnconventionalAuthor : DynamicModel
     {
-        Profiles profiles;
+        Profiles profiles = new Profiles();
 
-        public UnconventionalAuthor(dynamic dto)
+        public UnconventionalAuthor(object dto)
+            : base(dto)
         {
-            profiles = new Profiles();
-
-            Init(dto);
         }
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return
-                new HasOne(profiles) { ForeignKey = "fkAuthorId" };
+            yield return new HasOne(profiles) { ForeignKey = "fkAuthorId" };
         }
     }
 }

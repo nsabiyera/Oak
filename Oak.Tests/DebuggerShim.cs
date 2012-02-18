@@ -1,9 +1,7 @@
 ﻿using System;
-using NUnit.Framework;
 using NSpec.Domain;
 using System.Reflection;
 using NSpec;
-using NSpec.Domain.Formatters;
 using System.Linq;
 
 //[TestFixture]
@@ -12,7 +10,7 @@ public class DebuggerShim
     //[Test]
     public void debug()
     {
-        var tagOrClassName = "confirmation";
+        var tagOrClassName = "core_behavior_for_dynamic_model";
 
         var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 
