@@ -7,6 +7,18 @@ namespace Oak
 {
     public class DynamicModel : Gemini
     {
+        static DynamicModel()
+        {
+            Gemini.Initialized<DynamicModel>(instance =>
+            {
+                new Validations(instance);
+
+                new Associations(instance);
+
+                new Changes(instance);
+            });
+        }
+
         public DynamicModel(object dto)
             : base(dto)
         {
@@ -17,19 +29,6 @@ namespace Oak
             : this(new { })
         {
 
-        }
-
-        void Initialize()
-        {
-            new MixInValidation(this);
-
-            new MixInAssociation(this);
-
-            var dtoMembers = this.ToDictionary().ToList();
-
-            foreach (var item in dtoMembers) SetMember(item.Key, item.Value);
-
-            new MixInChanges(this);
         }
     }
 }
