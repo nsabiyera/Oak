@@ -10,7 +10,7 @@ public class DebuggerShim
     //[Test]
     public void debug()
     {
-        var tagOrClassName = "core_behavior_for_dynamic_model";
+        var tagOrClassName = "wip";
 
         var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 

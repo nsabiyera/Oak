@@ -402,7 +402,7 @@ namespace Oak
 
         public virtual IDictionary<string, object> HashExcludingDelegates()
         {
-            var dictionary = new Dictionary<string, object>();
+            var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
             var delegates = Delegates();
 
@@ -430,31 +430,33 @@ namespace Oak
 
             result = null;
 
-            if (!Hash().ContainsKey(binder.Name))
-            {
-                if (Hash().ContainsKey("MethodMissing"))
-                {
-                    result = _.MethodMissing(
-                        new Gemini(new
-                        {
-                            Name = binder.Name,
-                            Parameters = args,
-                            ParameterNames = binder.CallInfo.ArgumentNames.ToArray()
-                        }));
+            if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
 
-                    return true;
-                }
-
-                return false;
-            }
-
-            var member = Hash()[binder.Name];
+            var member = GetMember(binder.Name);
 
             if (!IsPolymorphicFunction(member)) return base.TryInvokeMember(binder, args, out result);
 
             result = InvokePolymorphicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
 
             return true;
+        }
+
+        public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+        {
+            if (RespondsTo("MethodMissing"))
+            {
+                result = _.MethodMissing(
+                    new Gemini(new
+                    {
+                        Name = binder.Name,
+                        Parameters = args,
+                        ParameterNames = binder.CallInfo.ArgumentNames.ToArray()
+                    }));
+
+                return true;
+            }
+
+            return false;
         }
 
         public virtual bool IsPolymorphicFunction(object member)

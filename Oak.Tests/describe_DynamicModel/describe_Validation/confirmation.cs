@@ -11,7 +11,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
     }
 
-    [Tag("wip")]
     class confirmation : nspec
     {
         Seed seed;  

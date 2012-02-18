@@ -32,7 +32,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         void describe_has_one_through()
         {
-            context["a store has one supplier through distribution channels"] = () =>
+            context["a store has one supplier through distribution channels", "wip"] = () =>
             {
                 before = () =>
                 {
@@ -45,8 +45,14 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     new { CustomerId = customerId, SupplierId = supplierId }.InsertInto("DistributionChannels");
                 };
 
-                it["retrieves has one through"] = () => 
-                    (customers.Single(customerId).Supplier().Name as string).should_be("Texas Instruments");
+                it["retrieves has one through"] = () =>
+                {
+                    var customer = customers.Single(customerId);
+
+                    (customer.suppliers as object).should_not_be_null();
+
+                    (customer.Supplier().Name as string).should_be("Texas Instruments");
+                };
             };
         }
 
