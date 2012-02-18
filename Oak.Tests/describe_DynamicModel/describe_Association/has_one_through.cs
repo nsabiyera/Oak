@@ -32,7 +32,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         void describe_has_one_through()
         {
-            context["a store has one supplier through distribution channels", "wip"] = () =>
+            context["a store has one supplier through distribution channels"] = () =>
             {
                 before = () =>
                 {
