@@ -12,6 +12,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
     {
         dynamic person;
 
+        dynamic gemini;
+
         void tracking_changes_after_new_instantiation_of_model()
         {
             act = () =>
@@ -127,6 +129,20 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
                 it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
             };
+        }
+
+        [Tag("wip")]
+        void change_tracking_can_be_added_directly_to_gemini()
+        {
+            before = () =>
+            {
+                gemini = new Gemini(new { FirstName = "Amir" });
+
+                new Changes(gemini);
+            };
+
+            it["change tracking methods exist when changes is mixed in"] = () =>
+                ((bool)gemini.HasChanged()).should_be(false);
         }
     }
 }

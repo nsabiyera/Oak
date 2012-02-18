@@ -112,6 +112,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Essay.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Order.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Player.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\length.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\numericality.cs" />
     <Compile Include="describe_DynamicModel\saving_dynamic_model.cs" />
