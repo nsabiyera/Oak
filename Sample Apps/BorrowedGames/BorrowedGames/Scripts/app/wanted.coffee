@@ -35,11 +35,9 @@ wantedGamesView = Backbone.View.extend
   el: "#wantedGames"
 
   initialize: ->
-    _.bindAll this, 'render'
-
     @wantedGames = new wantedGames()
 
-    @wantedGames.bind 'reset', @render
+    @wantedGames.bind 'reset', @render, @
 
     @wantedGames.fetch()
 
@@ -63,9 +61,7 @@ wantedGameView = Backbone.View.extend
   className: 'border'
 
   initialize: ->
-    _.bindAll this, "render", "apply"
-
-    @model.bind 'change', @apply
+    @model.bind 'change', @apply, @
 
   apply: ->
     $(@el).fadeOut()

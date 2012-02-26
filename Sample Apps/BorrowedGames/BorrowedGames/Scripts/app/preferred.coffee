@@ -48,11 +48,9 @@ preferredGamesView = Backbone.View.extend
   el: "#preferredGames"
 
   initialize: ->
-    _.bindAll this, 'render'
-
     @preferredGames = new libraries()
 
-    @preferredGames.bind 'reset', @render
+    @preferredGames.bind 'reset', @render, @
 
     @preferredGames.fetch()
 
@@ -83,9 +81,7 @@ preferredGameView = Backbone.View.extend
   className: 'gameBox'
 
   initialize: ->
-    _.bindAll this, "render", "apply"
-
-    @model.bind 'change', @apply
+    @model.bind 'change', @apply, @
 
   apply: ->
     $(@el).fadeOut() if(@model.deleted || @model.wanted)

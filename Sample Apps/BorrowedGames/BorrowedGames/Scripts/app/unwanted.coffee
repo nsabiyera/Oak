@@ -34,11 +34,9 @@ unwantedGamesView = Backbone.View.extend
   el: "#unwantedGames"
 
   initialize: ->
-    _.bindAll this, 'render'
-
     @unwantedGames = new unwantedGames()
 
-    @unwantedGames.bind 'reset', @render
+    @unwantedGames.bind 'reset', @render, @
 
     @unwantedGames.fetch()
 
@@ -64,9 +62,7 @@ unwantedGameView = Backbone.View.extend
   className: 'gameBoxSmall'
 
   initialize: ->
-    _.bindAll this, "render", "apply"
-
-    @model.bind 'change', @apply
+    @model.bind 'change', @apply, @
 
   apply: ->
     $(@el).fadeOut()

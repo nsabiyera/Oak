@@ -55,9 +55,8 @@
   preferredGamesView = Backbone.View.extend({
     el: "#preferredGames",
     initialize: function() {
-      _.bindAll(this, 'render');
       this.preferredGames = new libraries();
-      this.preferredGames.bind('reset', this.render);
+      this.preferredGames.bind('reset', this.render, this);
       return this.preferredGames.fetch();
     },
     refresh: function() {
@@ -87,8 +86,7 @@
   preferredGameView = Backbone.View.extend({
     className: 'gameBox',
     initialize: function() {
-      _.bindAll(this, "render", "apply");
-      return this.model.bind('change', this.apply);
+      return this.model.bind('change', this.apply, this);
     },
     apply: function() {
       if (this.model.deleted || this.model.wanted) {

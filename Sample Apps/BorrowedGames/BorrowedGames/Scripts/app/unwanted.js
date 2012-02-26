@@ -42,9 +42,8 @@
   unwantedGamesView = Backbone.View.extend({
     el: "#unwantedGames",
     initialize: function() {
-      _.bindAll(this, 'render');
       this.unwantedGames = new unwantedGames();
-      this.unwantedGames.bind('reset', this.render);
+      this.unwantedGames.bind('reset', this.render, this);
       return this.unwantedGames.fetch();
     },
     refresh: function() {
@@ -71,8 +70,7 @@
   unwantedGameView = Backbone.View.extend({
     className: 'gameBoxSmall',
     initialize: function() {
-      _.bindAll(this, "render", "apply");
-      return this.model.bind('change', this.apply);
+      return this.model.bind('change', this.apply, this);
     },
     apply: function() {
       return $(this.el).fadeOut();

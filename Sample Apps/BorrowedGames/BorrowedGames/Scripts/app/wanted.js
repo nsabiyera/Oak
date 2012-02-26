@@ -45,9 +45,8 @@
   wantedGamesView = Backbone.View.extend({
     el: "#wantedGames",
     initialize: function() {
-      _.bindAll(this, 'render');
       this.wantedGames = new wantedGames();
-      this.wantedGames.bind('reset', this.render);
+      this.wantedGames.bind('reset', this.render, this);
       return this.wantedGames.fetch();
     },
     refresh: function() {
@@ -71,8 +70,7 @@
   wantedGameView = Backbone.View.extend({
     className: 'border',
     initialize: function() {
-      _.bindAll(this, "render", "apply");
-      return this.model.bind('change', this.apply);
+      return this.model.bind('change', this.apply, this);
     },
     apply: function() {
       return $(this.el).fadeOut();
