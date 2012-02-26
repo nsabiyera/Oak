@@ -90,7 +90,7 @@ namespace Oak.Tests.describe_Seed
             before = () =>
                 columns = new[]
                 {
-                    new { Id = "uniqueidentifier", PrimaryKey = true }
+                    seed.GuidId()
                 };
 
             it["contains primary key definition"] = () =>
