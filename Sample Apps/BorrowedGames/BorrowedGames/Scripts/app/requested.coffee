@@ -21,11 +21,7 @@ requestedGame = Backbone.Model.extend
     name += " (" + @console() + ")"
 
   givenGame: ->
-    alert("I have given him the game")
-
-
-
-
+    alert("TODO: I have given him the game")
 
 requestedGames = Backbone.Collection.extend
   model: requestedGame
@@ -60,8 +56,13 @@ requestedGamesView = Backbone.View.extend
 requestedGameView = Backbone.View.extend
   className: "border"
 
+  events:
+    "click .check" : "givenGame"
+
+  givenGame: -> @model.givenGame()
+
   render: ->
-    game = $.tmpl(@gameTemplate, { })
+    game = $.tmpl(@gameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
 
     $(@el).html(game)
 
@@ -69,9 +70,8 @@ requestedGameView = Backbone.View.extend
 
   gameTemplate:
     '
-    <div class="border">
-      <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
-          <a class="check" href="javascript:alert("todo");">I have given him the game</a>
-      </div>
-    <div style="width: 60%; font-size: 20px">@@amirrajan is requesting<br /> Star Wars: The Force Unleashed (XBOX360)</div>
+    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
+        <a class="check" href="javascript:;">I have given him the game</a>
+    </div>
+    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>
     '
