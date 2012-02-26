@@ -331,6 +331,15 @@
       <DependentUpon>preferred.coffee</DependentUpon>
     </Content>
     <Content Include="Scripts\app\profile.js" />
+    <Content Include="Scripts\app\requested.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>requested.js</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\app\requested.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>requested.coffee</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\wanted.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
       <LastGenOutput>wanted.js</LastGenOutput>

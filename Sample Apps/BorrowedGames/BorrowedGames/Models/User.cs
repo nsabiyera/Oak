@@ -168,7 +168,7 @@ namespace BorrowedGames.Models
         public IEnumerable<dynamic> RequestedGames()
         {
             return wantedGames.All(where: "FromUserId = @0", args: new object[] { _.Id })
-                .Select(UserGame)
+                .Select(RequestedGame)
                 .ToList();
         }
 
@@ -201,6 +201,18 @@ namespace BorrowedGames.Models
                 game.Name,
                 game.Console,
                 Owner = game.User().Select("Id", "Handle")
+            });
+        }
+
+        private dynamic RequestedGame(dynamic game)
+        {
+            game.GetMember("FromUser");
+            return new Gemini(new
+            {
+                game.Id,
+                game.Name,
+                game.Console,
+                RequestedBy = game.FromUser().Select("Id", "Handle")
             });
         }
     }

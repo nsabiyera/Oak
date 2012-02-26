@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
+using Massive;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
@@ -20,6 +21,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         dynamic comment;
 
         Blogs blogs;
+
+        Familys familys;
+
+        Followings followings;
 
         void before_each()
         {
@@ -146,6 +151,46 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                         (comment.Blog().BlogId as object).should_be(blogId as object);
                     };
                 };
+            };
+        }
+
+        void multiple_belongs_to_columns_referencing_the_same_table()
+        {
+            before = () =>
+            {
+                familys = new Familys();
+
+                followings = new Followings();
+
+                seed.PurgeDb();
+
+                seed.CreateTable("Familys", new dynamic[] 
+                { 
+                    seed.Id(),
+                    new { Name = "nvarchar(255)" }
+                }).ExecuteNonQuery();
+
+                seed.CreateTable("Followings", new dynamic[] 
+                { 
+                    seed.Id(),
+                    new { FamilyId = "int" },
+                    new { FollowingId = "int" }
+                }).ExecuteNonQuery();
+
+                var userId = new { Name = "jane" }.InsertInto("Familys");
+
+                var userId2 = new { Name = "john" }.InsertInto("Familys");
+
+                new { FamilyId = userId, FollowingId = userId2 }.InsertInto("Followings");
+            };
+
+            it["both belongs to references are accessible"] = () =>
+            {
+                var firstFollowing = followings.All().First();
+
+                (firstFollowing.Family().Name as string).should_be("jane");
+
+                (firstFollowing.Following().Name as string).should_be("john");
             };
         }
 

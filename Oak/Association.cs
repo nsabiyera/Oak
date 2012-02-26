@@ -181,8 +181,8 @@ namespace Oak
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
         {
             if (DiscardCache(options)) selectManyRelatedToCache = null;
-            
-            if(selectManyRelatedToCache != null) return selectManyRelatedToCache;
+
+            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
 
             var query = SelectClause(models.ToArray());
 
@@ -289,7 +289,7 @@ namespace Oak
         {
             if (DiscardCache(options)) selectManyRelatedToCache = null;
 
-            if(selectManyRelatedToCache != null) return selectManyRelatedToCache;
+            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
 
             var many = Repository.Query(SelectClause(models.ToArray())).ToList();
 
@@ -488,9 +488,15 @@ namespace Oak
         public string PrimaryKey { get; set; }
 
         public BelongsTo(DynamicRepository repository)
+            : this(repository, null)
+        {
+            
+        }
+
+        public BelongsTo(DynamicRepository repository, string named)
         {
             this.Repository = repository;
-            Named = Singular(repository);
+            Named = named ?? Singular(repository);
         }
 
         public void Init(dynamic model)
@@ -504,7 +510,7 @@ namespace Oak
         {
             List<dynamic> collection = new List<dynamic>();
 
-            models.ForEach(s => 
+            models.ForEach(s =>
             {
                 var belongsTo = s.GetMember(Named)(new { discardCache = false });
                 belongsTo.SetMember(s.GetType().Name, new DynamicFunction(() => s));
