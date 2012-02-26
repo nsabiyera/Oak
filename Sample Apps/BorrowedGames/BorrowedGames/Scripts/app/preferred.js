@@ -3,10 +3,9 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   preferredGamesUrl = "";
   this.preferred = {
-    init: function(urls, div) {
+    init: function(urls) {
       preferredGamesUrl = urls.preferredGamesUrl;
-      this.view = new preferredGamesView();
-      return div.html(this.view.el);
+      return this.view = new preferredGamesView();
     },
     getPreferredGames: function() {
       return this.view.refresh();
@@ -54,6 +53,7 @@
     }
   });
   preferredGamesView = Backbone.View.extend({
+    el: "#preferredGames",
     initialize: function() {
       _.bindAll(this, 'render');
       this.preferredGames = new libraries();

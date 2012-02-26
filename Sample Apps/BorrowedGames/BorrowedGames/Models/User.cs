@@ -206,13 +206,12 @@ namespace BorrowedGames.Models
 
         private dynamic RequestedGame(dynamic game)
         {
-            game.GetMember("FromUser");
             return new Gemini(new
             {
                 game.Id,
                 game.Name,
                 game.Console,
-                RequestedBy = game.FromUser().Select("Id", "Handle")
+                RequestedBy = game.RequestedBy().Select("Id", "Handle")
             });
         }
     }

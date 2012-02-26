@@ -25,7 +25,7 @@ namespace BorrowedGames.Models
 
             yield return new BelongsTo(users) { ForeignKey = "FromUserId" };
 
-            yield return new BelongsTo(users, named: "RequestedBy") {  };
+            yield return new BelongsTo(users) { Named = "RequestedBy" };
         }
     }
 }

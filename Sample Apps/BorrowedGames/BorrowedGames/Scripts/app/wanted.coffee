@@ -1,12 +1,9 @@
 wantedGamesUrl = ""
 
 this.wanted =
-  init: (urls, div) ->
+  init: (urls) ->
     wantedGamesUrl = urls.wantedGamesUrl
-
     @view = new wantedGamesView()
-
-    div.html(@view.el)
 
   getWantedGames: -> @view.refresh()
 
@@ -35,7 +32,7 @@ wantedGames = Backbone.Collection.extend
   url: -> wantedGamesUrl
 
 wantedGamesView = Backbone.View.extend
-  tagName: "span"
+  el: "#wantedGames"
 
   initialize: ->
     _.bindAll this, 'render'

@@ -28,10 +28,10 @@
         urls.requestedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "Requested" })';
         urls.unwantedGamesUrl = '@Url.RouteUrl(new { controller = "Games", action = "NotInterested" })';
 
-        wanted.init(urls, $("#wantedGames"));
+        wanted.init(urls);
 
-        preferred.init(urls, $("#preferredGames"));
+        preferred.init(urls);
 
-        unwanted.init(urls, $("#unwantedGames"));
+        unwanted.init(urls);
     });
 </script>

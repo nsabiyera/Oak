@@ -1,12 +1,10 @@
 unwantedGamesUrl = ""
 
 this.unwanted =
-  init: (urls, div) ->
+  init: (urls) ->
     unwantedGamesUrl = urls.unwantedGamesUrl
 
     @view = new unwantedGamesView()
-
-    div.html(@view.el)
 
   getUnwantedGames: -> @view.refresh()
 
@@ -33,6 +31,8 @@ unwantedGames = Backbone.Collection.extend
   url: -> unwantedGamesUrl
 
 unwantedGamesView = Backbone.View.extend
+  el: "#unwantedGames"
+
   initialize: ->
     _.bindAll this, 'render'
 

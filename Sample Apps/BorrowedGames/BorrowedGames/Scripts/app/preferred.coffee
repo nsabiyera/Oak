@@ -1,10 +1,10 @@
 preferredGamesUrl = ""
 
 this.preferred =
-  init: (urls, div) ->
+  init: (urls) ->
     preferredGamesUrl = urls.preferredGamesUrl
+
     @view = new preferredGamesView()
-    div.html(@view.el)
     
   getPreferredGames: -> @view.refresh()
 
@@ -45,6 +45,8 @@ libraries = Backbone.Collection.extend
   url: -> preferredGamesUrl
 
 preferredGamesView = Backbone.View.extend
+  el: "#preferredGames"
+
   initialize: ->
     _.bindAll this, 'render'
 

@@ -3,10 +3,9 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   wantedGamesUrl = "";
   this.wanted = {
-    init: function(urls, div) {
+    init: function(urls) {
       wantedGamesUrl = urls.wantedGamesUrl;
-      this.view = new wantedGamesView();
-      return div.html(this.view.el);
+      return this.view = new wantedGamesView();
     },
     getWantedGames: function() {
       return this.view.refresh();
@@ -44,7 +43,7 @@
     }
   });
   wantedGamesView = Backbone.View.extend({
-    tagName: "span",
+    el: "#wantedGames",
     initialize: function() {
       _.bindAll(this, 'render');
       this.wantedGames = new wantedGames();

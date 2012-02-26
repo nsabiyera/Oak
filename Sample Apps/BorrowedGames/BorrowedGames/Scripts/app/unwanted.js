@@ -3,10 +3,9 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   unwantedGamesUrl = "";
   this.unwanted = {
-    init: function(urls, div) {
+    init: function(urls) {
       unwantedGamesUrl = urls.unwantedGamesUrl;
-      this.view = new unwantedGamesView();
-      return div.html(this.view.el);
+      return this.view = new unwantedGamesView();
     },
     getUnwantedGames: function() {
       return this.view.refresh();
@@ -41,6 +40,7 @@
     }
   });
   unwantedGamesView = Backbone.View.extend({
+    el: "#unwantedGames",
     initialize: function() {
       _.bindAll(this, 'render');
       this.unwantedGames = new unwantedGames();
