@@ -155,6 +155,16 @@ namespace Oak
                 order++;
             });
         }
+
+        public object Id()
+        {
+            return new { Id = "int", Identity = true, PrimaryKey = true };
+        }
+
+        public object GuidId()
+        {
+            return new { Id = "uniqueidentifier", PrimaryKey = true };
+        }
     }
 }
 

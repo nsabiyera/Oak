@@ -139,8 +139,44 @@ namespace Oak.Tests.describe_DynamicModels
 
                 it["applies first filter then next filter"] = () => resultForWhere.Count().should_be(1);
             };
+
+            context["value being compared is a dynamic function"] = () =>
+            {
+                before = () =>
+                {
+                    models.Models.Add(
+                        new Gemini(new
+                        {
+                            LastName = new DynamicFunction(() => "Smith"),
+                            FirstName = new DynamicFunction(() => "Jane")
+                        }));
+
+                    models.Models.Add(
+                        new Gemini(new
+                        {
+                            LastName = new DynamicFunction(() => "Smith"),
+                            FirstName = new DynamicFunction(() => "John")
+                        }));
+
+                    models.Models.Add(
+                        new Gemini(new
+                        {
+                            LastName = new DynamicFunction(() => "Doe"),
+                            FirstName = new DynamicFunction(() => "John")
+                        }));
+                };
+
+                act = () => { };
+
+                it["applies first filter then next filter"] = () =>
+                {
+                    resultForWhere = models.Where(new { LastName = "Smith" }).Where(new { FirstName = "Jane" });
+
+                    resultForWhere.Count().should_be(1);
+                };
+            };
         }
-        
+
         void describe_ToList()
         {
             before = () =>

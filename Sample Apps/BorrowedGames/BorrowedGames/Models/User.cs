@@ -87,6 +87,15 @@ namespace BorrowedGames.Models
             wantedGames.Insert(_.Wants().New(new { gameId, fromUserId }));
         }
 
+        public void GameGiven(dynamic gameId, dynamic toUserId)
+        {
+            var wantedGame = wantedGames.All().First();
+
+            wantedGame.ReturnDate = DateTime.Today.AddMonths(1);
+
+            wantedGames.Update(wantedGame, wantedGame.Id);
+        }
+
         public void UndoNotInterestedGame(dynamic gameId)
         {
             notInterestedGames.Delete(GameInNotInterestedList(gameId).Id);
@@ -193,6 +202,11 @@ namespace BorrowedGames.Models
             return preferredGames;
         }
 
+        IEnumerable<dynamic> BorrowedGames()
+        {
+            return _.Wants().Where(new { IsBorrowed = true });
+        }
+
         private dynamic UserGame(dynamic game)
         {
             return new Gemini(new
@@ -211,7 +225,8 @@ namespace BorrowedGames.Models
                 game.Id,
                 game.Name,
                 game.Console,
-                RequestedBy = game.RequestedBy().Select("Id", "Handle")
+                RequestedBy = game.RequestedBy().Select("Id", "Handle"),
+                game.ReturnDate
             });
         }
     }

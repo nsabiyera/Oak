@@ -52,6 +52,8 @@ namespace Oak.Controllers
 
             AddConsoleToGames();
 
+            AddReturnDateToWantedGames();
+
             return new EmptyResult();
         }
 
@@ -116,6 +118,14 @@ namespace Oak.Controllers
             Seed.AddColumns("Games", new dynamic[] 
             { 
                 new { Console = "nvarchar(255)" }
+            }).ExecuteNonQuery();
+        }
+
+        private void AddReturnDateToWantedGames()
+        {
+            Seed.AddColumns("WantedGames", new dynamic[] 
+            { 
+                new { ReturnDate = "datetime" }
             }).ExecuteNonQuery();
         }
 

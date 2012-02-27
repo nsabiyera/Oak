@@ -27,5 +27,10 @@ namespace BorrowedGames.Models
 
             yield return new BelongsTo(users) { Named = "RequestedBy" };
         }
+
+        dynamic IsBorrowed()
+        {
+            return _.ReturnDate != null;
+        }
     }
 }

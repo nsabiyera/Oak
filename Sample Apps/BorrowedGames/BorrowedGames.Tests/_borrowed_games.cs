@@ -128,5 +128,10 @@ namespace BorrowedGames.Tests
 
             user.AddFriend(Users.Single(isFollowing));
         }
+
+        protected DateTime OneMonthFromToday()
+        {
+            return DateTime.Today.AddMonths(1);
+        }
     }
 }

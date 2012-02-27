@@ -54,6 +54,12 @@ namespace BorrowedGames.Controllers
             User().UndoNotInterestedGame(gameId);
         }
 
+        [HttpPost]
+        public void GameGiven(int gameId, int toUserId)
+        {
+            User().GameGiven(gameId, toUserId);
+        }
+
         public IEnumerable<dynamic> LinksForPreferredGames(IEnumerable<dynamic> games)
         {
             games.ForEach(s =>
