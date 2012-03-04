@@ -102,7 +102,7 @@ def build_coffee_scripts
 
   Dir.glob("BorrowedGames/Scripts/app/*.coffee").each do |f| 
     js = CoffeeScript.compile(File.open(f))
-    js.gsub! "\u0393\u00EA\u2310\u0393\u00F2\u00F9\u0393\u00F6\u00C9;", ""
+    js = remove_encoding js
     jsFileName = File.dirname(f) + "/" + File.basename(f, ".coffee") + ".js"
     file = File.new(jsFileName, "w")
     file.write(js)
@@ -110,4 +110,8 @@ def build_coffee_scripts
     @file_sync.sync jsFileName
     puts "compiled/synced #{jsFileName}" 
   end
+end
+
+def remove_encoding output
+  return output.gsub "\u0393\u00EA\u2310\u0393\u00F2\u00F9\u0393\u00F6\u00C9;", ""
 end

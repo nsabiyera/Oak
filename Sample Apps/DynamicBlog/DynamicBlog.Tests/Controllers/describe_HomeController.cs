@@ -9,6 +9,7 @@ using Oak.Controllers;
 
 namespace DynamicBlog.Tests.Controllers
 {
+    [Tag("describe_Blog")]
     class describe_HomeController : nspec
     {
         HomeController homeController;

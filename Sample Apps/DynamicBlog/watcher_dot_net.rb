@@ -183,11 +183,7 @@ class NSpecRunner < TestRunner
     just_file_name = File.basename(file, ".cs")
     
     if(contained_in_test_project(file))
-      return file.gsub("./", "")
-                 .gsub(root_folder(file), "")
-                 .gsub(/^\//, "")
-                 .gsub(".cs", "")
-                 .gsub("/", "\\.")
+      return just_file_name
     else
       return "describe_" + just_file_name
     end

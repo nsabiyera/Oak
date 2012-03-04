@@ -33,7 +33,7 @@ task :tests => :build do
   sh @test_runner_command
 end
 
-desc "run nspec tests"
+desc "run nspec tests tagged with Tag[\"wip\"]"
 task :wip => :build do
   sh @test_runner_command + " --tag wip"
 end

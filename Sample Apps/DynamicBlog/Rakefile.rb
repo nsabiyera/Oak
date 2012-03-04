@@ -65,7 +65,7 @@ task :tests => :build do
 end
 
 desc "synchronizes a file specfied to the website deployment directory"
-task :sync => :rake_dot_net_initialize do |t, args|
+task :sync, [:file] => :rake_dot_net_initialize do |t, args|
   @file_sync.sync args[:file]
 end
 
