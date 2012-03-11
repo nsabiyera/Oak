@@ -105,7 +105,14 @@ namespace Oak
 
             else hash = (model as object).ToExpando();
 
-            return options.All(s => hash[s.Key] == s.Value);
+            return options.All(s => s.Value == ValueFor(hash[s.Key]));
+        }
+
+        private dynamic ValueFor(dynamic value)
+        {
+            if (value is Delegate) return value();
+
+            return value;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)

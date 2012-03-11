@@ -11,7 +11,7 @@ namespace Oak
     {
         List<dynamic> referencedAssociations = new List<dynamic>();
 
-        public Associations(DynamicModel mixWith)
+        public Associations(dynamic mixWith)
         {
             if (!SupportsAssociations(mixWith)) return;
 
@@ -27,9 +27,9 @@ namespace Oak
             mixWith.SetMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
         }
 
-        public bool SupportsAssociations(DynamicModel mixWith)
+        public bool SupportsAssociations(dynamic mixWith)
         {
-            return mixWith.GetType().GetMethod("Associates") != null;
+            return mixWith.GetType().GetMethod("Associates") != null || mixWith.RespondsTo("Associates");
         }
 
         public dynamic AssociationNamed(dynamic collectionName)
@@ -117,7 +117,7 @@ namespace Oak
             this.Named = named ?? repository.GetType().Name;
         }
 
-        public void Init(DynamicModel model)
+        public void Init(dynamic model)
         {
             ForeignKey = ForeignKeyFor(model);
 
@@ -126,14 +126,14 @@ namespace Oak
             AddAssociationMethods(model, ForeignKey, toTable);
         }
 
-        private void AddAssociationMethods(DynamicModel model, string fromColumn, string toTable)
+        private void AddAssociationMethods(dynamic model, string fromColumn, string toTable)
         {
             model.SetMember(Named, Query(fromColumn, model));
 
             model.SetMember(Singular(Named) + "Ids", QueryIds(fromColumn, model));
         }
 
-        private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
+        private void AddNewAssociationMethod(DynamicModels collection, dynamic model)
         {
             collection.SetMember(
                 "New",
@@ -143,7 +143,7 @@ namespace Oak
                 }));
         }
 
-        private dynamic EntityFor(DynamicModel model, dynamic attributes)
+        private dynamic EntityFor(dynamic model, dynamic attributes)
         {
             var entity = new Gemini(attributes);
 
@@ -181,8 +181,8 @@ namespace Oak
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
         {
             if (DiscardCache(options)) selectManyRelatedToCache = null;
-            
-            if(selectManyRelatedToCache != null) return selectManyRelatedToCache;
+
+            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
 
             var query = SelectClause(models.ToArray());
 
@@ -247,7 +247,7 @@ namespace Oak
             this.Named = named ?? repository.GetType().Name;
         }
 
-        public void Init(DynamicModel model)
+        public void Init(dynamic model)
         {
             fromColumn = ForeignKeyFor(model);
 
@@ -258,7 +258,7 @@ namespace Oak
             AddAssociationMethod(model);
         }
 
-        private void AddAssociationMethod(DynamicModel model)
+        private void AddAssociationMethod(dynamic model)
         {
             model.SetMember(
                 Named,
@@ -269,7 +269,7 @@ namespace Oak
                 QueryIds(model));
         }
 
-        private DynamicFunctionWithParam Query(DynamicModel model)
+        private DynamicFunctionWithParam Query(dynamic model)
         {
             return (options) =>
             {
@@ -289,7 +289,7 @@ namespace Oak
         {
             if (DiscardCache(options)) selectManyRelatedToCache = null;
 
-            if(selectManyRelatedToCache != null) return selectManyRelatedToCache;
+            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
 
             var many = Repository.Query(SelectClause(models.ToArray())).ToList();
 
@@ -319,8 +319,8 @@ namespace Oak
                 .Replace("{using}", resolvedForeignKey)
                 .Replace("{inClause}", InClause(models));
         }
-        
-        private void AddNewAssociationMethod(DynamicModels collection, DynamicModel model)
+
+        private void AddNewAssociationMethod(DynamicModels collection, dynamic model)
         {
             collection.SetMember(
                 "New",
@@ -337,7 +337,7 @@ namespace Oak
             return Repository.Projection(entity);
         }
 
-        private DynamicFunction QueryIds(DynamicModel model)
+        private DynamicFunction QueryIds(dynamic model)
         {
             return () =>
             {
@@ -367,14 +367,14 @@ namespace Oak
             Named = named ?? Singular(Repository);
         }
 
-        public void Init(DynamicModel model)
+        public void Init(dynamic model)
         {
             model.SetMember(
                 Named,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
-        public string ForeignKeyName(DynamicModel model)
+        public string ForeignKeyName(dynamic model)
         {
             return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
         }
@@ -393,7 +393,7 @@ namespace Oak
             return new DynamicModels(collection);
         }
 
-        public dynamic GetModelOrCache(DynamicModel model, dynamic options)
+        public dynamic GetModelOrCache(dynamic model, dynamic options)
         {
             if (DiscardCache(options)) Model = null;
 
@@ -423,19 +423,19 @@ namespace Oak
             Named = named ?? Singular(Repository);
         }
 
-        public void Init(DynamicModel model)
+        public void Init(dynamic model)
         {
             model.SetMember(
                 Singular(Repository),
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
-        public string ForeignKeyName(DynamicModel model)
+        public string ForeignKeyName(dynamic model)
         {
             return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
         }
 
-        public dynamic GetModelOrCache(DynamicModel model, dynamic options)
+        public dynamic GetModelOrCache(dynamic model, dynamic options)
         {
             if (DiscardCache(options)) Model = null;
 
@@ -450,7 +450,7 @@ namespace Oak
             return Model;
         }
 
-        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, DynamicModel model)
+        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, dynamic model)
         {
             return () => Repository.Query(
                 @"
@@ -488,12 +488,18 @@ namespace Oak
         public string PrimaryKey { get; set; }
 
         public BelongsTo(DynamicRepository repository)
+            : this(repository, null)
         {
-            this.Repository = repository;
-            Named = Singular(repository);
+            
         }
 
-        public void Init(DynamicModel model)
+        public BelongsTo(DynamicRepository repository, string named)
+        {
+            this.Repository = repository;
+            Named = named ?? Singular(repository);
+        }
+
+        public void Init(dynamic model)
         {
             model.SetMember(
                 Named,
@@ -504,7 +510,7 @@ namespace Oak
         {
             List<dynamic> collection = new List<dynamic>();
 
-            models.ForEach(s => 
+            models.ForEach(s =>
             {
                 var belongsTo = s.GetMember(Named)(new { discardCache = false });
                 belongsTo.SetMember(s.GetType().Name, new DynamicFunction(() => s));
@@ -514,7 +520,7 @@ namespace Oak
             return new DynamicModels(collection);
         }
 
-        public dynamic GetModelOrCache(DynamicModel model, dynamic options)
+        public dynamic GetModelOrCache(dynamic model, dynamic options)
         {
             if (DiscardCache(options)) Model = null;
 

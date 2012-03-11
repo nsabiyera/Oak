@@ -84,6 +84,11 @@ namespace Oak
             get { return this as dynamic; }
         }
 
+        public dynamic This()
+        {
+            return _;
+        }
+
         public Gemini()
             : this(new { })
         {
