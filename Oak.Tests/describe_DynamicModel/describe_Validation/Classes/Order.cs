@@ -24,7 +24,7 @@ namespace Oak.Tests.describe_Validation.Classes
 
         public bool IsDigitalPurchase()
         {
-            return _.ItemType == "Digital";
+            return This().ItemType == "Digital";
         }
     }
 }
