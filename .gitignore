@@ -11,3 +11,5 @@ Sample Apps/BorrowedGames/BorrowedGames.Tests/obj/*
 Sample Apps/BorrowedGames/BorrowedGames/bin/*
 Sample Apps/BorrowedGames/BorrowedGames/obj/*
 Sample Apps/BorrowedGames/BorrowedGames.suo
+_Resharper.canopy
+*.ReSharper.user
