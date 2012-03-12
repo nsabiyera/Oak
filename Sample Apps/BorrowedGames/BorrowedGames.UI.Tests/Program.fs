@@ -24,7 +24,7 @@ let reset _ =
 describe "register user"
 reset()
 url "http://localhost:3000"
-find "register" |> click
+click "a[href='/Account/Register']"
 write "#Email" "user@example.com"
 write "#Password" "Password"
 write "#PasswordConfirmation" "Password"
