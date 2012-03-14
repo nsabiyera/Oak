@@ -38,13 +38,14 @@ namespace Oak.Tests
                 objectToConvert.Double = (double)100;
                 objectToConvert.Guid = Guid.Empty;
                 objectToConvert.Decimal = (decimal)15;
+                objectToConvert.StringAsNull = null as string;
             };
 
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts expando"] = () =>
-                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
-                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15));
+                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7} }}"
+                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null"));
         }
 
         void describe_gemini_to_json()

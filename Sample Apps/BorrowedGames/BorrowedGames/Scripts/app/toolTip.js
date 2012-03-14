@@ -1,18 +1,14 @@
 (function() {
   var $createToolTip, toolTipTemplate, toolTips;
-
   toolTipTemplate = '\
   <div class="border dropshadow title" style="padding: 10px">{{html message}}</div>\
   ';
-
   toolTips = {};
-
   $createToolTip = function(message) {
     return $.tmpl(toolTipTemplate, {
       message: message
     });
   };
-
   this.toolTip = {
     init: function($element, key, startingMessage, endingMessage, left, top) {
       var $toolTip;
@@ -34,7 +30,9 @@
       $element.click(function() {
         if ($toolTip) {
           $toolTip.fadeOut(function() {
-            if ($toolTip) return $toolTip.remove();
+            if ($toolTip) {
+              return $toolTip.remove();
+            }
           });
         }
         return toolTips[key].disable();
@@ -60,11 +58,12 @@
       }, function() {
         if ($toolTip) {
           return $toolTip.fadeOut(function() {
-            if ($toolTip) return $toolTip.remove();
+            if ($toolTip) {
+              return $toolTip.remove();
+            }
           });
         }
       });
     }
   };
-
 }).call(this);

@@ -1,6 +1,7 @@
 ﻿// Learn more about F# at http://fsharp.net
 
-open firefox
+open runner
+open canopy
 
 type args = { Email : string; Password : string; PasswordConfirmation : string }
 
@@ -21,16 +22,32 @@ let reset _ =
     seed.All() |> ignore
     ()
 
-describe "register user"
-reset()
-url "http://localhost:3000"
-click "a[href='/Account/Register']"
-write "#Email" "user@example.com"
-write "#Password" "Password"
-write "#PasswordConfirmation" "Password"
-click "input[value='register']"
-url "http://localhost:3000/account/logoff"
+start "firefox"
 
+let registerUser = fun email ->
+    url "http://localhost:3000"
+    on "http://localhost:3000/Account/LogOn?ReturnUrl=%2f"
+    click "a[href='/Account/Register']"
+    on "http://localhost:3000/Account/Register"
+    write "#Email" email
+    write "#Password" "Password"
+    write "#PasswordConfirmation" "Password"
+    click "input[value='register']"
+    on "http://localhost:3000/"
+    url "http://localhost:3000/account/logoff"
+    on "http://localhost:3000/account/logoff"
+
+test(fun _ -> registerUser "user1@example.com")
+
+test(fun _ ->
+    describe "request games"
+    reset()
+    registerUser "user1@example.com"
+    registerUser "user2@example.com")
+
+run()
+ 
+quit()
 
 //describe "login"
 //reset()

@@ -3,5 +3,5 @@ website_deploy_directory: c:\iisexpress\dynamicblog
 solution_name: DynamicBlog
 mvc_project: DynamicBlog
 test_project: DynamicBlog.Tests
-test_runner: ./packages/nspec.0.9.58/tools/NSpecRunner.exe
+test_runner: ./packages/nspec.0.9.59/tools/NSpecRunner.exe
 iis_express: C:\Program Files (x86)\IIS Express

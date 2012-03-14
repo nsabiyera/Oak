@@ -14,7 +14,7 @@ namespace Oak
         {
             if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>);
 
-            if(o is ExpandoObject) return Convert(o as IDictionary<string, object>);
+            if (o is ExpandoObject) return Convert(o as IDictionary<string, object>);
 
             if (o is Gemini) return Convert(PublicAndDynamicProperties(o));
 
@@ -25,7 +25,7 @@ namespace Oak
 
         private static IDictionary<string, object> PublicAndDynamicProperties(dynamic o)
         {
-            Dictionary<string, object> properties = new Dictionary<string,object>();
+            Dictionary<string, object> properties = new Dictionary<string, object>();
 
             (o.Hash() as IDictionary<string, object>).ForEach(kvp => properties.Add(kvp.Key, kvp.Value));
 
@@ -73,6 +73,8 @@ namespace Oak
 
         public static string Stringify(dynamic o)
         {
+            if (IsNull(o)) return "null";
+
             if (IsJsonString(o)) return "\"" + o + "\"";
 
             if (IsJsonNumeric(o)) return o.ToString();
@@ -88,16 +90,16 @@ namespace Oak
 
         public static bool IsJsonString(dynamic o)
         {
-            return o is string || 
-                o.GetType() == typeof(DateTime) || 
-                o.GetType() == typeof(Char) || 
+            return o is string ||
+                o.GetType() == typeof(DateTime) ||
+                o.GetType() == typeof(Char) ||
                 o.GetType() == typeof(Guid);
         }
 
         public static bool IsJsonNumeric(dynamic o)
         {
-            return o.GetType() == typeof(Decimal) || 
-                o.GetType() == typeof(int) || 
+            return o.GetType() == typeof(Decimal) ||
+                o.GetType() == typeof(int) ||
                 o.GetType() == typeof(double);
         }
 
@@ -113,11 +115,17 @@ namespace Oak
 
         public static bool CanConvertValue(KeyValuePair<string, object> kvp)
         {
-            return IsJsonString(kvp.Value) || 
-                   IsJsonNumeric(kvp.Value) || 
-                   IsList(kvp.Value) || 
+            return IsNull(kvp.Value) ||
+                   IsJsonString(kvp.Value) ||
+                   IsJsonNumeric(kvp.Value) ||
+                   IsList(kvp.Value) ||
                    IsBool(kvp.Value) ||
                    kvp.Value is Gemini;
+        }
+
+        private static bool IsNull(object value)
+        {
+            return value == null;
         }
 
         public static bool CanConvertObject(dynamic o)

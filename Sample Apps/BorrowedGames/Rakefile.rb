@@ -35,6 +35,9 @@ end
 desc "builds and deploys website to directories iis express will use to run app"
 task :default => [:build, :deploy]
 
+desc "run ui automation tests"
+task :ui => [:build, :ui_tests]
+
 desc "builds the solution"
 task :build => :rake_dot_net_initialize do
   @sln.build @solution_name 
@@ -114,4 +117,9 @@ end
 
 def remove_encoding output
   return output.gsub "\u0393\u00EA\u2310\u0393\u00F2\u00F9\u0393\u00F6\u00C9;", ""
+end
+
+desc "runs ui tests (without building)"
+task :ui_tests do
+  sh "BorrowedGames.UI.Tests\\bin\\Debug\\BorrowedGames.UI.Tests.exe"
 end

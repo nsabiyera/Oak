@@ -22,7 +22,7 @@ namespace BorrowedGames.Controllers
 
         public dynamic Requested()
         {
-            return Json(User().RequestedGames());
+            return Json((User().RequestedGames() as IEnumerable<dynamic>).ToList());
         }
 
         public dynamic NotInterested()

@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NSpec, Version=0.9.58.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\nspec.0.9.58\lib\NSpec.dll</HintPath>
+    <Reference Include="NSpec, Version=0.9.59.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\nspec.0.9.59\lib\NSpec.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -161,7 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="specwatchr-usage.txt" />
