@@ -73,6 +73,8 @@ namespace Oak
 
         public static string Stringify(dynamic o)
         {
+            if (IsNull(o)) return "null";
+
             if (IsJsonString(o)) return "\"" + o + "\"";
 
             if (IsJsonNumeric(o)) return o.ToString();
@@ -113,11 +115,17 @@ namespace Oak
 
         public static bool CanConvertValue(KeyValuePair<string, object> kvp)
         {
-            return IsJsonString(kvp.Value) || 
+            return IsNull(kvp.Value) ||
+                   IsJsonString(kvp.Value) || 
                    IsJsonNumeric(kvp.Value) || 
                    IsList(kvp.Value) || 
                    IsBool(kvp.Value) ||
                    kvp.Value is Gemini;
+        }
+
+        private static bool IsNull(object value)
+        {
+            return value == null;
         }
 
         public static bool CanConvertObject(dynamic o)
