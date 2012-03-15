@@ -36,6 +36,10 @@ let url = fun address -> canopy.url (baseUrl + address)
 
 let on = fun address -> canopy.on(baseUrl + address)
 
+let logOff = fun _ ->
+    url "/account/logoff"
+    on "/account/logoff"
+
 let registerUser = fun email ->
     url "/"
     on "/Account/LogOn?ReturnUrl=%2f"
@@ -46,8 +50,7 @@ let registerUser = fun email ->
     write "#PasswordConfirmation" "Password"
     click "input[value='register']"
     on "/"
-    url "/account/logoff"
-    on "/account/logoff"
+    logOff()
 
 let loginAs = fun email ->
     url "/"
