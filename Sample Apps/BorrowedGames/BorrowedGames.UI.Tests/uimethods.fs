@@ -34,15 +34,19 @@ let baseUrl = "http://localhost:3000";
 
 let url = fun address -> canopy.url (baseUrl + address)
 
-let on = fun address -> canopy.on(baseUrl + address)
+let on = fun address -> canopy.on (baseUrl + address)
 
 let logOff = fun _ ->
     url "/account/logoff"
     on "/account/logoff"
 
-let registerUser = fun email ->
+let goToSignIn = fun _ ->
     url "/"
     on "/Account/LogOn?ReturnUrl=%2f"
+    ()
+
+let registerUser = fun email ->
+    goToSignIn()
     click "a[href='/Account/Register']"
     on "/Account/Register"
     write "#Email" email
@@ -53,8 +57,7 @@ let registerUser = fun email ->
     logOff()
 
 let loginAs = fun email ->
-    url "/"
-    on "/Account/LogOn?ReturnUrl=%2f"
+    goToSignIn()
     write "#Email" email
     write "#Password" "Password"
     click "input[value='login']"
