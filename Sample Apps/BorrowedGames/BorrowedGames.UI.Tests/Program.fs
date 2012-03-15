@@ -5,6 +5,8 @@ open canopy
 
 type args = { Email : string; Password : string; PasswordConfirmation : string }
 
+type game = { Name : string; Console : string }
+
 let given_user email password = 
     let registration = 
         new BorrowedGames.Models.Registration(
@@ -22,6 +24,11 @@ let reset _ =
     seed.All() |> ignore
     ()
 
+let stageGame = fun gameName ->
+    let repo = new BorrowedGames.Models.Games()
+    repo.Insert({ Name = gameName; Console = "XBOX360" }) |> ignore
+    ()
+
 start "firefox"
 
 let registerUser = fun email ->
@@ -37,17 +44,37 @@ let registerUser = fun email ->
     url "http://localhost:3000/account/logoff"
     on "http://localhost:3000/account/logoff"
 
-test(fun _ -> registerUser "user1@example.com")
+let loginAs = fun email ->
+    url "http://localhost:3000"
+    on "http://localhost:3000/Account/LogOn?ReturnUrl=%2f"
+    write "#Email" email
+    write "#Password" "Password"
+    click "input[value='login']"
+    on "http://localhost:3000/"
+
+let addGame = fun name ->
+    click "#showLibrary"
+    write "#gameToAdd" name
+    click "table tbody tr"
+    click "#closeLibraryTop"
+
+//test(fun _ -> 
+//    describe "registering a user"
+//    reset()
+//    registerUser "user1@example.com")
 
 test(fun _ ->
     describe "request games"
     reset()
+    stageGame "Dark Souls"
     registerUser "user1@example.com"
-    registerUser "user2@example.com")
+    registerUser "user2@example.com"
+    loginAs "user1@example.com"
+    addGame "Dark Souls")
 
 run()
  
-quit()
+//quit()
 
 //describe "login"
 //reset()
