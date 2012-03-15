@@ -4,6 +4,8 @@ open canopy
 
 open uimethods
 
+open setupmethods
+
 start "firefox"
 
 test(fun _ -> 
@@ -18,7 +20,9 @@ test(fun _ ->
     registerUser "user1@example.com"
     registerUser "user2@example.com"
     loginAs "user1@example.com"
-    addGame "Dark Souls")
+    addGame "Dark Souls"
+    logOff()
+    loginAs "user2@example.com")
 
 run()
  
