@@ -19,7 +19,7 @@ namespace Oak
                     //get the first connection string that isn't LocalSqlServer
                     foreach (ConnectionStringSettings config in ConfigurationManager.ConnectionStrings)
                     {
-                        if (config.Name != "LocalSqlServer")
+                        if (config.Name != "LocalSqlServer" && config.Name != "LocalMySqlServer")
                         {
                             return config.ConnectionString;
                         }

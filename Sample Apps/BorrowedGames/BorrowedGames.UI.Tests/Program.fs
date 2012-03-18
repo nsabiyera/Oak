@@ -26,4 +26,4 @@ test(fun _ ->
 
 run()
  
-quit() |> ignore
+quit()
