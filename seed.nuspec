@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>seed</id> 
-    <version>1.0.3</version> 
+    <version>1.0.4</version> 
     <authors>Amir Rajan</authors>
     <description>Dsl for generating sql that creates schema and inserts records.</description> 
     <language>en-US</language>
