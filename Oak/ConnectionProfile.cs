@@ -14,16 +14,12 @@ namespace Oak
             get
             {
                 //feel free to change this and just return your connection string
-                if (string.IsNullOrEmpty(connectionString))
+                if (!string.IsNullOrEmpty(connectionString)) return connectionString;
+                    
+                //get the first connection string that is defined in project's configuration file (excludes machine.config and company)
+                foreach (ConnectionStringSettings config in ConfigurationManager.ConnectionStrings)
                 {
-                    //get the first connection string that isn't LocalSqlServer
-                    foreach (ConnectionStringSettings config in ConfigurationManager.ConnectionStrings)
-                    {
-                        if (config.Name != "LocalSqlServer")
-                        {
-                            return config.ConnectionString;
-                        }
-                    }
+                    if (DefinedInProjectConfigFile(config)) return config.ConnectionString;
                 }
 
                 return connectionString;
@@ -32,6 +28,11 @@ namespace Oak
             {
                 connectionString = value;
             }
+        }
+
+        bool DefinedInProjectConfigFile(ConnectionStringSettings config)
+        {
+            return config.ElementInformation.Source != null;
         }
     }
 }
