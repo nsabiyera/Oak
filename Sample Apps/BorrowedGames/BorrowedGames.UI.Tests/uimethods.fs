@@ -46,3 +46,4 @@ let addGame = fun name ->
     System.Threading.Thread.Sleep(5000)
     click "table tbody tr"
     click "#closeLibraryTop"
+    on "/"
