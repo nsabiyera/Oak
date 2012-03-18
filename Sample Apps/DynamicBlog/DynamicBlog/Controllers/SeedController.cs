@@ -61,7 +61,7 @@ namespace Oak.Controllers
                     new { Body = "nvarchar(max)" }
                 });
 
-            createCommand.ExecuteNonQuery(ConnectionProfile);
+            createCommand.ExecuteNonQuery();
         }
 
         public void CreateComments()
@@ -104,7 +104,7 @@ namespace Oak.Controllers
                 {
                     Title = blog.Title,
                     Body = blog.Body
-                }.InsertInto("Blogs", connectionProfile: ConnectionProfile);
+                }.InsertInto("Blogs");
             }
 
             return new EmptyResult();
