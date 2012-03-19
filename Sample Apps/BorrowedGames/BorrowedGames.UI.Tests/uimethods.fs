@@ -14,12 +14,10 @@ let on = fun address -> canopy.on (baseUrl + address)
 
 let logOff = fun _ ->
     url "/account/logoff"
-    on "/account/logoff"
     ()
 
 let goToSignIn = fun _ ->
     url "/"
-    on "/Account/LogOn?ReturnUrl=%2f"
     ()
 
 let registerUser = fun email ->
@@ -43,6 +41,6 @@ let loginAs = fun email ->
 let addGame = fun name ->
     click "#showLibrary"
     write "#gameToAdd" name
-    System.Threading.Thread.Sleep(5000)
-    click "table tbody tr"
+    System.Threading.Thread.Sleep(100)
+    click "table tbody tr td"
     click "#closeLibraryTop"
