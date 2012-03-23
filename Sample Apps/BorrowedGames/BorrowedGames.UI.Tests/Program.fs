@@ -8,6 +8,12 @@ open setupmethods
 
 start "firefox"
 
+compareTimeout <- 600.0
+
+elementTimeout <- 600.0
+
+pageTimeout <- 600.0
+
 test(fun _ -> 
     describe "registering a user"
     reset()
