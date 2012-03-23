@@ -41,6 +41,5 @@ let loginAs = fun email ->
 let addGame = fun name ->
     click "#showLibrary"
     write "#gameToAdd" name
-    System.Threading.Thread.Sleep(100)
     click "table tbody tr td"
     click "#closeLibraryTop"
