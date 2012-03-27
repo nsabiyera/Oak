@@ -8,27 +8,27 @@ open setupmethods
 
 start "firefox"
 
-compareTimeout <- 600.0
+compareTimeout <- 10.0
 
-elementTimeout <- 600.0
+elementTimeout <- 10.0
 
-pageTimeout <- 600.0
+pageTimeout <- 10.0
 
 test(fun _ -> 
     describe "registering a user"
     reset()
-    registerUser "user1@example.com")
+    registerUser "user1")
 
-test(fun _ ->
-    describe "request games"
-    reset()
-    stageGame "Dark Souls"
-    registerUser "user1@example.com"
-    registerUser "user2@example.com"
-    loginAs "user1@example.com"
-    addGame "Dark Souls"
-    logOff()
-    loginAs "user2@example.com")
+//test(fun _ ->
+//    describe "request games"
+//    reset()
+//    stageGame "Dark Souls"
+//    registerUser "user1"
+//    registerUser "user2"
+//    loginAs "user1"
+//    addGame "Dark Souls"
+//    logOff()
+//    loginAs "user2")
 
 run()
  
