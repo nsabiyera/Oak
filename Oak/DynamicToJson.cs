@@ -34,6 +34,8 @@ namespace Oak
                 .GetProperties()
                 .ForEach<PropertyInfo>(kvp => properties.Add(kvp.Name, kvp.GetValue(o, null)));
 
+            if (properties.ContainsKey("Expando")) properties.Remove("Expando");
+
             return properties;
         }
 
@@ -109,7 +111,7 @@ namespace Oak
                    IsJsonNumeric(kvp.Value) || 
                    IsList(kvp.Value) || 
                    IsBool(kvp.Value) ||
-                   kvp.Value is Gemini;
+                   CanConvertObject(kvp.Value);
         }
 
         private static bool IsNull(object value)
@@ -128,6 +130,8 @@ namespace Oak
             if (IsAnonymous(o)) return true;
 
             if (o is string) return false;
+
+            if (o is Delegate) return false;
 
             return true;
         }

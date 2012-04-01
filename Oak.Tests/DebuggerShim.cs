@@ -1,7 +1,9 @@
 ﻿using System;
+using NUnit.Framework;
 using NSpec.Domain;
 using System.Reflection;
 using NSpec;
+using NSpec.Domain.Formatters;
 using System.Linq;
 
 //[TestFixture]

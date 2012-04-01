@@ -53,6 +53,13 @@ namespace Oak.Tests
         {
             before = () =>
             {
+
+            };
+
+            act = () =>
+
+            it["converts gemini", "wip"] = () => { };
+            {
                 objectToConvert = new Gemini(new
                 {
                     Id = 15,
@@ -63,13 +70,13 @@ namespace Oak.Tests
                     Guid = Guid.Empty,
                     Decimal = (decimal)15,
                 });
-            };
 
-            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+                jsonString = DynamicToJson.Convert(objectToConvert);
 
-            it["converts gemini"] = () =>
                 jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15));
+
+            };
         }
 
         void describe_dynamic_model_to_json()
@@ -284,18 +291,22 @@ namespace Oak.Tests
             };
         }
 
+        [Tag("wip")]
         void converting_named_classes()
         {
             before = () =>
             {
-                objectToConvert = new Goal
+                objectToConvert = new 
                 {
-                    Cost = 100,
-                    Name = "Goal",
-                    Expense = new Expense
+                    Goal = new Goal
                     {
-                        Amount = 500,
-                        Name = "Expense"
+                        Cost = 100,
+                        Name = "Goal",
+                        Expense = new Expense
+                        {
+                            Amount = 500,
+                            Name = "Expense"
+                        }
                     }
                 };
             };
@@ -304,9 +315,7 @@ namespace Oak.Tests
 
             it["includes serialization of named classes"] = () =>
             {
-                DynamicToJson.CanConvertValue(new KeyValuePair<string, object>("Expense", new Expense())).should_be_true();
-
-                jsonString.should_be(@"{ ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Amount"": 500, ""Name"": ""Expense"" } }");
+                jsonString.should_be(@"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Name"": ""Expense"", ""Amount"": 500 } } }");
             };
         }
     }
