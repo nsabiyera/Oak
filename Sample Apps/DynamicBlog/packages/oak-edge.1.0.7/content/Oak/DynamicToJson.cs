@@ -20,7 +20,7 @@ namespace Oak
 
             if (IsJsonString(o) || IsJsonNumeric(o) || IsBool(o)) return Stringify(o);
 
-            return Convert(ToHash(o));
+            return Convert((o as object).ToExpando());
         }
 
         private static IDictionary<string, object> PublicAndDynamicProperties(dynamic o)
@@ -33,6 +33,8 @@ namespace Oak
                 .GetType()
                 .GetProperties()
                 .ForEach<PropertyInfo>(kvp => properties.Add(kvp.Name, kvp.GetValue(o, null)));
+
+            if (properties.ContainsKey("Expando")) properties.Remove("Expando");
 
             return properties;
         }
@@ -57,15 +59,6 @@ namespace Oak
             return Stringify(kvp.Key) + ": " + Stringify(kvp.Value);
         }
 
-        private static IDictionary<string, object> ToHash(object o)
-        {
-            var dictionary = (o as object).ToExpando() as IDictionary<string, object>;
-
-            dictionary.Where(s => s.Value is IEnumerable<dynamic>).ForEach(s => dictionary[s.Key] = ToList(s.Value));
-
-            return dictionary;
-        }
-
         private static List<dynamic> ToList(dynamic enumerable)
         {
             return (enumerable as IEnumerable<dynamic>).ToList();
@@ -83,9 +76,7 @@ namespace Oak
 
             if (IsBool(o)) return o.ToString().ToLower();
 
-            if (o is Gemini) return Convert(o as object);
-
-            return o.ToString();
+            return Convert(o as object);
         }
 
         public static bool IsJsonString(dynamic o)
@@ -120,7 +111,7 @@ namespace Oak
                    IsJsonNumeric(kvp.Value) || 
                    IsList(kvp.Value) || 
                    IsBool(kvp.Value) ||
-                   kvp.Value is Gemini;
+                   CanConvertObject(kvp.Value);
         }
 
         private static bool IsNull(object value)
@@ -138,7 +129,11 @@ namespace Oak
 
             if (IsAnonymous(o)) return true;
 
-            return false;
+            if (o is string) return false;
+
+            if (o is Delegate) return false;
+
+            return true;
         }
 
         //http://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
