@@ -282,5 +282,35 @@ namespace Oak.Tests
                 jsonString.should_be(@"{ ""Id"": 20, ""Title"": ""SomeTitle"", ""Name"": ""SomeName"" }");
             };
         }
+
+        void converting_anonymous_type_containing_named_types()
+        {
+            before = () =>
+            {
+                objectToConvert = new
+                {
+                    Goal = new Goal { Cost = 100, Name = "Goal" }
+                };
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["includes serialization of named classes"] = () =>
+            {
+                jsonString.should_be(@"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100 } }");
+            };
+        }
+    }
+
+    public class Goal
+    {
+        public string Name { get; set; }
+        public decimal Cost { get; set; }
+    }
+
+    public class Expense
+    {
+        public string Name { get; set; }
+        public decimal Amount { get; set; }
     }
 }
