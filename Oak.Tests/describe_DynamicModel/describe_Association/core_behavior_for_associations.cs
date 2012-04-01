@@ -59,7 +59,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         dynamic comment;
 
-        [Tag("wip")]
         void associations_can_be_added_directly_to_gemini()
         {
             before = () =>
