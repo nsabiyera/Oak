@@ -35,7 +35,7 @@ let registerUser = fun userName ->
     click "#handle"
     write "#handleTextBox" userName
     click "input[value='update handle']"
-    ".growlinfo" == ("Your handle has been updated to @nameless" + userName + ".")
+    ".growlinfo" == ("Your handle has been updated to @" + userName + ".")
     logOff()
 
 let loginAs = fun userName ->
@@ -50,3 +50,12 @@ let addGame = fun name ->
     write "#gameToAdd" name
     click "table tbody tr td"
     click "#closeLibraryTop"
+
+let follow = fun name ->
+    click "#showFriends"
+    write "#handleToAdd" name
+    click "#addHandle"
+    click "#closeFriendsTop"
+
+let request = fun gameName ->
+    ()

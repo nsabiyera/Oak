@@ -19,17 +19,23 @@ test(fun _ ->
     reset()
     registerUser "user1")
 
-//test(fun _ ->
-//    describe "request games"
-//    reset()
-//    stageGame "Dark Souls"
-//    registerUser "user1"
-//    registerUser "user2"
-//    loginAs "user1"
-//    addGame "Dark Souls"
-//    logOff()
-//    loginAs "user2")
+wip(fun _ ->
+    describe "request games"
+    reset()
+    stageGame "Dark Souls"
+    stageGame "Mirror's Edge"
+    registerUser "user1"
+    registerUser "user2"
+    loginAs "user1"
+    addGame "Mirror's Edge"
+    addGame "Dark Souls"
+    logOff()
+    loginAs "user2"
+    follow "user1"
+    request "Dark Souls")
 
 run()
+
+
  
 quit()
