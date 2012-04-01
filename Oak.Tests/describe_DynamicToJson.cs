@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace Oak.Tests
 {
@@ -283,13 +284,19 @@ namespace Oak.Tests
             };
         }
 
-        void converting_anonymous_type_containing_named_types()
+        void converting_named_classes()
         {
             before = () =>
             {
-                objectToConvert = new
+                objectToConvert = new Goal
                 {
-                    Goal = new Goal { Cost = 100, Name = "Goal" }
+                    Cost = 100,
+                    Name = "Goal",
+                    Expense = new Expense
+                    {
+                        Amount = 500,
+                        Name = "Expense"
+                    }
                 };
             };
 
@@ -297,7 +304,9 @@ namespace Oak.Tests
 
             it["includes serialization of named classes"] = () =>
             {
-                jsonString.should_be(@"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100 } }");
+                DynamicToJson.CanConvertValue(new KeyValuePair<string, object>("Expense", new Expense())).should_be_true();
+
+                jsonString.should_be(@"{ ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Amount"": 500, ""Name"": ""Expense"" } }");
             };
         }
     }
@@ -305,12 +314,16 @@ namespace Oak.Tests
     public class Goal
     {
         public string Name { get; set; }
+
         public decimal Cost { get; set; }
+
+        public Expense Expense { get; set; }
     }
 
     public class Expense
     {
         public string Name { get; set; }
+
         public decimal Amount { get; set; }
     }
 }
