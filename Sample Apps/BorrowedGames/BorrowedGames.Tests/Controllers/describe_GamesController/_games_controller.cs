@@ -43,9 +43,11 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
             return PreferredGames().First();
         }
 
-        public dynamic FirstRequestedGame()
+        public dynamic FirstRequestedGame(Func<dynamic, bool> where = null)
         {
-            return RequestedGames().First();
+            where = where ?? new Func<dynamic, bool>(d => true);
+
+            return RequestedGames().First(where);
         }
 
         public dynamic FirstNotInterestedGame()

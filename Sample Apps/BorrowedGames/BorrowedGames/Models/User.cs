@@ -89,7 +89,7 @@ namespace BorrowedGames.Models
 
         public void GameGiven(dynamic gameId, dynamic toUserId)
         {
-            var wantedGame = wantedGames.All().First();
+            var wantedGame = wantedGames.SingleWhere("GameId = @0", new object[] { gameId });
 
             wantedGame.ReturnDate = DateTime.Today.AddMonths(1);
 
@@ -204,7 +204,9 @@ namespace BorrowedGames.Models
 
         IEnumerable<dynamic> BorrowedGames()
         {
-            return _.Wants().Where(new { IsBorrowed = true });
+            return (_.Wants().Where(new { IsBorrowed = true }) as IEnumerable<dynamic>)
+                .Select(RequestedGame)
+                .ToList();
         }
 
         private dynamic UserGame(dynamic game)
@@ -222,7 +224,7 @@ namespace BorrowedGames.Models
         {
             return new Gemini(new
             {
-                game.Id,
+                Id = game.GameId,
                 game.Name,
                 game.Console,
                 RequestedBy = game.RequestedBy().Select("Id", "Handle"),

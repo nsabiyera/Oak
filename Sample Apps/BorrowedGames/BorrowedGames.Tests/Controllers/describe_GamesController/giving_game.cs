@@ -3,25 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NSpec;
+using BorrowedGames.Models;
 
 namespace BorrowedGames.Tests.Controllers.describe_GamesController
 {
-    [Tag("describe_User,describe_WantedGame")]
+    [Tag("describe_User,describe_WantedGame,describe_GamesController")]
     class giving_game : _games_controller
     {
         void a_game_has_been_requested()
         {
-            before = () => GivenUserWantsGame(friendId, fromUser: currentUserId, game: mirrorsEdgeId);
+            before = () =>
+            {
+                GivenUserWantsGame(friendId, fromUser: currentUserId, game: gearsOfWarId);
+
+                GivenUserWantsGame(friendId, fromUser: currentUserId, game: mirrorsEdgeId);
+            };
 
             context["the requested game has been given"] = () =>
             {
-                act = () => controller.GameGiven(mirrorsEdgeId, friendId);
+                act = () => controller.GameGiven(gearsOfWarId, friendId);
 
                 it["the games return date is set to one month from today"] = () =>
-                ((DateTime)FirstRequestedGame().ReturnDate).should_be(OneMonthFromToday());
+                {
+                    var game = RequestedGames().First(s => s.Id == gearsOfWarId);
+
+                    ((DateTime?)FirstRequestedGame(d => d.Id == gearsOfWarId).ReturnDate).should_be(OneMonthFromToday());
+                };
 
                 it["the game is considered borrowed"] = () =>
-                    ((int)FirstBorrowedGame(friendId).Id).should_be(mirrorsEdgeId);
+                    ((int)FirstBorrowedGame(friendId).Id).should_be(gearsOfWarId);
 
                 it["the user who gave the game doesn't have any borrowed games"] = () =>
                     BorrowedGames(currentUserId).Count().should_be(0);
