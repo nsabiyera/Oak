@@ -33,7 +33,7 @@ wip(fun _ ->
     requestFirstGame()
     logOff()
     loginAs "user1"
-    giveRequestedGame())
+    giveFirstRequestedGame())
 
 run()
 

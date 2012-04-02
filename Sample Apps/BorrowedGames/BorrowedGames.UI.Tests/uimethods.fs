@@ -12,11 +12,11 @@ let url = fun address -> canopy.url (baseUrl + address)
 
 let on = fun address -> canopy.on (baseUrl + address)
 
-let logOff = fun _ ->
+let logOff _ =
     url "/account/logoff"
     ()
 
-let goToSignIn = fun _ ->
+let goToSignIn _ =
     url "/"
     ()
 
@@ -30,10 +30,10 @@ let writeWait css value =
     sleep 1 
     ()
 
-let email = fun userName ->
+let email userName =
     userName + "@example.com"
 
-let registerUser = fun userName ->
+let registerUser userName =
     goToSignIn()
     click "a[href='/Account/Register']"
     on "/Account/Register"
@@ -48,30 +48,30 @@ let registerUser = fun userName ->
     ".growlinfo" == ("Your handle has been updated to @" + userName + ".")
     logOff()
 
-let loginAs = fun userName ->
+let loginAs userName =
     goToSignIn()
     write "#Email" (email userName)
     write "#Password" "Password"
     click "input[value='login']"
     on "/"
 
-let addGame = fun name ->
+let addGame name =
     clickWait "#showLibrary"
     writeWait "#gameToAdd" name
     clickWait "table tbody tr td"
     clickWait "#closeLibraryTop"
     ()
 
-let follow = fun name ->
+let follow name =
     clickWait "#showFriends"
     write "#handleToAdd" name
     click "#addHandle"
     clickWait "#closeFriendsTop"
 
-let requestFirstGame = fun _ ->
+let requestFirstGame _ =
     click ".request"
     ()
 
-let giveRequestedGame = fun _ ->
+let giveFirstRequestedGame _ =
     click "a.check"
     ()
