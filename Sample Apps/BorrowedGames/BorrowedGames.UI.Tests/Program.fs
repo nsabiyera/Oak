@@ -23,16 +23,17 @@ wip(fun _ ->
     describe "request games"
     reset()
     stageGame "Dark Souls"
-    stageGame "Mirror's Edge"
     registerUser "user1"
     registerUser "user2"
     loginAs "user1"
-    addGame "Mirror's Edge"
     addGame "Dark Souls"
     logOff()
     loginAs "user2"
     follow "user1"
-    request "Dark Souls")
+    requestFirstGame()
+    logOff()
+    loginAs "user1"
+    giveRequestedGame())
 
 run()
 

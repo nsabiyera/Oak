@@ -20,6 +20,16 @@ let goToSignIn = fun _ ->
     url "/"
     ()
 
+let clickWait css =
+    click css
+    sleep 1
+    ()
+
+let writeWait css value =
+    write css value
+    sleep 1 
+    ()
+
 let email = fun userName ->
     userName + "@example.com"
 
@@ -46,16 +56,22 @@ let loginAs = fun userName ->
     on "/"
 
 let addGame = fun name ->
-    click "#showLibrary"
-    write "#gameToAdd" name
-    click "table tbody tr td"
-    click "#closeLibraryTop"
+    clickWait "#showLibrary"
+    writeWait "#gameToAdd" name
+    clickWait "table tbody tr td"
+    clickWait "#closeLibraryTop"
+    ()
 
 let follow = fun name ->
-    click "#showFriends"
+    clickWait "#showFriends"
     write "#handleToAdd" name
     click "#addHandle"
-    click "#closeFriendsTop"
+    clickWait "#closeFriendsTop"
 
-let request = fun gameName ->
+let requestFirstGame = fun _ ->
+    click ".request"
+    ()
+
+let giveRequestedGame = fun _ ->
+    click "a.check"
     ()
