@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Oak by amirrajan</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/amirrajan/Oak">Fork On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/amirrajan/Oak/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/amirrajan/Oak/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Oak</h1>
+          <p>Bring dynamic goodness and frictionless development to ASP .NET MVC</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/amirrajan">amirrajan</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>What is Oak?</h2>
+
+<p>Oak is about getting things done. It's about maintaining a rapid development cycle. It's about having an immediate and addictive feedback loop in place to keep you in the zone. It's about getting developers on board and getting them up and running fast so that they can start contributing. It's about reducing all aspects of development friction.</p>
+
+<h2>How does Oak make things awesome?</h2>
+
+<ul>
+<li>Oak is built on top of ASP.NET MVC, so you don't have to re-learn anything, just build upon what you already know.</li>
+<li>Oak maintains a rapid development cycle by making testing easy and by providing an immediate feedack loop using Growl For Windows.<br>
+</li>
+<li>Oak takes advantage of dynamic C# 4.0 and metaprogramming for your data access.<br>
+</li>
+<li>Initial schema creation, seeding sample data, and regenerating database for other developers is provided directly through controller actions that can be leveraged by tests and rake scripts.<br>
+</li>
+</ul><h2>Oak in Action</h2>
+
+<p>Here is a screencast that shows the creation of a Blog website using Oak</p>
+
+<h2>First Time (Prerequisites)</h2>
+
+<ul>
+<li>Install <a href="http://www.microsoft.com/download/en/details.aspx?id=1038">IIS Express</a>
+</li>
+<li>Install <a href="http://rubyinstaller.org/downloads/">ruby 1.9.2</a>
+</li>
+<li>Install the following gems using a command prompt that supports ruby:
+<pre>
+gem install bundler
+gem install warmup
+</pre>
+</li>
+</ul><h2>Explore The Sample App: DynamicBlog</h2>
+
+<ul>
+<li>Run the following commands:
+<pre>
+git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+cd "Oak\Sample Apps\DynamicBlog"
+start DynamicBlog.sln
+</pre>
+</li>
+<li>Update the connection strings in the Web.config and App.config to point to an existing database (or create a new one and update the connection strings accordingly).</li>
+<li>Then run the commands:
+<pre>
+rake             (builds and deploys the application)
+rake tests       (all tests should pass)
+rake server      (this will start up iis express)
+rake reset       (resets the database schema with no data)
+rake sample      (adds sample data to the database)
+start http://localhost:3000
+</pre>
+</li>
+</ul><h2>Explore The Reference Implementation: Borrowed Games</h2>
+
+<ul>
+<li>Run the following commands
+<pre>
+git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+cd "Oak\Sample Apps\BorrowedGames"
+start BorrowedGames.sln
+</pre>
+</li>
+<li>Update the connection strings in the Web.config and App.config to point to an existing database (or create a new one and update the connection strings accordingly).</li>
+<li>Then run the commands
+<pre>
+bundle install
+rake             (builds and deploys the application)
+rake tests       (all tests should pass)
+rake server      (this will start up iis express)
+rake reset       (resets the database schema with no data)
+rake sample      (adds sample data to the database)
+start http://localhost:3000
+</pre>
+</li>
+</ul><h2>Bootstrap Your Own App With Oak</h2>
+
+<ul>
+<li>Run the following commands:
+<pre>
+warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/loam</a> Blog (creates a .Net solution)
+cd Blog
+bundle install (installs any ruby gems needed)
+rake (builds the .net app)
+rake server (starts iis express)
+start Blog.sln (opens the solution)
+watchr dotnet.watchr.rb (starts your feedback loop)
+</pre>
+</li>
+</ul><h2>More Stuff</h2>
+
+<ul>
+<li>MIT License</li>
+<li>Head over to the <a href="https://github.com/amirrajan/oak/wiki">wiki</a> for additional details.</li>
+<li>
+<a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps">Reference Implementations</a> are included, test driven, awesome </li>
+<li>Built ground up <a href="https://github.com/amirrajan/Oak/tree/master/Oak.Tests">under test</a>
+</li>
+<li>Available via Nuget: <strong>install-package oak or install-package oak-edge</strong>
+</li>
+</ul>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
