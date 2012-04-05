@@ -20,8 +20,7 @@ requestedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
-  givenGame: ->
-    alert("TODO: I have given him the game")
+  givenGame: -> ""
 
 requestedGames = Backbone.Collection.extend
   model: requestedGame

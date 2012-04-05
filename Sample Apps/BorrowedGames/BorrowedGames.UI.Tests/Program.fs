@@ -19,7 +19,7 @@ test(fun _ ->
     reset()
     registerUser "user1")
 
-wip(fun _ ->
+test(fun _ ->
     describe "request games"
     reset()
     stageGame "Dark Souls"
@@ -36,7 +36,5 @@ wip(fun _ ->
     giveFirstRequestedGame())
 
 run()
-
-
  
 quit()

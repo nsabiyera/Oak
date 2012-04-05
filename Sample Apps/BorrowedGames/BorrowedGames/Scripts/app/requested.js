@@ -27,7 +27,7 @@
       return name += " (" + this.console() + ")";
     },
     givenGame: function() {
-      return alert("TODO: I have given him the game");
+      return "";
     }
   });
   requestedGames = Backbone.Collection.extend({

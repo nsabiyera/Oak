@@ -22,12 +22,12 @@ let goToSignIn _ =
 
 let clickWait css =
     click css
-    sleep 1
+    sleep()
     ()
 
 let writeWait css value =
     write css value
-    sleep 1 
+    sleep()
     ()
 
 let email userName =
