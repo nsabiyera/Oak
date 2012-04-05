@@ -123,5 +123,52 @@ namespace Oak.Tests
                 (blog.Title as string).should_be("Some Title");
             };
         }
+
+        void mass_assignment()
+        {
+            before = () =>
+            {
+                seed = new Seed();
+
+                seed.PurgeDb();
+
+                seed.CreateTable("Users", new dynamic[] 
+                { 
+                    new { Id = "int", Identity = true, PrimaryKey = true },
+                    new { Name = "nvarchar(255)" },
+                    new { IsAdmin = "bit", Default = false }
+                }).ExecuteNonQuery();
+
+                nameValueCollection.Add("Name", "John");
+
+                nameValueCollection.Add("IsAdmin", "true");
+            };
+
+            it["allows the ability to exclude fields"] = () =>
+            {
+                var users = new DynamicRepository("Users");
+
+                var userId = users.Insert(asDynamic.Exclude("IsAdmin"));
+
+                var user = users.Single(userId);
+
+                (user.Name as string).should_be("John");
+
+                ((bool)user.IsAdmin).should_be(false);
+            };
+
+            it["allows the ability to select fields"] = () =>
+            {
+                var users = new DynamicRepository("Users");
+
+                var userId = users.Insert(asDynamic.Select("Name"));
+
+                var user = users.Single(userId);
+
+                (user.Name as string).should_be("John");
+
+                ((bool)user.IsAdmin).should_be(false);
+            };
+        }
     }
 }
