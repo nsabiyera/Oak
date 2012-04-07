@@ -51,9 +51,7 @@ namespace Oak
         {
             Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(A), (i) =>
             {
-                var constructor = typeof(B).GetConstructor(new Type[] { typeof(object) });
-
-                constructor.Invoke(new object[] { i });
+                i.Extend<B>();
 
                 return null;
             }));
@@ -186,6 +184,13 @@ namespace Oak
             if (parameters.Any()) return false;
 
             return true;
+        }
+
+        public void Extend<T>() where T : class
+        {
+            var constructor = typeof(T).GetConstructor(new Type[] { typeof(object) });
+
+            constructor.Invoke(new object[] { this });
         }
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)

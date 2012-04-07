@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>gemini</id> 
-    <version>1.0.2</version> 
+    <version>1.0.3</version> 
     <authors>Amir Rajan</authors>
     <description>Gemini is a core dynamic construct that will make your C# code awesome. It's an integral part of Oak.</description> 
     <language>en-US</language>
