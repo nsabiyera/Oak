@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>cambium</id> 
-    <version>1.0.5</version> 
+    <version>1.0.6</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic models for .Net applications (data access, associations, validation change tracking). Inspired directly by rails active model: associations, validation and change tracking using DynamicModel. Handles saving and retrieving data (using an altered version of Massive..DynamicRepository).</description> 
     <language>en-US</language>

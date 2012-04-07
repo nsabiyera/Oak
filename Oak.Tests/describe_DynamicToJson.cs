@@ -58,7 +58,7 @@ namespace Oak.Tests
 
             act = () =>
 
-            it["converts gemini", "wip"] = () => { };
+            it["converts gemini"] = () => { };
             {
                 objectToConvert = new Gemini(new
                 {
@@ -291,7 +291,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void converting_named_classes()
         {
             before = () =>
