@@ -331,7 +331,9 @@ namespace Oak
         {
             var regex = new Regex(filter ?? "");
 
-            var methods = Hash().Where(s => filter == null || regex.IsMatch(s.Key)).Select(s => s.Key + " (" + s.Value.GetType().Name + ")");
+            var methods = Hash()
+                .Where(s => filter == null || regex.IsMatch(s.Key))
+                .Select(s => s.Key + " (" + (s.Value == null ? "null" : s.Value.GetType().Name) + ")");
 
             return string.Join(", ", methods);
         }
