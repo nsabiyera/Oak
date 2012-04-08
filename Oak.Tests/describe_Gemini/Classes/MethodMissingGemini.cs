@@ -17,11 +17,17 @@ namespace Oak.Tests.describe_Gemini.Classes
 
         dynamic MethodMissing(dynamic args)
         {
-            return args.Name + " " +
-                args.ParameterNames[0] + ": " +
-                args.Parameters[0] + " " +
-                args.ParameterNames[1] + ": " +
-                args.Parameters[1];
+            _.LastMethodMissing = args;
+
+            _.Instance = args.Instance;
+
+            _.Parameter = args.Parameter;
+
+            _.Parameters = args.Parameters;
+
+            _.ParameterNames = args.ParameterNames;
+
+            return null;
         }
     }
 }

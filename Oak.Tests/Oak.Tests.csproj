@@ -150,6 +150,7 @@
     <Compile Include="describe_Gemini\deleting_members.cs" />
     <Compile Include="describe_Gemini\describe_constructions.cs" />
     <Compile Include="describe_Gemini\describe_get_member.cs" />
+    <Compile Include="describe_Gemini\describe_Info.cs" />
     <Compile Include="describe_Gemini\describe_methods.cs" />
     <Compile Include="describe_Gemini\describe_responds_to.cs" />
     <Compile Include="describe_Gemini\extending_gemini.cs" />

@@ -92,9 +92,37 @@ namespace Oak.Tests.describe_Gemini
             {
                 dynamic methodMissingGemini = new MethodMissingGemini();
 
-                var result = methodMissingGemini.ThisIsAMissingMethod(parameter1: "Test", parameter2: "Test2") as string;
+                methodMissingGemini.ThisIsAMissingMethod(parameter1: "Test", parameter2: "Test2");
 
-                result.should_be("ThisIsAMissingMethod parameter1: Test parameter2: Test2");
+                (methodMissingGemini.ParameterNames[0] as string).should_be("parameter1");
+
+                (methodMissingGemini.Parameters[0] as string).should_be("Test");
+
+                (methodMissingGemini.ParameterNames[1] as string).should_be("parameter2");
+
+                (methodMissingGemini.Parameters[1] as string).should_be("Test2");
+            };
+
+            it["method missing has accessed to the instance of gemini that it was invoked on"] = () =>
+            {
+                dynamic methodMissingGemini = new MethodMissingGemini();
+
+                methodMissingGemini.ThisIsAMissingMethod(parameter1: "Test", parameter2: "Test2");
+
+                (methodMissingGemini.Instance as object).should_be(methodMissingGemini as object);
+            };
+
+            it["parameter values can be accessed via ParameterMethod of the object passed into method missing"] = () =>
+            {
+                dynamic methodMissingGemini = new MethodMissingGemini();
+
+                methodMissingGemini.ThisIsAMissingMethod("UnNamed1", "UnNamed2", parameter1: "Test", parameter2: "Test2");
+
+                (methodMissingGemini.Parameter.parameter1 as string).should_be("Test");
+
+                (methodMissingGemini.Parameter.parameter2 as string).should_be("Test2");
+
+                (methodMissingGemini.Parameters[0] as string).should_be("UnNamed1");
             };
         }
 
