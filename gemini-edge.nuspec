@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>gemini-edge</id> 
-    <version>0.0.5</version> 
+    <version>0.0.6</version> 
     <authors>Amir Rajan</authors>
     <description>Gemini is a core dynamic construct that will make your C# code awesome. It's an integral part of Oak (edge contains volatile things, but it's cutting edge).</description> 
     <language>en-US</language>

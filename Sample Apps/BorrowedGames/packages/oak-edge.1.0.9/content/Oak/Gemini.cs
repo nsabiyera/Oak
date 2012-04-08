@@ -4,6 +4,7 @@ using System.Linq;
 using System.Dynamic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Oak
 {
@@ -307,8 +308,6 @@ namespace Oak
 
             initialized = true;
 
-            var throwAway = new object();
-
             var hooks = ClassHooks.Where(s => types.Contains(s.Key));
 
             foreach (var hook in hooks) hook.Value(this);
@@ -325,7 +324,16 @@ namespace Oak
                 this.GetType().Name +
                 " does not respond to the property " +
                 property +
-                ".  These are the members that exist on this instance: " + string.Join(", ", Hash().Select(s => s.Key + " (" + s.Value.GetType().Name + ")")));
+                ".  These are the members that exist on this instance: " + __Info__());
+        }
+
+        public virtual dynamic __Info__(string filter = null)
+        {
+            var regex = new Regex(filter ?? "");
+
+            var methods = Hash().Where(s => filter == null || regex.IsMatch(s.Key)).Select(s => s.Key + " (" + s.Value.GetType().Name + ")");
+
+            return string.Join(", ", methods);
         }
 
         public virtual void SetMember(string property, object value, bool suppress)
@@ -463,12 +471,16 @@ namespace Oak
         {
             if (RespondsTo("MethodMissing"))
             {
+                var argNames = binder.CallInfo.ArgumentNames.ToArray();
+
                 result = _.MethodMissing(
                     new Gemini(new
                     {
                         Name = binder.Name,
                         Parameters = args,
-                        ParameterNames = binder.CallInfo.ArgumentNames.ToArray()
+                        ParameterNames = argNames,
+                        Instance = this,
+                        Parameter = GetNamedArgs(args, argNames)
                     }));
 
                 return true;
@@ -507,12 +519,13 @@ namespace Oak
         {
             var namedArgs = new Gemini();
 
-            argNames.Zip(args.Skip(args.Length - argNames.Length),
-                    (argName, argValue) => new
-                    {
-                        name = argName,
-                        value = argValue
-                    })
+            argNames.Zip(
+                args.Skip(args.Length - argNames.Length),
+                (argName, argValue) => new
+                {
+                    name = argName,
+                    value = argValue
+                })
                 .ForEach(arg => namedArgs.SetMember(arg.name, arg.value));
 
             return namedArgs;
