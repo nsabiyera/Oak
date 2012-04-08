@@ -23,6 +23,15 @@ namespace Oak.Tests.describe_Gemini
             info.should_be("get__ (DynamicFunction), FirstName (String), LastName (String)");
         }
 
+        void specify_requesting_info_for_null_values_prints_null()
+        {
+            gemini.Body = null;
+
+            var info = gemini.__Info__() as string;
+
+            info.should_be("get__ (DynamicFunction), FirstName (String), LastName (String), Body (null)");
+        }
+
         void specify_info_can_be_greped()
         {
             var info = gemini.__Info__("Name") as string;
