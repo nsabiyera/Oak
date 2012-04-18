@@ -37,7 +37,7 @@ namespace Oak
 
             hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => expando.Add(kvp.Key, kvp.Value));
 
-            if(expando.Count == 1) return expando.First().Value;
+            if (expando.Count == 1) return expando.First().Value;
 
             return expando;
         }
@@ -92,31 +92,30 @@ namespace Oak
 
             dynamic models = Models.AsEnumerable();
 
-            var isFirst = true;
-
-            foreach (var kvp in dict)
-            {
-                var firstKey = kvp.Key;
-
-                var firstValue = kvp.Value;
-
-                if(isFirst)
-                {
-                    if (firstValue == "asc") models = (models as IEnumerable<dynamic>).OrderBy(s => s.GetMember(firstKey));
-
-                    else models = (models as IEnumerable<dynamic>).OrderByDescending(s => s.GetMember(firstKey));    
-                }
-                else
-                {
-                    if (firstValue == "asc") models = (models as IOrderedEnumerable<dynamic>).ThenBy(s => s.GetMember(firstKey));
-
-                    else models = (models as IOrderedEnumerable<dynamic>).ThenByDescending(s => s.GetMember(firstKey));    
-                }
-
-                isFirst = false;
-            }
+            dict.ForEach(kvp => models = Sort(models, kvp.Key, kvp.Value));
 
             return models;
+        }
+
+        public dynamic Sort(IEnumerable<dynamic> models, string property, object direction)
+        {
+            if (models is IOrderedEnumerable<dynamic>)
+            {
+                var ordered = (models as IOrderedEnumerable<dynamic>);
+
+                if (IsAscending(direction)) return ordered.ThenBy(s => s.GetMember(property));
+
+                return ordered.ThenByDescending(s => s.GetMember(property));
+            }
+
+            if (IsAscending(direction)) return models.OrderBy(s => s.GetMember(property));
+
+            return models.OrderByDescending(s => s.GetMember(property));
+        }
+
+        public bool IsAscending(object value)
+        {
+            return (value as string) == "asc";
         }
 
         public DynamicModels Where(dynamic options)
