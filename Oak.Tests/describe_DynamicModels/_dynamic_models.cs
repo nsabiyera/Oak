@@ -14,7 +14,7 @@ namespace Oak.Tests.describe_DynamicModels
 
         public bool resultForAny;
 
-        public IEnumerable<dynamic> resultForWhere;
+        public IEnumerable<dynamic> resultList;
 
         public object resultForFirst;
 

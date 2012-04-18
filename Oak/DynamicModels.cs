@@ -86,6 +86,39 @@ namespace Oak
             return Where(options as object).FirstOrDefault();
         }
 
+        public dynamic OrderBy(dynamic options)
+        {
+            var dict = (options as object).ToExpando() as IDictionary<string, object>;
+
+            dynamic models = Models.AsEnumerable();
+
+            var isFirst = true;
+
+            foreach (var kvp in dict)
+            {
+                var firstKey = kvp.Key;
+
+                var firstValue = kvp.Value;
+
+                if(isFirst)
+                {
+                    if (firstValue == "asc") models = (models as IEnumerable<dynamic>).OrderBy(s => s.GetMember(firstKey));
+
+                    else models = (models as IEnumerable<dynamic>).OrderByDescending(s => s.GetMember(firstKey));    
+                }
+                else
+                {
+                    if (firstValue == "asc") models = (models as IOrderedEnumerable<dynamic>).ThenBy(s => s.GetMember(firstKey));
+
+                    else models = (models as IOrderedEnumerable<dynamic>).ThenByDescending(s => s.GetMember(firstKey));    
+                }
+
+                isFirst = false;
+            }
+
+            return models;
+        }
+
         public DynamicModels Where(dynamic options)
         {
             options = (options as object).ToExpando();
