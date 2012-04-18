@@ -73,11 +73,11 @@ namespace Oak.Tests.describe_DynamicModels
 
             context["matching single property"] = () =>
             {
-                act = () => resultForWhere = models.Where(new { Name = "Jane" });
+                act = () => resultList = models.Where(new { Name = "Jane" });
 
                 context["no items in list"] = () =>
                 {
-                    it["result list is empty"] = () => resultForWhere.should_be_empty();
+                    it["result list is empty"] = () => resultList.should_be_empty();
                 };
 
                 context["items exist in list that match"] = () =>
@@ -89,13 +89,13 @@ namespace Oak.Tests.describe_DynamicModels
                         models.Models.Add(expando);
                     };
 
-                    it["returns item"] = () => resultForWhere.Count().should_be(1);
+                    it["returns item"] = () => resultList.Count().should_be(1);
                 };
             };
 
             context["item exists in list that match multiple properties"] = () =>
             {
-                act = () => resultForWhere = models.Where(new { Name = "Jane", Age = 15 });
+                act = () => resultList = models.Where(new { Name = "Jane", Age = 15 });
 
                 context["entry exists where all properties match"] = () =>
                 {
@@ -107,7 +107,7 @@ namespace Oak.Tests.describe_DynamicModels
                         models.Models.Add(expando);
                     };
 
-                    it["returns item"] = () => resultForWhere.Count().should_be(1);
+                    it["returns item"] = () => resultList.Count().should_be(1);
                 };
 
                 context["entry exists where all properties do not match"] = () =>
@@ -120,7 +120,7 @@ namespace Oak.Tests.describe_DynamicModels
                         models.Models.Add(expando);
                     };
 
-                    it["result list is empty"] = () => resultForWhere.should_be_empty();
+                    it["result list is empty"] = () => resultList.should_be_empty();
                 };
             };
 
@@ -135,9 +135,9 @@ namespace Oak.Tests.describe_DynamicModels
                     models.Models.Add(new Gemini(new { LastName = "Doe", FirstName = "John" }));
                 };
 
-                act = () => resultForWhere = models.Where(new { LastName = "Smith" }).Where(new { FirstName = "Jane" });
+                act = () => resultList = models.Where(new { LastName = "Smith" }).Where(new { FirstName = "Jane" });
 
-                it["applies first filter then next filter"] = () => resultForWhere.Count().should_be(1);
+                it["applies first filter then next filter"] = () => resultList.Count().should_be(1);
             };
 
             context["value being compared is a dynamic function"] = () =>
@@ -170,9 +170,9 @@ namespace Oak.Tests.describe_DynamicModels
 
                 it["applies first filter then next filter"] = () =>
                 {
-                    resultForWhere = models.Where(new { LastName = "Smith" }).Where(new { FirstName = "Jane" });
+                    resultList = models.Where(new { LastName = "Smith" }).Where(new { FirstName = "Jane" });
 
-                    resultForWhere.Count().should_be(1);
+                    resultList.Count().should_be(1);
                 };
             };
         }
