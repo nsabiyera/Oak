@@ -129,27 +129,27 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 models = new DynamicModels(new List<Gemini>());
 
-                models.Models.Add(new Gemini(new { FirstName = "Jane", LastName = "Doe" }));
+                models.Models.Add(new Gemini(new { Value1 = "C", Value2 = "X" }));
 
-                models.Models.Add(new Gemini(new { FirstName = "Bob", LastName = "Smith" }));
+                models.Models.Add(new Gemini(new { Value1 = "B", Value2 = "Y" }));
 
-                models.Models.Add(new Gemini(new { FirstName = "John", LastName = "Smith" }));
+                models.Models.Add(new Gemini(new { Value1 = "D", Value2 = "Y" }));
 
-                models.Models.Add(new Gemini(new { FirstName = "Andy", LastName = "Doe" }));
+                models.Models.Add(new Gemini(new { Value1 = "A", Value2 = "X" }));
             };
 
             it["orders records ascending"] = () =>
             {
-                resultList = models.OrderBy(new { FirstName = "asc" });
+                resultList = models.OrderBy(new { Value1 = "asc" });
 
-                (resultList.First().FirstName as string).should_be("Andy");
+                (resultList.First().Value1 as string).should_be("A");
             };
 
             it["orders records descending"] = () =>
             {
-                resultList = models.OrderBy(new { FirstName = "desc" });
+                resultList = models.OrderBy(new { Value1 = "desc" });
 
-                (resultList.First().FirstName as string).should_be("John");
+                (resultList.First().Value1 as string).should_be("D");
             };
 
             it["orders records based on multiple ascending specifications"] = () =>
@@ -157,17 +157,17 @@ namespace Oak.Tests.describe_DynamicModels
                 var orderBy = (
                     models.OrderBy(new
                     {
-                        LastName = "asc",
-                        FirstName = "asc",
+                        Value2 = "asc",
+                        Value1 = "asc",
                     }) as IEnumerable<dynamic>).ToList();
 
-                (orderBy[0].LastName as string).should_be("Doe");
+                (orderBy[0].Value1 as string).should_be("A");
 
-                (orderBy[0].FirstName as string).should_be("Andy");
+                (orderBy[0].Value2 as string).should_be("X");
 
-                (orderBy[1].LastName as string).should_be("Doe");
+                (orderBy[1].Value2 as string).should_be("X");
 
-                (orderBy[1].FirstName as string).should_be("Jane");
+                (orderBy[1].Value1 as string).should_be("C");
             };
 
             it["orders records based on multiple descending specifications"] = () =>
@@ -175,17 +175,17 @@ namespace Oak.Tests.describe_DynamicModels
                 var orderBy = (
                     models.OrderBy(new
                     {
-                        LastName = "desc",
-                        FirstName = "desc"
+                        Value2 = "desc",
+                        Value1 = "desc"
                     }) as IEnumerable<dynamic>).ToList();
 
-                (orderBy[0].LastName as string).should_be("Smith");
+                (orderBy[0].Value1 as string).should_be("D");
 
-                (orderBy[0].FirstName as string).should_be("John");
+                (orderBy[0].Value2 as string).should_be("Y");
 
-                (orderBy[1].LastName as string).should_be("Smith");
+                (orderBy[1].Value1 as string).should_be("B");
 
-                (orderBy[1].FirstName as string).should_be("Bob");
+                (orderBy[1].Value2 as string).should_be("Y");
             };
         }
     }
