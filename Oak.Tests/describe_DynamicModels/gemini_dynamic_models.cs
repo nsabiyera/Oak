@@ -129,13 +129,13 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 models = new DynamicModels(new List<Gemini>());
 
-                models.Models.Add(new Gemini(new { Value1 = "C", Value2 = "X" }));
+                models.Models.Add(new Gemini(new { Value1 = "C", Value2 = "X", Method = new DynamicFunction(() => "A") }));
 
-                models.Models.Add(new Gemini(new { Value1 = "B", Value2 = "Y" }));
+                models.Models.Add(new Gemini(new { Value1 = "B", Value2 = "Y", Method = new DynamicFunction(() => "B") }));
 
-                models.Models.Add(new Gemini(new { Value1 = "D", Value2 = "Y" }));
+                models.Models.Add(new Gemini(new { Value1 = "D", Value2 = "Y", Method = new DynamicFunction(() => "C") }));
 
-                models.Models.Add(new Gemini(new { Value1 = "A", Value2 = "X" }));
+                models.Models.Add(new Gemini(new { Value1 = "A", Value2 = "X", Method = new DynamicFunction(() => "D") }));
             };
 
             it["orders records ascending"] = () =>
@@ -186,6 +186,33 @@ namespace Oak.Tests.describe_DynamicModels
                 (orderBy[1].Value1 as string).should_be("B");
 
                 (orderBy[1].Value2 as string).should_be("Y");
+            };
+
+            it["order by can be applied to methods"] = () =>
+            {
+                var orderBy = (
+                    models.OrderBy(new
+                    {
+                        Method = "desc"
+                    }) as IEnumerable<dynamic>).ToList();
+
+                (orderBy[0].Method() as string).should_be("D");
+            };
+
+            it["order by can have an additonal project applied to it"] = () =>
+            {
+                var orderBy = (
+                    models.OrderBy(new
+                    {
+                        Method = "desc"
+                    }).Where(new
+                    {
+                        Value1 = "A"
+                    }) as IEnumerable<dynamic>).ToList();
+
+                (orderBy[0].Method() as string).should_be("D");
+
+                orderBy.Count.should_be(1);
             };
         }
     }
