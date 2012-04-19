@@ -286,5 +286,28 @@ namespace Oak.Tests.describe_DynamicModels
                 it["returns first record"] = () => ((string)((dynamic)resultForFirst).Name).should_be("Jane");
             };
         }
+
+        void describe_OrderBy()
+        {
+            context["order by works for expando objects"] = () =>
+            {
+                before = () =>
+                {
+                    models = new DynamicModels(new List<ExpandoObject>());
+
+                    dynamic expando = new ExpandoObject();
+                    expando.Value = "A";
+                    models.Models.Add(expando);
+
+                    expando = new ExpandoObject();
+                    expando.Value = "B";
+                    models.Models.Add(expando);
+                };
+
+                act = () => resultList = models.OrderBy(new { Value = "desc" });
+
+                it["ordering is applied"] = () => (resultList.First().Value as string).should_be("B");
+            };
+        }
     }
 }
