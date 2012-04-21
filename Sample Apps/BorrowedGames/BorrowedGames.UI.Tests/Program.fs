@@ -19,7 +19,7 @@ test(fun _ ->
     reset()
     registerUser "user1")
 
-test(fun _ ->
+many 20 (fun _ ->
     describe "request games"
     reset()
     stageGame "Dark Souls"
@@ -33,7 +33,8 @@ test(fun _ ->
     requestFirstGame()
     logOff()
     loginAs "user1"
-    giveFirstRequestedGame())
+    giveFirstRequestedGame()
+    logOff())
 
 run()
  

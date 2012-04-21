@@ -1,8 +1,7 @@
 (function() {
   var unwantedGame, unwantedGameView, unwantedGames, unwantedGamesUrl, unwantedGamesView;
-
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   unwantedGamesUrl = "";
-
   this.unwanted = {
     init: function(urls) {
       unwantedGamesUrl = urls.unwantedGamesUrl;
@@ -12,7 +11,6 @@
       return this.view.refresh();
     }
   };
-
   unwantedGame = Backbone.Model.extend({
     name: function() {
       return this.get("Name");
@@ -20,28 +18,27 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 21) name = name.substring(0, 20) + "... ";
+      if (name.length > 21) {
+        name = name.substring(0, 20) + "... ";
+      }
       return name += " (" + this.console() + ")";
     },
     console: function() {
       return this.get("Console");
     },
     undo: function() {
-      var _this = this;
-      return $.post(this.get("UndoNotInterested"), {}, function() {
+      return $.post(this.get("UndoNotInterested"), {}, __bind(function() {
         preferred.getPreferredGames();
-        return _this.change();
-      });
+        return this.change();
+      }, this));
     }
   });
-
   unwantedGames = Backbone.Collection.extend({
     model: unwantedGame,
     url: function() {
       return unwantedGamesUrl;
     }
   });
-
   unwantedGamesView = Backbone.View.extend({
     el: "#unwantedGames",
     initialize: function() {
@@ -53,11 +50,10 @@
       return this.unwantedGames.fetch();
     },
     render: function() {
-      var _this = this;
       $(this.el).empty();
-      this.unwantedGames.each(function(game) {
-        return _this.addGame(game);
-      });
+      this.unwantedGames.each(__bind(function(game) {
+        return this.addGame(game);
+      }, this));
       return $(this.el).append($("<div />").css({
         clear: "both"
       }));
@@ -71,7 +67,6 @@
       return $(this.el).append(view.el);
     }
   });
-
   unwantedGameView = Backbone.View.extend({
     className: 'gameBoxSmall',
     initialize: function() {
@@ -111,5 +106,4 @@
     </div>\
     '
   });
-
 }).call(this);

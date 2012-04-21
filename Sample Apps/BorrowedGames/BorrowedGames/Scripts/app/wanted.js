@@ -1,8 +1,7 @@
 (function() {
   var wantedGame, wantedGameView, wantedGames, wantedGamesUrl, wantedGamesView;
-
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   wantedGamesUrl = "";
-
   this.wanted = {
     init: function(urls) {
       wantedGamesUrl = urls.wantedGamesUrl;
@@ -12,7 +11,6 @@
       return this.view.refresh();
     }
   };
-
   wantedGame = Backbone.Model.extend({
     name: function() {
       return this.get("Name");
@@ -26,25 +24,24 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) name = name.substring(0, 40) + "... ";
+      if (name.length > 41) {
+        name = name.substring(0, 40) + "... ";
+      }
       return name += " (" + this.console() + ")";
     },
     undoRequest: function() {
-      var _this = this;
-      return $.post(this.get("DeleteWant"), {}, function() {
+      return $.post(this.get("DeleteWant"), {}, __bind(function() {
         preferred.getPreferredGames();
-        return _this.change();
-      });
+        return this.change();
+      }, this));
     }
   });
-
   wantedGames = Backbone.Collection.extend({
     model: wantedGame,
     url: function() {
       return wantedGamesUrl;
     }
   });
-
   wantedGamesView = Backbone.View.extend({
     el: "#wantedGames",
     initialize: function() {
@@ -56,11 +53,10 @@
       return this.wantedGames.fetch();
     },
     render: function() {
-      var _this = this;
       $(this.el).empty();
-      return this.wantedGames.each(function(game) {
-        return _this.addGame(game);
-      });
+      return this.wantedGames.each(__bind(function(game) {
+        return this.addGame(game);
+      }, this));
     },
     addGame: function(game) {
       var view;
@@ -71,7 +67,6 @@
       return $(this.el).append(view.el);
     }
   });
-
   wantedGameView = Backbone.View.extend({
     className: 'border',
     initialize: function() {
@@ -114,5 +109,4 @@
     <div>${owner}</div>\
     '
   });
-
 }).call(this);

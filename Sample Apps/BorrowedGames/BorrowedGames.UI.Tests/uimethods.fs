@@ -20,16 +20,6 @@ let goToSignIn _ =
     url "/"
     ()
 
-let clickWait css =
-    click css
-    sleep()
-    ()
-
-let writeWait css value =
-    write css value
-    sleep()
-    ()
-
 let email userName =
     userName + "@example.com"
 
@@ -56,17 +46,17 @@ let loginAs userName =
     on "/"
 
 let addGame name =
-    clickWait "#showLibrary"
-    writeWait "#gameToAdd" name
-    clickWait "table tbody tr td"
-    clickWait "#closeLibraryTop"
+    click "#showLibrary"
+    write "#gameToAdd" name
+    click "table tbody tr td"
+    click "#closeLibraryTop"
     ()
 
 let follow name =
-    clickWait "#showFriends"
+    click "#showFriends"
     write "#handleToAdd" name
     click "#addHandle"
-    clickWait "#closeFriendsTop"
+    click "#closeFriendsTop"
 
 let requestFirstGame _ =
     click ".request"
