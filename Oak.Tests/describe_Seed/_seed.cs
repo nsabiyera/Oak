@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Oak.Tests.describe_Seed
 {
@@ -39,6 +40,11 @@ namespace Oak.Tests.describe_Seed
         public bool TableExists(string table)
         {
             return "select * from sysobjects where name = '{0}'".With(table).ExecuteReader().HasRows;
+        }
+
+        public void DeleteSqlFiles()
+        {
+            Directory.GetFiles(Environment.CurrentDirectory, "*.sql").ForEach(s => File.Delete(s));    	
         }
     }
 }
