@@ -159,6 +159,7 @@
     <Compile Include="describe_Gemini\setting_member.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_DynamicParams.cs" />
+    <Compile Include="describe_Seed\execute_non_query.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />
