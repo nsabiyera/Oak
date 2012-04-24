@@ -22,18 +22,23 @@ namespace Oak.Tests.describe_Seed
         }
 
 
-        protected void CommandShouldBe(string expected)
+        public void CommandShouldBe(string expected)
         {
             command.should_be(ToSingleLine(expected));
         }
 
-        protected string ToSingleLine(string s)
+        public string ToSingleLine(string s)
         {
             var single = Regex.Replace(s, @"[ ]{2,}", "");
 
             single = single.Trim().Replace(Environment.NewLine, "");
 
             return single;
+        }
+
+        public bool TableExists(string table)
+        {
+            return "select * from sysobjects where name = '{0}'".With(table).ExecuteReader().HasRows;
         }
     }
 }

@@ -165,6 +165,15 @@ namespace Oak
         {
             return new { Id = "uniqueidentifier", PrimaryKey = true };
         }
+
+        public void ExecuteNonQuery(dynamic script)
+        {
+            if (script is Delegate) ExecuteNonQuery(script());
+
+            else if(script is string) (script as string).ExecuteNonQuery(ConnectionProfile);
+
+            else foreach (var s in script) (s as string).ExecuteNonQuery(ConnectionProfile);
+        }
     }
 }
 

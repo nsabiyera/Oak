@@ -10,7 +10,6 @@ namespace Oak.Tests.describe_Gemini
     {
     }
 
-    [Tag("wip")]
     class extending_gemini : nspec
     {
         dynamic gemini;
