@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Oak.Extensions;
 using System.Diagnostics;
+using System.IO;
 
 namespace Oak
 {
@@ -144,16 +145,37 @@ namespace Oak
             }
         }
 
-        public void Export(string exportPath, IEnumerable<Func<string>> scripts)
+        public void Export(string exportPath, IEnumerable<dynamic> scripts)
         {
             int order = 1;
 
-            scripts.ForEach<Func<string>>(s =>
+            scripts.ForEach<dynamic>(s =>
             {
-                System.IO.File.WriteAllText(System.IO.Path.Combine(exportPath, order + " - " + s.Method.Name + ".sql"), s());
+                var result = s();
+
+                string name = s.Method.Name;
+
+                if (result is string) WriteSqlFile(exportPath, "{0} - {1}".With(order, name), result);
+
+                else
+                {
+                    int parts = 1;
+
+                    foreach (var r in result)
+                    {
+                        WriteSqlFile(exportPath, "{0} - {1} - {2}".With(order, parts, name), r);
+
+                        parts++;
+                    }
+                }
 
                 order++;
             });
+        }
+
+        void WriteSqlFile(string path, string name, string content)
+        {
+            File.WriteAllText(Path.Combine(path, name + ".sql"), content);
         }
 
         public object Id()

@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class execute_non_query : _seed
     {
         void before_each()

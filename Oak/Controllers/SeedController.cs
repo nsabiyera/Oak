@@ -69,21 +69,21 @@ namespace Oak.Controllers
         }
 
         //different ad hoc queries
-        public void AdHocChange()
+        public IEnumerable<string> AdHocChange()
         {
             //hey look, you can just do an ad hoc read
             var reader = "select * from SampleTable".ExecuteReader();
 
             while (reader.Read())
             {
-                //do stuff here
+                //do stuff here like yield return strings
             }
 
-            //hey look, I can do a ad hoc scalar
             var name = "select top 1 name from sysobjects".ExecuteScalar() as string;
 
-            //hey look, I can do an ad hoc non query
-            "drop table SampleTable".ExecuteNonQuery();
+            yield return "drop table SampleTable";
+
+            yield return "drop table AnotherSampleTable";
         }
 
         public void SampleEntries()
@@ -139,7 +139,7 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult All()
         {
-            Schema.Scripts().ForEach<Func<string>>(s => s().ExecuteNonQuery());
+            Schema.Scripts().ForEach<dynamic>(s => Seed.ExecuteNonQuery(s()));
 
             return new EmptyResult();
         }
