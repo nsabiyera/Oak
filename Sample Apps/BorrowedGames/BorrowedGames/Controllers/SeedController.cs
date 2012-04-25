@@ -12,121 +12,116 @@ namespace Oak.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if(filterContext.RequestContext.HttpContext.Request.IsLocal == false)
+            if (filterContext.RequestContext.HttpContext.Request.IsLocal == false)
             {
                 filterContext.Result = new HttpNotFoundResult();
             }
         }
     }
 
-    [LocalOnly]
-    public class SeedController : Controller
+    public class Schema
     {
         public Seed Seed { get; set; }
 
-        public SeedController()
+        public Schema(Seed seed)
         {
-            Seed = new Seed();
+            Seed = seed;
         }
 
-        /// <summary>
-        /// Change this method to create your tables.  Take a look 
-        /// at each method, CreateSampleTable(), CreateAnotherSampleTable(), 
-        /// AlterSampleTable() and AdHocChange()...you'll want to replace 
-        /// this with your own set of methods.
-        /// </summary>
-        [HttpPost]
-        public ActionResult All()
+        public IEnumerable<Func<dynamic>> Scripts()
         {
-            CreateUsers();
+            yield return CreateUsers;
 
-            CreateGames();
+            yield return CreateGames;
 
-            CreateLibrary();
+            yield return CreateLibrary;
 
-            CreateFriends();
+            yield return CreateFriends;
 
-            CreateNotInterestedGames();
+            yield return CreateNotInterestedGames;
 
-            CreateWantedGames();
+            yield return CreateWantedGames;
 
-            AddConsoleToGames();
+            yield return AddConsoleToGames;
 
-            AddReturnDateToWantedGames();
-
-            return new EmptyResult();
+            yield return AddReturnDateToWantedGames;
         }
 
-        private void CreateUsers()
+        public Func<dynamic> Current()
         {
-            Seed.CreateTable("Users", new dynamic[] 
+            return Scripts().Last();
+        }
+
+        public string CreateUsers()
+        {
+            return Seed.CreateTable("Users", new dynamic[] 
             { 
                 Id(),
                 new { Email = "nvarchar(1000)" },
                 new { Password = "nvarchar(100)" },
                 new { Handle = "nvarchar(1000)" }
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void CreateGames()
+        public string CreateGames()
         {
-            Seed.CreateTable("Games", new dynamic[] {
+            return Seed.CreateTable("Games", new dynamic[] {
                 Id(),
                 new { Name = "nvarchar(1000)" }
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void CreateLibrary()
+        public string CreateLibrary()
         {
-            Seed.CreateTable("Library", new dynamic[] {
+            return Seed.CreateTable("Library", new dynamic[] {
                 Id(),
                 UserId(),
                 GameId(),
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void CreateFriends()
+        public string CreateFriends()
         {
-            Seed.CreateTable("FriendAssociations", new dynamic[] {
+            return Seed.CreateTable("FriendAssociations", new dynamic[] {
                 Id(),
                 UserId(),
                 new { IsFollowing = "int", ForeignKey = "Users(Id)" }
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void CreateNotInterestedGames()
+        public string CreateNotInterestedGames()
         {
-            Seed.CreateTable("NotInterestedGames", new dynamic[] { 
+            return Seed.CreateTable("NotInterestedGames", new dynamic[] { 
                 Id(),
                 UserId(),
                 GameId(),
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void CreateWantedGames()
+        public string CreateWantedGames()
         {
-            Seed.CreateTable("WantedGames", new dynamic[] {
+            return Seed.CreateTable("WantedGames", new dynamic[] {
                 Id(),
                 UserId(),
                 GameId(),
                 new { FromUserId = "int", ForeignKey = "Users(Id)" },
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void AddConsoleToGames()
+        public string AddConsoleToGames()
         {
-            Seed.AddColumns("Games", new dynamic[] 
+            return Seed.AddColumns("Games", new dynamic[] 
             { 
                 new { Console = "nvarchar(255)" }
-            }).ExecuteNonQuery();
+            });
         }
 
-        private void AddReturnDateToWantedGames()
+        public string AddReturnDateToWantedGames()
         {
-            Seed.AddColumns("WantedGames", new dynamic[] 
+            return Seed.AddColumns("WantedGames", new dynamic[] 
             { 
                 new { ReturnDate = "datetime" }
-            }).ExecuteNonQuery();
+            });
         }
 
         private object Id()
@@ -144,19 +139,17 @@ namespace Oak.Controllers
             return new { GameId = "int", ForeignKey = "Games(Id)" };
         }
 
-        [HttpPost]
-        public ActionResult PurgeDb()
+        public void MigrateUpTo(Func<dynamic> method)
         {
-            Seed.PurgeDb();
-
-            return new EmptyResult();
+            Seed.ExecuteUpTo(Scripts(), method);
         }
 
-        /// <summary>
-        /// Create sample entries for your database in this method.
-        /// </summary>
-        [HttpPost]
-        public ActionResult SampleEntries()
+        public void ExecuteNonQuery(Func<dynamic> script)
+        {
+            Seed.ExecuteNonQuery(script());
+        }
+
+        public void SampleEntries()
         {
             var amir = SeedUser("amirrajan");
 
@@ -321,7 +314,7 @@ namespace Oak.Controllers
                 "Your Shape: Fitness Evolved"
             );
 
-            SeedGames(amir, 
+            SeedGames(amir,
                 "Final Fantasy X|PS2",
                 "Gran Turismo 3 A-spec|PS2",
                 "Grand Theft Auto: Vice City|PS2",
@@ -390,8 +383,6 @@ namespace Oak.Controllers
                 "Trials HD",
                 "Your Shape: Fitness Evolved"
             );
-
-            return new EmptyResult();
         }
 
         private void SeedGame(string name, object userId)
@@ -428,53 +419,50 @@ namespace Oak.Controllers
         {
             return new { Email = handle + "@example.com", Password = "password", Handle = "@" + handle }.InsertInto("Users");
         }
+    }
 
-        //here is a sample of how to create a table
-        private void CreateSampleTable()
+    [LocalOnly]
+    public class SeedController : Controller
+    {
+        public Seed Seed { get; set; }
+
+        public Schema Schema { get; set; }
+
+        public SeedController()
         {
-            Seed.CreateTable("SampleTable", new dynamic[] 
-            { 
-                new { Id = "uniqueidentifier", PrimaryKey = true },
-                new { Foo = "nvarchar(max)", Default = "Hello" },
-                new { Bar = "int", Nullable = false }
-            }).ExecuteNonQuery();
+            Seed = new Seed();
+
+            Schema = new Schema(Seed);
         }
 
-        //here is another sample of how to create a table
-        private void CreateAnotherSampleTable()
+        /// <summary>
+        /// Change this method to create your tables.  Take a look 
+        /// at each method, CreateSampleTable(), CreateAnotherSampleTable(), 
+        /// AlterSampleTable() and AdHocChange()...you'll want to replace 
+        /// this with your own set of methods.
+        /// </summary>
+        public IEnumerable<Func<dynamic>> Scripts()
         {
-            Seed.CreateTable("AnotherSampleTable", new dynamic[] 
-            { 
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                new { Foo = "nvarchar(max)", Default = "Hello", Nullable = false },
-            }).ExecuteNonQuery();
+            return Schema.Scripts();
         }
 
-        //here is a sample of how to alter a table
-        private void AlterSampleTable()
+        [HttpPost]
+        public ActionResult DeleteAllRecords()
         {
-            Seed.AddColumns("SampleTable", new dynamic[] 
-            {
-                new { AnotherColumn = "bigint" },
-                new { YetAnotherColumn = "nvarchar(max)" }
-            }).ExecuteNonQuery();
+            Seed.DeleteAllRecords();
+
+            return new EmptyResult();
         }
 
-        //different ad hoc queries
-        private void AdHocChange()
+        /// <summary>
+        /// Create sample entries for your database in this method.
+        /// </summary>
+        [HttpPost]
+        public ActionResult SampleEntries()
         {
-            //hey look, you can just do an ad hoc read
-            var reader = "select * from SampleTable".ExecuteReader();
-            while(reader.Read())
-            {
-                //do stuff here
-            }
+            Schema.SampleEntries();
 
-            //hey look, I can do a ad hoc scalar
-            var name = "select top 1 name from sysobjects".ExecuteScalar() as string;
-
-            //hey look, I can do an ad hoc non query
-            "drop table SampleTable".ExecuteNonQuery();
+            return new EmptyResult();
         }
 
         protected override void OnException(ExceptionContext filterContext)
