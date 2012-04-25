@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class renaming_column : _seed
     {
         void it_works()

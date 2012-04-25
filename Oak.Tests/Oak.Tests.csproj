@@ -160,6 +160,7 @@
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_DynamicParams.cs" />
     <Compile Include="describe_Seed\deleting_records.cs" />
+    <Compile Include="describe_Seed\dropping_column.cs" />
     <Compile Include="describe_Seed\execute_non_query.cs" />
     <Compile Include="describe_Seed\exporting_script.cs" />
     <Compile Include="describe_Seed\renaming_column.cs" />

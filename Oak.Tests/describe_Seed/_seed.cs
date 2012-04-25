@@ -46,5 +46,12 @@ namespace Oak.Tests.describe_Seed
         {
             Directory.GetFiles(Environment.CurrentDirectory, "*.sql").ForEach(s => File.Delete(s));    	
         }
+
+        public IEnumerable<string> Columns(string table)
+        {
+            var reader = "select name from syscolumns where object_name(id) = '{0}';".With(table).ExecuteReader();
+
+            while (reader.Read()) yield return reader.GetString(0);
+        }
     }
 }

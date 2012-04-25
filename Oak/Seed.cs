@@ -220,6 +220,22 @@ namespace Oak
         {
             return "sp_rename '{0}.{1}', '{2}', 'COLUMN'".With(table, currentColumnName, newColumnName);
         }
+
+        public string DropColumn(string table, string column)
+        {
+            return "alter table {0} drop column {1}".With(table, column);
+        }
+
+        public string DropConstraint(string table, string forColumn)
+        {
+            var name = @"
+            select CONSTRAINT_NAME
+            from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+            where TABLE_NAME = '{0}' 
+            and COLUMN_NAME = '{1}'".With(table, forColumn).ExecuteScalar(ConnectionProfile);
+
+            return "alter table {0} drop constraint {1}".With(table, name);
+        }
     }
 }
 
