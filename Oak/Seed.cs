@@ -236,6 +236,26 @@ namespace Oak
 
             return "alter table {0} drop constraint {1}".With(table, name);
         }
+
+        public void ExecuteUpTo(IEnumerable<Func<dynamic>> scripts, Func<string> method)
+        {
+            foreach (Func<dynamic> script in scripts)
+            {
+                if (script.Method == method.Method) break;
+
+                ExecuteNonQuery(script());
+            }
+        }
+
+        public void ExecuteTo(IEnumerable<Func<dynamic>> scripts, Func<string> method)
+        {
+            foreach (Func<dynamic> script in scripts)
+            {
+                ExecuteNonQuery(script());
+
+                if (script.Method == method.Method) break;
+            }
+        }
     }
 }
 

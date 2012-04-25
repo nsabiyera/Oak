@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class dropping_column : _seed
     {
         void it_works()
