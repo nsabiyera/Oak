@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorrowedGames.Tests", "Borr
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BorrowedGames.UI.Tests", "BorrowedGames.UI.Tests\BorrowedGames.UI.Tests.fsproj", "{401082FB-4C45-4688-94EE-298C5163FC11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorrowedGames.SchemaGen", "BorrowedGames.SchemaGen\BorrowedGames.SchemaGen.csproj", "{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{401082FB-4C45-4688-94EE-298C5163FC11}.Release|Mixed Platforms.Build.0 = Release|x86
 		{401082FB-4C45-4688-94EE-298C5163FC11}.Release|x86.ActiveCfg = Release|x86
 		{401082FB-4C45-4688-94EE-298C5163FC11}.Release|x86.Build.0 = Release|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Debug|x86.ActiveCfg = Debug|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Debug|x86.Build.0 = Debug|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Release|Any CPU.ActiveCfg = Release|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Release|x86.ActiveCfg = Release|x86
+		{C4CACF56-1A0D-4205-B24B-A4E5181AF1BD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
