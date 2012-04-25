@@ -7,7 +7,6 @@ using System.IO;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class exporting_script : _seed
     {
         void before_each()
