@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class deleting_records : _seed
     {
         void act_each()

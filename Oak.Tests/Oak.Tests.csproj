@@ -162,6 +162,7 @@
     <Compile Include="describe_Seed\deleting_records.cs" />
     <Compile Include="describe_Seed\execute_non_query.cs" />
     <Compile Include="describe_Seed\exporting_script.cs" />
+    <Compile Include="describe_Seed\renaming_column.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />

@@ -215,6 +215,11 @@ namespace Oak
 
             EnableKeyConstraints().ExecuteNonQuery(ConnectionProfile);
         }
+
+        public string RenameColumn(string table, string currentColumnName, string newColumnName)
+        {
+            return "sp_rename '{0}.{1}', '{2}', 'COLUMN'".With(table, currentColumnName, newColumnName);
+        }
     }
 }
 
