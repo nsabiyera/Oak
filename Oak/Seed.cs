@@ -196,6 +196,25 @@ namespace Oak
 
             else foreach (var s in script) (s as string).ExecuteNonQuery(ConnectionProfile);
         }
+
+        public string DisableKeyConstaints()
+        {
+            return "EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all';";
+        }
+
+        public string EnableKeyConstraints()
+        {
+            return "EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all';";
+        }
+
+        public void DeleteAllRecords()
+        {
+            DisableKeyConstaints().ExecuteNonQuery(ConnectionProfile);
+
+            "EXEC sp_msforeachtable 'delete ?';".ExecuteNonQuery(ConnectionProfile);
+
+            EnableKeyConstraints().ExecuteNonQuery(ConnectionProfile);
+        }
     }
 }
 
