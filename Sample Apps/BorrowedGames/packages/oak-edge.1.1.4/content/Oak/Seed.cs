@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Oak.Extensions;
 using System.Diagnostics;
+using System.IO;
 
 namespace Oak
 {
@@ -144,16 +145,37 @@ namespace Oak
             }
         }
 
-        public void Export(string exportPath, IEnumerable<Func<string>> scripts)
+        public void Export(string exportPath, IEnumerable<dynamic> scripts)
         {
             int order = 1;
 
-            scripts.ForEach<Func<string>>(s =>
+            scripts.ForEach<dynamic>(s =>
             {
-                System.IO.File.WriteAllText(System.IO.Path.Combine(exportPath, order + " - " + s.Method.Name + ".sql"), s());
+                var result = s();
+
+                string name = s.Method.Name;
+
+                if (result is string) WriteSqlFile(exportPath, "{0} - {1}".With(order, name), result);
+
+                else
+                {
+                    int parts = 1;
+
+                    foreach (var r in result)
+                    {
+                        WriteSqlFile(exportPath, "{0} - {1} - {2}".With(order, parts, name), r);
+
+                        parts++;
+                    }
+                }
 
                 order++;
             });
+        }
+
+        void WriteSqlFile(string path, string name, string content)
+        {
+            File.WriteAllText(Path.Combine(path, name + ".sql"), content);
         }
 
         public object Id()
@@ -164,6 +186,75 @@ namespace Oak
         public object GuidId()
         {
             return new { Id = "uniqueidentifier", PrimaryKey = true };
+        }
+
+        public void ExecuteNonQuery(dynamic script)
+        {
+            if (script is Delegate) ExecuteNonQuery(script());
+
+            else if(script is string) (script as string).ExecuteNonQuery(ConnectionProfile);
+
+            else foreach (var s in script) (s as string).ExecuteNonQuery(ConnectionProfile);
+        }
+
+        public string DisableKeyConstaints()
+        {
+            return "EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all';";
+        }
+
+        public string EnableKeyConstraints()
+        {
+            return "EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all';";
+        }
+
+        public void DeleteAllRecords()
+        {
+            DisableKeyConstaints().ExecuteNonQuery(ConnectionProfile);
+
+            "EXEC sp_msforeachtable 'delete ?';".ExecuteNonQuery(ConnectionProfile);
+
+            EnableKeyConstraints().ExecuteNonQuery(ConnectionProfile);
+        }
+
+        public string RenameColumn(string table, string currentColumnName, string newColumnName)
+        {
+            return "sp_rename '{0}.{1}', '{2}', 'COLUMN'".With(table, currentColumnName, newColumnName);
+        }
+
+        public string DropColumn(string table, string column)
+        {
+            return "alter table {0} drop column {1}".With(table, column);
+        }
+
+        public string DropConstraint(string table, string forColumn)
+        {
+            var name = @"
+            select CONSTRAINT_NAME
+            from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+            where TABLE_NAME = '{0}' 
+            and COLUMN_NAME = '{1}'".With(table, forColumn).ExecuteScalar(ConnectionProfile);
+
+            return "alter table {0} drop constraint {1}".With(table, name);
+        }
+
+        public void ExecuteUpTo(IEnumerable<Func<dynamic>> scripts, Func<string> method)
+        {
+            foreach (Func<dynamic> script in scripts)
+            {
+                if (script.Method == method.Method) break;
+
+                ExecuteNonQuery(script());
+            }
+        }
+
+        public void ExecuteTo(IEnumerable<Func<dynamic>> scripts, Func<string> method)
+        {
+            foreach (Func<dynamic> script in scripts)
+            {
+                ExecuteNonQuery(script());
+
+                if (script.Method == method.Method) break;
+            }
         }
     }
 }

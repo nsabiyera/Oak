@@ -11,23 +11,17 @@ namespace Oak.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if(filterContext.RequestContext.HttpContext.Request.IsLocal == false)
-            {
-                filterContext.Result = new HttpNotFoundResult();
-            }
+            if (!RunningLocally(filterContext)) filterContext.Result = new HttpNotFoundResult();
+        }
+
+        public bool RunningLocally(ActionExecutingContext filterContext)
+        {
+            return filterContext.RequestContext.HttpContext.Request.IsLocal;
         }
     }
 
-    [LocalOnly]
-    public class SeedController : Controller
+    public class Schema
     {
-        public Seed Seed { get; set; }
-
-        public SeedController()
-        {
-            Seed = new Seed();
-        }
-
         /// <summary>
         /// Change this method to create your tables.  Take a look 
         /// at each method, CreateSampleTable(), CreateAnotherSampleTable(), 
@@ -41,8 +35,84 @@ namespace Oak.Controllers
             yield return CreateAnotherSampleTable;
 
             yield return AlterSampleTable;
+        }
 
-            //yield additional Func<string>'s for each additional script
+        //here is a sample of how to create a table
+        public string CreateSampleTable()
+        {
+            return Seed.CreateTable("SampleTable", new dynamic[] 
+            { 
+                new { Id = "uniqueidentifier", PrimaryKey = true },
+                new { Foo = "nvarchar(max)", Default = "Hello" },
+                new { Bar = "int", Nullable = false }
+            });
+        }
+
+        //here is another sample of how to create a table
+        public string CreateAnotherSampleTable()
+        {
+            return Seed.CreateTable("AnotherSampleTable", new dynamic[] 
+            { 
+                new { Id = "int", Identity = true, PrimaryKey = true },
+                new { Foo = "nvarchar(max)", Default = "Hello", Nullable = false },
+            });
+        }
+
+        //here is a sample of how to alter a table
+        public string AlterSampleTable()
+        {
+            return Seed.AddColumns("SampleTable", new dynamic[] 
+            {
+                new { AnotherColumn = "bigint" },
+                new { YetAnotherColumn = "nvarchar(max)" }
+            });
+        }
+
+        //different ad hoc queries
+        public IEnumerable<string> AdHocChange()
+        {
+            //hey look, you can just do an ad hoc read
+            var reader = "select * from SampleTable".ExecuteReader();
+
+            while (reader.Read())
+            {
+                //do stuff here like yield return strings
+            }
+
+            var name = "select top 1 name from sysobjects".ExecuteScalar() as string;
+
+            yield return "drop table SampleTable";
+
+            yield return "drop table AnotherSampleTable";
+        }
+
+        public void SampleEntries()
+        {
+            new
+            {
+                Id = Guid.NewGuid(),
+                Title = "Hello World",
+                Body = "Lorem Ipsum"
+            }.InsertInto("Blogs");
+        }
+
+        public Seed Seed { get; set; }
+
+        public Schema(Seed seed) { Seed = seed; }
+    }
+
+    [LocalOnly]
+    public class SeedController : Controller
+    {
+        public Seed Seed { get; set; }
+
+        public Schema Schema { get; set; }
+
+        public SeedController()
+        {
+            Seed = new Seed();
+
+            Schema = new Schema(Seed);
         }
 
         [HttpPost]
@@ -61,7 +131,7 @@ namespace Oak.Controllers
         {
             var exportPath = Server.MapPath("~");
 
-            Seed.Export(exportPath, Scripts());
+            Seed.Export(exportPath, Schema.Scripts());
 
             return Content("Scripts executed to: " + exportPath);
         }
@@ -69,7 +139,7 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult All()
         {
-            Scripts().ForEach<Func<string>>(s => s().ExecuteNonQuery());
+            Schema.Scripts().ForEach<dynamic>(s => Seed.ExecuteNonQuery(s()));
 
             return new EmptyResult();
         }
@@ -80,64 +150,9 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult SampleEntries()
         {
-            //for example
-            new
-            {
-                Id = Guid.NewGuid(),
-                Title = "Hello World",
-                Body = "Lorem Ipsum"
-            }.InsertInto("Blogs");
+            Schema.SampleEntries();
 
             return new EmptyResult();
-        }
-
-        //here is a sample of how to create a table
-        private string CreateSampleTable()
-        {
-            return Seed.CreateTable("SampleTable", new dynamic[] 
-            { 
-                new { Id = "uniqueidentifier", PrimaryKey = true },
-                new { Foo = "nvarchar(max)", Default = "Hello" },
-                new { Bar = "int", Nullable = false }
-            });
-        }
-
-        //here is another sample of how to create a table
-        private string CreateAnotherSampleTable()
-        {
-            return Seed.CreateTable("AnotherSampleTable", new dynamic[] 
-            { 
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                new { Foo = "nvarchar(max)", Default = "Hello", Nullable = false },
-            });
-        }
-
-        //here is a sample of how to alter a table
-        private string AlterSampleTable()
-        {
-            return Seed.AddColumns("SampleTable", new dynamic[] 
-            {
-                new { AnotherColumn = "bigint" },
-                new { YetAnotherColumn = "nvarchar(max)" }
-            });
-        }
-
-        //different ad hoc queries
-        private void AdHocChange()
-        {
-            //hey look, you can just do an ad hoc read
-            var reader = "select * from SampleTable".ExecuteReader();
-
-            while (reader.Read())
-            {
-                //do stuff here
-            }
-
-            //hey look, I can do a ad hoc scalar
-            var name = "select top 1 name from sysobjects".ExecuteScalar() as string;
-
-            //hey look, I can do an ad hoc non query
-            "drop table SampleTable".ExecuteNonQuery();
         }
 
         protected override void OnException(ExceptionContext filterContext)
