@@ -7,7 +7,7 @@ using BorrowedGames.Models;
 
 namespace BorrowedGames.Tests.Controllers.describe_GamesController
 {
-    [Tag("describe_User,describe_WantedGame,describe_GamesController")]
+    [Tag("describe_User,describe_WantedGame,describe_GamesController,describe_RequestedGame")]
     class giving_game : _games_controller
     {
         void a_game_has_been_requested()
@@ -34,9 +34,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                     ((int)FirstBorrowedGame(friendId).Id).should_be(gearsOfWarId);
 
                 it["requested game cannot be given again (hypermedia link is removed)"] = () =>
-                {
                     ((bool)FirstRequestedGame().RespondsTo("GiveGame")).should_be_false();
-                };
 
                 it["the user who gave the game doesn't have any borrowed games"] = () =>
                     BorrowedGames(currentUserId).Count().should_be(0);

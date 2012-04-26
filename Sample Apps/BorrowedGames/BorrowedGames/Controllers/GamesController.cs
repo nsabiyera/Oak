@@ -118,7 +118,7 @@ namespace BorrowedGames.Controllers
         {
             games.ForEach(s =>
             {
-                if (!s.IsRequested())
+                if (!s.IsGiven())
                 {
                     s.GiveGame = Url.RouteUrl(new
                     {
