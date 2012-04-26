@@ -85,7 +85,7 @@ namespace BorrowedGames.Controllers
 
         public IEnumerable<dynamic> LinksForWantedGames(IEnumerable<dynamic> games)
         {
-            games.ForEach(s => 
+            games.ForEach(s =>
             {
                 s.DeleteWant = Url.RouteUrl(new
                 {
@@ -101,7 +101,7 @@ namespace BorrowedGames.Controllers
 
         public IEnumerable<dynamic> LinksForNotInterestedGames(IEnumerable<dynamic> games)
         {
-            games.ForEach(s => 
+            games.ForEach(s =>
             {
                 s.UndoNotInterested = Url.RouteUrl(new
                 {
@@ -118,13 +118,16 @@ namespace BorrowedGames.Controllers
         {
             games.ForEach(s =>
             {
-                s.GiveGame = Url.RouteUrl(new
+                if (!s.IsRequested())
                 {
-                    controller = "Games",
-                    action = "GameGiven",
-                    gameId = s.Id,
-                    toUserId = s.RequestedBy.Id
-                });
+                    s.GiveGame = Url.RouteUrl(new
+                    {
+                        controller = "Games",
+                        action = "GameGiven",
+                        gameId = s.Id,
+                        toUserId = s.RequestedBy.Id
+                    });    
+                }
             });
 
             return games;

@@ -33,6 +33,11 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 it["the game is considered borrowed"] = () =>
                     ((int)FirstBorrowedGame(friendId).Id).should_be(gearsOfWarId);
 
+                it["requested game cannot be given again (hypermedia link is removed)"] = () =>
+                {
+                    ((bool)FirstRequestedGame().RespondsTo("GiveGame")).should_be_false();
+                };
+
                 it["the user who gave the game doesn't have any borrowed games"] = () =>
                     BorrowedGames(currentUserId).Count().should_be(0);
             };

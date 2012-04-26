@@ -64,4 +64,5 @@ let requestFirstGame _ =
 
 let giveFirstRequestedGame _ =
     click "a.check"
+    "a.cancel" == "The game has been returned"
     ()

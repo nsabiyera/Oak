@@ -7,6 +7,9 @@
     init: function(urls) {
       requestedGamesUrl = urls.requestedGamesUrl;
       return this.view = new requestedGamesView();
+    },
+    getRequestedGames: function() {
+      return this.view.refresh();
     }
   };
 
@@ -26,11 +29,14 @@
       if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
-    givenGame: function() {
+    giveGame: function() {
       var _this = this;
       return $.post(this.get("GiveGame"), {}, function() {
-        return alert("done");
+        return requested.getRequestedGames();
       });
+    },
+    canGiveGame: function() {
+      return !!this.get("GiveGame");
     }
   });
 
@@ -71,21 +77,37 @@
   requestedGameView = Backbone.View.extend({
     className: "border",
     events: {
-      "click .check": "givenGame"
+      "click .check": "giveGame"
     },
-    givenGame: function() {
-      return this.model.givenGame();
+    giveGame: function() {
+      return this.model.giveGame();
     },
     render: function() {
       var game;
-      game = $.tmpl(this.gameTemplate, {
-        requestedBy: this.model.requestedBy(),
-        gameName: this.model.shortName()
-      });
+      if (this.model.canGiveGame()) game = this.genCanGiveTemplate();
+      if (!this.model.canGiveGame()) game = this.genReturnGame();
       $(this.el).html(game);
       return this;
     },
-    gameTemplate: '\
+    genCanGiveTemplate: function() {
+      return $.tmpl(this.canGiveGameTemplate, {
+        requestedBy: this.model.requestedBy(),
+        gameName: this.model.shortName()
+      });
+    },
+    genReturnGame: function() {
+      return $.tmpl(this.returnGameTemplate, {
+        requestedBy: this.model.requestedBy(),
+        gameName: this.model.shortName()
+      });
+    },
+    returnGameTemplate: '\
+    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">\
+        <a class="cancel" href="javascript:;">The game has been returned</a>\
+    </div>\
+    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>\
+    ',
+    canGiveGameTemplate: '\
     <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">\
         <a class="check" href="javascript:;">I have given him the game</a>\
     </div>\

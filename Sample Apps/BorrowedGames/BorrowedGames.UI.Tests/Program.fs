@@ -19,7 +19,7 @@ test(fun _ ->
     reset()
     registerUser "user1")
 
-many 20 (fun _ ->
+test(fun _ ->
     describe "request games"
     reset()
     stageGame "Dark Souls"

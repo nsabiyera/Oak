@@ -6,6 +6,8 @@ this.requested =
 
     @view = new requestedGamesView()
 
+  getRequestedGames: -> @view.refresh()
+
 requestedGame = Backbone.Model.extend
   name: -> @get("Name")
 
@@ -20,10 +22,13 @@ requestedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
-  givenGame: ->
+  giveGame: ->
     $.post(@get("GiveGame"), { }, =>
-      alert("done")
+      requested.getRequestedGames()
     )
+
+  canGiveGame: ->
+    !!@get("GiveGame")
 
 requestedGames = Backbone.Collection.extend
   model: requestedGame
@@ -59,18 +64,34 @@ requestedGameView = Backbone.View.extend
   className: "border"
 
   events:
-    "click .check" : "givenGame"
+    "click .check" : "giveGame"
 
-  givenGame: -> @model.givenGame()
+  giveGame: -> @model.giveGame()
 
   render: ->
-    game = $.tmpl(@gameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+    game = @genCanGiveTemplate() if @model.canGiveGame()
+
+    game = @genReturnGame() if !@model.canGiveGame()
 
     $(@el).html(game)
 
     return this
 
-  gameTemplate:
+  genCanGiveTemplate: ->
+    return $.tmpl(@canGiveGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+
+  genReturnGame: ->
+    return $.tmpl(@returnGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+
+  returnGameTemplate:
+    '
+    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
+        <a class="cancel" href="javascript:;">The game has been returned</a>
+    </div>
+    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>
+    '
+
+  canGiveGameTemplate:
     '
     <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
         <a class="check" href="javascript:;">I have given him the game</a>

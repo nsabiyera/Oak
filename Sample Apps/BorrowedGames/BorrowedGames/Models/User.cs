@@ -228,7 +228,8 @@ namespace BorrowedGames.Models
                 game.Name,
                 game.Console,
                 RequestedBy = game.RequestedBy().Select("Id", "Handle"),
-                game.ReturnDate
+                game.ReturnDate,
+                IsRequested = new DynamicFunction(() =>  game.ReturnDate != null)
             });
         }
     }
