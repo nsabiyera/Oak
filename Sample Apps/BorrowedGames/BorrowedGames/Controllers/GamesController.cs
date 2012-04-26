@@ -22,7 +22,7 @@ namespace BorrowedGames.Controllers
 
         public dynamic Requested()
         {
-            return Json((User().RequestedGames() as IEnumerable<dynamic>).ToList());
+            return Json(LinksForRequestedGames(User().RequestedGames()));
         }
 
         public dynamic NotInterested()
@@ -108,6 +108,22 @@ namespace BorrowedGames.Controllers
                     controller = "Games",
                     action = "UndoNotInterested",
                     gameId = s.GameId
+                });
+            });
+
+            return games;
+        }
+
+        public IEnumerable<dynamic> LinksForRequestedGames(IEnumerable<dynamic> games)
+        {
+            games.ForEach(s =>
+            {
+                s.GiveGame = Url.RouteUrl(new
+                {
+                    controller = "Games",
+                    action = "GameGiven",
+                    gameId = s.Id,
+                    toUserId = s.RequestedBy.Id
                 });
             });
 

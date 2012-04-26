@@ -157,6 +157,8 @@ namespace Oak.Controllers
 
             var greg = SeedUser("gregkniffin");
 
+            SeedFriend("amirrajan", "gregkniffin");
+
             SeedGames(james,
                 "Battalion Wars 2|WII",
                 "Big Brain Academy: Wii Degree|WII",
@@ -418,6 +420,17 @@ namespace Oak.Controllers
         private object SeedUser(string handle)
         {
             return new { Email = handle + "@example.com", Password = "password", Handle = "@" + handle }.InsertInto("Users");
+        }
+
+        private void SeedFriend(string from, string to)
+        {
+            var users = new Users();
+
+            var user = users.ForHandle("@" + from);
+
+            var friend = users.ForHandle("@" + to);
+
+            user.AddFriend(friend);
         }
     }
 

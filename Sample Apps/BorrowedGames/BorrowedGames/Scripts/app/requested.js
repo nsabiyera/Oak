@@ -27,7 +27,10 @@
       return name += " (" + this.console() + ")";
     },
     givenGame: function() {
-      return "";
+      var _this = this;
+      return $.post(this.get("GiveGame"), {}, function() {
+        return alert("done");
+      });
     }
   });
 

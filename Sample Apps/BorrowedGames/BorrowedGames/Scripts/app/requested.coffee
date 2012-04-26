@@ -20,7 +20,10 @@ requestedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
-  givenGame: -> ""
+  givenGame: ->
+    $.post(@get("GiveGame"), { }, =>
+      alert("done")
+    )
 
 requestedGames = Backbone.Collection.extend
   model: requestedGame
