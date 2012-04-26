@@ -17,8 +17,7 @@ let given_user email password =
 
 let reset _ =
     let seed = new Oak.Controllers.SeedController()
-    seed.PurgeDb() |> ignore
-    seed.All() |> ignore
+    seed.DeleteAllRecords() |> ignore
     ()
 
 let stageGame = fun gameName ->

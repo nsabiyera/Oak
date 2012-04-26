@@ -32,8 +32,7 @@ namespace BorrowedGames.Tests
         {
             session = new Dictionary<string, dynamic>();
             seedController = new SeedController();
-            seedController.PurgeDb();
-            seedController.All();
+            seedController.DeleteAllRecords();
             Users = new Users();
         }
 

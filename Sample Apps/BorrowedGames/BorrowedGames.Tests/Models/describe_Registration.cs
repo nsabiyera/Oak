@@ -21,9 +21,7 @@ namespace BorrowedGames.Tests.Models
         {
             seedController = new SeedController();
 
-            seedController.PurgeDb();
-
-            seedController.All();
+            seedController.DeleteAllRecords();
 
             registration = ValidRegistration();
         }
