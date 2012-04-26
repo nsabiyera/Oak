@@ -44,7 +44,7 @@ task :build => :rake_dot_net_initialize do
 end
 
 desc "builds, runs tests, deploys and seeds sample data"
-task :all => [:build, :coffee, :compass, :deploy, :tests, :server, :sample]
+task :all => [:build, :regen_db, :coffee, :compass, :deploy, :tests, :server, :sample]
 
 desc "deploys MVC app to directory that iis express will use to run"
 task :deploy => :rake_dot_net_initialize do 
