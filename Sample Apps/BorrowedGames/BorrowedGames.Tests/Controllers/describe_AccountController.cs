@@ -82,12 +82,17 @@ namespace BorrowedGames.Tests.Controllers
 
             context["user registers"] = () =>
             {
-                act = () => result = controller.Register(new
+                act = () =>
                 {
-                    Email = "user@example.com",
-                    Password = "password",
-                    PasswordConfirmation = "password"
-                });
+                    result = controller.Register(new
+                    {
+                        Email = "user@example.com",
+                        Password = "password",
+                        PasswordConfirmation = "password"
+                    });
+
+                    user = Users.All().First().Id;
+                };
 
                 it["logs in user"] = () => (result.Url as string).should_be("/");
 
