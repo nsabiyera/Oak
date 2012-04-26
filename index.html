@@ -162,9 +162,10 @@ start BorrowedGames.sln
 <pre>
 bundle install
 rake             (builds and deploys the application)
+rake regen_db    (this generates the schema for the db)
 rake tests       (all tests should pass)
 rake server      (this will start up iis express)
-rake reset       (resets the database schema with no data)
+rake reset       (deletes all records in the db)
 rake sample      (adds sample data to the database)
 start http://localhost:3000
 </pre>
