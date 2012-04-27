@@ -43,6 +43,11 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
             return PreferredGames().First();
         }
 
+        public dynamic FirstRequestedGame(int gameId, int requestedById)
+        {
+            return FirstRequestedGame(s => s.Id == gameId && s.RequestedBy.Id == requestedById);
+        }
+
         public dynamic FirstRequestedGame(Func<dynamic, bool> where = null)
         {
             where = where ?? new Func<dynamic, bool>(d => true);
@@ -65,9 +70,9 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
             return controller.Preferred().Data;
         }
 
-        public IEnumerable<dynamic> WantedGames()
+        public IEnumerable<dynamic> WantedGames(int userId)
         {
-            return controller.Wanted().Data;
+            return User(userId).WantedGames();
         }
 
         public IEnumerable<dynamic> NotInterestedGames()

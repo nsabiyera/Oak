@@ -9,6 +9,7 @@ using System.Web.Routing;
 using Moq;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace BorrowedGames.Tests
 {
@@ -126,6 +127,21 @@ namespace BorrowedGames.Tests
             dynamic user = Users.Single(userId);
 
             user.AddFriend(Users.Single(isFollowing));
+        }
+
+        public void GivenGameIsBorrowed(int game, int fromUser, int givenTo)
+        {
+            User(fromUser).GiveGame(game, givenTo);
+        }
+
+        public dynamic FirstBorrowedGame(int userId)
+        {
+            return BorrowedGames(userId).First();
+        }
+
+        public IEnumerable<dynamic> BorrowedGames(int userId)
+        {
+            return User(userId).BorrowedGames() as IEnumerable<dynamic>;
         }
 
         protected DateTime OneMonthFromToday()

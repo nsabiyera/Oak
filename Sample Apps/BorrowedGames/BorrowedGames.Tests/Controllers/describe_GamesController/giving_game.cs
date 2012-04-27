@@ -14,6 +14,8 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
         {
             before = () =>
             {
+                GivenUserWantsGame(anotherFriendId, fromUser: currentUserId, game: gearsOfWarId);
+
                 GivenUserWantsGame(friendId, fromUser: currentUserId, game: gearsOfWarId);
 
                 GivenUserWantsGame(friendId, fromUser: currentUserId, game: mirrorsEdgeId);
@@ -21,20 +23,19 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             context["the requested game has been given"] = () =>
             {
-                act = () => controller.GameGiven(gearsOfWarId, friendId);
+                act = () => controller.GiveGame(gearsOfWarId, friendId);
 
                 it["the games return date is set to one month from today"] = () =>
-                {
-                    var game = RequestedGames().First(s => s.Id == gearsOfWarId);
-
-                    ((DateTime?)FirstRequestedGame(d => d.Id == gearsOfWarId).ReturnDate).should_be(OneMonthFromToday());
-                };
+                    ((DateTime?)FirstRequestedGame(gearsOfWarId, friendId).ReturnDate).should_be(OneMonthFromToday());
 
                 it["the game is considered borrowed"] = () =>
                     ((int)FirstBorrowedGame(friendId).Id).should_be(gearsOfWarId);
 
                 it["requested game cannot be given again (hypermedia link is removed)"] = () =>
-                    ((bool)FirstRequestedGame().RespondsTo("GiveGame")).should_be_false();
+                    ((bool)FirstRequestedGame(gearsOfWarId, friendId).RespondsTo("GiveGame")).should_be_false();
+
+                it["the requested game can be marked as returned"] = () =>
+                    ((string)FirstRequestedGame(gearsOfWarId, friendId).GameReturned).should_be("/Games/GameReturned?gameId=" + gearsOfWarId + "&byUserId=" + friendId);
 
                 it["the user who gave the game doesn't have any borrowed games"] = () =>
                     BorrowedGames(currentUserId).Count().should_be(0);
@@ -45,16 +46,6 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 it["the game is not considered borrowed"] = () =>
                     BorrowedGames(friendId).Count().should_be(0);
             };
-        }
-
-        public dynamic FirstBorrowedGame(int userId)
-        {
-            return BorrowedGames(userId).First();
-        }
-
-        public IEnumerable<dynamic> BorrowedGames(int userId)
-        {
-            return User(userId).BorrowedGames() as IEnumerable<dynamic>;
         }
     }
 }

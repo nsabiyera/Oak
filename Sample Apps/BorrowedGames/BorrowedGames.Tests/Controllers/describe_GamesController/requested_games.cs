@@ -24,7 +24,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                     ((string)FirstRequestedGame().RequestedBy.Handle).should_be("@following");
 
                 it["request game contains hyper media link to give game"] = () =>
-                    ((string)FirstRequestedGame().GiveGame).should_be("/Games/GameGiven?gameId=" + mirrorsEdgeId + "&toUserId=" + FirstRequestedGame().RequestedBy.Id as string);
+                    ((string)FirstRequestedGame().GiveGame).should_be("/Games/GiveGame?gameId=" + mirrorsEdgeId + "&toUserId=" + FirstRequestedGame().RequestedBy.Id as string);
             };
 
             context["user has games, but none have been requested"] = () =>

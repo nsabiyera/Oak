@@ -19,7 +19,7 @@ namespace BorrowedGames.Controllers
         {
             return Json(LinksForWantedGames(User().WantedGames()));
         }
-
+        
         public dynamic Requested()
         {
             return Json(LinksForRequestedGames(User().RequestedGames()));
@@ -55,9 +55,20 @@ namespace BorrowedGames.Controllers
         }
 
         [HttpPost]
-        public void GameGiven(int gameId, int toUserId)
+        public void GiveGame(int gameId, int toUserId)
         {
-            User().GameGiven(gameId, toUserId);
+            User().GiveGame(gameId, toUserId);
+        }
+
+        [HttpPost]
+        public void GameReturned(int gameId, int byUserId)
+        {
+            User().GameReturned(gameId, byUserId);
+        }
+
+        public void ReturnGame(int gameId, int toUserId)
+        {
+            User().ReturnGame(gameId, toUserId);
         }
 
         public IEnumerable<dynamic> LinksForPreferredGames(IEnumerable<dynamic> games)
@@ -118,15 +129,26 @@ namespace BorrowedGames.Controllers
         {
             games.ForEach(s =>
             {
-                if (!s.IsGiven())
+                if(s is RequestedGame)
                 {
                     s.GiveGame = Url.RouteUrl(new
                     {
                         controller = "Games",
-                        action = "GameGiven",
+                        action = "GiveGame",
                         gameId = s.Id,
                         toUserId = s.RequestedBy.Id
-                    });    
+                    });
+                }
+
+                if(s is LendedGame)
+                {
+                    s.GameReturned = Url.RouteUrl(new
+                    {
+                        controller = "Games",
+                        action = "GameReturned",
+                        gameId = s.Id,
+                        byUserId = s.RequestedBy.Id
+                    });
                 }
             });
 

@@ -35,6 +35,12 @@
         return requested.getRequestedGames();
       });
     },
+    gameReturned: function() {
+      var _this = this;
+      return $.post(this.get("GameReturned"), {}, function() {
+        return requested.getRequestedGames();
+      });
+    },
     canGiveGame: function() {
       return !!this.get("GiveGame");
     }
@@ -77,10 +83,14 @@
   requestedGameView = Backbone.View.extend({
     className: "border",
     events: {
-      "click .check": "giveGame"
+      "click .check": "giveGame",
+      "click .cancel": "gameReturned"
     },
     giveGame: function() {
       return this.model.giveGame();
+    },
+    gameReturned: function() {
+      return this.model.gameReturned();
     },
     render: function() {
       var game;

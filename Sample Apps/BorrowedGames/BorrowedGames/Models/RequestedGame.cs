@@ -6,20 +6,17 @@ using Oak;
 
 namespace BorrowedGames.Models
 {
-    public class RequestedGame : Gemini
+    public class LendedGame : PotentialRental
+    {
+        public LendedGame(dynamic game)
+            : base(game as object)
+        { }
+    }
+
+    public class RequestedGame : PotentialRental
     {
         public RequestedGame(dynamic game)
-        {
-            _.Id = game.GameId;
-            _.Name = game.Name;
-            _.Console = game.Console;
-            _.RequestedBy = game.RequestedBy().Select("Id", "Handle");
-            _.ReturnDate = game.ReturnDate;
-        }
-
-        dynamic IsGiven()
-        {
-            return _.ReturnDate != null;
-        }
+            : base(game as object)
+        { }
     }
 }

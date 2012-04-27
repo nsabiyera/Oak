@@ -70,5 +70,10 @@ namespace BorrowedGames.Tests.Controllers
                     WantedGames().should_not_contain(s => s.Name == "Gears of War");
             };
         }
+
+        public IEnumerable<dynamic> WantedGames()
+        {
+            return controller.Wanted().Data;
+        }
     }
 }

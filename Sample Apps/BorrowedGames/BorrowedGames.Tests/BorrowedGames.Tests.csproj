@@ -52,6 +52,7 @@
     <Compile Include="Controllers\describe_FriendsController.cs" />
     <Compile Include="Controllers\describe_GamesController\giving_game.cs" />
     <Compile Include="Controllers\describe_GamesController\requested_games.cs" />
+    <Compile Include="Controllers\describe_GamesController\returning_game.cs" />
     <Compile Include="Controllers\describe_GamesController\wanted_games.cs" />
     <Compile Include="Controllers\describe_GamesController\not_interested_games.cs" />
     <Compile Include="Controllers\describe_GamesController\preferred_games.cs" />

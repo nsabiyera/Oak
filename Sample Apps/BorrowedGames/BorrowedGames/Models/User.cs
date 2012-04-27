@@ -87,13 +87,18 @@ namespace BorrowedGames.Models
             wantedGames.Insert(_.Wants().New(new { gameId, fromUserId }));
         }
 
-        public void GameGiven(dynamic gameId, dynamic toUserId)
+        public void GiveGame(dynamic gameId, dynamic toUserId)
         {
-            var wantedGame = wantedGames.SingleWhere("GameId = @0", new object[] { gameId });
+            var wantedGame = WantedGame(gameId, toUserId);
 
             wantedGame.ReturnDate = DateTime.Today.AddMonths(1);
 
             wantedGames.Update(wantedGame, wantedGame.Id);
+        }
+
+        public dynamic WantedGame(int gameId, int userId)
+        {
+            return wantedGames.SingleWhere("GameId = @0 and UserId = @1", new object[] { gameId, userId });
         }
 
         public void UndoNotInterestedGame(dynamic gameId)
@@ -176,8 +181,14 @@ namespace BorrowedGames.Models
 
         public IEnumerable<dynamic> RequestedGames()
         {
-            return wantedGames.All(where: "FromUserId = @0", args: new object[] { _.Id })
-                .Select(g => new RequestedGame(g))
+            return wantedGames
+                .All(where: "FromUserId = @0", args: new object[] { _.Id })
+                .Select(g => 
+                {
+                    if (g.ReturnDate == null) return new RequestedGame(g) as dynamic;
+
+                    return new LendedGame(g) as dynamic;
+                })
                 .ToList();
         }
 
@@ -218,6 +229,20 @@ namespace BorrowedGames.Models
                 game.Console,
                 Owner = game.User().Select("Id", "Handle")
             });
+        }
+
+        public void GameReturned(int gameId, int byUserId)
+        {
+            var wantedGame = WantedGame(gameId, byUserId);
+
+            wantedGames.Delete(wantedGame.Id);
+        }
+
+        public void ReturnGame(int gameId, int toUserId)
+        {
+            var wantedGame = wantedGames.SingleWhere("GameId = @0 and FromUserId = @1 and UserId = @2", new object[] { gameId, toUserId, _.Id });
+
+            wantedGames.Delete(wantedGame.Id);
         }
     }
 }

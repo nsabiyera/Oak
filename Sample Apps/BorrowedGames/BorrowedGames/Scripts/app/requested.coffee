@@ -27,6 +27,11 @@ requestedGame = Backbone.Model.extend
       requested.getRequestedGames()
     )
 
+  gameReturned: ->
+    $.post(@get("GameReturned"), { }, =>
+      requested.getRequestedGames()
+    )
+
   canGiveGame: ->
     !!@get("GiveGame")
 
@@ -65,8 +70,11 @@ requestedGameView = Backbone.View.extend
 
   events:
     "click .check" : "giveGame"
+    "click .cancel" : "gameReturned"
 
   giveGame: -> @model.giveGame()
+
+  gameReturned: -> @model.gameReturned()
 
   render: ->
     game = @genCanGiveTemplate() if @model.canGiveGame()
