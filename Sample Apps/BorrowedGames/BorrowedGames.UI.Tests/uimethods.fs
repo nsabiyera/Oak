@@ -27,34 +27,34 @@ let registerUser userName =
     goToSignIn()
     click "a[href='/Account/Register']"
     on "/Account/Register"
-    write "#Email" (email userName)
-    write "#Password" "Password"
-    write "#PasswordConfirmation" "Password"
+    "#Email" << (email userName)
+    "#Password" << "Password"
+    "#PasswordConfirmation" << "Password"
     click "input[value='register']"
     on "/"
     click "#handle"
-    write "#handleTextBox" userName
+    "#handleTextBox" << userName
     click "input[value='update handle']"
     ".growlinfo" == ("Your handle has been updated to @" + userName + ".")
     logOff()
 
 let loginAs userName =
     goToSignIn()
-    write "#Email" (email userName)
-    write "#Password" "Password"
+    "#Email" << (email userName)
+    "#Password" << "Password"
     click "input[value='login']"
     on "/"
 
 let addGame name =
     click "#showLibrary"
-    write "#gameToAdd" name
+    "#gameToAdd" << name
     click "table tbody tr td"
     click "#closeLibraryTop"
     ()
 
 let follow name =
     click "#showFriends"
-    write "#handleToAdd" name
+    "#handleToAdd" << name
     click "#addHandle"
     click "#closeFriendsTop"
 
@@ -64,5 +64,5 @@ let requestFirstGame _ =
 
 let giveFirstRequestedGame _ =
     click "a.check"
-    "a.cancel" == "The game has been returned"
+    "#requestedGames a.cancel" == "The game has been returned"
     ()
