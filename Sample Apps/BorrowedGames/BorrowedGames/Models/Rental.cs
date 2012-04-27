@@ -6,9 +6,9 @@ using Oak;
 
 namespace BorrowedGames.Models
 {
-    public class PotentialRental : Gemini
+    public class Rental : Gemini
     {
-        public PotentialRental(dynamic game)
+        public Rental(dynamic game)
         {
             _.Id = game.GameId;
             _.Name = game.Name;
