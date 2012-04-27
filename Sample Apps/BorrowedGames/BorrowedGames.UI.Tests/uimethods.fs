@@ -62,7 +62,24 @@ let requestFirstGame _ =
     click ".request"
     ()
 
+let gameReturnedLink = "#requestedGames a.cancel"
+
 let giveFirstRequestedGame _ =
     click "a.check"
-    "#requestedGames a.cancel" == "The game has been returned"
+    gameReturnedLink == "The game has been returned"
     ()
+
+let requestGame _ = 
+    reset()
+    stageGame "Dark Souls"
+    registerUser "user1"
+    registerUser "user2"
+    loginAs "user1"
+    addGame "Dark Souls"
+    logOff()
+    loginAs "user2"
+    follow "user1"
+    requestFirstGame()
+    logOff()
+    loginAs "user1"
+    giveFirstRequestedGame()
