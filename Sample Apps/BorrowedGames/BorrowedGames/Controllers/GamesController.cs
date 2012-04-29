@@ -105,6 +105,17 @@ namespace BorrowedGames.Controllers
                     gameId = s.Id,
                     followingId = s.Owner.Id
                 });
+
+                if (s.IsBorrowed())
+                {
+                    s.ReturnGame = Url.RouteUrl(new
+                    {
+                        controller = "Games",
+                        action = "ReturnGame",
+                        gameId = s.Id,
+                        toUserId = s.Owner.Id
+                    });    
+                }
             });
 
             return games;

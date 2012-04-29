@@ -34,7 +34,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 it["requested game cannot be given again (hypermedia link is removed)"] = () =>
                     ((bool)FirstRequestedGame(gearsOfWarId, friendId).RespondsTo("GiveGame")).should_be_false();
 
-                it["the requested game can be marked as returned"] = () =>
+                it["the requested game can be marked as returned by the lender"] = () =>
                     ((string)FirstRequestedGame(gearsOfWarId, friendId).GameReturned).should_be("/Games/GameReturned?gameId=" + gearsOfWarId + "&byUserId=" + friendId);
 
                 it["the user who gave the game doesn't have any borrowed games"] = () =>

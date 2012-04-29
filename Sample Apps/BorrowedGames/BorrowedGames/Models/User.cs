@@ -96,9 +96,9 @@ namespace BorrowedGames.Models
             wantedGames.Update(wantedGame, wantedGame.Id);
         }
 
-        public dynamic WantedGame(int gameId, int userId)
+        public dynamic WantedGame(int gameId, int ownerId)
         {
-            return wantedGames.SingleWhere("GameId = @0 and UserId = @1", new object[] { gameId, userId });
+            return wantedGames.SingleWhere("GameId = @0 and UserId = @1", new object[] { gameId, ownerId });
         }
 
         public void UndoNotInterestedGame(dynamic gameId)
@@ -175,7 +175,7 @@ namespace BorrowedGames.Models
         {
             return GamesFriendsHave()
                 .Where(GameIsWanted)
-                .Select(UserGame)
+                .Select(WantedGame)
                 .ToList();
         }
 
@@ -206,7 +206,7 @@ namespace BorrowedGames.Models
                         PrefersGame(s.Id) &&
                         SharesConsole(s.Console) &&
                         HasNotBeenRequested(s))
-                    .Select(UserGame)
+                    .Select(PreferredGame)
                     .OrderBy(s => s.Name)
                     .ToList();
 
@@ -220,14 +220,28 @@ namespace BorrowedGames.Models
                 .ToList();
         }
 
-        private dynamic UserGame(dynamic game)
+        private dynamic PreferredGame(dynamic game)
         {
-            return new Gemini(new
+            return new PreferredGame(new
             {
                 game.Id,
                 game.Name,
                 game.Console,
                 Owner = game.User().Select("Id", "Handle")
+            });
+        }
+
+        private dynamic WantedGame(dynamic game)
+        {
+            var isBorrowed = WantedGame(game.Id, _.Id, game.User().Id).ReturnDate != null;
+
+            return new Gemini(new
+            {
+                game.Id,
+                game.Name,
+                game.Console,
+                Owner = game.User().Select("Id", "Handle"),
+                IsBorrowed = new DynamicFunction(() => isBorrowed)
             });
         }
 
@@ -240,9 +254,14 @@ namespace BorrowedGames.Models
 
         public void ReturnGame(int gameId, int toUserId)
         {
-            var wantedGame = wantedGames.SingleWhere("GameId = @0 and FromUserId = @1 and UserId = @2", new object[] { gameId, toUserId, _.Id });
+            var wantedGame = WantedGame(gameId, _.Id, toUserId);
 
             wantedGames.Delete(wantedGame.Id);
+        }
+
+        public dynamic WantedGame(int gameId, int requesterId, int ownerId)
+        {
+            return wantedGames.SingleWhere("GameId = @0 and FromUserId = @1 and UserId = @2", new object[] { gameId, ownerId, _.Id });
         }
     }
 }

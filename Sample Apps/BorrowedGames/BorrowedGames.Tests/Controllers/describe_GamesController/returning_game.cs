@@ -24,6 +24,15 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 GivenGameIsBorrowed(game: gearsOfWarId, fromUser: borrowedFromUserId, givenTo: friendId);
             };
 
+            it["the requested game can be returned by the person who borrowed it"] = () =>
+            {
+                controller.CurrentUser = friendId;
+
+                var wantedGames = controller.Wanted().Data as IEnumerable<dynamic>;
+
+                ((string)wantedGames.First().ReturnGame).should_be("/Games/ReturnGame?gameId=" + gearsOfWarId + "&toUserId=" + currentUserId);
+            };
+
             context["user who originally gave game marks the game as returned"] = () => 
             {
                 act = () => controller.GameReturned(gearsOfWarId, friendId);

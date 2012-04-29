@@ -14,6 +14,8 @@ wantedGame = Backbone.Model.extend
 
   owner: -> @get("Owner").Handle
 
+  canReturnGame: -> @get("ReturnGame")
+
   shortName: ->
     name = @name()
     
@@ -23,6 +25,12 @@ wantedGame = Backbone.Model.extend
 
   undoRequest: ->
     $.post(@get("DeleteWant"), { }, =>
+      preferred.getPreferredGames()
+      @change()
+    )
+
+  returnGame: ->
+    $.post(@get("ReturnGame"), { }, =>
       preferred.getPreferredGames()
       @change()
     )
@@ -67,12 +75,22 @@ wantedGameView = Backbone.View.extend
     $(@el).fadeOut()
 
   events:
-    "click .cancel": "undoRequest"
+    "click .cancel": "delete"
 
-  undoRequest: -> @model.undoRequest()
+  delete: ->
+    @model.undoRequest() if !@model.canReturnGame()
+
+    @model.returnGame() if @model.canReturnGame()
 
   render: ->
-    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
+    @renderRequestedGame() if !@model.canReturnGame()
+
+    @renderBorrowedGame() if @model.canReturnGame()
+
+    return this
+
+  renderRequestedGame: ->
+    game = $.tmpl(@requestedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
     $(@el).html(game)
 
@@ -85,9 +103,36 @@ wantedGameView = Backbone.View.extend
       -> game.find(".cancel").offset().top - 75
     )
 
-    return this
+  renderBorrowedGame: ->
+    game = $.tmpl(@borrowedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
-  gameTemplate:
+    $(@el).html(game)
+
+    toolTip.init(
+      game.find(".cancel"),
+      "ReturnGame",
+      "All done with the game?<br/>Click to mark it as returned.",
+      "You get the idea...<br/>Return game.",
+      -> game.find(".cancel").offset().left - 125,
+      -> game.find(".cancel").offset().top - 75
+    )
+
+  borrowedGameTemplate:
+    '
+  <div class="menubar">
+    <a href="javascript:;"
+       style="text-decoration: none; color: black; float: right; padding-left: 15px"
+       class="cancel">&nbsp;</a>
+    <div style="clear: both">&nbsp;</div>
+  </div>
+    <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
+      Borrowed
+    </span>
+    <div style="font-size: 20px">${gameName}</div>
+    <div>${owner}</div>
+    '
+
+  requestedGameTemplate:
     '
   <div class="menubar">
     <a href="javascript:;"

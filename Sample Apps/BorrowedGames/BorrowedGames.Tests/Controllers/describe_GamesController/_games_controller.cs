@@ -70,6 +70,11 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
             return controller.Preferred().Data;
         }
 
+        public dynamic FirstWantedGame(int userId)
+        {
+            return WantedGames(userId).First();
+        }
+
         public IEnumerable<dynamic> WantedGames(int userId)
         {
             return User(userId).WantedGames();

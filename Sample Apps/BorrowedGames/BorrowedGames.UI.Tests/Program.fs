@@ -19,12 +19,12 @@ xtest(fun _ ->
     reset()
     registerUser "user1")
 
-xtest(fun _ ->
+test(fun _ ->
     describe "request games"
     requestGame()
     logOff())
 
-test(fun _ ->
+xtest(fun _ ->
     describe "lender marks game as returned"
     requestGame()
     System.Console.ReadLine() |> ignore
