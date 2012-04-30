@@ -34,7 +34,7 @@ watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md|
   if(md[0].match /App_Code/)
     @sh.execute "rake"
   else
-    @sh.execute "rake sync[\"#{ md[0] }\"]"
+    @sh.execute "rake sync file=\"#{ md[0] }\""
   end
 
   growl "website deployed", "deployed", "green"

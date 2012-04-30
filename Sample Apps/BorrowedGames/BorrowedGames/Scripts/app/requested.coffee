@@ -55,6 +55,11 @@ requestedGamesView = Backbone.View.extend
   render: ->
     $(@el).empty()
 
+    if @requestedGames.length == 0
+      $("#requestedGamesHeader").hide()
+    else
+      $("#requestedGamesHeader").show()
+
     @requestedGames.each (game) => @addGame(game)
 
   addGame: (game) ->
@@ -96,7 +101,7 @@ requestedGameView = Backbone.View.extend
     <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
         <a class="cancel" href="javascript:;">The game has been returned</a>
     </div>
-    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>
+    <div style="width: 60%; font-size: 20px">${requestedBy} has borrowed<br /> ${gameName}</div>
     '
 
   canGiveGameTemplate:

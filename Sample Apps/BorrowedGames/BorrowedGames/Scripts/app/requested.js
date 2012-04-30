@@ -61,6 +61,11 @@
     },
     render: function() {
       $(this.el).empty();
+      if (this.requestedGames.length === 0) {
+        $("#requestedGamesHeader").hide();
+      } else {
+        $("#requestedGamesHeader").show();
+      }
       return this.requestedGames.each(__bind(function(game) {
         return this.addGame(game);
       }, this));
@@ -113,7 +118,7 @@
     <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">\
         <a class="cancel" href="javascript:;">The game has been returned</a>\
     </div>\
-    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>\
+    <div style="width: 60%; font-size: 20px">${requestedBy} has borrowed<br /> ${gameName}</div>\
     ',
     canGiveGameTemplate: '\
     <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">\
