@@ -83,3 +83,6 @@ let requestGame _ =
     logOff()
     loginAs "user1"
     giveFirstRequestedGame()
+
+let numberOfRequestedGames _ =
+    (elementsWithText "#requestedGames a" "The game has been returned").Length
