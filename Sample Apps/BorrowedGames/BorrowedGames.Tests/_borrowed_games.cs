@@ -37,6 +37,13 @@ namespace BorrowedGames.Tests
             Users = new Users();
         }
 
+        protected void SetCurrentUser(BaseController controller, dynamic userId)
+        {
+            var email = users.Single(userId).Email;
+
+            controller.Email = () => email;
+        }
+
         protected dynamic GivenUser(string email)
         {
             return GivenUser(email, null, null);

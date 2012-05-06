@@ -14,5 +14,10 @@ namespace BorrowedGames.Models
         {
             return SingleWhere("Handle = @0", handle);
         }
+
+        public dynamic ForEmail(string email)
+        {
+            return SingleWhere("Email = @0", email);
+        }
     }
 }

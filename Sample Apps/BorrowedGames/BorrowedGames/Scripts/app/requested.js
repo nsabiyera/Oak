@@ -1,7 +1,8 @@
 (function() {
   var requestedGame, requestedGameView, requestedGames, requestedGamesUrl, requestedGamesView;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   requestedGamesUrl = "";
+
   this.requested = {
     init: function(urls) {
       requestedGamesUrl = urls.requestedGamesUrl;
@@ -11,6 +12,7 @@
       return this.view.refresh();
     }
   };
+
   requestedGame = Backbone.Model.extend({
     name: function() {
       return this.get("Name");
@@ -24,31 +26,33 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) {
-        name = name.substring(0, 40) + "... ";
-      }
+      if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
     giveGame: function() {
-      return $.post(this.get("GiveGame"), {}, __bind(function() {
+      var _this = this;
+      return $.post(this.get("GiveGame"), {}, function() {
         return requested.getRequestedGames();
-      }, this));
+      });
     },
     gameReturned: function() {
-      return $.post(this.get("GameReturned"), {}, __bind(function() {
+      var _this = this;
+      return $.post(this.get("GameReturned"), {}, function() {
         return requested.getRequestedGames();
-      }, this));
+      });
     },
     canGiveGame: function() {
       return !!this.get("GiveGame");
     }
   });
+
   requestedGames = Backbone.Collection.extend({
     model: requestedGame,
     url: function() {
       return requestedGamesUrl;
     }
   });
+
   requestedGamesView = Backbone.View.extend({
     el: "#requestedGames",
     initialize: function() {
@@ -60,15 +64,16 @@
       return this.requestedGames.fetch();
     },
     render: function() {
+      var _this = this;
       $(this.el).empty();
       if (this.requestedGames.length === 0) {
         $("#requestedGamesHeader").hide();
       } else {
         $("#requestedGamesHeader").show();
       }
-      return this.requestedGames.each(__bind(function(game) {
-        return this.addGame(game);
-      }, this));
+      return this.requestedGames.each(function(game) {
+        return _this.addGame(game);
+      });
     },
     addGame: function(game) {
       var view;
@@ -79,6 +84,7 @@
       return $(this.el).append(view.el);
     }
   });
+
   requestedGameView = Backbone.View.extend({
     className: "border",
     events: {
@@ -93,12 +99,8 @@
     },
     render: function() {
       var game;
-      if (this.model.canGiveGame()) {
-        game = this.genCanGiveTemplate();
-      }
-      if (!this.model.canGiveGame()) {
-        game = this.genReturnGame();
-      }
+      if (this.model.canGiveGame()) game = this.genCanGiveTemplate();
+      if (!this.model.canGiveGame()) game = this.genReturnGame();
       $(this.el).html(game);
       return this;
     },
@@ -127,4 +129,5 @@
     <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>\
     '
   });
+
 }).call(this);

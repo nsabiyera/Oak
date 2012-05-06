@@ -26,7 +26,7 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
 
             anotherFriendId = GivenUser("another@example.com");
 
-            controller.CurrentUser = currentUserId;
+            SetCurrentUser(controller, currentUserId);
 
             mirrorsEdgeId = GivenGame("Mirror's Edge");
 

@@ -18,7 +18,7 @@ namespace BorrowedGames.Tests.Controllers
 
             MockSession(controller);
 
-            controller.CurrentUser = GivenUser("user@example.com", "@me");
+            SetCurrentUser(controller, GivenUser("user@example.com", "@me"));
         }
 
         [Tag("describe_User")]
@@ -32,7 +32,7 @@ namespace BorrowedGames.Tests.Controllers
                 {
                     var you = GivenUser("another@example.com", "@you");
                     var existingFriend = GivenUser("friendswithanother@example.com", "@other");
-                    GivenUserIsFollowing(controller.CurrentUser, existingFriend);
+                    GivenUserIsFollowing(controller.UserId(), existingFriend);
                 };
 
                 it["contains new friend"] = () => Friends().should_contain("@you");

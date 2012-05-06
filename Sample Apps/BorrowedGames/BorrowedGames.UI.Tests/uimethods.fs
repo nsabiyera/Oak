@@ -86,3 +86,8 @@ let requestGame _ =
 
 let numberOfRequestedGames _ =
     (elementsWithText "#requestedGames a" "The game has been returned").Length
+
+let numberOfBorrowedGames _ = 
+    (elementsWithText "#wantedGames .brand" "Borrowed").Length
+
+let deleteBorrowedGameLink = "#wantedGames .cancel"

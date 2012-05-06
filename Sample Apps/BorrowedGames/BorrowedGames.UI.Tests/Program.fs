@@ -15,18 +15,22 @@ test(fun _ ->
     requestGame()
     logOff()
     loginAs "user2"
-    is (elementsWithText "#wantedGames .brand" "Borrrrrrowed").Length 1)
+    sleep() //elements with text bug needs to be fixed before this sleep can be removed
+    is (numberOfBorrowedGames()) 1
+    click deleteBorrowedGameLink
+    sleep() //elements with text bug needs to be fixed before this sleep can be removed
+    is (numberOfBorrowedGames()) 0)
 
-xtest(fun _ -> 
+test(fun _ -> 
     describe "registering a user"
     reset()
     registerUser "user1")
 
-xtest(fun _ ->
+test(fun _ ->
     describe "request games"
     requestGame())
 
-xtest(fun _ ->
+test(fun _ ->
     describe "lender marks game as returned"
     requestGame()
     is (numberOfRequestedGames()) 1

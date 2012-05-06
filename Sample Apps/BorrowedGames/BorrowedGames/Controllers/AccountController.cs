@@ -36,8 +36,6 @@ namespace BorrowedGames.Controllers
 
             Authenticate(user.Email);
 
-            CurrentUser = user.Id;
-
             return Redirect(@params.RedirectUrl ?? "/");
         }
 

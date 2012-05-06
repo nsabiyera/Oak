@@ -25,7 +25,12 @@ namespace BorrowedGames.Tests.Controllers
 
             MockSession(controller);
 
-            controller.Authenticate = s => authenticated = true;
+            controller.Authenticate = s =>
+            {
+                authenticated = true;
+
+                SetCurrentUser(controller, Users.ForEmail(s).Id);
+            };
         }
 
         void logging_in()
@@ -54,7 +59,7 @@ namespace BorrowedGames.Tests.Controllers
 
                     it["redirects to home page"] = () => (result.Url as string).should_be("/");
 
-                    it["sets user in session"] = () => ((decimal)controller.CurrentUser).should_be((decimal)user);
+                    it["sets user in session"] = () => (controller.UserId()).should_be((decimal)user);
                 };
 
                 context["user exists, password doesn't match"] = () =>
@@ -98,7 +103,7 @@ namespace BorrowedGames.Tests.Controllers
 
                 it["authenticates user"] = () => authenticated.should_be_true();
 
-                it["sets user in session"] = () => ((decimal)controller.CurrentUser).should_be((decimal)user);
+                it["sets user in session"] = () => ((decimal)controller.UserId()).should_be((decimal)user);
 
                 context["user name is taken"] = () =>
                 {

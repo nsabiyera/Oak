@@ -17,6 +17,8 @@ namespace BorrowedGames.Controllers
 
         public Action<string, dynamic> SetSessionValue { get; set; }
 
+        public Func<string> Email { get; set; }
+
         protected Users users;
 
         public BaseController()
@@ -26,6 +28,8 @@ namespace BorrowedGames.Controllers
             GetSessionValue = (key) => HttpContext.Session[key];
 
             SetSessionValue = (key, value) => HttpContext.Session[key] = value;
+
+            Email = () => base.User.Identity.Name;
         }
 
         public new JsonResult Json(object o)
@@ -33,16 +37,14 @@ namespace BorrowedGames.Controllers
             return new DynamicJsonResult(o);
         }
 
-        public dynamic CurrentUser
-        {
-            get { return GetSessionValue("CurrentUser"); }
-
-            set { SetSessionValue("CurrentUser", value); }
-        }
-
         public new dynamic User()
         {
-            return users.Single(CurrentUser);
+            return users.ForEmail(Email());
+        }
+
+        public int UserId()
+        {
+            return Convert.ToInt32(User().Id);
         }
 
         public dynamic Friends()

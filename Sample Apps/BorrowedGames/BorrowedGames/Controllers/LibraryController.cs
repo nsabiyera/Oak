@@ -22,7 +22,7 @@ namespace BorrowedGames.Controllers
 
         public dynamic List()
         {
-            return Json(GamesInLibraryFor(CurrentUser));
+            return Json(GamesInLibraryFor(UserId()));
         }
 
         public dynamic ListFor(dynamic user)
@@ -33,7 +33,7 @@ namespace BorrowedGames.Controllers
         [HttpPost]
         public dynamic Add(dynamic @params)
         {
-            if (!UserHasGame(@params.gameId)) library.Insert(new { UserId = CurrentUser, GameId = @params.gameId });
+            if (!UserHasGame(@params.gameId)) library.Insert(new { UserId = UserId(), GameId = @params.gameId });
 
             return Json(games.Single(@params.gameId));
         }

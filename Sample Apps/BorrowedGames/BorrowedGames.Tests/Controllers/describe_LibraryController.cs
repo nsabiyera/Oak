@@ -24,7 +24,7 @@ namespace BorrowedGames.Tests.Controllers
 
             MockSession(controller);
 
-            controller.CurrentUser = user;
+            SetCurrentUser(controller, user);
         }
 
         void retrieving_library()
