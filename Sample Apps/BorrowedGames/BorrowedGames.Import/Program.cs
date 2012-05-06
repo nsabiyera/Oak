@@ -79,7 +79,7 @@ namespace BorrowedGames.Import
 
             var gameNames = doc.DocumentNode.SelectNodes("//div[@class='body']/table/tr/td");
 
-            if(gameNames != null)
+            if (gameNames != null)
             {
                 foreach (var item in gameNames)
                 {
@@ -87,13 +87,18 @@ namespace BorrowedGames.Import
 
                     gameName = System.Web.HttpUtility.HtmlDecode(gameName);
 
+                    gameName = gameName.Trim();
+
                     var exclude = new string[] { "---", "MyG", "Q&A", "Pics", "Vids", "Board", "FAQs", "Codes", "Reviews" };
 
                     if (exclude.Contains(gameName)) continue;
 
-                    Console.WriteLine(gameName);
+                    if (gameName.Contains("Ass"))
+                    {
+                        Console.WriteLine(gameName);
+                    }
 
-                    if (games.Query("select * from Games where Name = '{0}'", gameName).Count() == 0) games.Insert(new { Name = gameName, console });
+                    if (games.All(where: "Name = @0", args: new object[] { gameName }).Count() == 0) games.Insert(new { Name = gameName, console });
                 }
 
                 ProcessGameLetter(url, ++page);

@@ -130,6 +130,11 @@ task :regen_db => :build do
   sh regen_db_command("Data Source=(local);Initial Catalog=BorrowedGames_Test;Integrated Security=true")
 end
 
+desc "imports data from gamefaqs.com"
+task :import => :build do
+  sh "BorrowedGames.Import\\bin\\debug\\BorrowedGames.Import.exe"
+end
+
 def regen_db_command connection_string
   exe_location = "BorrowedGames.SchemaGen\\bin\\debug\\BorrowedGames.SchemaGen.exe"
 

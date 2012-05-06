@@ -36,6 +36,9 @@ library = Backbone.Model.extend
       @change()
     )
 
+  owner: ->
+    @get("Owner").Handle
+
   deleted: false
 
   wanted: false
@@ -95,7 +98,7 @@ preferredGameView = Backbone.View.extend
   wantGame: -> @model.wantGame()
 
   render: ->
-    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), searchString: @model.reviewUrl() })
+    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), searchString: @model.reviewUrl(), owner: @model.owner() })
 
     $(@el).html(game)
 
@@ -130,7 +133,7 @@ preferredGameView = Backbone.View.extend
     <div style="font-size: 12px; height: 70px; padding-bottom: 3px">
       <a style="color: black;" href="${searchString}" target="_blank">${gameName}</a><br/>
     </div>
-    <div style="font-size: 12px; height: 30px; padding-bottom: 3px">
+    <div style="font-size: 12px; margin-top: 15px; padding-bottom: 3px">
       ${owner}
     </div>
     <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">

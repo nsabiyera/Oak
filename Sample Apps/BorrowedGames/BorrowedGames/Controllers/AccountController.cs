@@ -56,9 +56,11 @@ namespace BorrowedGames.Controllers
             return LogOn(new { @params.Email, @params.Password, RedirectUrl = "/" });
         }
 
-        public void LogOff()
+        public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
+
+            return RedirectToAction("LogOn");
         }
 
         public dynamic Register()
