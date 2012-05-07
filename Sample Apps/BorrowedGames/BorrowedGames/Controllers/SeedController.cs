@@ -419,7 +419,7 @@ namespace Oak.Controllers
 
         private object SeedUser(string handle)
         {
-            return new { Email = handle + "@example.com", Password = "password", Handle = "@" + handle }.InsertInto("Users");
+            return new { Email = handle + "@example.com", Password = Registration.Encrypt("password"), Handle = "@" + handle }.InsertInto("Users");
         }
 
         private void SeedFriend(string from, string to)

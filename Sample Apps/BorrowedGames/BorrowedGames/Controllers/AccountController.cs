@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using BorrowedGames.Models;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace BorrowedGames.Controllers
 {
@@ -27,7 +29,7 @@ namespace BorrowedGames.Controllers
         {
             var user = GetUser(@params);
 
-            if (user == null || user.Password != @params.Password)
+            if (user == null || user.Password != Registration.Encrypt(@params.Password))
             {
                 ViewBag.Flash = "Login failed.";
 
@@ -44,6 +46,8 @@ namespace BorrowedGames.Controllers
         {
             dynamic registration = new Registration(@params);
 
+            string unalteredPassword = @params.Password;
+
             if (!registration.IsValid())
             {
                 ViewBag.Flash = registration.FirstError();
@@ -53,7 +57,7 @@ namespace BorrowedGames.Controllers
 
             registration.Register();
 
-            return LogOn(new { @params.Email, @params.Password, RedirectUrl = "/" });
+            return LogOn(new { @params.Email, Password = unalteredPassword, RedirectUrl = "/" });
         }
 
         public ActionResult LogOff()

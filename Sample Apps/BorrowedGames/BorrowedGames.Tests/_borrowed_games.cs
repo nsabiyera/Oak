@@ -56,7 +56,7 @@ namespace BorrowedGames.Tests
 
         protected dynamic GivenUser(string email, string handle, string password)
         {
-            return Convert.ToInt32(new { email, password, handle }.InsertInto("Users"));
+            return Convert.ToInt32(new { email, Password = Registration.Encrypt(password ?? ""), handle }.InsertInto("Users"));
         }
 
         protected dynamic GivenGame(string name, string console = "XBOX360")

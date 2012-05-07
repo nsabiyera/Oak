@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Oak;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace BorrowedGames.Models
 {
@@ -43,7 +45,17 @@ namespace BorrowedGames.Models
 
         public void Register()
         {
+            _.Password = Encrypt(_.Password);
+
             users.Insert(this.Exclude("PasswordConfirmation"));
+        }
+
+        public static string Encrypt(string password)
+        {
+            var hash = Encoding.Unicode.GetBytes(password);
+            var md5 = new MD5CryptoServiceProvider();
+            var md5hash = md5.ComputeHash(hash);
+            return Encoding.Unicode.GetString(md5hash);
         }
     }
 }

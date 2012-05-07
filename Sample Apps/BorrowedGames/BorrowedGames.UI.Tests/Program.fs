@@ -30,7 +30,7 @@ test(fun _ ->
     describe "request games"
     requestGame())
 
-test(fun _ ->
+wip(fun _ ->
     describe "lender marks game as returned"
     requestGame()
     is (numberOfRequestedGames()) 1
