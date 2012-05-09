@@ -46,6 +46,13 @@ namespace Oak
 
         private static List<KeyValuePair<Type, Action<dynamic>>> ClassHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
+        private List<Type> extendedWith = new List<Type>();
+
+        public virtual List<Type> ExtendedWith()
+        {
+            return extendedWith;
+        }
+
         public dynamic Expando { get; set; }
 
         public static void Extend<A, B>()
@@ -157,7 +164,7 @@ namespace Oak
 
         public DynamicFunctionWithParam DynamicFunctionWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) => 
+            return new DynamicFunctionWithParam((arg) =>
             {
                 return method.Invoke(this, new[] { arg });
             });
@@ -192,6 +199,8 @@ namespace Oak
             var constructor = typeof(T).GetConstructor(new Type[] { typeof(object) });
 
             constructor.Invoke(new object[] { this });
+
+            extendedWith.Add(typeof(T));
         }
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)
@@ -567,12 +576,22 @@ namespace Oak
 
             var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
-            expando.ForEach(s => 
+            expando.ForEach(s =>
             {
                 if (!args.Contains(s.Key as string)) dictionary.Add(s.Key as string, GetMember(s.Key));
             });
 
             return new Gemini(dictionary);
+        }
+
+        public virtual bool IsOfType<T>()
+        {
+            return TypeExtensions.IsOfType<T>(this);
+        }
+
+        public virtual bool IsOfKind<T>()
+        {
+            return TypeExtensions.IsOfKind<T>(this) || ExtendedWith().Contains(typeof(T));
         }
     }
 }
