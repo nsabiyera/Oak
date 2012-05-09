@@ -55,7 +55,7 @@ namespace BorrowedGames.Models
             var hash = Encoding.Unicode.GetBytes(password);
             var md5 = new MD5CryptoServiceProvider();
             var md5hash = md5.ComputeHash(hash);
-            return Encoding.Unicode.GetString(md5hash);
+            return Convert.ToBase64String(hash);
         }
     }
 }
