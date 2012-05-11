@@ -263,5 +263,15 @@ namespace BorrowedGames.Models
         {
             return wantedGames.SingleWhere("GameId = @0 and FromUserId = @1 and UserId = @2", new object[] { gameId, ownerId, _.Id });
         }
+
+        dynamic FollowerAssociations()
+        {
+            return friendAssociations.All(where: "IsFollowing = @0", args: new object[] { _.Id });
+        }
+
+        IEnumerable<dynamic> Followers()
+        {
+            return FollowerAssociations().User();
+        }
     }
 }

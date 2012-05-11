@@ -59,6 +59,7 @@ end
 desc "start iis express for MVC app"
 task :server => :rake_dot_net_initialize do
   sh @iis_express.command @website_deploy_directory, @website_port
+  sh "start /d\"smtp4dev\\\" /MIN smtp4dev"
 end
 
 desc "if you have the nuget package oak installed, use this to seed sample data"

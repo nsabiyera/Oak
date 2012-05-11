@@ -37,6 +37,9 @@
     <Reference Include="NSpec">
       <HintPath>..\packages\nspec.0.9.59\lib\NSpec.dll</HintPath>
     </Reference>
+    <Reference Include="Rnwood.SmtpServer">
+      <HintPath>..\smtp4dev\Rnwood.SmtpServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -70,7 +73,9 @@
     <Compile Include="Sleight\ObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -5,22 +5,44 @@ using System.Text;
 using BorrowedGames.Controllers;
 using NSpec;
 using Oak;
+using BorrowedGames.Models;
 
 namespace BorrowedGames.Tests.Controllers
 {
     class describe_LibraryController : _borrowed_games
     {
+        static List<Email> emailsSent;
+
         LibraryController controller;
 
-        dynamic user, anotherUser;
+        dynamic user, anotherUser, yetAnotherUser;
 
         object finalFantasy7;
 
+        static describe_LibraryController()
+        {
+            Gemini.Initialized<Email>(e =>
+            {
+                e.Send = new DynamicMethod(() =>
+                {
+                    emailsSent.Add(e);
+
+                    return null;
+                });
+            });
+        }
+
         void before_each()
         {
+            emailsSent = new List<Email>();
+
             controller = new LibraryController();
 
-            user = GivenUser("user@example.com");
+            user = GivenUser("user@example.com", "@user");
+
+            anotherUser = GivenUser("anotheruser@example.com");
+
+            yetAnotherUser = GivenUser("yetanotheruser@example.com");
 
             MockSession(controller);
 
@@ -99,9 +121,10 @@ namespace BorrowedGames.Tests.Controllers
             };
         }
 
+        [Tag("describe_FriendAssociation,describe_User,describe_Email")]
         void adding_games_to_library()
         {
-            before = () => finalFantasy7 = GivenGame("Final Fantasy 7");
+            before = () => finalFantasy7 = GivenGame("Final Fantasy 7", "PS2");
 
             act = () => result = controller.Add(new { gameId = finalFantasy7 });
 
@@ -118,9 +141,35 @@ namespace BorrowedGames.Tests.Controllers
 
             context["game libraries are unique accross users"] = () =>
             {
-                before = () => GivenUserHasGame(AnotherUser(), finalFantasy7);
+                before = () => GivenUserHasGame(anotherUser, finalFantasy7);
 
                 it["game is available to user"] = () => (Library().First().Name as string).should_be("Final Fantasy 7");
+            };
+
+            context["friends are following the person who added the game"] = () =>
+            {
+                before = () =>
+                {
+                    GivenUserIsFollowing(anotherUser, user);
+                    GivenUserIsFollowing(yetAnotherUser, user);
+                };
+
+                it["a notification emails are sent to followers"] = () =>
+                {
+                    var email = emailsSent[0];
+
+                    email.To.should_be(User(anotherUser).Email as string);
+
+                    var subject = User(user).Handle as string + " added Final Fantasy 7 (PS2) to his library.";
+
+                    email.Subject.should_be(subject);
+
+                    email.Body.should_be(subject + Environment.NewLine + "Go check it out at http://borrowedgames.com/");
+
+                    email = emailsSent[1];
+
+                    email.To.should_be(User(yetAnotherUser).Email as string);
+                };
             };
         }
 
@@ -148,13 +197,10 @@ namespace BorrowedGames.Tests.Controllers
 
                 context["another user has same game"] = () =>
                 {
-                    before = () =>
-                    {
-                        anotherUser = AnotherUser();
-                        GivenUserHasGame(anotherUser, finalFantasy7);
-                    };
+                    before = () => GivenUserHasGame(anotherUser, finalFantasy7);
 
-                    it["his library is unaffected"] = () => LibraryFor(anotherUser as object).Count().should_be(1);
+                    it["his library is unaffected"] = () => 
+                        LibraryFor(anotherUser as object).Count().should_be(1);
                 };
             };
         }
@@ -182,11 +228,6 @@ namespace BorrowedGames.Tests.Controllers
         private object GameIdFor(string name)
         {
             return Games().Single(s => s.Name == name).Id;
-        }
-
-        private dynamic AnotherUser()
-        {
-            return GivenUser("anotheruser@example.com");
         }
     }
 }

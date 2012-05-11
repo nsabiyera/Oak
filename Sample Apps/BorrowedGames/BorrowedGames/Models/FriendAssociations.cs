@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System;
 using Massive;
 
 namespace BorrowedGames.Models
@@ -10,7 +7,7 @@ namespace BorrowedGames.Models
     {
         public FriendAssociations()
         {
-            
+            Projection = d => new FriendAssociation(d);
         }
     }
 }

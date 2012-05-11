@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rnwood.SmtpServer</name>
+    </assembly>
+    <members>
+        <member name="M:Rnwood.SmtpServer.SmtpResponse.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the response.
+            </summary>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.StartDate">
+            <summary>
+            Gets the date the session started.
+            </summary>
+            <value>The start date.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.EndDate">
+            <summary>
+            Gets the date the session ended.
+            </summary>
+            <value>The end date.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.ClientAddress">
+            <summary>
+            Gets the IP address of the client that established this session.
+            </summary>
+            <value>The client address.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.ClientName">
+            <summary>
+            Gets or sets the name of the client as reported in its HELO/EHLO command
+            or null.
+            </summary>
+            <value>The name of the client.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.SecureConnection">
+            <summary>
+            Gets or sets a value indicating whether the session is over a secure connection.
+            </summary>
+            <value><c>true</c> if [secure connection]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.Log">
+            <summary>
+            Gets the session log (all communication between the client and server)
+            if session logging is enabled.
+            </summary>
+            <value>The log.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.Messages">
+            <summary>
+            Gets the list of messages recevied in this session.
+            </summary>
+            <value>The messages.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.CompletedNormally">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Rnwood.SmtpServer.Session"/> completed normally (by the client issuing a QUIT command).
+            </summary>
+            <value><c>true</c> if the session completed normally; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.Authenticated">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Rnwood.SmtpServer.Session"/> is authenticated.
+            </summary>
+            <value><c>true</c> if authenticated; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ISession.SessionError">
+            <summary>
+            Gets the error that caused the session to terminate if it didn't complete normally.
+            </summary>
+            <seealso cref="P:Rnwood.SmtpServer.ISession.CompletedNormally"/>
+            <value>The session error.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.StartDate">
+            <summary>
+            Gets the date the session started.
+            </summary>
+            <value>The start date.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.EndDate">
+            <summary>
+            Gets the date the session ended.
+            </summary>
+            <value>The end date.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.ClientAddress">
+            <summary>
+            Gets the IP address of the client that established this session.
+            </summary>
+            <value>The client address.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.ClientName">
+            <summary>
+            Gets or sets the name of the client as reported in its HELO/EHLO command
+            or null.
+            </summary>
+            <value>The name of the client.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.SecureConnection">
+            <summary>
+            Gets or sets a value indicating whether the session is over a secure connection.
+            </summary>
+            <value><c>true</c> if [secure connection]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.Log">
+            <summary>
+            Gets the session log (all communication between the client and server)
+            if session logging is enabled.
+            </summary>
+            <value>The log.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.Messages">
+            <summary>
+            Gets the list of messages recevied in this session.
+            </summary>
+            <value>The messages.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.CompletedNormally">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Rnwood.SmtpServer.Session"/> completed normally (by the client issuing a QUIT command).
+            </summary>
+            <value><c>true</c> if the session completed normally; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.Authenticated">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Rnwood.SmtpServer.Session"/> is authenticated.
+            </summary>
+            <value><c>true</c> if authenticated; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.ICompletedSession.SessionError">
+            <summary>
+            Gets the error that caused the session to terminate if it didn't complete normally.
+            </summary>
+            <seealso cref="P:Rnwood.SmtpServer.ICompletedSession.CompletedNormally"/>
+            <value>The session error.</value>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.IsSSLEnabled(Rnwood.SmtpServer.IConnection)">
+            <summary>
+            Gets a value indicating whether to run in SSL mode.
+            </summary>
+            <value><c>true</c> if the server should run in SSL mode otherwise, <c>false</c>.</value>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.GetMaximumMessageSize(Rnwood.SmtpServer.IConnection)">
+            <summary>
+            Gets the maximum allowed size of the message for the specified connection.
+            </summary>
+            <param name="connection">The connection.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.GetSSLCertificate(Rnwood.SmtpServer.IConnection)">
+            <summary>
+            Gets the SSL certificate that should be used for the specified connection.
+            </summary>
+            <param name="connection">The connection.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.GetExtensions(Rnwood.SmtpServer.IConnection)">
+            <summary>
+            Gets the extensions that should be enabled for the specified connection.
+            </summary>
+            <param name="connection">The connection.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.OnSessionCompleted(Rnwood.SmtpServer.IConnection,Rnwood.SmtpServer.ISession)">
+            <summary>
+            Called when a SMTP session is completed.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="Session">The session.</param>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.OnSessionStarted(Rnwood.SmtpServer.IConnection,Rnwood.SmtpServer.ISession)">
+            <summary>
+            Called when a new SMTP session is started.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="session">The session.</param>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.GetReceiveTimeout(Rnwood.SmtpServer.IConnection)">
+            <summary>
+            Gets the receive timeout that should be used for the specified connection.
+            </summary>
+            <param name="connection">The connection.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.ValidateAuthenticationCredentials(Rnwood.SmtpServer.IConnection,Rnwood.SmtpServer.Extensions.Auth.IAuthenticationRequest)">
+            <summary>
+            Validates the authentication request to determine if the supplied details
+            are correct.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="authenticationRequest">The authentication request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.OnMessageStart(Rnwood.SmtpServer.IConnection,System.String)">
+            <summary>
+            Called when a new message is started in the specified session.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="from">From.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Rnwood.SmtpServer.IServerBehaviour.IsAuthMechanismEnabled(Rnwood.SmtpServer.IConnection,Rnwood.SmtpServer.Extensions.Auth.IAuthMechanism)" -->
+        <member name="M:Rnwood.SmtpServer.IServerBehaviour.OnCommandReceived(Rnwood.SmtpServer.IConnection,Rnwood.SmtpServer.SmtpCommand)">
+            <summary>
+            Called when a command received in the specified SMTP session.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="P:Rnwood.SmtpServer.IServerBehaviour.DomainName">
+            <summary>
+            Gets domain name reported by the server to clients.
+            </summary>
+            <value>The domain name report by the server to clients.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.IServerBehaviour.IpAddress">
+            <summary>
+            Gets the IP address on which to listen for connections.
+            </summary>
+            <value>The IP address.</value>
+        </member>
+        <member name="P:Rnwood.SmtpServer.IServerBehaviour.PortNumber">
+            <summary>
+            Gets the TCP port number on which to listen for connections.
+            </summary>
+            <value>The TCP port number.</value>
+        </member>
+        <member name="M:Rnwood.SmtpServer.Server.Run">
+            <summary>
+            Runs the server synchronously. This method blocks until the server is stopped.
+            </summary>
+        </member>
+        <member name="M:Rnwood.SmtpServer.Server.Start">
+            <summary>
+            Runs the server asynchronously. This method returns once the server has been started.
+            To stop the server call the <see cref="M:Rnwood.SmtpServer.Server.Stop"/> method.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">if the server is already running.</exception>
+        </member>
+        <member name="M:Rnwood.SmtpServer.Server.Stop">
+            <summary>
+            Stops the running server. Any existing connections are continued.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">if the server is not running.</exception>
+        </member>
+        <member name="P:Rnwood.SmtpServer.Server.IsRunning">
+            <summary>
+            Gets or sets a value indicating whether the server is currently running.
+            </summary>
+        </member>
+        <member name="M:Rnwood.SmtpServer.DefaultServer.#ctor(System.Security.Cryptography.X509Certificates.X509Certificate)">
+            <summary>
+            Initializes a new SMTP over SSL server on port 465 using the
+            supplied SSL certificate.
+            </summary>
+            <param name="sslCertificate">The SSL certificate to use for the server.</param>
+        </member>
+        <member name="M:Rnwood.SmtpServer.DefaultServer.#ctor">
+            <summary>
+            Initializes a new SMTP server on port 25.
+            </summary>
+        </member>
+        <member name="M:Rnwood.SmtpServer.DefaultServer.#ctor(System.Int32)">
+            <summary>
+            Initializes a new SMTP server on the specified port number.
+            </summary>
+            <param name="portNumber">The port number.</param>
+        </member>
+        <member name="M:Rnwood.SmtpServer.DefaultServer.#ctor(System.Int32,System.Security.Cryptography.X509Certificates.X509Certificate)">
+            <summary>
+            Initializes a new SMTP over SSL server on the specified port number
+            using the supplied SSL ceritificate.
+            </summary>
+            <param name="portNumber">The port number.</param>
+            <param name="sslCertificate">The SSL certificate.</param>
+        </member>
+        <member name="M:Rnwood.SmtpServer.DefaultServer.#ctor(Rnwood.SmtpServer.Ports)">
+            <summary>
+            Initializes a new SMTP over SSL server on the specified standard port number
+            </summary>
+            <param name="portNumber">The port number.</param>
+            <param name="sslCertificate">The SSL certificate.</param>
+        </member>
+    </members>
+</doc>

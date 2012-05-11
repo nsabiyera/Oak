@@ -10,7 +10,7 @@ start "firefox"
 
 before <- fun _ -> logOff()
 
-test(fun _ ->
+wip(fun _ ->
     describe "borrower returns game"
     requestGame()
     logOff()
@@ -30,7 +30,7 @@ test(fun _ ->
     describe "request games"
     requestGame())
 
-wip(fun _ ->
+test(fun _ ->
     describe "lender marks game as returned"
     requestGame()
     is (numberOfRequestedGames()) 1

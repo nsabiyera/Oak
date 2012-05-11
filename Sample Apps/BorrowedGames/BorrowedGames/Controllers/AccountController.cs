@@ -7,6 +7,7 @@ using System.Web.Security;
 using BorrowedGames.Models;
 using System.Text;
 using System.Security.Cryptography;
+using System.Net.Mail;
 
 namespace BorrowedGames.Controllers
 {
@@ -17,6 +18,13 @@ namespace BorrowedGames.Controllers
         public AccountController()
         {
             Authenticate = email => FormsAuthentication.RedirectFromLoginPage(email, false);
+
+            SendEmail = new Action<string>(email => 
+            {
+                var client = new SmtpClient();
+
+                client.Send("bg@borrowedgames.com", email, "Welcome", "Welcome to Borrowed Games.");
+            });
         }
 
         public dynamic LogOn()
@@ -41,6 +49,8 @@ namespace BorrowedGames.Controllers
             return Redirect(@params.RedirectUrl ?? "/");
         }
 
+        public Action<string> SendEmail { get; set; }
+
         [HttpPost]
         public dynamic Register(dynamic @params)
         {
@@ -56,6 +66,8 @@ namespace BorrowedGames.Controllers
             }
 
             registration.Register();
+
+            SendEmail(registration.Email);
 
             return LogOn(new { @params.Email, Password = unalteredPassword, RedirectUrl = "/" });
         }

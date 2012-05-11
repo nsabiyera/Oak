@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NSpec;
 using BorrowedGames.Controllers;
 using System.Web.Mvc;
-using Oak;
-using Oak.Controllers;
-using BorrowedGames.Models;
+using Rnwood.SmtpServer;
+using System.Collections.Generic;
 
 namespace BorrowedGames.Tests.Controllers
 {
@@ -31,6 +28,8 @@ namespace BorrowedGames.Tests.Controllers
 
                 SetCurrentUser(controller, Users.ForEmail(s).Id);
             };
+
+            controller.SendEmail = s => { };
         }
 
         void logging_in()
@@ -118,8 +117,14 @@ namespace BorrowedGames.Tests.Controllers
             {
                 act = () => result = controller.Register(new { Email = default(string), Password = default(string) });
 
-                it["returns error stating that email is required."] = () => (result.ViewBag.Flash as string).should_be("Email is required.");
+                it["returns error stating that email is required."] = () =>
+                    (result.ViewBag.Flash as string).should_be("Email is required.");
             };
+        }
+
+        void after_each()
+        {
+            //smtpServer.Stop();
         }
     }
 }

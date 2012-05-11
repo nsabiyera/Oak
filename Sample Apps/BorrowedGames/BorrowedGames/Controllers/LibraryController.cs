@@ -13,11 +13,15 @@ namespace BorrowedGames.Controllers
 
         Games games;
 
+        FriendAssociations associations;
+
         public LibraryController()
         {
             library = new Library();
 
             games = new Games();
+
+            associations = new FriendAssociations();
         }
 
         public dynamic List()
@@ -33,9 +37,32 @@ namespace BorrowedGames.Controllers
         [HttpPost]
         public dynamic Add(dynamic @params)
         {
-            if (!UserHasGame(@params.gameId)) library.Insert(new { UserId = UserId(), GameId = @params.gameId });
+            if (!UserHasGame(@params.gameId))
+            {
+                library.Insert(new { UserId = UserId(), GameId = @params.gameId });
+
+                var game = games.Single(@params.gameId);
+
+                var followers = User().Followers();
+
+                foreach (var follower in followers) SendGameAddedEmail(User(), game, follower);
+            }
 
             return Json(games.Single(@params.gameId));
+        }
+
+        public void SendGameAddedEmail(dynamic user, dynamic game, dynamic follower)
+        {
+            var subject = user.Handle + " added " + game.Name + " (" + game.Console + ")" + " to his library.";
+
+            dynamic email = new Email
+            {
+                To = follower.Email,
+                Subject = subject,
+                Body = subject + Environment.NewLine + "Go check it out at http://borrowedgames.com/"
+            };
+
+            email.Send();
         }
 
         [HttpPost]
