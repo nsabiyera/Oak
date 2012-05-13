@@ -34,8 +34,7 @@ test(fun _ ->
     loginAs "user1"
     "#requestedGames a" *= "The game has been returned"
     click gameReturnedLink
-    //todo need to assert that the #requestedGames div is gone
-    )
+    count "#requestedGames a" 0)
 
 run()
  

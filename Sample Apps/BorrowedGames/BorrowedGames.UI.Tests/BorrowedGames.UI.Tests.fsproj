@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="canopy">
-      <HintPath>..\packages\canopy.0.3.5\lib\canopy.dll</HintPath>
+      <HintPath>..\packages\canopy.0.3.6\lib\canopy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.Core">
