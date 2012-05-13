@@ -12,7 +12,7 @@ public class DebuggerShim
     {
         //the specification class you want to test
         //this can be a regular expression
-        var testClassYouWantToDebug = "describe_LibraryController";
+        var testClassYouWantToDebug = "wip";
 
         //initialize NSpec's specfinder
         var finder = new SpecFinder(

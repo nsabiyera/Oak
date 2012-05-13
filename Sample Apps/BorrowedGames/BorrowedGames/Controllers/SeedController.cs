@@ -45,6 +45,8 @@ namespace Oak.Controllers
             yield return AddConsoleToGames;
 
             yield return AddReturnDateToWantedGames;
+
+            yield return CreateEmailHistorys;
         }
 
         public Func<dynamic> Current()
@@ -121,6 +123,15 @@ namespace Oak.Controllers
             return Seed.AddColumns("WantedGames", new dynamic[] 
             { 
                 new { ReturnDate = "datetime" }
+            });
+        }
+
+        public string CreateEmailHistorys()
+        {
+            return Seed.CreateTable("EmailHistorys", new dynamic[] {
+                Id(),
+                UserId(),
+                new { CreatedAt = "datetime" }
             });
         }
 

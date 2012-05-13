@@ -4,25 +4,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BorrowedGames.Models;
+using Oak;
 
 namespace BorrowedGames.Controllers
 {
     public class LibraryController : BaseController
     {
-        Library library;
+        Library library= new Library();
 
-        Games games;
+        Games games = new Games();
 
-        FriendAssociations associations;
+        FriendAssociations associations = new FriendAssociations();
 
-        public LibraryController()
-        {
-            library = new Library();
-
-            games = new Games();
-
-            associations = new FriendAssociations();
-        }
+        EmailHistorys emailHistorys = new EmailHistorys();
 
         public dynamic List()
         {
@@ -41,14 +35,21 @@ namespace BorrowedGames.Controllers
             {
                 library.Insert(new { UserId = UserId(), GameId = @params.gameId });
 
-                var game = games.Single(@params.gameId);
+                var user = User();
 
-                var followers = User().Followers();
-
-                foreach (var follower in followers) SendGameAddedEmail(User(), game, follower);
+                SendNotificationEmails(user, 
+                    games.Single(@params.gameId), 
+                    user.Followers());
             }
 
             return Json(games.Single(@params.gameId));
+        }
+
+        private void SendNotificationEmails(dynamic user, dynamic game, IEnumerable<dynamic> followers)
+        {
+            if (emailHistorys.Exists(user.Id, DateTime.Today)) return;
+
+            followers.ForEach(follower => SendGameAddedEmail(user, game, follower));
         }
 
         public void SendGameAddedEmail(dynamic user, dynamic game, dynamic follower)
@@ -61,6 +62,8 @@ namespace BorrowedGames.Controllers
                 Subject = subject,
                 Body = subject + Environment.NewLine + "Go check it out at http://borrowedgames.com/"
             };
+
+            emailHistorys.Insert(new { UserId = user.Id, CreatedAt = DateTime.Today });
 
             email.Send();
         }

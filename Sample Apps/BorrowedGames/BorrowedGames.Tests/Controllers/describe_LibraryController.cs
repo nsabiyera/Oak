@@ -17,7 +17,7 @@ namespace BorrowedGames.Tests.Controllers
 
         dynamic user, anotherUser, yetAnotherUser;
 
-        object finalFantasy7;
+        object finalFantasy7, finalFantasyTactics;
 
         static describe_LibraryController()
         {
@@ -154,7 +154,7 @@ namespace BorrowedGames.Tests.Controllers
                     GivenUserIsFollowing(yetAnotherUser, user);
                 };
 
-                it["a notification emails are sent to followers"] = () =>
+                it["notification emails are sent to followers"] = () =>
                 {
                     var email = emailsSent[0];
 
@@ -169,6 +169,23 @@ namespace BorrowedGames.Tests.Controllers
                     email = emailsSent[1];
 
                     email.To.should_be(User(yetAnotherUser).Email as string);
+
+                    emailsSent.Count.should_be(2);
+                };
+
+                context["user adds another game the same day", "wip"] = () =>
+                {
+                    before = () => finalFantasyTactics = GivenGame("Final Fantasy Tactics", "PS2");
+
+                    act = () =>
+                    {
+                        emailsSent.Count.should_be(2);
+                        emailsSent.Clear();
+                        controller.Add(new { gameId = finalFantasyTactics });
+                    };
+
+                    it["a subsequent email for that day is not sent"] = () =>
+                        emailsSent.Count.should_be(0);
                 };
             };
         }

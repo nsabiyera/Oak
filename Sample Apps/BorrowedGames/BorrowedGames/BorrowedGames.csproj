@@ -89,6 +89,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Models\Email.cs" />
+    <Compile Include="Models\EmailHistorys.cs" />
     <Compile Include="Models\FriendAssociation.cs" />
     <Compile Include="Models\FriendAssociations.cs" />
     <Compile Include="Models\PreferredGame.cs" />
