@@ -28,8 +28,6 @@ namespace BorrowedGames.Tests.Controllers
 
                 SetCurrentUser(controller, Users.ForEmail(s).Id);
             };
-
-            controller.SendEmail = s => { };
         }
 
         void logging_in()

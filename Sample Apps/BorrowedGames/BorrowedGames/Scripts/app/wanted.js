@@ -111,8 +111,8 @@
         owner: this.model.owner()
       });
       $(this.el).html(game);
-      return toolTip.init(game.find(".cancel"), "UndoRequest", "Don't want the game?<br/>Click to undo request.", "You get the idea...<br/>Undo request.", function() {
-        return game.find(".cancel").offset().left - 125;
+      return toolTip.init(game.find(".cancel"), "UndoRequest", "Don't want the game?<br/>Click to undo request.", "Don't want the game?<br/>Click to undo request.", function() {
+        return game.find(".cancel").offset().left - 200;
       }, function() {
         return game.find(".cancel").offset().top - 75;
       });
@@ -124,8 +124,8 @@
         owner: this.model.owner()
       });
       $(this.el).html(game);
-      return toolTip.init(game.find(".cancel"), "ReturnGame", "All done with the game?<br/>Click to mark it as returned.", "You get the idea...<br/>Return game.", function() {
-        return game.find(".cancel").offset().left - 125;
+      return toolTip.init(game.find(".cancel"), "ReturnGame", "All done with the game?<br/>Click to mark it as returned.", "All done with the game?<br/>Click to mark it as returned.", function() {
+        return game.find(".cancel").offset().left - 225;
       }, function() {
         return game.find(".cancel").offset().top - 75;
       });

@@ -12,6 +12,12 @@ let url = fun address -> canopy.url (baseUrl + address)
 
 let on = fun address -> canopy.on (baseUrl + address)
 
+let gameReturnedLink = "#requestedGames a.cancel"
+
+let wantedGamesList = "#wantedGames .brand"
+
+let deleteBorrowedGameLink = "#wantedGames .cancel"
+
 let logOff _ =
     url "/account/logoff"
     ()
@@ -62,8 +68,6 @@ let requestFirstGame _ =
     click ".request"
     ()
 
-let gameReturnedLink = "#requestedGames a.cancel"
-
 let giveFirstRequestedGame _ =
     click "a.check"
     gameReturnedLink == "The game has been returned"
@@ -80,14 +84,8 @@ let requestGame _ =
     loginAs "user2"
     follow "user1"
     requestFirstGame()
+    wantedGamesList *= "Requested"
     logOff()
     loginAs "user1"
     giveFirstRequestedGame()
-
-let numberOfRequestedGames _ =
-    (elementsWithText "#requestedGames a" "The game has been returned").Length
-
-let numberOfBorrowedGames _ = 
-    (elementsWithText "#wantedGames .brand" "Borrowed").Length
-
-let deleteBorrowedGameLink = "#wantedGames .cancel"
+    logOff()

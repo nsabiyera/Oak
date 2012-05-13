@@ -11,9 +11,6 @@ namespace BorrowedGames.Import
     class Program
     {
         static Games games;
-        static bool colGroupFound;
-        static bool hrefFound;
-        static bool trFound;
 
         static void Main(string[] args)
         {

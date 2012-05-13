@@ -10,16 +10,14 @@ start "firefox"
 
 before <- fun _ -> logOff()
 
-wip(fun _ ->
+test(fun _ ->
     describe "borrower returns game"
     requestGame()
     logOff()
     loginAs "user2"
-    sleep() //elements with text bug needs to be fixed before this sleep can be removed
-    is (numberOfBorrowedGames()) 1
+    wantedGamesList *= "Borrowed"
     click deleteBorrowedGameLink
-    sleep() //elements with text bug needs to be fixed before this sleep can be removed
-    is (numberOfBorrowedGames()) 0)
+    wantedGamesList *!= "Borrowed")
 
 test(fun _ -> 
     describe "registering a user"
@@ -33,9 +31,11 @@ test(fun _ ->
 test(fun _ ->
     describe "lender marks game as returned"
     requestGame()
-    is (numberOfRequestedGames()) 1
+    loginAs "user1"
+    "#requestedGames a" *= "The game has been returned"
     click gameReturnedLink
-    is (numberOfRequestedGames()) 0)
+    //todo need to assert that the #requestedGames div is gone
+    )
 
 run()
  

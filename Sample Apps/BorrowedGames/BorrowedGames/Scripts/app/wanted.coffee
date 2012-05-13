@@ -98,22 +98,22 @@ wantedGameView = Backbone.View.extend
       game.find(".cancel"),
       "UndoRequest",
       "Don't want the game?<br/>Click to undo request.",
-      "You get the idea...<br/>Undo request.",
-      -> game.find(".cancel").offset().left - 125,
+      "Don't want the game?<br/>Click to undo request.",
+      -> game.find(".cancel").offset().left - 200,
       -> game.find(".cancel").offset().top - 75
     )
 
   renderBorrowedGame: ->
     game = $.tmpl(@borrowedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
-    $(@el).html(game)
+    $(@el).html(game) 
 
     toolTip.init(
       game.find(".cancel"),
       "ReturnGame",
       "All done with the game?<br/>Click to mark it as returned.",
-      "You get the idea...<br/>Return game.",
-      -> game.find(".cancel").offset().left - 125,
+      "All done with the game?<br/>Click to mark it as returned.",
+      -> game.find(".cancel").offset().left - 225,
       -> game.find(".cancel").offset().top - 75
     )
 
