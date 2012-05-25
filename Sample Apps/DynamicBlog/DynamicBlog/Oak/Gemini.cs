@@ -5,6 +5,8 @@ using System.Dynamic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Text;
+
 
 namespace Oak
 {
@@ -45,6 +47,15 @@ namespace Oak
         private List<Type> types = new List<Type>();
 
         private static List<KeyValuePair<Type, Action<dynamic>>> ClassHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
+
+        private List<Type> extendedWith = new List<Type>();
+
+        private static Dictionary<Type, List<MethodInfo>> ReflectionCache = new Dictionary<Type, List<MethodInfo>>();
+
+        public virtual List<Type> ExtendedWith()
+        {
+            return extendedWith;
+        }
 
         public dynamic Expando { get; set; }
 
@@ -102,7 +113,7 @@ namespace Oak
 
             else Expando = dto.ToExpando();
 
-            foreach (var method in DynamicDelegates()) AddDynamicMember(method);
+            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
 
             var currentType = this.GetType();
 
@@ -157,7 +168,7 @@ namespace Oak
 
         public DynamicFunctionWithParam DynamicFunctionWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) => 
+            return new DynamicFunctionWithParam((arg) =>
             {
                 return method.Invoke(this, new[] { arg });
             });
@@ -192,6 +203,8 @@ namespace Oak
             var constructor = typeof(T).GetConstructor(new Type[] { typeof(object) });
 
             constructor.Invoke(new object[] { this });
+
+            extendedWith.Add(typeof(T));
         }
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)
@@ -225,23 +238,19 @@ namespace Oak
             return true;
         }
 
-        public IEnumerable<MethodInfo> DynamicDelegates()
+        public IEnumerable<MethodInfo> DynamicDelegates(Type type)
         {
-            List<MethodInfo> delegates =
-                this.GetType()
-                    .GetMethods(PrivateFlags())
-                    .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
+            if (type == typeof(Gemini) || type == typeof(object)) return new List<MethodInfo>();
 
-            var baseType = this.GetType().BaseType;
+            if (ReflectionCache.ContainsKey(type)) return ReflectionCache[type];
 
-            while (baseType != typeof(Gemini) && baseType != typeof(object))
-            {
-                delegates.AddRange(
-                    baseType.GetMethods(PrivateFlags())
-                    .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())));
+            var delegates = type
+                .GetMethods(PrivateFlags())
+                .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
 
-                baseType = baseType.BaseType;
-            }
+            delegates.AddRange(DynamicDelegates(type.BaseType));
+
+            ReflectionCache.Add(type, delegates);
 
             return delegates;
         }
@@ -567,12 +576,22 @@ namespace Oak
 
             var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
-            expando.ForEach(s => 
+            expando.ForEach(s =>
             {
                 if (!args.Contains(s.Key as string)) dictionary.Add(s.Key as string, GetMember(s.Key));
             });
 
             return new Gemini(dictionary);
+        }
+
+        public virtual bool IsOfType<T>()
+        {
+            return TypeExtensions.IsOfType<T>(this);
+        }
+
+        public virtual bool IsOfKind<T>()
+        {
+            return TypeExtensions.IsOfKind<T>(this) || ExtendedWith().Contains(typeof(T));
         }
     }
 }

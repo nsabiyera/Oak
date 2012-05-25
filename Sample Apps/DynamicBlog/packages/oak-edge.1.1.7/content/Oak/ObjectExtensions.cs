@@ -60,4 +60,18 @@ namespace System
             return (IDictionary<string, object>)thingy.ToExpando();
         }
     }
+
+    //object extensions not part of massive
+    public static class TypeExtensions
+    {
+        public static bool IsOfType<T>(this object o)
+        {
+            return o.GetType() == typeof(T);
+        }
+
+        public static bool IsOfKind<T>(this object o)
+        {
+            return o is T;
+        }
+    }
 }
