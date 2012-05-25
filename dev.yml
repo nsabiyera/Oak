@@ -1,3 +1,3 @@
 solution_name: Oak.sln
 test_dll: ./Oak.Tests/bin/debug/Oak.Tests.dll
-test_runner: ./packages/nspec.0.9.59/tools/NSpecRunner.exe
+test_runner: ./packages/nspec.0.9.61/tools/NSpecRunner.exe
