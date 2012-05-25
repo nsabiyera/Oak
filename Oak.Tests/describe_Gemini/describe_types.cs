@@ -7,7 +7,6 @@ using Oak.Tests.describe_Gemini.Classes;
 
 namespace Oak.Tests.describe_Gemini
 {
-    [Tag("wip")]
     class describe_types : nspec
     {
         void specify_of_type_for_gemini_compares_direct_type()

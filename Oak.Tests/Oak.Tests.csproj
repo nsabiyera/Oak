@@ -31,13 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=1.3.0.727, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <HintPath>..\Libraries\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\Libraries\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\External Assemblies\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NSpec">
-      <HintPath>..\packages\nspec.0.9.59\lib\NSpec.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\Libraries\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NSpec, Version=0.9.61.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\nspec.0.9.61\lib\NSpec.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -145,7 +156,10 @@
     <Compile Include="describe_Gemini\Classes\InheritedGemini.cs" />
     <Compile Include="describe_Gemini\Classes\InheritedInheritedGemini.cs" />
     <Compile Include="describe_Gemini\Classes\MethodMissingGemini.cs" />
+    <Compile Include="describe_Gemini\Classes\Person.cs" />
     <Compile Include="describe_Gemini\Classes\ParameterlessGemini.cs" />
+    <Compile Include="describe_Gemini\Classes\Persons.cs" />
+    <Compile Include="describe_Gemini\Classes\DynamicPerson.cs" />
     <Compile Include="describe_Gemini\Classes\PrivateGemini.cs" />
     <Compile Include="describe_Gemini\deleting_members.cs" />
     <Compile Include="describe_Gemini\describe_constructions.cs" />
@@ -157,6 +171,7 @@
     <Compile Include="describe_Gemini\extending_gemini.cs" />
     <Compile Include="describe_Gemini\gemini_methods.cs" />
     <Compile Include="describe_Gemini\inheritance_of_gemini.cs" />
+    <Compile Include="describe_Gemini\performance.cs" />
     <Compile Include="describe_Gemini\setting_member.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_DynamicParams.cs" />

@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class executing_scripts : _seed
     {
         void it_executes_scripts_up_to_specified_script()

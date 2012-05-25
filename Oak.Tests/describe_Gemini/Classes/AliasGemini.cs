@@ -5,6 +5,7 @@ using System.Text;
 using NSpec;
 using System.Dynamic;
 using System.Reflection;
+using Massive;
 
 namespace Oak.Tests.describe_Gemini.Classes
 {
