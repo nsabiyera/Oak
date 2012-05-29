@@ -317,6 +317,28 @@ namespace Oak.Tests
                 jsonString.should_be(@"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Name"": ""Expense"", ""Amount"": 500 } } }");
             };
         }
+
+        [Tag("wip")]
+        void escaping_strings()
+        {
+            before = () =>
+            {
+                objectToConvert = new
+                {
+                    Quotes = @"""Quoted""",
+                    Ticks = @"'Ticked'",
+                    BackSlashes = @"c:\Temp",
+                    NewLine = "New" + Environment.NewLine + "Line"
+                };
+            };
+
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+
+            it["special characters are escaped"] = () =>
+            {
+                jsonString.should_be(@"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""\'Ticked\'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }");
+            };
+        }
     }
 
     public class Goal
