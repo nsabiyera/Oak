@@ -25,8 +25,6 @@ namespace BorrowedGames.Tests.Controllers
 
             user = GivenUser("user@example.com");
 
-            MockSession(controller);
-
             SetCurrentUser(controller, user);
         }
 

@@ -16,8 +16,6 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
         {
             controller = new GamesController();
 
-            MockSession(controller);
-
             MockRouting(controller);
 
             currentUserId = GivenUser("user@example.com", "@current");

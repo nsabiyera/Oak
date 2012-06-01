@@ -1,7 +1,8 @@
 (function() {
   var libraries, library, preferredGameView, preferredGamesUrl, preferredGamesView;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   preferredGamesUrl = "";
+
   this.preferred = {
     init: function(urls) {
       preferredGamesUrl = urls.preferredGamesUrl;
@@ -11,6 +12,7 @@
       return this.view.refresh();
     }
   };
+
   library = Backbone.Model.extend({
     reviewUrl: function() {
       return "http://www.google.com/search?q=" + encodeURIComponent(this.name() + " ") + "site:gamespot.com&btnI=3564";
@@ -24,24 +26,24 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) {
-        name = name.substring(0, 40) + "... ";
-      }
+      if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
     notInterested: function() {
-      return $.post(this.get("NotInterested"), {}, __bind(function() {
-        this.deleted = true;
+      var _this = this;
+      return $.post(this.get("NotInterested"), {}, function() {
+        _this.deleted = true;
         unwanted.getUnwantedGames();
-        return this.change();
-      }, this));
+        return _this.change();
+      });
     },
     wantGame: function() {
-      return $.post(this.get("WantGame"), {}, __bind(function() {
-        this.wanted = true;
+      var _this = this;
+      return $.post(this.get("WantGame"), {}, function() {
+        _this.wanted = true;
         wanted.getWantedGames();
-        return this.change();
-      }, this));
+        return _this.change();
+      });
     },
     owner: function() {
       return this.get("Owner").Handle;
@@ -49,12 +51,14 @@
     deleted: false,
     wanted: false
   });
+
   libraries = Backbone.Collection.extend({
     model: library,
     url: function() {
       return preferredGamesUrl;
     }
   });
+
   preferredGamesView = Backbone.View.extend({
     el: "#preferredGames",
     initialize: function() {
@@ -66,14 +70,15 @@
       return this.preferredGames.fetch();
     },
     render: function() {
+      var _this = this;
       $(this.el).empty();
-      this.preferredGames.each(__bind(function(library) {
+      this.preferredGames.each(function(library) {
         var view;
         view = new preferredGameView({
           model: library
         });
-        return $(this.el).append(view.render().el);
-      }, this));
+        return $(_this.el).append(view.render().el);
+      });
       $(this.el).append($("<div />").css({
         clear: "both"
       }));
@@ -86,15 +91,14 @@
       }
     }
   });
+
   preferredGameView = Backbone.View.extend({
     className: 'gameBox',
     initialize: function() {
       return this.model.bind('change', this.apply, this);
     },
     apply: function() {
-      if (this.model.deleted || this.model.wanted) {
-        return $(this.el).fadeOut();
-      }
+      if (this.model.deleted || this.model.wanted) return $(this.el).fadeOut();
     },
     events: {
       "click .cancel": "notInterested",
@@ -144,4 +148,5 @@
     </div>\
     '
   });
+
 }).call(this);

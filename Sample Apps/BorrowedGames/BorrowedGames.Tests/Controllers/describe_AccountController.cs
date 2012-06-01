@@ -20,8 +20,6 @@ namespace BorrowedGames.Tests.Controllers
         {
             controller = new AccountController();
 
-            MockSession(controller);
-
             controller.Authenticate = s =>
             {
                 authenticated = true;

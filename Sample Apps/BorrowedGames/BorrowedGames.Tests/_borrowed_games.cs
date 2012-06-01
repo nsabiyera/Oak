@@ -79,13 +79,6 @@ namespace BorrowedGames.Tests
             session[key] = value;
         }
 
-        protected void MockSession(BaseController controller)
-        {
-            controller.SetSessionValue = SetSessionValue;
-
-            controller.GetSessionValue = GetSessionValue;
-        }
-
         public void MockRouting(BaseController controller)
         {
             var routes = new RouteCollection();

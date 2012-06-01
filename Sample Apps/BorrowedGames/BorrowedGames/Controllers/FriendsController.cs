@@ -26,7 +26,7 @@ namespace BorrowedGames.Controllers
         [HttpPost]
         public dynamic Unfollow(string handle)
         {
-            User().RemoveFriend(users.ForHandle(handle));
+            User().RemoveFriend(users.ForHandle(handle)); 
 
             return new EmptyResult();
         }

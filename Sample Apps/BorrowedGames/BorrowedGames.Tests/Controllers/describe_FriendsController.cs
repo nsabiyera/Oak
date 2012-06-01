@@ -16,8 +16,6 @@ namespace BorrowedGames.Tests.Controllers
         {
             controller = new FriendsController();
 
-            MockSession(controller);
-
             SetCurrentUser(controller, GivenUser("user@example.com", "@me"));
         }
 

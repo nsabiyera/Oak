@@ -44,8 +44,6 @@ namespace BorrowedGames.Tests.Controllers
 
             yetAnotherUser = GivenUser("yetanotheruser@example.com");
 
-            MockSession(controller);
-
             SetCurrentUser(controller, user);
         }
 
