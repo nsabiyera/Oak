@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Massive;
-using Oak;
+using BorrowedGames.Models;
 
-namespace BorrowedGames.Models
+namespace BorrowedGames.Repositories
 {
     public class NotInterestedGames : DynamicRepository
     {

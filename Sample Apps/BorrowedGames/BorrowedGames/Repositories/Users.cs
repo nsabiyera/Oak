@@ -1,7 +1,8 @@
 ﻿using System;
 using Massive;
+using BorrowedGames.Models;
 
-namespace BorrowedGames.Models
+namespace BorrowedGames.Repositories
 {
     public class Users : DynamicRepository
     {

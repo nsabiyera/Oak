@@ -6,13 +6,6 @@ using Oak;
 
 namespace BorrowedGames.Models
 {
-    public class LendedGame : Rental
-    {
-        public LendedGame(dynamic game)
-            : base(game as object)
-        { }
-    }
-
     public class RequestedGame : Rental
     {
         public RequestedGame(dynamic game)

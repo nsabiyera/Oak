@@ -5,7 +5,7 @@ using System.Text;
 using Massive;
 using Oak;
 
-namespace BorrowedGames.Models
+namespace BorrowedGames.Repositories
 {
     public class Games : DynamicRepository
     {

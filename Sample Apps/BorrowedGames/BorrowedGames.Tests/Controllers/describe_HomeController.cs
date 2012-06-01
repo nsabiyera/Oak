@@ -7,6 +7,7 @@ using BorrowedGames.Controllers;
 using Oak;
 using System.Web.Mvc;
 using BorrowedGames.Models;
+using BorrowedGames.Repositories;
 
 namespace BorrowedGames.Tests.Controllers
 {

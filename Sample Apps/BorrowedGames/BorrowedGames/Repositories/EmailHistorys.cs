@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Massive;
 
-namespace BorrowedGames.Models
+namespace BorrowedGames.Repositories
 {
     public class EmailHistorys : DynamicRepository
     {

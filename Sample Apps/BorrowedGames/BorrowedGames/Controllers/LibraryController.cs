@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using BorrowedGames.Models;
 using Oak;
+using BorrowedGames.Repositories;
 
 namespace BorrowedGames.Controllers
 {
@@ -33,9 +34,9 @@ namespace BorrowedGames.Controllers
         {
             if (!UserHasGame(@params.gameId))
             {
-                library.Insert(new { UserId = UserId(), GameId = @params.gameId });
-
                 var user = User();
+
+                library.Insert(user.Library().New(new { GameId = @params.gameId }));
 
                 SendNotificationEmails(user, 
                     games.Single(@params.gameId), 

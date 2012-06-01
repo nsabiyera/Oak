@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using BorrowedGames.Models;
-using System.Text.RegularExpressions;
+using BorrowedGames.Repositories;
 
 namespace BorrowedGames.Controllers
 {

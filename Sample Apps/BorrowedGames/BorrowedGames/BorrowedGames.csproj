@@ -89,7 +89,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Models\Email.cs" />
-    <Compile Include="Models\EmailHistorys.cs" />
+    <Compile Include="Models\LendedGame.cs" />
+    <Compile Include="Repositories\EmailHistorys.cs" />
     <Compile Include="Models\FriendAssociation.cs" />
     <Compile Include="Models\FriendAssociations.cs" />
     <Compile Include="Models\PreferredGame.cs" />
@@ -97,18 +98,18 @@
     <Compile Include="Models\NotInterestedGame.cs" />
     <Compile Include="Models\RequestedGame.cs" />
     <Compile Include="Models\WantedGame.cs" />
-    <Compile Include="Models\WantedGames.cs" />
-    <Compile Include="Models\Games.cs" />
-    <Compile Include="Models\Library.cs" />
+    <Compile Include="Repositories\WantedGames.cs" />
+    <Compile Include="Repositories\Games.cs" />
+    <Compile Include="Repositories\Library.cs" />
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\NotInterestedGames.cs" />
+    <Compile Include="Repositories\NotInterestedGames.cs" />
     <Compile Include="Models\ObjectExtensions.cs" />
     <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\Users.cs" />
+    <Compile Include="Repositories\Users.cs" />
     <Compile Include="Oak\Association.cs" />
     <Compile Include="Oak\BootStrap.cs" />
     <Compile Include="Oak\Changes.cs" />

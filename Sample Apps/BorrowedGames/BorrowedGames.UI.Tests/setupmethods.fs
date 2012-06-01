@@ -21,7 +21,7 @@ let reset _ =
     ()
 
 let stageGame = fun gameName ->
-    let repo = new BorrowedGames.Models.Games()
+    let repo = new BorrowedGames.Repositories.Games()
     repo.Insert({ Name = gameName; Console = "XBOX360" }) |> ignore
     ()
 
