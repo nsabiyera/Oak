@@ -26,7 +26,9 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) name = name.substring(0, 40) + "... ";
+      if (name.length > 41) {
+        name = name.substring(0, 40) + "... ";
+      }
       return name += " (" + this.console() + ")";
     },
     notInterested: function() {
@@ -98,7 +100,9 @@
       return this.model.bind('change', this.apply, this);
     },
     apply: function() {
-      if (this.model.deleted || this.model.wanted) return $(this.el).fadeOut();
+      if (this.model.deleted || this.model.wanted) {
+        return $(this.el).fadeOut();
+      }
     },
     events: {
       "click .cancel": "notInterested",

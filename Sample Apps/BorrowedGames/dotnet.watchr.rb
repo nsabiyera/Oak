@@ -31,13 +31,21 @@ watch ('(.*.csproj$)|(.*.sln$)') do |md|
 end
 
 watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md| 
+  failed = false
+
   if(md[0].match /App_Code/)
     @sh.execute "rake"
   else
-    @sh.execute "rake sync file=\"#{ md[0] }\""
+    output = @sh.execute "rake sync[\"#{ md[0] }\"]"
+
+    failed = true if output =~ /rake aborted!/
   end
 
-  growl "website deployed", "deployed", "green"
+  growl "website deployed", "deployed", "green" unless failed
+
+  growl "sync failed", 
+        "it looks like the sync failed, this usually happens if the version of rake you are running is NOT 0.8.7.  Please ensure you are running version 0.8.7 of rake. To see the gem versions that are installed, run the command 'gem list' in a command prompt that supports ruby.",
+        "red" if failed
 end
 
 watch ('(.*.scss)$') do |md|
