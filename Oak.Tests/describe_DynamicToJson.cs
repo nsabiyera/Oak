@@ -272,7 +272,7 @@ namespace Oak.Tests
 
             it["converts whole object graph"] = () =>
             {
-                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
+                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror\'s Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
             };
         }
 

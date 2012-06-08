@@ -336,15 +336,9 @@ namespace Oak
                 ".  These are the members that exist on this instance: " + __Info__());
         }
 
-        public virtual dynamic __Info__(string filter = null)
+        public virtual dynamic __Info__()
         {
-            var regex = new Regex(filter ?? "");
-
-            var methods = Hash()
-                .Where(s => filter == null || regex.IsMatch(s.Key))
-                .Select(s => s.Key + " (" + (s.Value == null ? "null" : s.Value.GetType().Name) + ")");
-
-            return string.Join(", ", methods);
+            return GeminiInfo.Parse(this);
         }
 
         public virtual void SetMember(string property, object value, bool suppress)
@@ -592,6 +586,11 @@ namespace Oak
         public virtual bool IsOfKind<T>()
         {
             return TypeExtensions.IsOfKind<T>(this) || ExtendedWith().Contains(typeof(T));
+        }
+
+        public override string ToString()
+        {
+            return __Info__();
         }
     }
 }

@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>1.1.7</version> 
+    <version>1.1.8</version> 
     <authors>Amir Rajan</authors>
     <description>Bring dynamic goodness and frictionless development to ASP .NET MVC</description> 
     <language>en-US</language>
@@ -22,6 +22,7 @@
     <file src="Oak/Massive.cs" target="content/Oak/Massive.cs" />
     <file src="Oak/ObjectExtensions.cs" target="content/Oak/ObjectExtensions.cs" />
     <file src="Oak/Gemini.cs" target="content/Oak/Gemini.cs" />
+    <file src="Oak/GeminiInfo.cs" target="content/Oak/GeminiInfo.cs" />
     <file src="Oak/ParamsModelBinder.cs" target="content/Oak/ParamsModelBinder.cs" />
     <file src="Oak/Query.cs" target="content/Oak/Query.cs" />
     <file src="Oak/Seed.cs" target="content/Oak/Seed.cs" />
