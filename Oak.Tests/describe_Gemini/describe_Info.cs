@@ -3,6 +3,7 @@ using NSpec;
 
 namespace Oak.Tests.describe_Gemini
 {
+    [Tag("wip")]
     class describe_Info : nspec
     {
         dynamic gemini;
@@ -16,11 +17,14 @@ namespace Oak.Tests.describe_Gemini
             gemini.LastName = "Doe";
         }
 
-        void specify_requesting_info_shows_methods()
+        void specify_requesting_info_shows_properties()
         {
             var info = gemini.__Info__() as string;
 
-            info.should_be("FirstName (String), LastName (String)");
+            info.should_be(@"this (dynamic)
+  FirstName (String): Jane
+  LastName (String): Doe
+");
         }
 
         void specify_requesting_info_for_null_values_prints_null()
@@ -29,14 +33,29 @@ namespace Oak.Tests.describe_Gemini
 
             var info = gemini.__Info__() as string;
 
-            info.should_be("FirstName (String), LastName (String), Body (null)");
+            info.should_be(@"this (dynamic)
+  FirstName (String): Jane
+  LastName (String): Doe
+  Body (null)
+");
         }
 
-        void specify_info_can_be_greped()
+        void specify_requesting_info_shows_delegates()
         {
-            var info = gemini.__Info__("Name") as string;
+            gemini.SayHello = new DynamicFunction(() => "hi");
 
-            info.should_be("FirstName (String), LastName (String)");
+            var info = gemini.__Info__() as string;
+
+            info.should_be(@"this (dynamic)
+  FirstName (String): Jane
+  LastName (String): Doe
+  SayHello (DynamicFunction)
+");
+        }
+
+        void specify_to_string_is_the_same_as_info()
+        {
+            (gemini.ToString() as string).should_be(gemini.__Info__() as string);
         }
     }
 }

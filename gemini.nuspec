@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>gemini</id> 
-    <version>1.0.6</version> 
+    <version>1.0.7</version> 
     <authors>Amir Rajan</authors>
     <description>Gemini is a core dynamic construct that will make your C# code awesome. It's an integral part of Oak.</description> 
     <language>en-US</language>
@@ -12,5 +12,6 @@
   <files>
     <file src="Oak/ObjectExtensions.cs" target="content/Oak/ObjectExtensions.cs" />
     <file src="Oak/Gemini.cs" target="content/Oak/Gemini.cs" />
+    <file src="Oak/GeminiInfo.cs" target="content/Oak/GeminiInfo.cs" />
   </files>
 </package>
