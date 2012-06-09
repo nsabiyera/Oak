@@ -59,6 +59,12 @@ namespace Oak.Controllers
                     name = "Consultant " + i.ToString(),
                     RollOffDate = DateTime.Today.AddDays(1).AddMonths(i)
                 });
+
+                consultants.Insert(new
+                {
+                    name = "Consultant " + i.ToString() + " - 2",
+                    RollOffDate = DateTime.Today.AddDays(1).AddMonths(i)
+                });
             });
         }
 

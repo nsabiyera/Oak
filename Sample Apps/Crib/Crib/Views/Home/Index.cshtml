@@ -2,49 +2,13 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Dashboard</h2>
-
-<h3>Mock Up</h3>
-<div id="mock">
-    <ul class="thumbnails">
-      <li>
-        <div>
-            <a href="#" class="thumbnail">
-              <img src="http://placehold.it/130x90" alt="">
-            </a>
-            <div class="well" style="margin: 3px; padding: 3px;">
-                Consultant 1
-            </div>
-        </div>
-      </li>
-      <li>
-        <div>
-            <a href="#" class="thumbnail">
-              <img src="http://placehold.it/130x90" alt="">
-            </a>
-            <div class="well" style="margin: 3px; padding: 3px;">
-                Consultant 2
-            </div>
-        </div>
-      </li>
-      <li>
-        <div>
-            <a href="#" class="thumbnail">
-              <img src="http://placehold.it/130x90" alt="">
-            </a>
-            <div class="well" style="margin: 3px; padding: 3px;">
-                Consultant 3
-            </div>
-        </div>
-      </li>
-    </ul>
-</div>
-
-<h3>Bench</h3>
+<h1>Dashboard</h1>
+<br />
+<h2>Bench</h2>
 <div id="bench"></div>
 <hr />
 
-<h3>Roll Offs</h3>
+<h2>Roll Offs</h2>
 <div id="roll_offs"></div>
 
 <script>
@@ -56,8 +20,10 @@
 
     function getBench() {
         $.getJSON("rolloffs/bench", function (bench) {
+            var consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' });
+            $("#bench").append(consultantContainer);
             _.each(bench, function (consultant) {
-                $("#bench").append("<div>" + consultant.Name + "</div>");
+                createConsultant(consultantContainer, consultant);
             });
         });
     }
@@ -65,6 +31,8 @@
     function getRollOffs() {
         $.getJSON("rolloffs/list", function (bench) {
             var monthSeperator = 0;
+
+            var consultantContainer = null;
 
             var sorted = _.sortBy(bench, function (consultant) {
                 return new Date(consultant.RollOffDate);
@@ -77,10 +45,12 @@
 
                 if (monthSeperator != currentMonth) {
                     monthSeperator = currentMonth;
+                    consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' });
                     createHeader(currentMonth, rollOff.getYear());
+                    $("#roll_offs").append(consultantContainer);
                 }
 
-                createConsultant(consultant);
+                createConsultant(consultantContainer, consultant);
             });
         });
     }
@@ -88,13 +58,39 @@
     function createHeader(month, year) {
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         $("#roll_offs").append("<hr/>");
-        $("#roll_offs").append("<h4>" + monthNames[month] + " " + (1900 + year) + "</h4>");
+        $("#roll_offs").append("<h3>" + monthNames[month] + " " + (1900 + year) + "</h3>");
     }
 
-    function createConsultant(consultant) {
+    function createConsultant(container, consultant) {
+        var element = $.tmpl(consultantTemplate, { Name: consultant.Name });
+
+        container.append(element);
+
         var rollOff = new Date(consultant.RollOffDate);
 
         var formatted = rollOff.getDate() + "-" + rollOff.getMonth() + "-" + (1900 + rollOff.getYear());
-        $("#roll_offs").append("<div>" + consultant.Name + "<br/>" + formatted + "</div>");
     }
+
+    var consultantTemplate = '\
+      <li>\
+        <div>\
+            <a href="#" class="thumbnail">\
+              <img src="http://placehold.it/130x90" alt="">\
+            </a>\
+            <div class="well" style="margin: 3px; padding: 3px; width: 130px">\
+                <div class="btn-group">\
+                  <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="#">\
+                    Options\
+                    <span class="caret"></span>\
+                  </a>\
+                  <ul class="dropdown-menu">\
+                    <li><a href="#">consultant has been extended</a></li>\
+                    <li><a href="#">edit</a></li>\
+                  </ul>\
+                </div>\
+                <h4 style="margin: 5px">${Name}</h4>\
+            </div>\
+        </div>\
+      </li>\
+    '
 </script>
