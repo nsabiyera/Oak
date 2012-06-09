@@ -30,60 +30,17 @@ namespace Oak.Controllers
         /// </summary>
         public IEnumerable<Func<dynamic>> Scripts()
         {
-            yield return CreateSampleTable;
-
-            yield return CreateAnotherSampleTable;
-
-            yield return AlterSampleTable;
+            yield return CreateConsultantsTable;
         }
 
-        //here is a sample of how to create a table
-        public string CreateSampleTable()
+        public string CreateConsultantsTable()
         {
-            return Seed.CreateTable("SampleTable", new dynamic[] 
-            { 
-                new { Id = "uniqueidentifier", PrimaryKey = true },
-                new { Foo = "nvarchar(max)", Default = "Hello" },
-                new { Bar = "int", Nullable = false }
-            });
-        }
-
-        //here is another sample of how to create a table
-        public string CreateAnotherSampleTable()
-        {
-            return Seed.CreateTable("AnotherSampleTable", new dynamic[] 
-            { 
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                new { Foo = "nvarchar(max)", Default = "Hello", Nullable = false },
-            });
-        }
-
-        //here is a sample of how to alter a table
-        public string AlterSampleTable()
-        {
-            return Seed.AddColumns("SampleTable", new dynamic[] 
+            return Seed.CreateTable("Consultants", new dynamic[] 
             {
-                new { AnotherColumn = "bigint" },
-                new { YetAnotherColumn = "nvarchar(max)" }
+                Seed.Id(),
+                new { Name = "nvarchar(255)" },
+                new { RollOffDate = "datetime" }
             });
-        }
-
-        //different ad hoc queries
-        public IEnumerable<string> AdHocChange()
-        {
-            //hey look, you can just do an ad hoc read
-            var reader = "select * from SampleTable".ExecuteReader();
-
-            while (reader.Read())
-            {
-                //do stuff here like yield return strings
-            }
-
-            var name = "select top 1 name from sysobjects".ExecuteScalar() as string;
-
-            yield return "drop table SampleTable";
-
-            yield return "drop table AnotherSampleTable";
         }
 
         public void SampleEntries()
