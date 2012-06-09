@@ -4,8 +4,45 @@
 
 <h2>Dashboard</h2>
 
+<h3>Mock Up</h3>
+<div id="mock">
+    <ul class="thumbnails">
+      <li>
+        <div>
+            <a href="#" class="thumbnail">
+              <img src="http://placehold.it/130x90" alt="">
+            </a>
+            <div class="well" style="margin: 3px; padding: 3px;">
+                Consultant 1
+            </div>
+        </div>
+      </li>
+      <li>
+        <div>
+            <a href="#" class="thumbnail">
+              <img src="http://placehold.it/130x90" alt="">
+            </a>
+            <div class="well" style="margin: 3px; padding: 3px;">
+                Consultant 2
+            </div>
+        </div>
+      </li>
+      <li>
+        <div>
+            <a href="#" class="thumbnail">
+              <img src="http://placehold.it/130x90" alt="">
+            </a>
+            <div class="well" style="margin: 3px; padding: 3px;">
+                Consultant 3
+            </div>
+        </div>
+      </li>
+    </ul>
+</div>
+
 <h3>Bench</h3>
 <div id="bench"></div>
+<hr />
 
 <h3>Roll Offs</h3>
 <div id="roll_offs"></div>
@@ -50,9 +87,8 @@
 
     function createHeader(month, year) {
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-        $("#roll_offs").append("<h4>" + monthNames[month] + " " + (1900 + year) + "</h4>");
         $("#roll_offs").append("<hr/>");
+        $("#roll_offs").append("<h4>" + monthNames[month] + " " + (1900 + year) + "</h4>");
     }
 
     function createConsultant(consultant) {
