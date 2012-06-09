@@ -1,0 +1,9 @@
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\bin\Debug\Crib.Tests.dll.config
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\bin\Debug\Crib.Tests.dll
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\bin\Debug\Crib.Tests.pdb
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\bin\Debug\Crib.dll
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\bin\Debug\NSpec.dll
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\bin\Debug\Crib.pdb
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\obj\Debug\Crib.Tests.dll
+C:\Development\Oak\Sample Apps\Crib\Crib.Tests\obj\Debug\Crib.Tests.pdb

@@ -1,0 +1,5 @@
+C:\Development\Oak\Sample Apps\Crib\Crib\bin\Crib.dll
+C:\Development\Oak\Sample Apps\Crib\Crib\bin\Crib.pdb
+C:\Development\Oak\Sample Apps\Crib\Crib\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\Oak\Sample Apps\Crib\Crib\obj\Debug\Crib.dll
+C:\Development\Oak\Sample Apps\Crib\Crib\obj\Debug\Crib.pdb
