@@ -11,11 +11,70 @@
 <h2>Roll Offs</h2>
 <div id="roll_offs"></div>
 
+<div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Extend Consultant</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+        <label>Extended Until:</label>
+        <input type="text" class="span2" value="@DateTime.Today.AddMonths(6).ToShortDateString()" data-date-format="m/d/yyyy" id="extensionDate">
+
+        <h3>How about these consultants?</h3>
+        <label>Other Consultant</label>
+        <input type="text" class="span2" value="@DateTime.Today.AddMonths(6).ToShortDateString()" data-date-format="m/d/yyyy" id="extensionDate2">
+
+        <label>One More</label>
+        <input type="text" class="span2" value="@DateTime.Today.AddMonths(6).ToShortDateString()" data-date-format="m/d/yyyy" id="extensionDate3">
+    </p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" id="extendConsultant" class="btn btn-primary" data-dismiss="modal">Save</a>
+  </div>
+</div>
+
+<div class="modal hide" id="editConsultantModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Edit Consultant</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+        <label>Name</label>
+        <input type="text" />
+        <label>Client</label>
+        <input type="text" />
+        <label>Roll Off Date</label>
+        <input type="text" data-date-format="m/d/yyyy" id="rollOffDate" />
+        <label>Image url via <a href="http://en.gravatar.com/" target="_blank">Gravatar</a></label>
+        <input type="text" />
+    </p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" id="extendConsultant" class="btn btn-primary" data-dismiss="modal">Save</a>
+  </div>
+</div>
+
 <script>
     $(function () {
         getBench();
 
         getRollOffs();
+
+        $("#extensionDate").datepicker();
+
+        $("#extensionDate2").datepicker();
+
+        $("#extensionDate3").datepicker();
+
+        $("#rollOffDate").datepicker();
+
+        $("#extendConsultant").click(function () {
+            alert('worky');
+        });
     });
 
     function getBench() {
@@ -23,7 +82,7 @@
             var consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' });
             $("#bench").append(consultantContainer);
             _.each(bench, function (consultant) {
-                createConsultant(consultantContainer, consultant);
+                createConsultant(consultantContainer, consultant, benchTemplate);
             });
         });
     }
@@ -50,7 +109,7 @@
                     $("#roll_offs").append(consultantContainer);
                 }
 
-                createConsultant(consultantContainer, consultant);
+                createConsultant(consultantContainer, consultant, consultantTemplate);
             });
         });
     }
@@ -61,14 +120,10 @@
         $("#roll_offs").append("<h3>" + monthNames[month] + " " + (1900 + year) + "</h3>");
     }
 
-    function createConsultant(container, consultant) {
-        var element = $.tmpl(consultantTemplate, { Name: consultant.Name });
+    function createConsultant(container, consultant, template) {
+        var element = $.tmpl(template, { Name: consultant.Name });
 
         container.append(element);
-
-        var rollOff = new Date(consultant.RollOffDate);
-
-        var formatted = rollOff.getDate() + "-" + rollOff.getMonth() + "-" + (1900 + rollOff.getYear());
     }
 
     var consultantTemplate = '\
@@ -84,8 +139,30 @@
                     <span class="caret"></span>\
                   </a>\
                   <ul class="dropdown-menu">\
-                    <li><a href="#">consultant has been extended</a></li>\
-                    <li><a href="#">edit</a></li>\
+                    <li><a data-toggle="modal" href="#myModal">consultant has been extended</li>\
+                    <li><a data-toggle="modal" href="#editConsultantModal">edit</a></li>\
+                  </ul>\
+                </div>\
+                <h4 style="margin: 5px">${Name}</h4>\
+            </div>\
+        </div>\
+      </li>\
+    '
+
+    var benchTemplate = '\
+      <li>\
+        <div>\
+            <a href="#" class="thumbnail">\
+              <img src="http://placehold.it/130x90" alt="">\
+            </a>\
+            <div class="well" style="margin: 3px; padding: 3px; width: 130px">\
+                <div class="btn-group">\
+                  <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="#">\
+                    Options\
+                    <span class="caret"></span>\
+                  </a>\
+                  <ul class="dropdown-menu">\
+                    <li><a data-toggle="modal" href="#editConsultantModal">edit</a></li>\
                   </ul>\
                 </div>\
                 <h4 style="margin: 5px">${Name}</h4>\
