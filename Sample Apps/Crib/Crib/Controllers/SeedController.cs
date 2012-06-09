@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Oak;
+using Crib.Repositories;
 
 namespace Oak.Controllers
 {
@@ -45,12 +46,20 @@ namespace Oak.Controllers
 
         public void SampleEntries()
         {
-            new
+            var consultants = new Consultants();
+
+            consultants.Insert(new { name = "Consultant A" });
+
+            consultants.Insert(new { name = "Consultant B" });
+
+            Enumerable.Range(0, 12).ForEach(i =>
             {
-                Id = Guid.NewGuid(),
-                Title = "Hello World",
-                Body = "Lorem Ipsum"
-            }.InsertInto("Blogs");
+                consultants.Insert(new
+                {
+                    name = "Consultant " + i.ToString(),
+                    RollOffDate = DateTime.Today.AddDays(1).AddMonths(i)
+                });
+            });
         }
 
         public Seed Seed { get; set; }

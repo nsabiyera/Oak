@@ -38,13 +38,46 @@ namespace Crib.Tests.Controllers
             };
 
             it["a consultant who's roll off day has passed, is on the bench"] = () =>
-                Bench().Any(s => s.Name == "Person 1").should_be_true();
+                Bench().has("Person 1");
 
             it["a consultant with no roll off, is on the bench"] = () =>
-                Bench().Any(s => s.Name == "Person 2").should_be_true();
+                Bench().has("Person 2");
 
             it["a consultant who's roll off date hasn't passed, is not on the bench"] = () =>
-                Bench().Any(s => s.Name == "Person 3").should_be_false();
+                Bench().doesnt_have("Person 3");
+        }
+
+        void describe_rolling_for_year()
+        {
+            before = () =>
+            {
+                GivenConsultant("Person 1", rollOffDate: Tomorrow());
+
+                GivenConsultant("Person 2", rollOffDate: NextMonth());
+
+                GivenConsultant("Person 3", rollOffDate: NextYear());
+
+                GivenConsultant("Person 4", rollOffDate: Yesterday());
+
+                GivenConsultant("Person 5", null);
+            };
+
+            it["includes consultants that roll off this month"] = () =>
+                List().has("Person 1");
+
+            it["includes consultants rolling of next month (or any dates after)"] = () =>
+            {
+                List().has("Person 2");
+
+                List().has("Person 3");
+            };
+
+            it["the list does not contain anyone on the bench"] = () =>
+            {
+                List().doesnt_have("Person 4");
+
+                List().doesnt_have("Person 5");
+            };
         }
 
         void GivenConsultant(string name, DateTime? rollOffDate = null)
@@ -54,7 +87,12 @@ namespace Crib.Tests.Controllers
 
         IEnumerable<dynamic> Bench()
         {
-            return controller.Bench(DateTime.Today.ToShortDateString()).Data;
+            return controller.Bench(Today().ToShortDateString()).Data;
+        }
+
+        IEnumerable<dynamic> List()
+        {
+            return controller.List(Today().ToShortDateString()).Data;
         }
 
         DateTime Yesterday()
@@ -65,6 +103,36 @@ namespace Crib.Tests.Controllers
         DateTime Tomorrow()
         {
             return DateTime.Today.AddDays(1);
+        }
+
+        DateTime Today()
+        {
+            return DateTime.Today;
+        }
+
+        DateTime NextMonth()
+        {
+            return DateTime.Today.AddMonths(1);
+        }
+
+        DateTime NextYear()
+        {
+            return DateTime.Today.AddYears(1).AddDays(1);
+        }
+    }
+
+    public static class ConsultantsAssertions
+    {
+        public static dynamic has(this IEnumerable<dynamic> consultants, string name)
+        {
+            if (!consultants.Any(s => s.Name == name)) throw new InvalidOperationException(name + " was not found in consultant list.");
+
+            return consultants.First(s => s.Name == name);
+        }
+
+        public static void doesnt_have(this IEnumerable<dynamic> consultants, string name)
+        {
+            if (consultants.Any(s => s.Name == name)) throw new InvalidOperationException(name + " was found in consultant list.");
         }
     }
 }

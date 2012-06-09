@@ -5,21 +5,32 @@ using System.Web;
 using System.Web.Mvc;
 using Oak;
 using Massive;
+using Crib.Repositories;
 
 namespace Crib.Controllers
 {
-    public class Consultants : DynamicRepository
-    {
-        	
-    }
-
     public class RollOffsController : Controller
     {
         Consultants consultants = new Consultants();
 
         public dynamic Bench(string date)
         {
-            return Json(consultants.All(where: "coalesce(RollOffDate, @0) <= @0", args: date));
+            date = DateTime.Today.ToShortDateString() ?? date;
+
+            return Json(consultants.Bench(DateTime.Parse(date)));
+        }
+
+        public dynamic List(string benchDate)
+        {
+            benchDate = DateTime.Today.ToShortDateString() ?? benchDate;
+
+            var date = DateTime.Parse(benchDate);
+
+            var consultantsForMonth = consultants.WithRollOff(date);
+
+            var bench = consultants.Bench(date);
+
+            return Json(consultantsForMonth.Where(s => !bench.Any(b => b.Id == s.Id)));
         }
 
         public new JsonResult Json(object o)

@@ -2,5 +2,63 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Dashboard</h2>
 
+<h3>Bench</h3>
+<div id="bench"></div>
+
+<h3>Roll Offs</h3>
+<div id="roll_offs"></div>
+
+<script>
+    $(function () {
+        getBench();
+
+        getRollOffs();
+    });
+
+    function getBench() {
+        $.getJSON("rolloffs/bench", function (bench) {
+            _.each(bench, function (consultant) {
+                $("#bench").append("<div>" + consultant.Name + "</div>");
+            });
+        });
+    }
+
+    function getRollOffs() {
+        $.getJSON("rolloffs/list", function (bench) {
+            var monthSeperator = 0;
+
+            var sorted = _.sortBy(bench, function (consultant) {
+                return new Date(consultant.RollOffDate);
+            });
+
+            _.each(sorted, function (consultant) {
+                var rollOff = new Date(consultant.RollOffDate);
+
+                var currentMonth = rollOff.getMonth();
+
+                if (monthSeperator != currentMonth) {
+                    monthSeperator = currentMonth;
+                    createHeader(currentMonth, rollOff.getYear());
+                }
+
+                createConsultant(consultant);
+            });
+        });
+    }
+
+    function createHeader(month, year) {
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        $("#roll_offs").append("<h4>" + monthNames[month] + " " + (1900 + year) + "</h4>");
+        $("#roll_offs").append("<hr/>");
+    }
+
+    function createConsultant(consultant) {
+        var rollOff = new Date(consultant.RollOffDate);
+
+        var formatted = rollOff.getDate() + "-" + rollOff.getMonth() + "-" + (1900 + rollOff.getYear());
+        $("#roll_offs").append("<div>" + consultant.Name + "<br/>" + formatted + "</div>");
+    }
+</script>
