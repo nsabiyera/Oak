@@ -233,3 +233,7 @@ end
 watch ('(.*.csproj$)|(.*.sln$)') do |md| 
   reload md[0]
 end
+
+watch ('(.*.coffee)$') do |md|
+  @dw.sh.execute "rake coffee --trace"
+end

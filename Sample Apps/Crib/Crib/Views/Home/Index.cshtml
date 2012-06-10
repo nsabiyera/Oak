@@ -2,6 +2,7 @@
     ViewBag.Title = "Index";
 }
 
+<script src="@Url.Content("~/Scripts/app/dashboard.js")" type="text/javascript"></script>
 <h1>Dashboard</h1>
 <br />
 <h2>Bench</h2>
@@ -64,6 +65,8 @@
 
         getRollOffs();
 
+        dashboard.init();
+
         $("#extensionDate").datepicker();
 
         $("#extensionDate2").datepicker();
@@ -73,8 +76,6 @@
         $("#rollOffDate").datepicker();
 
         $("#extendConsultant").click(function () {
-            alert($("#extensionDate").val());
-
             $.post("rolloffs/extensions", { consultantId: 1, til: $("#extensionDate").val() });
 
             getRollOffs();

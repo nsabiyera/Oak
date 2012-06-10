@@ -9,6 +9,7 @@ require './RakeDotNet/sln_builder.rb'
 require './RakeDotNet/file_sync.rb'
 require 'net/http'
 require 'yaml'
+require 'coffee-script'
 
 task :rake_dot_net_initialize do
   yml = YAML::load File.open("dev.yml")
@@ -32,7 +33,7 @@ task :rake_dot_net_initialize do
 end
 
 desc "builds and deploys website to directories iis express will use to run app"
-task :default => [:build, :deploy]
+task :default => [:coffee, :build, :deploy]
 
 desc "builds the solution"
 task :build => :rake_dot_net_initialize do
@@ -74,6 +75,30 @@ end
 desc "synchronizes a file specfied to the website deployment directory"
 task :sync, [:file] => :rake_dot_net_initialize do |t, args|
   @file_sync.sync args[:file]
+end
+
+desc "convert coffee script to javascript"
+task :coffee => :rake_dot_net_initialize do 
+  build_coffee_scripts
+end
+
+def build_coffee_scripts
+  puts "coffee time"
+
+  Dir.glob("Crib/Scripts/app/*.coffee").each do |f| 
+    js = CoffeeScript.compile(File.open(f))
+    js = remove_encoding js
+    jsFileName = File.dirname(f) + "/" + File.basename(f, ".coffee") + ".js"
+    file = File.new(jsFileName, "w")
+    file.write(js)
+    file.close
+    @file_sync.sync jsFileName
+    puts "compiled/synced #{jsFileName}" 
+  end
+end
+
+def remove_encoding output
+  return output.gsub "\u0393\u00EA\u2310\u0393\u00F2\u00F9\u0393\u00F6\u00C9;", ""
 end
 
 def reset_db
