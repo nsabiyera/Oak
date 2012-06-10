@@ -33,6 +33,16 @@ namespace Crib.Controllers
             return Json(consultantsForMonth.Where(s => !bench.Any(b => b.Id == s.Id)));
         }
 
+        [HttpPost]
+        public void Extensions(dynamic @params)
+        {
+            var consultant = consultants.Single(@params.consultantId);
+
+            consultant.RollOffDate = DateTime.Parse(@params.til);
+
+            consultants.Save(consultant);
+        }
+
         public new JsonResult Json(object o)
         {
             return new DynamicJsonResult(o);

@@ -15,6 +15,8 @@ namespace Crib.Tests.Controllers
 
         Schema schema;
 
+        dynamic consultantId;
+
         void before_each()
         {
             controller = new RollOffsController();
@@ -47,7 +49,7 @@ namespace Crib.Tests.Controllers
                 Bench().doesnt_have("Person 3");
         }
 
-        void describe_rolling_for_year()
+        void describe_consultants_not_on_bench()
         {
             before = () =>
             {
@@ -80,9 +82,20 @@ namespace Crib.Tests.Controllers
             };
         }
 
-        void GivenConsultant(string name, DateTime? rollOffDate = null)
+        void describe_extensions()
         {
-            new { name, rollOffDate }.InsertInto("Consultants");
+            before = () =>
+                consultantId = GivenConsultant("Person 1", rollOffDate: Tomorrow());
+
+            act = () => controller.Extensions(new Gemini(new { consultantId, til = NextMonth().ToShortDateString() }));
+
+            it["consultant's roll off date is set to a new date"] = () =>
+                ((DateTime)List().has("Person 1").RollOffDate).should_be(NextMonth());
+        }
+
+        object GivenConsultant(string name, DateTime? rollOffDate = null)
+        {
+            return Convert.ToInt32(new { name, rollOffDate }.InsertInto("Consultants"));
         }
 
         IEnumerable<dynamic> Bench()

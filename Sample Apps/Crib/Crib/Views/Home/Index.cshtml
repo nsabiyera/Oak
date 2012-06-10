@@ -73,11 +73,19 @@
         $("#rollOffDate").datepicker();
 
         $("#extendConsultant").click(function () {
-            alert('worky');
+            alert($("#extensionDate").val());
+
+            $.post("rolloffs/extensions", { consultantId: 1, til: $("#extensionDate").val() });
+
+            getRollOffs();
+
+            getBench();
         });
     });
 
     function getBench() {
+        $("#bench").html('');
+
         $.getJSON("rolloffs/bench", function (bench) {
             var consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' });
             $("#bench").append(consultantContainer);
@@ -89,6 +97,8 @@
 
     function getRollOffs() {
         $.getJSON("rolloffs/list", function (bench) {
+            $("#roll_offs").html('');
+
             var monthSeperator = 0;
 
             var consultantContainer = null;
