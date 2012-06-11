@@ -12,7 +12,7 @@
 <h2>Roll Offs</h2>
 <div id="roll_offs"></div>
 
-<div class="modal hide" id="myModal">
+<div class="modal hide" id="extendConsultantModal">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h3>Extend Consultant</h3>
@@ -60,125 +60,5 @@
 </div>
 
 <script>
-    $(function () {
-        getBench();
-
-        //getRollOffs();
-
-        dashboard.init();
-
-        $("#extensionDate").datepicker();
-
-        $("#extensionDate2").datepicker();
-
-        $("#extensionDate3").datepicker();
-
-        $("#rollOffDate").datepicker();
-
-        $("#extendConsultant").click(function () {
-            $.post("rolloffs/extensions", { consultantId: 1, til: $("#extensionDate").val() });
-
-            getRollOffs();
-
-            getBench();
-        });
-    });
-
-    function getBench() {
-        $("#bench").html('');
-
-        $.getJSON("rolloffs/bench", function (bench) {
-            var consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' });
-            $("#bench").append(consultantContainer);
-            _.each(bench, function (consultant) {
-                createConsultant(consultantContainer, consultant, benchTemplate);
-            });
-        });
-    }
-
-    function getRollOffs() {
-        $.getJSON("rolloffs/list", function (bench) {
-            $("#roll_offs").html('');
-
-            var monthSeperator = 0;
-
-            var consultantContainer = null;
-
-            var sorted = _.sortBy(bench, function (consultant) {
-                return new Date(consultant.RollOffDate);
-            });
-
-            _.each(sorted, function (consultant) {
-                var rollOff = new Date(consultant.RollOffDate);
-
-                var currentMonth = rollOff.getMonth();
-
-                if (monthSeperator != currentMonth) {
-                    monthSeperator = currentMonth;
-                    consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' });
-                    createHeader(currentMonth, rollOff.getYear());
-                    $("#roll_offs").append(consultantContainer);
-                }
-
-                createConsultant(consultantContainer, consultant, consultantTemplate);
-            });
-        });
-    }
-
-    function createHeader(month, year) {
-        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        $("#roll_offs").append("<hr/>");
-        $("#roll_offs").append("<h3>" + monthNames[month] + " " + (1900 + year) + "</h3>");
-    }
-
-    function createConsultant(container, consultant, template) {
-        var element = $.tmpl(template, { Name: consultant.Name });
-
-        container.append(element);
-    }
-
-    var consultantTemplate = '\
-      <li>\
-        <div>\
-            <a href="#" class="thumbnail">\
-              <img src="http://placehold.it/130x90" alt="">\
-            </a>\
-            <div class="well" style="margin: 3px; padding: 3px; width: 130px">\
-                <div class="btn-group">\
-                  <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="#">\
-                    Options\
-                    <span class="caret"></span>\
-                  </a>\
-                  <ul class="dropdown-menu">\
-                    <li><a data-toggle="modal" href="#myModal">consultant has been extended</li>\
-                    <li><a data-toggle="modal" href="#editConsultantModal">edit</a></li>\
-                  </ul>\
-                </div>\
-                <h4 style="margin: 5px">${Name}</h4>\
-            </div>\
-        </div>\
-      </li>\
-    '
-
-    var benchTemplate = '\
-      <li>\
-        <div>\
-            <a href="#" class="thumbnail">\
-              <img src="http://placehold.it/130x90" alt="">\
-            </a>\
-            <div class="well" style="margin: 3px; padding: 3px; width: 130px">\
-                <div class="btn-group">\
-                  <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="#">\
-                    Options\
-                    <span class="caret"></span>\
-                  </a>\
-                  <ul class="dropdown-menu">\
-                    <li><a data-toggle="modal" href="#editConsultantModal">edit</a></li>\
-                  </ul>\
-                </div>\
-                <h4 style="margin: 5px">${Name}</h4>\
-            </div>\
-        </div>\
-      </li>\
-    '
+    $(function () { dashboard.init(); });
 </script>

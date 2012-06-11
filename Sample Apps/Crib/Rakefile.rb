@@ -40,6 +40,13 @@ task :build => :rake_dot_net_initialize do
   @sln.build @solution_name 
 end
 
+desc "starts up the dev environment"
+task :code do
+  sh "start Crib.sln"
+  sh "start gvim"
+  sh "rake default server tests sample"
+end
+
 desc "deploys MVC app to directory that iis express will use to run"
 task :deploy => :rake_dot_net_initialize do 
   @web_deploy.deploy @mvc_project_directory, @website_deploy_directory

@@ -9,6 +9,7 @@ using Oak.Controllers;
 
 namespace Crib.Tests.Controllers
 {
+    [Tag("describe_Consultants")]
     class describe_RollOffsController : nspec
     {
         RollOffsController controller;
@@ -40,7 +41,11 @@ namespace Crib.Tests.Controllers
             };
 
             it["a consultant who's roll off day has passed, is on the bench"] = () =>
-                Bench().has("Person 1");
+            {
+                var consultant = Bench().has("Person 1");
+
+                ((bool)consultant.OnBench).should_be_true();
+            };
 
             it["a consultant with no roll off, is on the bench"] = () =>
                 Bench().has("Person 2");
