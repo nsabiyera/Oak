@@ -4,6 +4,10 @@ this.dashboard =
 
     @bench = new BenchView()
 
+    ExtendConsultantModal.render()
+
+    EditConsultantModal.render()
+
 BenchView = Backbone.View.extend
   el: "#bench"
 
@@ -139,6 +143,8 @@ Consultant = Backbone.Model.extend
 
   onBench: -> @get("OnBench")
 
+  extendTil: (date) -> $.post("/rolloffs/extensions", { consultantId: @get("Id"), til: date }, -> alert("saved"))
+
 RollOffs = Backbone.Collection.extend
   model: Consultant
 
@@ -150,25 +156,30 @@ Bench = Backbone.Collection.extend
   url: "rolloffs/bench"
 
 EditConsultantModal = new (Backbone.View.extend
-  initialize: ->
-    @el = "#editConsultantModal"
+  render: ->
+    EditConsultantModal.el = "#editConsultantModal"
 
-    $(@el).modal
+    $(EditConsultantModal.el).modal
       show: false
 
   edit: (consultant) ->
-    @model = consultant
-    $(@el).modal('show')
+    EditConsultantModal.model = consultant
+    $(EditConsultantModal.el).modal('show')
   )
 
 ExtendConsultantModal = new (Backbone.View.extend
-  initialize: ->
-    @el = "#extendConsultantModal"
+  save: ->
+    ExtendConsultantModal.model.extendTil $("#extensionDate").val()
 
-    $(@el).modal
+  render: ->
+    ExtendConsultantModal.el = "#extendConsultantModal"
+    $(ExtendConsultantModal.el).modal
       show: false
+    $(ExtendConsultantModal.el).find("#extendConsultant").click @save
+    $(ExtendConsultantModal.el).find("#extensionDate").datepicker()
 
   edit: (consultant) ->
-    @model = consultant
-    $(@el).modal('show')
+    ExtendConsultantModal.model = consultant
+    $(ExtendConsultantModal.el).find(".consultantName").html(@model.name())
+    $(ExtendConsultantModal.el).modal('show')
   )

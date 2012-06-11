@@ -4,7 +4,9 @@
   this.dashboard = {
     init: function() {
       this.rollOffs = new RollOffsView();
-      return this.bench = new BenchView();
+      this.bench = new BenchView();
+      ExtendConsultantModal.render();
+      return EditConsultantModal.render();
     }
   };
 
@@ -158,6 +160,14 @@
     },
     onBench: function() {
       return this.get("OnBench");
+    },
+    extendTil: function(date) {
+      return $.post("/rolloffs/extensions", {
+        consultantId: this.get("Id"),
+        til: date
+      }, function() {
+        return alert("saved");
+      });
     }
   });
 
@@ -172,28 +182,34 @@
   });
 
   EditConsultantModal = new (Backbone.View.extend({
-    initialize: function() {
-      this.el = "#editConsultantModal";
-      return $(this.el).modal({
+    render: function() {
+      EditConsultantModal.el = "#editConsultantModal";
+      return $(EditConsultantModal.el).modal({
         show: false
       });
     },
     edit: function(consultant) {
-      this.model = consultant;
-      return $(this.el).modal('show');
+      EditConsultantModal.model = consultant;
+      return $(EditConsultantModal.el).modal('show');
     }
   }));
 
   ExtendConsultantModal = new (Backbone.View.extend({
-    initialize: function() {
-      this.el = "#extendConsultantModal";
-      return $(this.el).modal({
+    save: function() {
+      return ExtendConsultantModal.model.extendTil($("#extensionDate").val());
+    },
+    render: function() {
+      ExtendConsultantModal.el = "#extendConsultantModal";
+      $(ExtendConsultantModal.el).modal({
         show: false
       });
+      $(ExtendConsultantModal.el).find("#extendConsultant").click(this.save);
+      return $(ExtendConsultantModal.el).find("#extensionDate").datepicker();
     },
     edit: function(consultant) {
-      this.model = consultant;
-      return $(this.el).modal('show');
+      ExtendConsultantModal.model = consultant;
+      $(ExtendConsultantModal.el).find(".consultantName").html(this.model.name());
+      return $(ExtendConsultantModal.el).modal('show');
     }
   }));
 

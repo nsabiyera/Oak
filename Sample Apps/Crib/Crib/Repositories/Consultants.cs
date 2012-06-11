@@ -28,7 +28,8 @@ namespace Crib.Repositories
         {
             end = end ?? DateTime.MaxValue;
 
-            return All(where: "RollOffDate between @0 and @1", args: new object[] { start, end });
+            //test needed for order by
+            return All(where: "RollOffDate between @0 and @1", orderBy: "RollOffDate", args: new object[] { start, end });
         }
     }
 }
