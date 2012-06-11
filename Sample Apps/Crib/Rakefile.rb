@@ -33,7 +33,10 @@ task :rake_dot_net_initialize do
 end
 
 desc "builds and deploys website to directories iis express will use to run app"
-task :default => [:coffee, :build, :deploy]
+task :default => [:build, :deploy]
+
+desc "build coffee script, website, deploys, runs tests, starts server"
+task :all => [:coffee, :build, :server, :tests, :sample]
 
 desc "builds the solution"
 task :build => :rake_dot_net_initialize do
@@ -44,7 +47,7 @@ desc "starts up the dev environment"
 task :code do
   sh "start Crib.sln"
   sh "start gvim"
-  sh "rake default server tests sample"
+  sh "rake all"
 end
 
 desc "deploys MVC app to directory that iis express will use to run"

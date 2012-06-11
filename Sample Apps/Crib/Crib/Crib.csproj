@@ -65,6 +65,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Consultant.cs" />
+    <Compile Include="Models\StringExtensions.cs" />
     <Compile Include="Oak\Association.cs" />
     <Compile Include="Oak\BootStrap.cs" />
     <Compile Include="Oak\Changes.cs" />

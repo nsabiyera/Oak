@@ -1,5 +1,7 @@
 (function() {
-  var Bench, BenchView, Consultant, ConsultantView, EditConsultantModal, ExtendConsultantModal, RollOffs, RollOffsView;
+  var Bench, BenchView, Consultant, ConsultantView, EditConsultantModal, ExtendConsultantModal, RollOffs, RollOffsView, app;
+
+  app = this;
 
   this.dashboard = {
     init: function() {
@@ -44,6 +46,7 @@
     initialize: function() {
       this.rollOffs = new RollOffs();
       this.rollOffs.bind('reset', this.render, this);
+      this.rollOffs.bind('change', this.render, this);
       return this.refresh();
     },
     refresh: function() {
@@ -162,11 +165,14 @@
       return this.get("OnBench");
     },
     extendTil: function(date) {
+      var _this = this;
+      console.log(date);
       return $.post("/rolloffs/extensions", {
         consultantId: this.get("Id"),
         til: date
       }, function() {
-        return alert("saved");
+        app.dashboard.rollOffs.refresh();
+        return app.dashboard.bench.refresh();
       });
     }
   });
@@ -183,33 +189,36 @@
 
   EditConsultantModal = new (Backbone.View.extend({
     render: function() {
-      EditConsultantModal.el = "#editConsultantModal";
-      return $(EditConsultantModal.el).modal({
+      this.el = "#editConsultantModal";
+      return $(this.el).modal({
         show: false
       });
     },
     edit: function(consultant) {
-      EditConsultantModal.model = consultant;
-      return $(EditConsultantModal.el).modal('show');
+      this.model = consultant;
+      return $(this.el).modal('show');
     }
   }));
 
   ExtendConsultantModal = new (Backbone.View.extend({
     save: function() {
-      return ExtendConsultantModal.model.extendTil($("#extensionDate").val());
+      return this.model.extendTil($("#extensionDate").val());
     },
     render: function() {
-      ExtendConsultantModal.el = "#extendConsultantModal";
-      $(ExtendConsultantModal.el).modal({
+      var _this = this;
+      this.el = "#extendConsultantModal";
+      $(this.el).modal({
         show: false
       });
-      $(ExtendConsultantModal.el).find("#extendConsultant").click(this.save);
-      return $(ExtendConsultantModal.el).find("#extensionDate").datepicker();
+      $(this.el).find("#extendConsultant").click(function() {
+        return _this.save();
+      });
+      return $(this.el).find("#extensionDate").datepicker();
     },
     edit: function(consultant) {
-      ExtendConsultantModal.model = consultant;
-      $(ExtendConsultantModal.el).find(".consultantName").html(this.model.name());
-      return $(ExtendConsultantModal.el).modal('show');
+      this.model = consultant;
+      $(this.el).find(".consultantName").html(this.model.name());
+      return $(this.el).modal('show');
     }
   }));
 

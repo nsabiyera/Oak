@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Oak;
 using Massive;
 using Crib.Repositories;
+using Crib.Models;
 
 namespace Crib.Controllers
 {
@@ -43,16 +44,6 @@ namespace Crib.Controllers
         public new JsonResult Json(object o)
         {
             return new DynamicJsonResult(o);
-        }
-    }
-
-    public static class StringExtensions
-    {
-        public static DateTime Parse(this string date)
-        {
-            if (string.IsNullOrWhiteSpace(date)) return DateTime.Today;
-
-            return DateTime.Parse(date);
         }
     }
 }

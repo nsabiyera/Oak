@@ -1,3 +1,5 @@
+app = this
+
 this.dashboard =
   init: ->
     @rollOffs = new RollOffsView()
@@ -41,6 +43,8 @@ RollOffsView = Backbone.View.extend
     @rollOffs = new RollOffs()
 
     @rollOffs.bind 'reset', @render, @
+
+    @rollOffs.bind 'change', @render, @
 
     @refresh()
 
@@ -143,7 +147,12 @@ Consultant = Backbone.Model.extend
 
   onBench: -> @get("OnBench")
 
-  extendTil: (date) -> $.post("/rolloffs/extensions", { consultantId: @get("Id"), til: date }, -> alert("saved"))
+  extendTil: (date) ->
+    console.log(date)
+    $.post("/rolloffs/extensions", { consultantId: @get("Id"), til: date }, =>
+      app.dashboard.rollOffs.refresh()
+      app.dashboard.bench.refresh()
+    ) #bad form, consider events
 
 RollOffs = Backbone.Collection.extend
   model: Consultant
@@ -157,29 +166,29 @@ Bench = Backbone.Collection.extend
 
 EditConsultantModal = new (Backbone.View.extend
   render: ->
-    EditConsultantModal.el = "#editConsultantModal"
+    @el = "#editConsultantModal"
 
-    $(EditConsultantModal.el).modal
+    $(@el).modal
       show: false
 
   edit: (consultant) ->
-    EditConsultantModal.model = consultant
-    $(EditConsultantModal.el).modal('show')
+    @model = consultant
+    $(@el).modal('show')
   )
 
 ExtendConsultantModal = new (Backbone.View.extend
   save: ->
-    ExtendConsultantModal.model.extendTil $("#extensionDate").val()
+    @model.extendTil $("#extensionDate").val()
 
   render: ->
-    ExtendConsultantModal.el = "#extendConsultantModal"
-    $(ExtendConsultantModal.el).modal
+    @el = "#extendConsultantModal"
+    $(@el).modal
       show: false
-    $(ExtendConsultantModal.el).find("#extendConsultant").click @save
-    $(ExtendConsultantModal.el).find("#extensionDate").datepicker()
+    $(@el).find("#extendConsultant").click => @save()
+    $(@el).find("#extensionDate").datepicker()
 
   edit: (consultant) ->
-    ExtendConsultantModal.model = consultant
-    $(ExtendConsultantModal.el).find(".consultantName").html(@model.name())
-    $(ExtendConsultantModal.el).modal('show')
+    @model = consultant
+    $(@el).find(".consultantName").html(@model.name())
+    $(@el).modal('show')
   )
