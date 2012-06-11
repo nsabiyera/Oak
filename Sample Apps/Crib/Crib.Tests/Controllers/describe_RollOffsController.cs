@@ -27,6 +27,8 @@ namespace Crib.Tests.Controllers
             schema.Seed.PurgeDb();
 
             schema.Scripts().ForEach(s => schema.Seed.ExecuteNonQuery(s()));
+
+            MvcApplication.Mixins();
         }
 
         void describe_the_bench()
@@ -58,13 +60,13 @@ namespace Crib.Tests.Controllers
         {
             before = () =>
             {
-                GivenConsultant("Person 1", rollOffDate: Tomorrow());
-
                 GivenConsultant("Person 2", rollOffDate: NextMonth());
 
                 GivenConsultant("Person 3", rollOffDate: NextYear());
 
                 GivenConsultant("Person 4", rollOffDate: Yesterday());
+
+                GivenConsultant("Person 1", rollOffDate: Tomorrow());
 
                 GivenConsultant("Person 5", null);
             };
@@ -84,6 +86,11 @@ namespace Crib.Tests.Controllers
                 List().doesnt_have("Person 4");
 
                 List().doesnt_have("Person 5");
+            };
+
+            it["consultants are ordered by roll off date"] = () =>
+            {
+                (List().First().Name as string).should_be("Person 1");
             };
         }
 

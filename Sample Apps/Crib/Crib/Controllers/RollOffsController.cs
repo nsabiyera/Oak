@@ -16,22 +16,18 @@ namespace Crib.Controllers
 
         public dynamic Bench(string date)
         {
-            date = DateTime.Today.ToShortDateString() ?? date;
-
-            return Json(consultants.Bench(DateTime.Parse(date)));
+            return Json(consultants.Bench(date.Parse()));
         }
 
         public dynamic List(string benchDate)
         {
-            benchDate = DateTime.Today.ToShortDateString() ?? benchDate;
+            var date = benchDate.Parse();
 
-            var date = DateTime.Parse(benchDate);
-
-            var consultantsForMonth = consultants.WithRollOff(date);
+            dynamic consultantsForMonth = consultants.WithRollOff(date);
 
             var bench = consultants.Bench(date);
 
-            return Json(consultantsForMonth.Where(s => !bench.Any(b => b.Id == s.Id)));
+            return Json(consultantsForMonth.Exclude(bench));
         }
 
         [HttpPost]
@@ -47,6 +43,16 @@ namespace Crib.Controllers
         public new JsonResult Json(object o)
         {
             return new DynamicJsonResult(o);
+        }
+    }
+
+    public static class StringExtensions
+    {
+        public static DateTime Parse(this string date)
+        {
+            if (string.IsNullOrWhiteSpace(date)) return DateTime.Today;
+
+            return DateTime.Parse(date);
         }
     }
 }

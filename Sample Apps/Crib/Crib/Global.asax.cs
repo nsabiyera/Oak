@@ -38,6 +38,30 @@ namespace Crib
             RegisterRoutes(RouteTable.Routes);
 
             BootStrap.Init();
+
+            Mixins();
+        }
+
+        public static void Mixins()
+        {
+            Gemini.Extend<DynamicModels>(d =>
+            {
+                d.Exclude = new DynamicFunctionWithParam(excludeList =>
+                {
+                    var list = excludeList as IEnumerable<dynamic>;
+
+                    var result = new List<dynamic>();
+
+                    foreach (var item in d)
+                    {
+                        if (list.Any(s => s.Id == item.Id)) continue;
+
+                        result.Add(item);
+                    }
+
+                    return new DynamicModels(result);
+                });
+            });
         }
     }
 }
