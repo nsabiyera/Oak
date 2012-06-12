@@ -137,7 +137,11 @@ Consultant = Backbone.Model.extend
 
   name: -> @get("Name")
 
-  rollOffDate: -> new Date(@get("RollOffDate"))
+  rollOffDate: ->
+    if @get("RollOffDate")
+      return new Date(@get("RollOffDate"))
+    else
+      return null
 
   rollOffMonth: -> @rollOffDate().getMonth()
 
@@ -168,11 +172,34 @@ EditConsultantModal = new (Backbone.View.extend
   render: ->
     @el = "#editConsultantModal"
 
+    $(@el).find("#rollOffDate").datepicker()
+
+    d = new Date()
+    date = d.getDate()
+    month = d.getMonth() + 1
+    year = d.getFullYear()
+    formatted = month + "/" + date + "/" + year
+
+    $(@el).find("#updateConsultant").click( ->
+
+      $(@el).modal('hide')
+    )
+
     $(@el).modal
       show: false
 
   edit: (consultant) ->
     @model = consultant
+    $("#consultantName").val(consultant.name())
+
+    if consultant.rollOffDate()
+      d = consultant.rollOffDate()
+      date = d.getDate()
+      month = d.getMonth() + 1
+      year = d.getFullYear()
+      formatted = month + "/" + date + "/" + year
+      $("#rollOffDate").val(formatted)
+     
     $(@el).modal('show')
   )
 

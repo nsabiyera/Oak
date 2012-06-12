@@ -45,9 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\describe_ConsultantsController.cs" />
     <Compile Include="Controllers\describe_RollOffsController.cs" />
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="describe_Crib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

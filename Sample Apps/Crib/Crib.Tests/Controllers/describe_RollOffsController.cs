@@ -10,25 +10,15 @@ using Oak.Controllers;
 namespace Crib.Tests.Controllers
 {
     [Tag("describe_Consultants")]
-    class describe_RollOffsController : nspec
+    class describe_RollOffsController : describe_Crib
     {
         RollOffsController controller;
-
-        Schema schema;
 
         dynamic consultantId;
 
         void before_each()
         {
             controller = new RollOffsController();
-
-            schema = new Schema(new Seed());
-
-            schema.Seed.PurgeDb();
-
-            schema.Scripts().ForEach(s => schema.Seed.ExecuteNonQuery(s()));
-
-            MvcApplication.Mixins();
         }
 
         void describe_the_bench()
@@ -118,31 +108,6 @@ namespace Crib.Tests.Controllers
         IEnumerable<dynamic> List()
         {
             return controller.List(Today().ToShortDateString()).Data;
-        }
-
-        DateTime Yesterday()
-        {
-            return DateTime.Today.AddDays(-1);
-        }
-
-        DateTime Tomorrow()
-        {
-            return DateTime.Today.AddDays(1);
-        }
-
-        DateTime Today()
-        {
-            return DateTime.Today;
-        }
-
-        DateTime NextMonth()
-        {
-            return DateTime.Today.AddMonths(1);
-        }
-
-        DateTime NextYear()
-        {
-            return DateTime.Today.AddYears(1).AddDays(1);
         }
     }
 

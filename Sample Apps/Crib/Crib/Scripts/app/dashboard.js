@@ -150,7 +150,11 @@
       return this.get("Name");
     },
     rollOffDate: function() {
-      return new Date(this.get("RollOffDate"));
+      if (this.get("RollOffDate")) {
+        return new Date(this.get("RollOffDate"));
+      } else {
+        return null;
+      }
     },
     rollOffMonth: function() {
       return this.rollOffDate().getMonth();
@@ -189,13 +193,33 @@
 
   EditConsultantModal = new (Backbone.View.extend({
     render: function() {
+      var d, date, formatted, month, year;
       this.el = "#editConsultantModal";
+      $(this.el).find("#rollOffDate").datepicker();
+      d = new Date();
+      date = d.getDate();
+      month = d.getMonth() + 1;
+      year = d.getFullYear();
+      formatted = month + "/" + date + "/" + year;
+      $(this.el).find("#updateConsultant").click(function() {
+        return $(this.el).modal('hide');
+      });
       return $(this.el).modal({
         show: false
       });
     },
     edit: function(consultant) {
+      var d, date, formatted, month, year;
       this.model = consultant;
+      $("#consultantName").val(consultant.name());
+      if (consultant.rollOffDate()) {
+        d = consultant.rollOffDate();
+        date = d.getDate();
+        month = d.getMonth() + 1;
+        year = d.getFullYear();
+        formatted = month + "/" + date + "/" + year;
+        $("#rollOffDate").val(formatted);
+      }
       return $(this.el).modal('show');
     }
   }));
