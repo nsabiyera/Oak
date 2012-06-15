@@ -40,32 +40,14 @@ namespace Oak.Controllers
             {
                 Seed.Id(),
                 new { Name = "nvarchar(255)" },
-                new { RollOffDate = "datetime" }
+                new { RollOffDate = "datetime" },
+                new { Gravatar = "nvarchar(4000)" }
             });
         }
 
         public void SampleEntries()
         {
-            var consultants = new Consultants();
 
-            consultants.Insert(new { name = "Consultant A" });
-
-            consultants.Insert(new { name = "Consultant B" });
-
-            Enumerable.Range(0, 12).ForEach(i =>
-            {
-                consultants.Insert(new
-                {
-                    name = "Consultant " + i.ToString(),
-                    RollOffDate = DateTime.Today.AddDays(1).AddMonths(i)
-                });
-
-                consultants.Insert(new
-                {
-                    name = "Consultant " + i.ToString() + " - 2",
-                    RollOffDate = DateTime.Today.AddDays(1).AddMonths(i)
-                });
-            });
         }
 
         public Seed Seed { get; set; }

@@ -33,7 +33,8 @@ namespace Crib.Tests.Controllers
             {
                 Id = consultantId,
                 Name = "Person 1",
-                RollOffDate = DateTime.Today
+                RollOffDate = DateTime.Today,
+                Gravatar = "http://temp.com/img"
             });
 
             it["works"] = () =>
@@ -43,6 +44,26 @@ namespace Crib.Tests.Controllers
                 (consultant.Name as string).should_be("Person 1");
 
                 ((DateTime)consultant.RollOffDate).should_be(DateTime.Today);
+
+                (consultant.Gravatar as string).should_be("http://temp.com/img");
+            };
+        }
+
+        void creating_consultant()
+        {
+            act = () => controller.Create(new 
+            { 
+                Name = "Person 2",
+                RollOffDate = Tomorrow()
+            });
+
+            it["works"] = () =>
+            {
+                var consultant = consultants.All().First();
+
+                (consultant.Name as string).should_be("Person 2");
+
+                ((DateTime)consultant.RollOffDate).should_be(Tomorrow());
             };
         }
     }

@@ -21,13 +21,6 @@
     <p>
         <label>Extended Until:</label>
         <input type="text" class="span2" value="@DateTime.Today.AddMonths(6).ToShortDateString()" data-date-format="m/d/yyyy" id="extensionDate">
-
-        <h3>How about these consultants?</h3>
-        <label>Other Consultant</label>
-        <input type="text" class="span2" value="@DateTime.Today.AddMonths(6).ToShortDateString()" data-date-format="m/d/yyyy" id="extensionDate2">
-
-        <label>One More</label>
-        <input type="text" class="span2" value="@DateTime.Today.AddMonths(6).ToShortDateString()" data-date-format="m/d/yyyy" id="extensionDate3">
     </p>
   </div>
   <div class="modal-footer">
@@ -47,13 +40,32 @@
         <input type="text" id="consultantName" />
         <label>Roll Off Date</label>
         <input type="text" data-date-format="m/d/yyyy" id="rollOffDate" />
+        <label>Image url via <a href="http://en.gravatar.com/" target="_blank">Gravatar</a></label>
+        <input type="text" id="gravatar" />
+    </p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" id="updateConsultant" class="btn btn-primary">Save</a>
+  </div>
+</div>
+
+<div class="modal hide" id="newConsultantModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Create Consultant</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+        <label>Name</label>
+        <input type="text" id="newConsultantName" />
         @*<label>Image url via <a href="http://en.gravatar.com/" target="_blank">Gravatar</a></label>
         <input type="text" />*@
     </p>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn" data-dismiss="modal">Close</a>
-    <a href="#" id="updateConsultant" class="btn btn-primary">Save</a>
+    <a href="#" id="createConsultant" class="btn btn-primary">Save</a>
   </div>
 </div>
 

@@ -1,5 +1,5 @@
 (function() {
-  var Bench, BenchView, Consultant, ConsultantView, EditConsultantModal, ExtendConsultantModal, RollOffs, RollOffsView, app;
+  var Bench, BenchView, Consultant, ConsultantView, EditConsultantModal, ExtendConsultantModal, NewConsultantModal, RollOffs, RollOffsView, app;
 
   app = this;
 
@@ -8,7 +8,11 @@
       this.rollOffs = new RollOffsView();
       this.bench = new BenchView();
       ExtendConsultantModal.render();
-      return EditConsultantModal.render();
+      EditConsultantModal.render();
+      NewConsultantModal.render();
+      return $("#newConsultant").click(function() {
+        return NewConsultantModal.create(new Consultant());
+      });
     }
   };
 
@@ -152,6 +156,12 @@
     setName: function(name) {
       return this.set("Name", name);
     },
+    gravatar: function() {
+      return this.get("Gravatar");
+    },
+    setGravatar: function(url) {
+      return this.set("Gravatar", url);
+    },
     rollOffDate: function() {
       if (this.get("RollOffDate")) {
         return new Date(this.get("RollOffDate"));
@@ -178,6 +188,16 @@
       var _this = this;
       return $.post("/consultants/update", {
         id: this.get("Id"),
+        name: this.get("Name"),
+        rollOffDate: this.get("RollOffDate")
+      }, function() {
+        app.dashboard.rollOffs.refresh();
+        return app.dashboard.bench.refresh();
+      });
+    },
+    create: function() {
+      var _this = this;
+      return $.post("/consultants/create", {
         name: this.get("Name"),
         rollOffDate: this.get("RollOffDate")
       }, function() {
@@ -215,6 +235,7 @@
       $(this.el).find("#updateConsultant").click(function() {
         _this.model.setName($(_this.el).find("#consultantName").val());
         _this.model.setRollOffDate($(_this.el).find("#rollOffDate").val());
+        _this.model.setGravatar($(_this.el).find("#gravatar").val());
         _this.model.update();
         return $(_this.el).modal('hide');
       });
@@ -235,6 +256,25 @@
         $("#rollOffDate").val(formatted);
         $("#rollOffDate").datepicker("update");
       }
+      return $(this.el).modal('show');
+    }
+  }));
+
+  NewConsultantModal = new (Backbone.View.extend({
+    render: function() {
+      var _this = this;
+      this.el = "#newConsultantModal";
+      $(this.el).find("#createConsultant").click(function() {
+        _this.model.setName($(_this.el).find("#newConsultantName").val());
+        _this.model.create();
+        return $(_this.el).modal('hide');
+      });
+      return $(this.el).modal({
+        show: false
+      });
+    },
+    create: function(consultant) {
+      this.model = consultant;
       return $(this.el).modal('show');
     }
   }));

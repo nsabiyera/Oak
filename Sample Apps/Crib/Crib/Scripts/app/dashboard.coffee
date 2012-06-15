@@ -10,6 +10,12 @@ this.dashboard =
 
     EditConsultantModal.render()
 
+    NewConsultantModal.render()
+
+    $("#newConsultant").click( ->
+      NewConsultantModal.create(new Consultant())
+    )
+
 BenchView = Backbone.View.extend
   el: "#bench"
 
@@ -139,6 +145,10 @@ Consultant = Backbone.Model.extend
 
   setName: (name) -> @set("Name", name)
 
+  gravatar: -> @get("Gravatar")
+
+  setGravatar: (url) -> @set("Gravatar", url)
+
   rollOffDate: ->
     if @get("RollOffDate")
       return new Date(@get("RollOffDate"))
@@ -158,6 +168,12 @@ Consultant = Backbone.Model.extend
 
   update: ->
     $.post("/consultants/update", { id: @get("Id"), name: @get("Name"), rollOffDate: @get("RollOffDate") }, =>
+      app.dashboard.rollOffs.refresh() #bad form, consider events
+      app.dashboard.bench.refresh() #bad form, consider events
+    )
+
+  create: ->
+    $.post("/consultants/create", { name: @get("Name"), rollOffDate: @get("RollOffDate") }, =>
       app.dashboard.rollOffs.refresh() #bad form, consider events
       app.dashboard.bench.refresh() #bad form, consider events
     )
@@ -187,6 +203,7 @@ EditConsultantModal = new (Backbone.View.extend
     $(@el).find("#updateConsultant").click( =>
       @model.setName($(@el).find("#consultantName").val())
       @model.setRollOffDate($(@el).find("#rollOffDate").val())
+      @model.setGravatar($(@el).find("#gravatar").val())
       @model.update()
       $(@el).modal('hide')
     )
@@ -207,6 +224,25 @@ EditConsultantModal = new (Backbone.View.extend
       $("#rollOffDate").val(formatted)
 
       $("#rollOffDate").datepicker("update")
+     
+    $(@el).modal('show')
+  )
+
+NewConsultantModal = new (Backbone.View.extend
+  render: ->
+    @el = "#newConsultantModal"
+
+    $(@el).find("#createConsultant").click( =>
+      @model.setName($(@el).find("#newConsultantName").val())
+      @model.create()
+      $(@el).modal('hide')
+    )
+
+    $(@el).modal
+      show: false
+
+  create: (consultant) ->
+    @model = consultant
      
     $(@el).modal('show')
   )

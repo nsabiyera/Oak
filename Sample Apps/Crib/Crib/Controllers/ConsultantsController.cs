@@ -15,5 +15,10 @@ namespace Crib.Controllers
         {
             consultants.Update(@params, @params.Id);
         }
+
+        public void Create(dynamic @params)
+        {
+            consultants.Insert(@params);
+        }
     }
 }
