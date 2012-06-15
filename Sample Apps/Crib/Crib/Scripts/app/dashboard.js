@@ -149,12 +149,18 @@
     name: function() {
       return this.get("Name");
     },
+    setName: function(name) {
+      return this.set("Name", name);
+    },
     rollOffDate: function() {
       if (this.get("RollOffDate")) {
         return new Date(this.get("RollOffDate"));
       } else {
         return null;
       }
+    },
+    setRollOffDate: function(date) {
+      return this.set("RollOffDate", date);
     },
     rollOffMonth: function() {
       return this.rollOffDate().getMonth();
@@ -168,9 +174,19 @@
     onBench: function() {
       return this.get("OnBench");
     },
+    update: function() {
+      var _this = this;
+      return $.post("/consultants/update", {
+        id: this.get("Id"),
+        name: this.get("Name"),
+        rollOffDate: this.get("RollOffDate")
+      }, function() {
+        app.dashboard.rollOffs.refresh();
+        return app.dashboard.bench.refresh();
+      });
+    },
     extendTil: function(date) {
       var _this = this;
-      console.log(date);
       return $.post("/rolloffs/extensions", {
         consultantId: this.get("Id"),
         til: date
@@ -193,16 +209,14 @@
 
   EditConsultantModal = new (Backbone.View.extend({
     render: function() {
-      var d, date, formatted, month, year;
+      var _this = this;
       this.el = "#editConsultantModal";
       $(this.el).find("#rollOffDate").datepicker();
-      d = new Date();
-      date = d.getDate();
-      month = d.getMonth() + 1;
-      year = d.getFullYear();
-      formatted = month + "/" + date + "/" + year;
       $(this.el).find("#updateConsultant").click(function() {
-        return $(this.el).modal('hide');
+        _this.model.setName($(_this.el).find("#consultantName").val());
+        _this.model.setRollOffDate($(_this.el).find("#rollOffDate").val());
+        _this.model.update();
+        return $(_this.el).modal('hide');
       });
       return $(this.el).modal({
         show: false
@@ -219,6 +233,7 @@
         year = d.getFullYear();
         formatted = month + "/" + date + "/" + year;
         $("#rollOffDate").val(formatted);
+        $("#rollOffDate").datepicker("update");
       }
       return $(this.el).modal('show');
     }
@@ -229,13 +244,16 @@
       return this.model.extendTil($("#extensionDate").val());
     },
     render: function() {
-      var _this = this;
+      var view,
+        _this = this;
       this.el = "#extendConsultantModal";
       $(this.el).modal({
         show: false
       });
+      view = $(this.el);
       $(this.el).find("#extendConsultant").click(function() {
-        return _this.save();
+        _this.save();
+        return view.modal("hide");
       });
       return $(this.el).find("#extensionDate").datepicker();
     },

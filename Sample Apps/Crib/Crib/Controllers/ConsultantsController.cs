@@ -13,7 +13,7 @@ namespace Crib.Controllers
 
         public void Update(dynamic @params)
         {
-            consultants.Save(@params);
+            consultants.Update(@params, @params.Id);
         }
     }
 }

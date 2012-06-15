@@ -137,11 +137,16 @@ Consultant = Backbone.Model.extend
 
   name: -> @get("Name")
 
+  setName: (name) -> @set("Name", name)
+
   rollOffDate: ->
     if @get("RollOffDate")
       return new Date(@get("RollOffDate"))
     else
       return null
+
+  setRollOffDate: (date) ->
+    @set("RollOffDate", date)
 
   rollOffMonth: -> @rollOffDate().getMonth()
 
@@ -151,12 +156,17 @@ Consultant = Backbone.Model.extend
 
   onBench: -> @get("OnBench")
 
+  update: ->
+    $.post("/consultants/update", { id: @get("Id"), name: @get("Name"), rollOffDate: @get("RollOffDate") }, =>
+      app.dashboard.rollOffs.refresh() #bad form, consider events
+      app.dashboard.bench.refresh() #bad form, consider events
+    )
+
   extendTil: (date) ->
-    console.log(date)
     $.post("/rolloffs/extensions", { consultantId: @get("Id"), til: date }, =>
-      app.dashboard.rollOffs.refresh()
-      app.dashboard.bench.refresh()
-    ) #bad form, consider events
+      app.dashboard.rollOffs.refresh() #bad form, consider events
+      app.dashboard.bench.refresh() #bad form, consider events
+    )
 
 RollOffs = Backbone.Collection.extend
   model: Consultant
@@ -174,14 +184,10 @@ EditConsultantModal = new (Backbone.View.extend
 
     $(@el).find("#rollOffDate").datepicker()
 
-    d = new Date()
-    date = d.getDate()
-    month = d.getMonth() + 1
-    year = d.getFullYear()
-    formatted = month + "/" + date + "/" + year
-
-    $(@el).find("#updateConsultant").click( ->
-
+    $(@el).find("#updateConsultant").click( =>
+      @model.setName($(@el).find("#consultantName").val())
+      @model.setRollOffDate($(@el).find("#rollOffDate").val())
+      @model.update()
       $(@el).modal('hide')
     )
 
@@ -199,6 +205,8 @@ EditConsultantModal = new (Backbone.View.extend
       year = d.getFullYear()
       formatted = month + "/" + date + "/" + year
       $("#rollOffDate").val(formatted)
+
+      $("#rollOffDate").datepicker("update")
      
     $(@el).modal('show')
   )
@@ -211,7 +219,13 @@ ExtendConsultantModal = new (Backbone.View.extend
     @el = "#extendConsultantModal"
     $(@el).modal
       show: false
-    $(@el).find("#extendConsultant").click => @save()
+
+    view = $(@el)
+
+    $(@el).find("#extendConsultant").click =>
+      @save()
+      view.modal("hide")
+
     $(@el).find("#extensionDate").datepicker()
 
   edit: (consultant) ->
