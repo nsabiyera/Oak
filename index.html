@@ -46,7 +46,7 @@
         </div>
 
         <h2>What is Oak?</h2>
-        <p style="font-size: 20px">Oak is a suite of contructs that brings the <b>power of dynamic typing</b> to ASP.NET MVC.</p>
+        <p style="font-size: 20px">Oak is a suite of contructs that brings the <b>power of dynamic typing and frictionless development</b> to ASP.NET MVC (it can be used outside of MVC too).</p>
 
         <h3>You're getting rid of compile time checking?!</h3>
         <p style="font-size: 20px">Yep! But dont worry, Oak also has built in guidance for keeping things managable without the compiler.</p>
@@ -56,7 +56,7 @@
 
         <h3>I don't believe you!</h3>
         <p style="font-size: 20px">Watch this screencast then, it'll show off the power of dynamic typing.</p>
- <div id="media">
+ <div id="media" style="z-index: 0">
    <object id="csSW2F" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="650" height="450">
       <param name="movie" value="DynamicTyping_controller.swf" />
       <param name="scale" value="showall" />
@@ -112,9 +112,9 @@
    </object>
  </div>
 
-<br/>
-<h2>First Time (Prerequisites)</h2>
+ <br/>
 
+<h2>First Time (Prerequisites)</h2>
 <ul>
 <li>Install <a href="http://www.microsoft.com/download/en/details.aspx?id=1038">IIS Express</a>
 </li>
@@ -126,8 +126,25 @@ gem install bundler
 gem install warmup
 </pre>
 </li>
-</ul><h2>Explore the Sample App: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
+</ul>
 
+<h2>Bootstrap Your Own App With Oak</h2>
+<ul>
+<li>Run the following commands:
+<pre>
+warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/loam</a> Blog (creates a .Net solution)
+cd Blog
+bundle install (installs any ruby gems needed)
+rake (builds the .net app)
+rake server (starts iis express)
+start Blog.sln (opens the solution)
+watchr dotnet.watchr.rb (starts your feedback loop)
+</pre>
+</li>
+</ul>
+
+<h2>Explore the sample apps: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
+<p>This is..you guessed it...a blogging app.</p>
 <ul>
 <li>Run the following commands:
 <pre>
@@ -147,8 +164,58 @@ rake sample      (adds sample data to the database)
 start http://localhost:3000
 </pre>
 </li>
-</ul><h2>Explore the Reference Implementation: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h2>
+</ul>
 
+<h2>Explore the sample apps: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BattleShip">BattleShip</a></h2>
+<p>This is a web based version of the game BattleShip.  Open up two browsers and start playing!</p>
+<ul>
+<li>Run the following commands:
+<pre>
+git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+cd "Oak\Sample Apps\BattleShip"
+start BattleShip.sln
+</pre>
+</li>
+<li>Update the connection strings in the Web.config and App.config to point to an existing database (or create a new one and update the connection strings accordingly).</li>
+<li>Then run the commands:
+<pre>
+rake             (builds and deploys the application)
+rake tests       (all tests should pass)
+rake server      (this will start up iis express)
+rake reset       (resets the database schema with no data)
+rake sample      (adds sample data to the database)
+start http://localhost:3000
+</pre>
+</li>
+</ul>
+
+<h2>Explore the sample apps: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/Crib">Crib</a></h2>
+<p>This is a web applications that tracks consultants and when they roll off of a client engagement.  Consulting companies like <a href="http://improvingenterprises.com" target="_blank">Improving Enterprises</a> would use this app to manage their resource pool.</p>
+<ul>
+<li>Run the following commands:
+<pre>
+git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+cd "Oak\Sample Apps\Crib"
+start Crib.sln
+</pre>
+</li>
+<li>Update the connection strings in the Web.config and App.config to point to an existing database (or create a new one and update the connection strings accordingly).</li>
+<li>Then run the commands:
+<pre>
+rake             (builds and deploys the application)
+rake tests       (all tests should pass)
+rake server      (this will start up iis express)
+rake reset       (resets the database schema with no data)
+rake sample      (adds sample data to the database)
+start http://localhost:3000
+</pre>
+</li>
+</ul>
+
+<h2>Explore the Reference Implementation: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h2>
+<p>
+  This is a full blown reference implementation that uses all aspects of Oak.  This is a website that allows a circle of friends to borrow games from each other.
+</p>
 <ul>
 <li>Run the following commands
 <pre>
@@ -165,26 +232,15 @@ rake             (builds and deploys the application)
 rake regen_db    (this generates the schema for the db)
 rake tests       (all tests should pass)
 rake server      (this will start up iis express)
+rake ui          (this will run ui tests, it requires <a href="http://seleniumhq.org/projects/webdriver/" target="_blank">selenium</a>)
 rake reset       (deletes all records in the db)
 rake sample      (adds sample data to the database)
 start http://localhost:3000
 </pre>
 </li>
-</ul><h2>Bootstrap Your Own App With Oak</h2>
+</ul>
 
-<ul>
-<li>Run the following commands:
-<pre>
-warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/loam</a> Blog (creates a .Net solution)
-cd Blog
-bundle install (installs any ruby gems needed)
-rake (builds the .net app)
-rake server (starts iis express)
-start Blog.sln (opens the solution)
-watchr dotnet.watchr.rb (starts your feedback loop)
-</pre>
-</li>
-</ul><h2>More Stuff</h2>
+<h2>More Stuff</h2>
 
 <ul>
 <li>MIT License</li>
