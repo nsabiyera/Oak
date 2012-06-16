@@ -60,6 +60,7 @@ RollOffsView = Backbone.View.extend
     $(@el).empty()
 
     monthSeperator = -1
+    yearSeperator = -1
 
     consultantContainer = null
 
@@ -71,8 +72,11 @@ RollOffsView = Backbone.View.extend
 
       currentMonth = consultant.rollOffMonth()
 
-      if(monthSeperator != currentMonth)
+      currentYear = consultant.rollOffYear()
+
+      if(monthSeperator != currentMonth || yearSeperator != currentYear)
         monthSeperator = currentMonth
+        yearSeperator = currentYear
         @createSeperator consultant.rollOffMonthName(), consultant.rollOffYear()
         consultantContainer = $("<ul></ul>").addClass("thumbnails").css({ 'margin-top': '10px' })
         $(@el).append consultantContainer
@@ -90,9 +94,13 @@ ConsultantView = Backbone.View.extend
     "click .extend": "extendConsultant"
 
   render: ->
-    $(@el).append $.tmpl(@engageConsultant, { name: @model.name() }) if !@model.onBench()
+    imageUrl = "http://placehold.it/130x90"
 
-    $(@el).append $.tmpl(@benchConsultant, { name: @model.name() }) if @model.onBench()
+    imageUrl = @model.picture() if @model.picture()
+
+    $(@el).append $.tmpl(@engageConsultant, { name: @model.name(), imageUrl: imageUrl }) if !@model.onBench()
+
+    $(@el).append $.tmpl(@benchConsultant, { name: @model.name(), imageUrl: imageUrl }) if @model.onBench()
 
     return @
 
@@ -102,12 +110,12 @@ ConsultantView = Backbone.View.extend
 
   engageConsultant:
     '
-    <a href="#" class="thumbnail">
-      <img src="http://placehold.it/130x90" alt="">
+    <a class="thumbnail">
+      <img src="${imageUrl}" alt="" width="130px" height="90px">
     </a>
     <div class="well" style="margin: 3px; padding: 3px; width: 130px">
         <div class="btn-group">
-          <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="#">
+          <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="javascript:;">
             Options
             <span class="caret"></span>
           </a>
@@ -121,12 +129,12 @@ ConsultantView = Backbone.View.extend
     '
   benchConsultant:
     '
-    <a href="#" class="thumbnail">
-      <img src="http://placehold.it/130x90" alt="">
+    <a class="thumbnail">
+      <img src="${imageUrl}" alt="" width="130px" height="90px">
     </a>
     <div class="well" style="margin: 3px; padding: 3px; width: 130px">
         <div class="btn-group">
-          <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="#">
+          <a class="btn dropdown-toggle" style="width: 110px" data-toggle="dropdown" href="javascript:;">
             Options
             <span class="caret"></span>
           </a>
@@ -145,9 +153,9 @@ Consultant = Backbone.Model.extend
 
   setName: (name) -> @set("Name", name)
 
-  gravatar: -> @get("Gravatar")
+  picture: -> @get("Picture")
 
-  setGravatar: (url) -> @set("Gravatar", url)
+  setPicture: (url) -> @set("Picture", url)
 
   rollOffDate: ->
     if @get("RollOffDate")
@@ -167,7 +175,7 @@ Consultant = Backbone.Model.extend
   onBench: -> @get("OnBench")
 
   update: ->
-    $.post("/consultants/update", { id: @get("Id"), name: @get("Name"), rollOffDate: @get("RollOffDate") }, =>
+    $.post("/consultants/update", { id: @get("Id"), name: @get("Name"), rollOffDate: @get("RollOffDate"), picture: @get("Picture") }, =>
       app.dashboard.rollOffs.refresh() #bad form, consider events
       app.dashboard.bench.refresh() #bad form, consider events
     )
@@ -203,7 +211,7 @@ EditConsultantModal = new (Backbone.View.extend
     $(@el).find("#updateConsultant").click( =>
       @model.setName($(@el).find("#consultantName").val())
       @model.setRollOffDate($(@el).find("#rollOffDate").val())
-      @model.setGravatar($(@el).find("#gravatar").val())
+      @model.setPicture($(@el).find("#picture").val())
       @model.update()
       $(@el).modal('hide')
     )
@@ -214,6 +222,7 @@ EditConsultantModal = new (Backbone.View.extend
   edit: (consultant) ->
     @model = consultant
     $("#consultantName").val(consultant.name())
+    $(@el).find("#picture").val(consultant.picture())
 
     if consultant.rollOffDate()
       d = consultant.rollOffDate()
@@ -222,9 +231,10 @@ EditConsultantModal = new (Backbone.View.extend
       year = d.getFullYear()
       formatted = month + "/" + date + "/" + year
       $("#rollOffDate").val(formatted)
-
-      $("#rollOffDate").datepicker("update")
+    else
+      $("#rollOffDate").val("")
      
+    $("#rollOffDate").datepicker("update")
     $(@el).modal('show')
   )
 

@@ -1,8 +1,7 @@
 (function() {
   var Bench, BenchView, Consultant, ConsultantView, EditConsultantModal, ExtendConsultantModal, NewConsultantModal, RollOffs, RollOffsView, app;
-
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   app = this;
-
   this.dashboard = {
     init: function() {
       this.rollOffs = new RollOffsView();
@@ -15,7 +14,6 @@
       });
     }
   };
-
   BenchView = Backbone.View.extend({
     el: "#bench",
     initialize: function() {
@@ -27,24 +25,22 @@
       return this.bench.fetch();
     },
     render: function() {
-      var consultantContainer,
-        _this = this;
+      var consultantContainer;
       $(this.el).empty();
       consultantContainer = $("<ul></ul>").addClass("thumbnails").css({
         'margin-top': '10px'
       });
       $(this.el).append(consultantContainer);
-      return this.bench.each(function(consultant) {
+      return this.bench.each(__bind(function(consultant) {
         var view;
         view = new ConsultantView({
           model: consultant,
           editor: EditConsultantModal
         });
         return consultantContainer.append($("<li></li>").append(view.render().el));
-      });
+      }, this));
     }
   });
-
   RollOffsView = Backbone.View.extend({
     el: "#roll_offs",
     initialize: function() {
@@ -57,13 +53,12 @@
       return this.rollOffs.fetch();
     },
     render: function() {
-      var consultantContainer, monthSeperator, yearSeperator,
-        _this = this;
+      var consultantContainer, monthSeperator, yearSeperator;
       $(this.el).empty();
       monthSeperator = -1;
       yearSeperator = -1;
       consultantContainer = null;
-      return this.rollOffs.each(function(consultant) {
+      return this.rollOffs.each(__bind(function(consultant) {
         var currentMonth, currentYear, view;
         view = new ConsultantView({
           model: consultant,
@@ -75,21 +70,20 @@
         if (monthSeperator !== currentMonth || yearSeperator !== currentYear) {
           monthSeperator = currentMonth;
           yearSeperator = currentYear;
-          _this.createSeperator(consultant.rollOffMonthName(), consultant.rollOffYear());
+          this.createSeperator(consultant.rollOffMonthName(), consultant.rollOffYear());
           consultantContainer = $("<ul></ul>").addClass("thumbnails").css({
             'margin-top': '10px'
           });
-          $(_this.el).append(consultantContainer);
+          $(this.el).append(consultantContainer);
         }
         return consultantContainer.append($("<li></li>").append(view.render().el));
-      });
+      }, this));
     },
     createSeperator: function(monthName, year) {
       $(this.el).append("<hr/>");
       return $(this.el).append("<h3>" + monthName + " " + (1900 + year) + "</h3>");
     }
   });
-
   ConsultantView = Backbone.View.extend({
     events: {
       "click .edit": "edit",
@@ -98,7 +92,9 @@
     render: function() {
       var imageUrl;
       imageUrl = "http://placehold.it/130x90";
-      if (this.model.picture()) imageUrl = this.model.picture();
+      if (this.model.gravatar()) {
+        imageUrl = this.model.gravatar();
+      }
       if (!this.model.onBench()) {
         $(this.el).append($.tmpl(this.engageConsultant, {
           name: this.model.name(),
@@ -155,7 +151,6 @@
     </div>\
     '
   });
-
   Consultant = Backbone.Model.extend({
     monthName: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     name: function() {
@@ -193,61 +188,54 @@
       return this.get("OnBench");
     },
     update: function() {
-      var _this = this;
       return $.post("/consultants/update", {
         id: this.get("Id"),
         name: this.get("Name"),
         rollOffDate: this.get("RollOffDate"),
         picture: this.get("Picture")
-      }, function() {
+      }, __bind(function() {
         app.dashboard.rollOffs.refresh();
         return app.dashboard.bench.refresh();
-      });
+      }, this));
     },
     create: function() {
-      var _this = this;
       return $.post("/consultants/create", {
         name: this.get("Name"),
         rollOffDate: this.get("RollOffDate")
-      }, function() {
+      }, __bind(function() {
         app.dashboard.rollOffs.refresh();
         return app.dashboard.bench.refresh();
-      });
+      }, this));
     },
     extendTil: function(date) {
-      var _this = this;
       return $.post("/rolloffs/extensions", {
         consultantId: this.get("Id"),
         til: date
-      }, function() {
+      }, __bind(function() {
         app.dashboard.rollOffs.refresh();
         return app.dashboard.bench.refresh();
-      });
+      }, this));
     }
   });
-
   RollOffs = Backbone.Collection.extend({
     model: Consultant,
     url: "rolloffs/list"
   });
-
   Bench = Backbone.Collection.extend({
     model: Consultant,
     url: "rolloffs/bench"
   });
-
   EditConsultantModal = new (Backbone.View.extend({
     render: function() {
-      var _this = this;
       this.el = "#editConsultantModal";
       $(this.el).find("#rollOffDate").datepicker();
-      $(this.el).find("#updateConsultant").click(function() {
-        _this.model.setName($(_this.el).find("#consultantName").val());
-        _this.model.setRollOffDate($(_this.el).find("#rollOffDate").val());
-        _this.model.setPicture($(_this.el).find("#picture").val());
-        _this.model.update();
-        return $(_this.el).modal('hide');
-      });
+      $(this.el).find("#updateConsultant").click(__bind(function() {
+        this.model.setName($(this.el).find("#consultantName").val());
+        this.model.setRollOffDate($(this.el).find("#rollOffDate").val());
+        this.model.setPicture($(this.el).find("#picture").val());
+        this.model.update();
+        return $(this.el).modal('hide');
+      }, this));
       return $(this.el).modal({
         show: false
       });
@@ -256,7 +244,7 @@
       var d, date, formatted, month, year;
       this.model = consultant;
       $("#consultantName").val(consultant.name());
-      $(this.el).find("#picture").val(consultant.picture());
+      $(this.el).find("#gravatar").val(consultant.gravatar());
       if (consultant.rollOffDate()) {
         d = consultant.rollOffDate();
         date = d.getDate();
@@ -271,16 +259,14 @@
       return $(this.el).modal('show');
     }
   }));
-
   NewConsultantModal = new (Backbone.View.extend({
     render: function() {
-      var _this = this;
       this.el = "#newConsultantModal";
-      $(this.el).find("#createConsultant").click(function() {
-        _this.model.setName($(_this.el).find("#newConsultantName").val());
-        _this.model.create();
-        return $(_this.el).modal('hide');
-      });
+      $(this.el).find("#createConsultant").click(__bind(function() {
+        this.model.setName($(this.el).find("#newConsultantName").val());
+        this.model.create();
+        return $(this.el).modal('hide');
+      }, this));
       return $(this.el).modal({
         show: false
       });
@@ -290,23 +276,21 @@
       return $(this.el).modal('show');
     }
   }));
-
   ExtendConsultantModal = new (Backbone.View.extend({
     save: function() {
       return this.model.extendTil($("#extensionDate").val());
     },
     render: function() {
-      var view,
-        _this = this;
+      var view;
       this.el = "#extendConsultantModal";
       $(this.el).modal({
         show: false
       });
       view = $(this.el);
-      $(this.el).find("#extendConsultant").click(function() {
-        _this.save();
+      $(this.el).find("#extendConsultant").click(__bind(function() {
+        this.save();
         return view.modal("hide");
-      });
+      }, this));
       return $(this.el).find("#extensionDate").datepicker();
     },
     edit: function(consultant) {
@@ -315,5 +299,4 @@
       return $(this.el).modal('show');
     }
   }));
-
 }).call(this);

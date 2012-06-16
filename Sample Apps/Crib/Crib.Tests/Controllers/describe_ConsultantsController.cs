@@ -24,47 +24,40 @@ namespace Crib.Tests.Controllers
             consultants = new Consultants();
         }
 
-        void updating_consultant()
+        void specify__updating_consultant()
         {
-            before = () =>
-                consultantId = new { Name = "" }.InsertInto("Consultants");
+            consultantId = new { Name = "" }.InsertInto("Consultants");
 
-            act = () => controller.Update(new
+            controller.Update(new
             {
                 Id = consultantId,
                 Name = "Person 1",
                 RollOffDate = DateTime.Today,
-                Gravatar = "http://temp.com/img"
+                Picture = "http://temp.com/img"
             });
 
-            it["works"] = () =>
-            {
-                var consultant = consultants.All().First();
+            var consultant = consultants.All().First();
 
-                (consultant.Name as string).should_be("Person 1");
+            (consultant.Name as string).should_be("Person 1");
 
-                ((DateTime)consultant.RollOffDate).should_be(DateTime.Today);
+            ((DateTime)consultant.RollOffDate).should_be(DateTime.Today);
 
-                (consultant.Gravatar as string).should_be("http://temp.com/img");
-            };
+            (consultant.Picture as string).should_be("http://temp.com/img");
         }
 
-        void creating_consultant()
+        void specify_creating_consultant()
         {
-            act = () => controller.Create(new 
-            { 
+            controller.Create(new
+            {
                 Name = "Person 2",
                 RollOffDate = Tomorrow()
             });
 
-            it["works"] = () =>
-            {
-                var consultant = consultants.All().First();
+            var consultant = consultants.All().First();
 
-                (consultant.Name as string).should_be("Person 2");
+            (consultant.Name as string).should_be("Person 2");
 
-                ((DateTime)consultant.RollOffDate).should_be(Tomorrow());
-            };
+            ((DateTime)consultant.RollOffDate).should_be(Tomorrow());
         }
     }
 }

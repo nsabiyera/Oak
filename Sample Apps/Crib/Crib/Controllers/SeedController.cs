@@ -41,7 +41,7 @@ namespace Oak.Controllers
                 Seed.Id(),
                 new { Name = "nvarchar(255)" },
                 new { RollOffDate = "datetime" },
-                new { Gravatar = "nvarchar(4000)" }
+                new { Picture = "nvarchar(4000)" }
             });
         }
 
