@@ -25,5 +25,10 @@ namespace BattleShip.Models
 
             yield return new HasMany(gameAttacks);
         }
+
+        dynamic SquaresFor(dynamic playerId)
+        {
+            return _.GameSquares().Where(new { PlayerId = playerId });
+        }
     }
 }

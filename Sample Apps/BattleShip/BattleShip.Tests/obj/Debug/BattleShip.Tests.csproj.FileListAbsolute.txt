@@ -1,9 +1,0 @@
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\bin\Debug\BattleShip.Tests.dll.config
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\bin\Debug\BattleShip.Tests.dll
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\bin\Debug\BattleShip.Tests.pdb
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\bin\Debug\BattleShip.dll
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\bin\Debug\NSpec.dll
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\bin\Debug\BattleShip.pdb
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\obj\Debug\ResolveAssemblyReference.cache
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\obj\Debug\BattleShip.Tests.dll
-C:\Development\Oak\Sample Apps\BattleShip\BattleShip.Tests\obj\Debug\BattleShip.Tests.pdb

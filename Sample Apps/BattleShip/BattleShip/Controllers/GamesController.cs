@@ -50,13 +50,11 @@ namespace BattleShip.Controllers
 
             else
             {
-                var playerSquares = game.GameSquares().Where(new { PlayerId = @params.PlayerId.ToString() }) as IEnumerable<dynamic>;
+                var playerSquares = game.SquaresFor(@params.PlayerId.ToString());
 
                 if (playerSquares.Count() == maxShips) return new DynamicJsonResult(new { Success = false });
 
-                var gameSquare = game.GameSquares().New(squareToInsert);
-
-                gameSquares.Insert(gameSquare);
+                gameSquares.Insert(game.GameSquares().New(squareToInsert));
             }
 
             return new DynamicJsonResult(new { Success = true });
@@ -90,31 +88,11 @@ namespace BattleShip.Controllers
             return RedirectToAction("SetupGame", "Games", new { gameId = gameId, userId = userId });
         }
 
-        [HttpPost]
-        public ActionResult CreateGameForPhone(dynamic @params)
-        {
-            var userId = @params.UserId;
-
-            var game = new { Name = @params.Name, CurrentTurn = userId };
-
-            var gameId = Convert.ToInt32(games.Insert(game));
-
-            Join(new { GameId = gameId, UserId = userId });
-
-            return Get(gameId);
-        }
-
         public ActionResult Get(int gameId)
         {
             var game = games.Single(gameId);
 
-            dynamic gameResult = new Gemini();
-
-            gameResult.GameId = game.Id;
-
-            gameResult.Player1Id = game.Player1Id;
-
-            gameResult.Player2Id = game.Player2Id;
+            dynamic gameResult = new Gemini(game);
 
             gameResult.Player1Squares = new List<dynamic>();
 
@@ -128,13 +106,7 @@ namespace BattleShip.Controllers
 
             gameResult.Player1MissesOnPlayer2 = new List<string>();
 
-            gameResult.Player1Ready = game.Player1Ready;
-
-            gameResult.Player2Ready = game.Player2Ready;
-
             gameResult.Started = false;
-
-            gameResult.CurrentTurn = game.CurrentTurn;
 
             if (GameStarted(gameResult)) gameResult.Started = true;
 
@@ -215,7 +187,7 @@ namespace BattleShip.Controllers
 
             else if (string.IsNullOrEmpty(game.Player2Id)) game.Player2Id = @params.UserId;
 
-            if (game.HasChanged()) games.Save(game);
+            games.Save(game);
 
             return Get(Convert.ToInt32(@params.GameId));
         }
