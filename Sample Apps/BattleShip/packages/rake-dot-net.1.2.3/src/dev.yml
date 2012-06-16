@@ -1,0 +1,7 @@
+website_port: 3000
+website_deploy_directory: c:\iisexpress\website
+solution_name: YourSolution #just the name, no .sln extension
+mvc_project: YourMvcDirectory #just the folder name, no .csproj extension
+test_project: YourTestProject #just the folder name, no .csproj extension
+test_runner: ./packages/nspec.0.9.58/tools/NSpecRunner.exe
+iis_express: C:\Program Files (x86)\IIS Express
