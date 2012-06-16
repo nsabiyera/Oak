@@ -18,6 +18,11 @@ Sample Apps/Crib/Crib.Tests/obj/*
 Sample Apps/Crib/Crib/bin/*
 Sample Apps/Crib/Crib/obj/*
 Sample Apps/Crib/Crib.suo
+Sample Apps/BattleShip/BattleShip.Tests/bin/*
+Sample Apps/BattleShip/BattleShip.Tests/obj/*
+Sample Apps/BattleShip/BattleShip/bin/*
+Sample Apps/BattleShip/BattleShip/obj/*
+Sample Apps/BattleShip/BattleShip.suo
 _Resharper.canopy
 *.ReSharper.user
 *.sql
