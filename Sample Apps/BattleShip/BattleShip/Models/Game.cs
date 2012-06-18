@@ -30,5 +30,10 @@ namespace BattleShip.Models
         {
             return _.GameSquares().Where(new { PlayerId = playerId });
         }
+
+        dynamic Started()
+        {
+            return _.Player1Ready && _.Player2Ready;
+        }
     }
 }

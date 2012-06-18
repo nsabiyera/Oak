@@ -106,9 +106,7 @@ namespace BattleShip.Controllers
 
             gameResult.Player1MissesOnPlayer2 = new List<string>();
 
-            gameResult.Started = false;
-
-            if (GameStarted(gameResult)) gameResult.Started = true;
+            gameResult.Started = game.Started();
 
             var gameSquares = game.GameSquares();
 
@@ -192,17 +190,12 @@ namespace BattleShip.Controllers
             return Get(Convert.ToInt32(@params.GameId));
         }
 
-        private static bool GameStarted(dynamic game)
-        {
-            return game.Player1Ready && game.Player2Ready;
-        }
-
         [HttpPost]
         public void Attack(dynamic @params)
         {
             var game = games.Single(@params.GameId);
 
-            if (!GameStarted(game)) return;
+            if (!game.Started()) return;
 
             var byPlayer = @params.PlayerId.ToString();
 
