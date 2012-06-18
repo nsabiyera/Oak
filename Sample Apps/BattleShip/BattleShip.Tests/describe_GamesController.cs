@@ -92,11 +92,11 @@ namespace BattleShip.Tests
                 {
                     SetupGame(player1, gameId, "1A");
 
-                    (GetGame(gameId).Player1Squares[0].Location as string).should_be("1A");
+                    (GetGame(gameId).Player1Squares.First().Location as string).should_be("1A");
 
                     SetupGame(player1, gameId, "1A");
 
-                    ((int)GetGame(gameId).Player1Squares.Count).should_be(0);
+                    ((int)GetGame(gameId).Player1Squares.Count()).should_be(0);
                 };
 
                 it["maximum of 5 squares can be marked for each player"] = () =>
@@ -108,7 +108,7 @@ namespace BattleShip.Tests
                         "5A", "1B"
                     }.ForEach(location => SetupGame(player1, gameId, location));
 
-                    ((int)GetGame(gameId).Player1Squares.Count).should_be(5);
+                    ((int)GetGame(gameId).Player1Squares.Count()).should_be(5);
 
                     new string[] 
                     { 
@@ -117,7 +117,7 @@ namespace BattleShip.Tests
                         "5E", "1D"
                     }.ForEach(location => SetupGame(player2, gameId, location));
 
-                    ((int)GetGame(gameId).Player2Squares.Count).should_be(5);
+                    ((int)GetGame(gameId).Player2Squares.Count()).should_be(5);
                 };
             };
         }

@@ -79,8 +79,6 @@ namespace BattleShip.Controllers
 
             var userId = Guid.NewGuid().ToString();
 
-            @params.CurrentTurn = userId;
-
             var gameId = Convert.ToInt32(games.Insert(@params));
 
             Join(new { GameId = gameId, UserId = userId });
@@ -94,65 +92,21 @@ namespace BattleShip.Controllers
 
             dynamic gameResult = new Gemini(game);
 
-            gameResult.Player1Squares = new List<dynamic>();
+            gameResult.Player1Squares = game.SquaresFor(game.Player1Id);
 
-            gameResult.Player2Squares = new List<dynamic>();
+            gameResult.Player2Squares = game.SquaresFor(game.Player2Id);
 
-            gameResult.Player2HitsOnPlayer1 = new List<string>();
+            gameResult.Player2HitsOnPlayer1 = game.HitsOn(game.Player1Id);
 
-            gameResult.Player2MissesOnPlayer1 = new List<string>();
+            gameResult.Player2MissesOnPlayer1 = game.MissesOn(game.Player1Id);
 
-            gameResult.Player1HitsOnPlayer2 = new List<string>();
+            gameResult.Player1HitsOnPlayer2 = game.HitsOn(game.Player2Id);
 
-            gameResult.Player1MissesOnPlayer2 = new List<string>();
+            gameResult.Player1MissesOnPlayer2 = game.MissesOn(game.Player2Id);
 
             gameResult.Started = game.Started();
 
-            var gameSquares = game.GameSquares();
-
-            foreach (var square in gameSquares)
-            {
-                if (square.PlayerId == gameResult.Player1Id) gameResult.Player1Squares.Add(square);
-
-                else gameResult.Player2Squares.Add(square);
-            }
-
-            var attacks = game.GameAttacks() as IEnumerable<dynamic>;
-
-            gameResult.Loser = "";
-
-            foreach (var attack in attacks)
-            {
-                var hits = gameResult.Player1HitsOnPlayer2;
-
-                var misses = gameResult.Player1MissesOnPlayer2;
-
-                if (attack.Target == game.Player1Id)
-                {
-                    hits = gameResult.Player2HitsOnPlayer1;
-
-                    misses = gameResult.Player2MissesOnPlayer1;
-                }
-
-                var wasHit = gameSquares.Any(new { PlayerId = attack.Target, Location = attack.Location });
-
-                if (wasHit) hits.Add(attack.Location);
-
-                else misses.Add(attack.Location);
-            }
-
-            if (gameResult.Started)
-            {
-                if (gameResult.Player1HitsOnPlayer2.Count == gameResult.Player2Squares.Count)
-                {
-                    gameResult.Loser = game.Player2Id;
-                }
-
-                if (gameResult.Player2HitsOnPlayer1.Count == gameResult.Player1Squares.Count)
-                {
-                    gameResult.Loser = game.Player1Id;
-                }
-            }
+            gameResult.Loser = game.Loser();
 
             return new DynamicJsonResult(gameResult);
         }
@@ -181,9 +135,7 @@ namespace BattleShip.Controllers
         {
             var game = games.Single(@params.GameId);
 
-            if (string.IsNullOrEmpty(game.Player1Id)) game.Player1Id = @params.UserId;
-
-            else if (string.IsNullOrEmpty(game.Player2Id)) game.Player2Id = @params.UserId;
+            game.Join(@params.UserId);
 
             games.Save(game);
 
