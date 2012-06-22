@@ -109,7 +109,11 @@ namespace Oak.Tests.describe_Gemini
 
                 act = () => gemini = gemini.Exclude("inTerest");
 
-                it["casing doesn't matter"] = () => ((bool)gemini.RespondsTo("Interest")).should_be(true);
+                it["casing doesn't matter"] = () =>
+                {
+                    ((bool)gemini.RespondsTo("Amount")).should_be(true);
+                    ((bool)gemini.RespondsTo("Interest")).should_be(false);
+                };
             };
         }
     }
