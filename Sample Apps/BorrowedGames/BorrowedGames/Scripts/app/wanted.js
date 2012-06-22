@@ -29,7 +29,9 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) name = name.substring(0, 40) + "... ";
+      if (name.length > 41) {
+        name = name.substring(0, 40) + "... ";
+      }
       return name += " (" + this.console() + ")";
     },
     undoRequest: function() {
@@ -94,12 +96,20 @@
       "click .cancel": "delete"
     },
     "delete": function() {
-      if (!this.model.canReturnGame()) this.model.undoRequest();
-      if (this.model.canReturnGame()) return this.model.returnGame();
+      if (!this.model.canReturnGame()) {
+        this.model.undoRequest();
+      }
+      if (this.model.canReturnGame()) {
+        return this.model.returnGame();
+      }
     },
     render: function() {
-      if (!this.model.canReturnGame()) this.renderRequestedGame();
-      if (this.model.canReturnGame()) this.renderBorrowedGame();
+      if (!this.model.canReturnGame()) {
+        this.renderRequestedGame();
+      }
+      if (this.model.canReturnGame()) {
+        this.renderBorrowedGame();
+      }
       return this;
     },
     renderRequestedGame: function() {
