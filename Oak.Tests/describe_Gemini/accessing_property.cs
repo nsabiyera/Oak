@@ -49,33 +49,67 @@ namespace Oak.Tests.describe_Gemini
 
         void selecting_properties()
         {
-            before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
-
-            act = () => gemini = gemini.Select("Term", "Amount");
-
-            it["only responds to properties that were selected"] = () =>
+            context["core behavior"] = () =>
             {
-                ((bool)gemini.RespondsTo("Term")).should_be(true);
+                before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30, DueDate = DateTime.Today });
 
-                ((bool)gemini.RespondsTo("Amount")).should_be(true);
+                act = () => gemini = gemini.Select("Term", "Amount");
 
-                ((bool)gemini.RespondsTo("Interest")).should_be(false);
+                it["only responds to properties that were selected"] = () =>
+                {
+                    ((bool)gemini.RespondsTo("Term")).should_be(true);
+
+                    ((bool)gemini.RespondsTo("Amount")).should_be(true);
+
+                    ((bool)gemini.RespondsTo("Interest")).should_be(false);
+                };
+            };
+
+            context["casing"] = () =>
+            {
+                before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30, DueDate = DateTime.Today });
+
+                act = () =>
+                {
+                    gemini = gemini.Select("term", "aMount", "dueDate");
+                };
+
+                it["case doesn't matter"] = () =>
+                {
+                    ((bool)gemini.RespondsTo("Term")).should_be(true);
+
+                    ((bool)gemini.RespondsTo("Amount")).should_be(true);
+
+                    ((bool)gemini.RespondsTo("DueDate")).should_be(true);
+                };
             };
         }
 
         void excluding_properties()
         {
-            before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
-
-            act = () => gemini = gemini.Exclude("Interest");
-
-            it["only responds to properties that were selected"] = () =>
+            context["core behavior"] = () =>
             {
-                ((bool)gemini.RespondsTo("Term")).should_be(true);
+                before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
 
-                ((bool)gemini.RespondsTo("Amount")).should_be(true);
+                act = () => gemini = gemini.Exclude("Interest");
 
-                ((bool)gemini.RespondsTo("Interest")).should_be(false);
+                it["only responds to properties that were selected"] = () =>
+                {
+                    ((bool)gemini.RespondsTo("Term")).should_be(true);
+
+                    ((bool)gemini.RespondsTo("Amount")).should_be(true);
+
+                    ((bool)gemini.RespondsTo("Interest")).should_be(false);
+                };
+            };
+
+            context["casing", "wip"] = () =>
+            {
+                before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
+
+                act = () => gemini = gemini.Exclude("inTerest");
+
+                it["casing doesn't matter"] = () => ((bool)gemini.RespondsTo("Interest")).should_be(true);
             };
         }
     }

@@ -318,7 +318,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void escaping_strings()
         {
             before = () =>
