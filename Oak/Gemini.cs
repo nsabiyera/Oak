@@ -568,9 +568,11 @@ namespace Oak
 
             var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
+            args = args.Select(s => s.ToLower()).ToArray();
+
             expando.ForEach(s =>
             {
-                if (!args.Contains(s.Key as string)) dictionary.Add(s.Key as string, GetMember(s.Key));
+                if (!args.Contains(s.Key.ToLower())) dictionary.Add(s.Key, GetMember(s.Key));
             });
 
             return new Gemini(dictionary);

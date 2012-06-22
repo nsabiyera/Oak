@@ -12,7 +12,7 @@ public class DebuggerShim
     //[Test]
     public void debug()
     {
-        var tagOrClassName = "performance";
+        var tagOrClassName = "accessing_property";
 
         var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 
