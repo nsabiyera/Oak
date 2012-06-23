@@ -54,8 +54,13 @@ namespace Oak.Tests.describe_Gemini
             it["private function that take in no parameters and return dynamic are publicly accessible"] = () =>
                 (gemini.HelloString() as string).should_be("hello");
 
+            it["original exception is retained for private functions"] = expect<InvalidOperationException>(() => gemini.HelloException());
+
             it["private function that take in dynamic and return dynamic are publicly accessible"] = () =>
                 (gemini.Hello("Jane") as string).should_be("hello Jane");
+
+            it["private function that take in dynamic and return dynamic retain exception"] =
+                expect<InvalidOperationException>(() => gemini.HelloException("Jane"));
 
             it["private delegate that take in dynamic can interperet generic parameters"] = () =>
                 (gemini.HelloFullName(firstName: "Jane", lastName: "Doe") as string).should_be("hello Jane Doe");
@@ -67,6 +72,9 @@ namespace Oak.Tests.describe_Gemini
                 ((bool)gemini.Altered).should_be_true();
             };
 
+            it["private method that takes in no parameters retains origin exception"] =
+                expect<InvalidOperationException>(() => gemini.AlterException());
+
             it["private method that takes in dynamic parameter is publically accessible"] = () =>
             {
                 gemini.SetAltered(true);
@@ -77,6 +85,9 @@ namespace Oak.Tests.describe_Gemini
 
                 ((bool)gemini.Altered).should_be_false();
             };
+
+            it["private method that takes in dynamic parameter retains exception"] = 
+                expect<InvalidOperationException>(() => gemini.SetAlteredException(true));
 
             it["private function that return enumerable of dynamic is publically accessible"] = () =>
                 (gemini.Names() as IEnumerable<dynamic>).should_contain("name1");
