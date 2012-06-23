@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>1.2.0</version> 
+    <version>1.2.1</version> 
     <authors>Amir Rajan</authors>
     <description>Bring dynamic goodness and frictionless development to ASP .NET MVC</description> 
     <language>en-US</language>
