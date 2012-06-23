@@ -27,9 +27,19 @@ namespace Oak.Tests.describe_Gemini.Classes
             return "hello";
         }
 
+        dynamic HelloException()
+        {
+            throw new InvalidOperationException();
+        }
+
         dynamic Hello(dynamic name)
         {
             return "hello " + name;
+        }
+
+        dynamic HelloException(dynamic name)
+        {
+            throw new InvalidOperationException();
         }
 
         dynamic HelloFullName(dynamic fullName)
@@ -42,9 +52,19 @@ namespace Oak.Tests.describe_Gemini.Classes
             Altered = true;
         }
 
+        void AlterException()
+        {
+            throw new InvalidOperationException();   
+        }
+
         void SetAltered(dynamic value)
         {
             Altered = value;
+        }
+
+        void SetAlteredException(dynamic value)
+        {
+            throw new InvalidOperationException();
         }
 
         IEnumerable<dynamic> Names()

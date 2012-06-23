@@ -50,7 +50,7 @@ GrowlNotifier.growl_path =
   'C:\program files (x86)\Growl for Windows\growlnotify.exe'
 
 watch('.*.\.cs$') do 
-  results = @sh.execute "rake tests"
+  results = @sh.execute "rake tests_excluding_performance"
 
   if(!tests_passed? results)
     @growl.execute "sad panda", "tests failed", "red"
