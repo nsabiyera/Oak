@@ -4,8 +4,6 @@ using System.Linq;
 using System.Dynamic;
 using System.Diagnostics;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Text;
 
 
 namespace Oak
@@ -148,35 +146,29 @@ namespace Oak
 
             else if (IsDynamicMethod(method, parameters)) TrySetMember(method.Name, DynamicMethodFor(method));
 
-            else if (IsDynamicMethodWithParam(method, parameters)) TrySetMember(method.Name, DynamicMethodWithParamFor(method));
+            else if (IsDynamicMethodWithParam(method, parameters)) TrySetMember(method.Name, DynamicFunctionWithParamFor(method));
         }
 
         public DynamicFunction DynamicFunctionFor(MethodInfo method)
         {
-            return new DynamicFunction(() => method.Invoke(this, null));
-        }
-
-        private DynamicFunctionWithParam DynamicMethodWithParamFor(MethodInfo method)
-        {
-            return new DynamicFunctionWithParam((arg) =>
-            {
-                method.Invoke(this, new[] { arg });
-
-                return null;
-            });
+            return new DynamicFunction(() => Invoke(method, null));
         }
 
         public DynamicFunctionWithParam DynamicFunctionWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) =>
-            {
-                return method.Invoke(this, new[] { arg });
-            });
+            return new DynamicFunctionWithParam((arg) => Invoke(method, new[] { arg }));
         }
 
         private DynamicMethod DynamicMethodFor(MethodInfo method)
         {
-            return new DynamicMethod(() => method.Invoke(this, null));
+            return new DynamicMethod(() => Invoke(method, null));
+        }
+
+        private object Invoke(MethodInfo method, object[] parameters)
+        {
+            try { return method.Invoke(this, parameters); }
+
+            catch (Exception ex) { throw ex.InnerException; }
         }
 
         public BindingFlags PrivateFlags()
@@ -336,15 +328,9 @@ namespace Oak
                 ".  These are the members that exist on this instance: " + __Info__());
         }
 
-        public virtual dynamic __Info__(string filter = null)
+        public virtual dynamic __Info__()
         {
-            var regex = new Regex(filter ?? "");
-
-            var methods = Hash()
-                .Where(s => filter == null || regex.IsMatch(s.Key))
-                .Select(s => s.Key + " (" + (s.Value == null ? "null" : s.Value.GetType().Name) + ")");
-
-            return string.Join(", ", methods);
+            return GeminiInfo.Parse(this);
         }
 
         public virtual void SetMember(string property, object value, bool suppress)
@@ -576,9 +562,11 @@ namespace Oak
 
             var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
+            args = args.Select(s => s.ToLower()).ToArray();
+
             expando.ForEach(s =>
             {
-                if (!args.Contains(s.Key as string)) dictionary.Add(s.Key as string, GetMember(s.Key));
+                if (!args.Contains(s.Key.ToLower())) dictionary.Add(s.Key, GetMember(s.Key));
             });
 
             return new Gemini(dictionary);
@@ -592,6 +580,11 @@ namespace Oak
         public virtual bool IsOfKind<T>()
         {
             return TypeExtensions.IsOfKind<T>(this) || ExtendedWith().Contains(typeof(T));
+        }
+
+        public override string ToString()
+        {
+            return __Info__();
         }
     }
 }

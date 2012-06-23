@@ -32,7 +32,7 @@ namespace BorrowedGames.Controllers
 
             if (user == null || user.Password != Registration.Encrypt(@params.Password))
             {
-                //ViewBag.Flash = "Login failed.";
+                ViewBag.Flash = "Login failed.";
 
                 return View();
             }

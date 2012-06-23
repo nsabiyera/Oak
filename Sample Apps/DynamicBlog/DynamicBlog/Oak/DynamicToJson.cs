@@ -68,6 +68,8 @@ namespace Oak
         {
             if (IsNull(o)) return "null";
 
+            if (o is string) return "\"" + Escape(o) + "\"";
+
             if (IsJsonString(o)) return "\"" + o + "\"";
 
             if (IsJsonNumeric(o)) return o.ToString();
@@ -77,6 +79,11 @@ namespace Oak
             if (IsBool(o)) return o.ToString().ToLower();
 
             return Convert(o as object);
+        }
+
+        private static string Escape(string o)
+        {
+            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("'", "\\'").Replace("\r", "\\r").Replace("\n", "\\n");
         }
 
         public static bool IsJsonString(dynamic o)

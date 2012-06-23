@@ -146,35 +146,29 @@ namespace Oak
 
             else if (IsDynamicMethod(method, parameters)) TrySetMember(method.Name, DynamicMethodFor(method));
 
-            else if (IsDynamicMethodWithParam(method, parameters)) TrySetMember(method.Name, DynamicMethodWithParamFor(method));
+            else if (IsDynamicMethodWithParam(method, parameters)) TrySetMember(method.Name, DynamicFunctionWithParamFor(method));
         }
 
         public DynamicFunction DynamicFunctionFor(MethodInfo method)
         {
-            return new DynamicFunction(() => method.Invoke(this, null));
-        }
-
-        private DynamicFunctionWithParam DynamicMethodWithParamFor(MethodInfo method)
-        {
-            return new DynamicFunctionWithParam((arg) =>
-            {
-                method.Invoke(this, new[] { arg });
-
-                return null;
-            });
+            return new DynamicFunction(() => Invoke(method, null));
         }
 
         public DynamicFunctionWithParam DynamicFunctionWithParamFor(MethodInfo method)
         {
-            return new DynamicFunctionWithParam((arg) =>
-            {
-                return method.Invoke(this, new[] { arg });
-            });
+            return new DynamicFunctionWithParam((arg) => Invoke(method, new[] { arg }));
         }
 
         private DynamicMethod DynamicMethodFor(MethodInfo method)
         {
-            return new DynamicMethod(() => method.Invoke(this, null));
+            return new DynamicMethod(() => Invoke(method, null));
+        }
+
+        private object Invoke(MethodInfo method, object[] parameters)
+        {
+            try { return method.Invoke(this, parameters); }
+
+            catch (Exception ex) { throw ex.InnerException; }
         }
 
         public BindingFlags PrivateFlags()
@@ -568,9 +562,11 @@ namespace Oak
 
             var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
+            args = args.Select(s => s.ToLower()).ToArray();
+
             expando.ForEach(s =>
             {
-                if (!args.Contains(s.Key as string)) dictionary.Add(s.Key as string, GetMember(s.Key));
+                if (!args.Contains(s.Key.ToLower())) dictionary.Add(s.Key, GetMember(s.Key));
             });
 
             return new Gemini(dictionary);

@@ -80,6 +80,7 @@
     <Compile Include="Oak\DynamicToJson.cs" />
     <Compile Include="Oak\ElementMetaData.cs" />
     <Compile Include="Oak\Gemini.cs" />
+    <Compile Include="Oak\GeminiInfo.cs" />
     <Compile Include="Oak\Massive.cs" />
     <Compile Include="Oak\ObjectExtensions.cs" />
     <Compile Include="Oak\ParamsModelBinder.cs" />

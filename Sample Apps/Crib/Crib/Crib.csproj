@@ -156,12 +156,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\OakForm.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\OakForm.cshtml" />
     <None Include="Scripts\app\dashboard.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
       <LastGenOutput>dashboard1.js</LastGenOutput>
