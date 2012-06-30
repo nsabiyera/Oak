@@ -405,7 +405,7 @@ namespace Oak
             {
                 var hooks = MethodHooks.Where(s => s.Key == this.GetType());
 
-                foreach (var hook in hooks) hook.Value(new { Name = property, Instance = this });
+                foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
             }
 
             return true;
