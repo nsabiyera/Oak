@@ -103,7 +103,7 @@ namespace Oak.Tests.describe_Gemini
                 };
             };
 
-            context["casing", "wip"] = () =>
+            context["casing"] = () =>
             {
                 before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30 });
 

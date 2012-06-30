@@ -19,6 +19,8 @@ namespace Oak
         {
             this.valueProvider = valueProvider;
 
+            DeleteMember("__RequestVerificationToken");
+
             Hash()
                 .ToList()
                 .Where(s => s.Key.ToLower().EndsWith("id"))
