@@ -375,9 +375,16 @@ namespace Oak
 
         string toTable;
 
+        public string CrossRefenceTable { get; set; }
+
+        public string ForeignKey { get; set; }
+
+        public string FromColumn { get; set; }
+
         public HasManyAndBelongsTo(DynamicRepository repository, DynamicRepository reference)
         {
             Repository = repository;
+
             this.reference = reference;
 
             var sorted = new[] { repository.TableName, reference.TableName }.OrderBy(s => s);
@@ -389,11 +396,13 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            fromColumn = ForeignKeyFor(model);
+            throughTable = CrossRefenceTable ?? throughTable;
 
-            toTable = Repository.GetType().Name;
+            fromColumn = FromColumn ?? ForeignKeyFor(model);
 
-            resolvedForeignKey = ForeignKeyFor(Repository);
+            toTable = Repository.TableName;
+
+            resolvedForeignKey = ForeignKey ?? ForeignKeyFor(Repository);
 
             AddAssociationMethods(model);
 
@@ -404,10 +413,24 @@ namespace Oak
         {
             model.SetMember(
                 Named,
-                Query(model));
+                InnerJoinFor(model));
+
+            model.SetMember(
+                Singular(Named) + "Ids",
+                QueryIds(model));
         }
 
-        private DynamicFunctionWithParam Query(dynamic model)
+        private DynamicFunction QueryIds(dynamic model)
+        {
+            return () =>
+            {
+                IEnumerable<dynamic> models = (InnerJoinFor(model) as DynamicFunctionWithParam).Invoke(null);
+
+                return models.Select(s => s.Id).ToList();
+            };
+        }
+
+        private DynamicFunctionWithParam InnerJoinFor(dynamic model)
         {
             return (options) =>
             {
@@ -415,7 +438,11 @@ namespace Oak
 
                 if (cachedCollection != null) return cachedCollection;
 
-                var models = (Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model)) as IEnumerable<dynamic>).ToList();
+                string innerJoinSelectClause = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model);
+
+                Console.WriteLine(innerJoinSelectClause);
+
+                var models = (Repository.Query(innerJoinSelectClause) as IEnumerable<dynamic>).ToList();
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 

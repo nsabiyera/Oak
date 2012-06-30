@@ -120,6 +120,7 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalComments.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalComments2.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalProfile.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalStudents.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\User.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Users.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\core_behavior_for_associations.cs" />
