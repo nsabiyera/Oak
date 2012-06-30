@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>cambium</id> 
-    <version>1.1.6</version> 
+    <version>1.1.8</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic models for .Net applications (data access, associations, validation change tracking). Handles saving and retrieving data (using an altered version of Massive..DynamicRepository).</description> 
     <language>en-US</language>
@@ -11,16 +11,16 @@
     <tags>dynamic activemodel oak</tags>
   </metadata>
   <files>
-    <file src="Oak/ConnectionProfile.cs" target="content/Oak/ConnectionProfile.cs" />
-    <file src="Oak/DynamicModel.cs" target="content/Oak/DynamicModel.cs" />
-    <file src="Oak/DynamicModels.cs" target="content/Oak/DynamicModels.cs" />
-    <file src="Oak/Massive.cs" target="content/Oak/Massive.cs" />
-    <file src="Oak/ObjectExtensions.cs" target="content/Oak/ObjectExtensions.cs" />
-    <file src="Oak/Gemini.cs" target="content/Oak/Gemini.cs" />
-    <file src="Oak/GeminiInfo.cs" target="content/Oak/GeminiInfo.cs" />
-    <file src="Oak/Validation.cs" target="content/Oak/Validation.cs" />
-    <file src="Oak/Association.cs" target="content/Oak/Association.cs" />
-    <file src="Oak/Changes.cs" target="content/Oak/Changes.cs" />
+    <file src="Oak\ConnectionProfile.cs" target="content\Oak\ConnectionProfile.cs" />
+    <file src="Oak\DynamicModel.cs" target="content\Oak\DynamicModel.cs" />
+    <file src="Oak\DynamicModels.cs" target="content\Oak\DynamicModels.cs" />
+    <file src="Oak\Massive.cs" target="content\Oak\Massive.cs" />
+    <file src="Oak\ObjectExtensions.cs" target="content\Oak\ObjectExtensions.cs" />
+    <file src="Oak\Gemini.cs" target="content\Oak\Gemini.cs" />
+    <file src="Oak\GeminiInfo.cs" target="content\Oak\GeminiInfo.cs" />
+    <file src="Oak\Validation.cs" target="content\Oak\Validation.cs" />
+    <file src="Oak\Association.cs" target="content\Oak\Association.cs" />
+    <file src="Oak\Changes.cs" target="content\Oak\Changes.cs" />
   </files>
 </package>
 
