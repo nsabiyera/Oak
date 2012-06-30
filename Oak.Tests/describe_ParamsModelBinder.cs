@@ -8,7 +8,7 @@ using Massive;
 
 namespace Oak.Tests
 {
-    class describe_DynamicParams : nspec
+    class describe_ParamsModelBinder : nspec
     {
         DynamicParams dynamicParams;
 
@@ -28,6 +28,19 @@ namespace Oak.Tests
             dynamicParams = new DynamicParams(nameValueCollection, null);
 
             asDynamic = dynamicParams;
+        }
+
+        void mvc_specific_exclusions()
+        {
+            before = () =>
+            {
+                nameValueCollection.Add("__RequestVerificationToken", "AAJKIJF121==");
+
+                nameValueCollection.Add("Name", "123Foobar");
+            };
+
+            it["excludes the anti forgery form value (not need past the action filter)"] = () =>
+                ((bool)asDynamic.RespondsTo("__RequestVerificationToken")).should_be_false();
         }
 
         void describe_casting_assumptions()

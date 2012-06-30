@@ -256,6 +256,8 @@ namespace Oak
             resolvedForeignKey = ForeignKey ?? ForeignKeyFor(Repository);
 
             AddAssociationMethod(model);
+
+            modelReference = new DynamicFunction(() => model);
         }
 
         private void AddAssociationMethod(dynamic model)
@@ -269,6 +271,8 @@ namespace Oak
                 QueryIds(model));
         }
 
+        DynamicFunction modelReference;
+
         private DynamicFunctionWithParam Query(dynamic model)
         {
             return (options) =>
@@ -277,12 +281,21 @@ namespace Oak
 
                 if (cachedCollection != null) return cachedCollection;
 
-                cachedCollection = new DynamicModels(Repository.Query(SelectClause(model)));
+                var models = (Repository.Query(SelectClause(model)) as IEnumerable<dynamic>).ToList();
+
+                foreach (var m in models) AddReferenceBackToModel(m, model);
+
+                cachedCollection = new DynamicModels(models);
 
                 AddNewAssociationMethod(cachedCollection, model);
 
                 return cachedCollection;
             };
+        }
+
+        private void AddReferenceBackToModel(dynamic association, dynamic model)
+        {
+            association.SetMember(model.GetType().Name, modelReference);
         }
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
