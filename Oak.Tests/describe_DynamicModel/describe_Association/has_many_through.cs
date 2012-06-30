@@ -83,7 +83,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                     it["contains game for user"] = () =>
                         (userGames.First().Title as string).should_be("Gears of War");
 
-                    it["has a reference back to the user the game belongs to", "wip"] = () =>
+                    it["has a reference back to the user the game belongs to"] = () =>
                     {
                         (userGames.First().User().Email as string).should_be("user@example.com");
                     };

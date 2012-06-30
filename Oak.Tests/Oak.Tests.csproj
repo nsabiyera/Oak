@@ -98,6 +98,7 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blogs.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Comments.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Courses.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Customer.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Customers.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\DistributionChannels.cs" />
@@ -109,6 +110,8 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Library.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Loan.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Profiles.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Student.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Students.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Suppliers.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalAuthor.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Unconventional\UnconventionalAuthors.cs" />
@@ -121,6 +124,7 @@
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Users.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\core_behavior_for_associations.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_many.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\has_many_and_belongs_to.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_many_through.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_one.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\has_one_through.cs" />
