@@ -406,7 +406,7 @@ namespace Massive
             var expando = GetAttributesToSave(o);
             var settings = (IDictionary<string, object>)expando;
             var sbKeys = new StringBuilder();
-            var stub = "UPDATE {0} SET {1} WHERE {2} = @{3}";
+            var stub = "UPDATE {0} SET {1} WHERE [{2}] = @{3}";
             var args = new List<object>();
             var result = CreateCommand(stub, null);
             int counter = 0;
@@ -416,7 +416,7 @@ namespace Massive
                 if (!item.Key.Equals(PrimaryKeyField, StringComparison.CurrentCultureIgnoreCase) && val != null)
                 {
                     result.AddParam(val);
-                    sbKeys.AppendFormat("{0} = @{1}, \r\n", item.Key, counter.ToString());
+                    sbKeys.AppendFormat("[{0}] = @{1}, \r\n", item.Key, counter.ToString());
                     counter++;
                 }
             }

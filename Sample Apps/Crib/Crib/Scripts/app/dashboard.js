@@ -97,7 +97,7 @@
     },
     render: function() {
       var imageUrl;
-      imageUrl = "http://placehold.it/130x90";
+      imageUrl = "http://placekitten.com/130/90";
       if (this.model.picture()) imageUrl = this.model.picture();
       if (!this.model.onBench()) {
         $(this.el).append($.tmpl(this.engageConsultant, {
