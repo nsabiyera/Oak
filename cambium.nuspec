@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>cambium</id> 
-    <version>1.1.9</version> 
+    <version>1.2.0</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic models for .Net applications (data access, associations, validation change tracking). Handles saving and retrieving data (using an altered version of Massive..DynamicRepository).</description> 
     <language>en-US</language>
