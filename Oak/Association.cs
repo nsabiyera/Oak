@@ -440,8 +440,6 @@ namespace Oak
 
                 string innerJoinSelectClause = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model);
 
-                Console.WriteLine(innerJoinSelectClause);
-
                 var models = (Repository.Query(innerJoinSelectClause) as IEnumerable<dynamic>).ToList();
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
