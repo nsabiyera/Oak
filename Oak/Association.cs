@@ -107,10 +107,8 @@ namespace Oak
 
         public void AddReferenceBackToModel(dynamic association, dynamic model)
         {
-            association.SetMember(model.GetType().Name, ModelReference);
+            association.SetMember(model.GetType().Name, Model);
         }
-
-        public DynamicFunction ModelReference { get; set; }
 
         public string InClause(IEnumerable<dynamic> models)
         {
@@ -231,7 +229,7 @@ namespace Oak
             {
                 var model = models.First(s => s.Id == item.GetMember(ForeignKey));
 
-                item.SetMember(model.GetType().Name, new DynamicFunction(() => model));
+                item.SetMember(model.GetType().Name, model);
             }
 
             selectManyRelatedToCache = new DynamicModels(many);
@@ -296,7 +294,7 @@ namespace Oak
 
             AddAssociationMethod(model);
 
-            ModelReference = new DynamicFunction(() => model);
+            Model = model;
         }
 
         private void AddAssociationMethod(dynamic model)
@@ -342,7 +340,7 @@ namespace Oak
             {
                 var model = models.First(s => s.Id == item.GetMember(fromColumn));
 
-                item.SetMember(model.GetType().Name, new DynamicFunction(() => model));
+                item.SetMember(model.GetType().Name, model);
             }
 
             selectManyRelatedToCache = new DynamicModels(many);
@@ -364,6 +362,8 @@ namespace Oak
     public class HasManyAndBelongsTo : Association
     {
         dynamic cachedCollection;
+
+        DynamicModels selectManyRelatedToCache;
 
         string throughTable;
 
@@ -406,7 +406,7 @@ namespace Oak
 
             AddAssociationMethods(model);
 
-            ModelReference = new DynamicFunction(() => model);
+            Model = model;
         }
 
         public void AddAssociationMethods(dynamic model)
@@ -451,6 +451,26 @@ namespace Oak
                 return cachedCollection;
             };
         }
+
+        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        {
+            if (DiscardCache(options)) selectManyRelatedToCache = null;
+
+            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
+
+            var many = Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray())).ToList();
+
+            foreach (var item in many)
+            {
+                var model = models.First(s => s.Id == item.GetMember(fromColumn));
+
+                item.SetMember(model.GetType().Name, model);
+            }
+
+            selectManyRelatedToCache = new DynamicModels(many);
+
+            return selectManyRelatedToCache;
+        }
     }
 
     public class HasOne : Association
@@ -491,7 +511,7 @@ namespace Oak
             models.ForEach(s =>
             {
                 var hasOne = s.GetMember(Named)(new { discardCache = false });
-                hasOne.SetMember(s.GetType().Name, new DynamicFunction(() => s));
+                hasOne.SetMember(s.GetType().Name, s);
                 collection.Add(hasOne);
             });
 
@@ -578,7 +598,7 @@ namespace Oak
             models.ForEach(s =>
             {
                 var hasOne = s.GetMember(Named)(new { discardCache = false });
-                hasOne.SetMember(s.GetType().Name, new DynamicFunction(() => s));
+                hasOne.SetMember(s.GetType().Name, s);
                 collection.Add(hasOne);
             });
 
@@ -618,7 +638,7 @@ namespace Oak
             models.ForEach(s =>
             {
                 var belongsTo = s.GetMember(Named)(new { discardCache = false });
-                belongsTo.SetMember(s.GetType().Name, new DynamicFunction(() => s));
+                belongsTo.SetMember(s.GetType().Name, s);
                 collection.Add(belongsTo);
             });
 

@@ -51,7 +51,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 (FirstCourseFor(studentId).Name as string).should_be("History");
 
             it["has a reference back to the original table"] = () =>
-                (FirstCourseFor(studentId).Student().Name as string).should_be("Amir");
+                (FirstCourseFor(studentId).Student.Name as string).should_be("Amir");
 
             it["new association can be created from reference"] = () =>
             {

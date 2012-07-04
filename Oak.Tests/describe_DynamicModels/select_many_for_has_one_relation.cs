@@ -58,7 +58,7 @@ namespace Oak.Tests.describe_DynamicModels
 
                 (users.Last().DisplayName as string).should_be("John");
 
-                (users.First().User().Name as string).should_be("Jane Doe");
+                (users.First().User.Name as string).should_be("Jane Doe");
             };
         }
     }
