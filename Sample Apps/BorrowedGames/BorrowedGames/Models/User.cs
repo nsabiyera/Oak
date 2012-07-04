@@ -144,7 +144,7 @@ namespace BorrowedGames.Models
 
         public bool GameIsWanted(dynamic game)
         {
-            return _.Wants().Any(new { GameId = game.Id, FromUserId = game.User().Id });
+            return _.Wants().Any(new { GameId = game.Id, FromUserId = game.User.Id });
         }
 
         public bool HasNotBeenRequested(dynamic game)
@@ -228,20 +228,20 @@ namespace BorrowedGames.Models
                 game.Id,
                 game.Name,
                 game.Console,
-                Owner = game.User().Select("Id", "Handle")
+                Owner = game.User.Select("Id", "Handle")
             });
         }
 
         private dynamic WantedGame(dynamic game)
         {
-            var isBorrowed = WantedGame(game.Id, _.Id, game.User().Id).ReturnDate != null;
+            var isBorrowed = WantedGame(game.Id, _.Id, game.User.Id).ReturnDate != null;
 
             return new Gemini(new
             {
                 game.Id,
                 game.Name,
                 game.Console,
-                Owner = game.User().Select("Id", "Handle"),
+                Owner = game.User.Select("Id", "Handle"),
                 IsBorrowed = new DynamicFunction(() => isBorrowed)
             });
         }
