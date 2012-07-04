@@ -101,7 +101,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     var firstEmail = selectMany.First();
 
-                    (firstEmail.User().Name as string).should_be("John");
+                    (firstEmail.User.Name as string).should_be("John");
                 };
             };
 

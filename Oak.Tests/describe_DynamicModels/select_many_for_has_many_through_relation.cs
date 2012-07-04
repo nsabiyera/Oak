@@ -83,11 +83,11 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 var firstGame = selectMany.First();
 
-                (firstGame.Player().Name as string).should_be("Jane");
+                (firstGame.Player.Name as string).should_be("Jane");
 
                 var secondGame = selectMany.Last();
 
-                (secondGame.Player().Name as string).should_be("John");
+                (secondGame.Player.Name as string).should_be("John");
             };
         }
 

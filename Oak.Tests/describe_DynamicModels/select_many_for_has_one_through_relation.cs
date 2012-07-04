@@ -67,7 +67,7 @@ namespace Oak.Tests.describe_DynamicModels
 
                 (warehouses.Last().Location as string).should_be("LOC333");
 
-                (warehouses.First().Store().Name as string).should_be("Store 1");
+                (warehouses.First().Store.Name as string).should_be("Store 1");
             };
         }
     }

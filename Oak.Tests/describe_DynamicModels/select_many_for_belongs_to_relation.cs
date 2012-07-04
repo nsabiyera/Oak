@@ -55,9 +55,9 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 var blogs = models.Posts();
 
-                (blogs.First().Comment().Body as string).should_be("good stuff");
+                (blogs.First().Comment.Body as string).should_be("good stuff");
 
-                (blogs.Last().Comment().Body as string).should_be("not bad, not bad");
+                (blogs.Last().Comment.Body as string).should_be("not bad, not bad");
             };
         }
     }

@@ -85,7 +85,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
                     it["has a reference back to the user the game belongs to"] = () =>
                     {
-                        (userGames.First().User().Email as string).should_be("user@example.com");
+                        (userGames.First().User.Email as string).should_be("user@example.com");
                     };
                 };
 
