@@ -155,6 +155,7 @@
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Product.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
+    <Compile Include="describe_DynamicRepository.cs" />
     <Compile Include="describe_DynamicToJson.cs" />
     <Compile Include="describe_Gemini\accessing_property.cs" />
     <Compile Include="describe_Gemini\Classes\AliasGemini.cs" />
