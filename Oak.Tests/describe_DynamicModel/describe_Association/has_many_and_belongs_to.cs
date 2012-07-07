@@ -47,7 +47,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 new { studentId, courseId }.InsertInto("CoursesStudents");
             };
 
-            it["cross reference table is determined by convention (tables are alphabetically combined)", "wip"] = () =>
+            it["cross reference table is determined by convention (tables are alphabetically combined)"] = () =>
                 (FirstCourseFor(studentId).Name as string).should_be("History");
 
             it["has a reference back to the original table"] = () =>
