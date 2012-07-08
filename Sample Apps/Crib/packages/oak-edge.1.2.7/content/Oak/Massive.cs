@@ -434,13 +434,32 @@ namespace Massive
 
         public virtual dynamic GetAttributesToSave(object o)
         {
-            if (o is DynamicModel) return ((DynamicModel)o).HashExcludingDelegates();
+            dynamic attributes = null;
 
-            if (o is Gemini) return ((Gemini)o).HashExcludingDelegates();
+            if (o is DynamicModel) attributes = ((DynamicModel)o).HashExcludingDelegates();
 
-            return o.ToExpando();
+            if (o is Gemini) attributes = ((Gemini)o).HashExcludingDelegates();
+
+            else attributes = o.ToExpando();
+
+            var keysToRemove = new List<string>();
+
+            foreach (var attr in attributes) if (!IsValueType(attr.Value)) keysToRemove.Add(attr.Key);
+
+            foreach (var key in keysToRemove) (attributes as IDictionary<string, object>).Remove(key);
+
+            return attributes;
         }
 
+        public virtual bool IsValueType(object o)
+        {
+            if (o is string) return true;
+
+            if (o == null) return true;
+
+            return o is ValueType;
+        }
+        
         /// <summary>
         /// Removes one or more records from the DB according to the passed-in WHERE
         /// </summary>
