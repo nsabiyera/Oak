@@ -457,6 +457,8 @@ namespace Massive
 
             if (o == null) return true;
 
+            if (o is byte[]) return true;
+
             return o is ValueType;
         }
         
