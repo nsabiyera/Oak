@@ -100,7 +100,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             };
         }
 
-        [Tag("wip")]
         void describe_overrides()
         {
             context["xref table can be overridden"] = () =>
