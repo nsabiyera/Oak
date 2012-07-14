@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NSpec;
 
 namespace Oak.Tests.describe_Seed
 {
@@ -15,10 +16,10 @@ namespace Oak.Tests.describe_Seed
         void add_int_column()
         {
             before = () =>
-                    columns = new[] 
-                    {
-                        new { FooBar = "int" }
-                    };
+                columns = new[] 
+                {
+                    new { FooBar = "int" }
+                };
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
@@ -122,7 +123,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [Column1] int FOREIGN KEY REFERENCES Customers(Id)
+                    ALTER TABLE [dbo].[Users] ADD [Column1] int NULL FOREIGN KEY REFERENCES Customers(Id)
                 ");
         }
     }

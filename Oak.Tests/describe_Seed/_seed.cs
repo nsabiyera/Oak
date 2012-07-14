@@ -53,5 +53,14 @@ namespace Oak.Tests.describe_Seed
 
             while (reader.Read()) yield return reader.GetString(0);
         }
+
+        public string StringWithLength(int length)
+        {
+            var s = "";
+
+            length.Times(() => s += "X");
+
+            return s;
+        }
     }
 }

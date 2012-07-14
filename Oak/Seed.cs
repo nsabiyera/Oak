@@ -330,8 +330,6 @@ namespace Oak.Extensions
 
             if (columnDefinition.IsPrimaryKey() || columnDefinition.IsIdentityColumn()) nullDefinition = "NOT NULL";
 
-            if (columnDefinition.IsForeignKeyColumn()) nullDefinition = "";
-
             return nullDefinition;
         }
 
