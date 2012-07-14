@@ -5,14 +5,29 @@ using System.Text;
 using NSpec;
 using Oak;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Data.SqlClient;
 
 namespace Oak.Tests.describe_Seed
 {
+    [Tag("wip")]
     class when_creating_table : _seed
     {
+        void before_each()
+        {
+            seed.PurgeDb();
+        }
+
         void act_each()
         {
+            seed.CreateTable("Customers", new dynamic[] 
+            { 
+                seed.Id()
+            }).ExecuteNonQuery();
+
             command = seed.CreateTable("Users", columns);
+
+            command.ExecuteNonQuery();
         }
 
         void table_with_a_string_column()
@@ -30,6 +45,16 @@ namespace Oak.Tests.describe_Seed
                         [FirstName] nvarchar(255) NULL,
                     )
                 ");
+
+            it["table can be queried"] = () =>
+                "select FirstName from Users".ExecuteReader();
+
+            it["nulls can be inserted into table"] = () =>
+                "insert into Users(FirstName) values(null)".ExecuteNonQuery();
+
+            it["length specification is adhered to"] = 
+                expect<SqlException>(() => "insert into Users(FirstName) values('{0}')".With(StringWithLength(300)).ExecuteNonQuery());
+                
         }
 
         void column_has_a_null_definition()
@@ -47,6 +72,15 @@ namespace Oak.Tests.describe_Seed
                         [FirstName] nvarchar(255) NOT NULL,
                     )
                 ");
+
+            it["table can be queried"] = () =>
+                "select FirstName from Users".ExecuteReader();
+
+            it["nulls cannot be inserted into table"] = () =>
+                expect<SqlException>(() => "insert into Users(FirstName) values(null)".ExecuteNonQuery());
+
+            it["length specification is adhered to"] =
+                expect<SqlException>(() => "insert into Users(FirstName) values('{0}')".With(StringWithLength(300)).ExecuteNonQuery());
         }
 
         void column_has_default_value()
@@ -135,7 +169,26 @@ namespace Oak.Tests.describe_Seed
                 CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
-                        [CustomerId] int FOREIGN KEY REFERENCES Customers(Id),
+                        [CustomerId] int NULL FOREIGN KEY REFERENCES Customers(Id),
+                    )
+                ");
+        }
+
+        void foreign_key_column_not_null()
+        {
+            before = () =>
+            {
+                columns = new[]
+                {
+                    new { CustomerId = "int", ForeignKey = "Customers(Id)", Nullable = false }
+                };
+            };
+
+            it["contains identity definition"] = () =>
+                CommandShouldBe(@"
+                    CREATE TABLE [dbo].[Users]
+                    (
+                        [CustomerId] int NOT NULL FOREIGN KEY REFERENCES Customers(Id),
                     )
                 ");
         }

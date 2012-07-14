@@ -49,7 +49,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void updating_every_type_of_sql_column()
         {
             before = () =>
