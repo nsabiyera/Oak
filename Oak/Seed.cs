@@ -37,18 +37,18 @@ namespace Oak
         {
             string columnString = "";
 
-            var primaryKeyColumn = null as string;
+            var primaryKeyColumns = new List<string>();
 
             foreach (var entry in columns)
             {
                 object column = entry;
 
-                if (column.IsPrimaryKey()) primaryKeyColumn = column.PrimaryKeyColumn();
+                if (column.IsPrimaryKey()) primaryKeyColumns.Add(column.PrimaryKeyColumn());
 
                 columnString += ColumnStringFor(column) + ",";
             }
 
-            return CreateTableCommand(table, columnString, primaryKeyColumn);
+            return CreateTableCommand(table, columnString, primaryKeyColumns);
         }
 
         /// <summary>
@@ -98,12 +98,14 @@ namespace Oak
                         .Trim();
         }
 
-        string CreateTableCommand(string table, string columns, string primaryKeyColumn)
+        string CreateTableCommand(string table, string columns, List<string> primaryKeyColumns)
         {
-            var primaryKeyScript =
-                " CONSTRAINT [PK_{0}] PRIMARY KEY CLUSTERED ([{1}] ASC)".With(table, primaryKeyColumn ?? string.Empty);
+            var primaryKeyColumnScript = string.Join(",", primaryKeyColumns.Select(s => "[{0}] ASC".With(s)));
 
-            if (primaryKeyColumn == null) primaryKeyScript = "";
+            var primaryKeyScript =
+                " CONSTRAINT [PK_{0}] PRIMARY KEY CLUSTERED ({1})".With(table, primaryKeyColumnScript ?? string.Empty);
+
+            if (!primaryKeyColumns.Any()) primaryKeyScript = "";
 
             return "CREATE TABLE [dbo].[{0}]({1}{2})".With(table, columns, primaryKeyScript);
         }
