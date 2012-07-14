@@ -10,7 +10,6 @@ using System.Data.SqlClient;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class when_creating_table : _seed
     {
         void before_each()
@@ -22,7 +21,8 @@ namespace Oak.Tests.describe_Seed
         {
             seed.CreateTable("Customers", new dynamic[] 
             { 
-                seed.Id()
+                seed.Id(),
+                new { Name = "nvarchar(255)" }
             }).ExecuteNonQuery();
 
             command = seed.CreateTable("Users", columns);
@@ -86,18 +86,25 @@ namespace Oak.Tests.describe_Seed
         void column_has_default_value()
         {
             before = () =>
-                columns = new[]
+                columns = new dynamic[]
                 {
-                    new { FirstName = "nvarchar(255)", Default = "test"  }
+                    new { FirstName = "nvarchar(255)", Default = "test", Nullable = false  },
+                    new { LastName = "nvarchar(255)" }
                 };
+
+            act = () => "insert into Users(LastName) values('not first name')".ExecuteNonQuery();
 
             it["the command creates column with default value"] = () =>
                 CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
-                        [FirstName] nvarchar(255) NULL DEFAULT('test'),
+                        [FirstName] nvarchar(255) NOT NULL DEFAULT('test'),
+                        [LastName] nvarchar(255) NULL,
                     )
                 ");
+
+            it["default value is set"] = () =>
+                "select FirstName from Users".ExecuteScalar().should_be("test");
         }
 
         void table_with_two_columns()
@@ -117,6 +124,9 @@ namespace Oak.Tests.describe_Seed
                         [LastName] nvarchar(255) NULL DEFAULT('test'),
                     )
                 ");
+
+            it["both columns are selectable"] = () =>
+                "select FirstName, LastName from Users".ExecuteReader();
         }
 
         void primary_key_column()
@@ -138,14 +148,30 @@ namespace Oak.Tests.describe_Seed
                         )
                     )
                 ");
+
+            it["it doesn't allow duplicate guid entries"] = () =>
+            {
+                try
+                {
+                    var id = Guid.NewGuid().ToString();
+
+                    "insert into Users(Id) values('{0}')".With(id).ExecuteNonQuery();
+
+                    "insert into Users(Id) values('{0}')".With(id).ExecuteNonQuery();
+
+                    throw new InvalidOperationException("Sql exception was not thrown");
+                }
+                catch (SqlException) { }
+            };
         }
 
         void identity_column()
         {
             before = () =>
-                columns = new[]
+                columns = new dynamic[]
                 {
-                    new { Id = "int", Identity = true }
+                    new { Id = "int", Identity = true },
+                    new { Name = "nvarchar(255)" }
                 };
 
             it["contains identity definition"] = () =>
@@ -153,15 +179,28 @@ namespace Oak.Tests.describe_Seed
                     CREATE TABLE [dbo].[Users]
                     (
                         [Id] int NOT NULL IDENTITY(1,1),
+                        [Name] nvarchar(255) NULL,
                     )
                 ");
+
+            it["inserts auto increment id column"] = () =>
+            {
+                "insert into Users([Name]) values('a name')".ExecuteNonQuery();
+
+                "select top 1 Id from Users".ExecuteScalar().should_be(1);
+            };
+
+            it["doesn't allow the insert of id collumn"] = 
+                expect<SqlException>(() => "insert into Users(Id) values(1)".ExecuteNonQuery());
         }
 
         void foreign_key_column()
         {
             before = () =>
-                columns = new[]
+                columns = new dynamic[]
                 {
+                    new { Id = "int", Identity = true },
+                    new { Name = "nvarchar(255)" },
                     new { CustomerId = "int", ForeignKey = "Customers(Id)" }
                 };
             
@@ -169,9 +208,29 @@ namespace Oak.Tests.describe_Seed
                 CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
+                        [Id] int NOT NULL IDENTITY(1,1),
+                        [Name] nvarchar(255) NULL,
                         [CustomerId] int NULL FOREIGN KEY REFERENCES Customers(Id),
                     )
                 ");
+
+            it["the foreign key is nullable"] = () =>
+            {
+                "insert into Users([Name], [CustomerId]) values('a name', null)".ExecuteNonQuery();
+
+                "select top 1 customerid from users".ExecuteScalar().should_be(DBNull.Value);
+            };
+
+            it["the foreign key constraint is adhered to"] = 
+                expect<SqlException>(() => "insert into Users([Name], [CustomerId]) values('a name', 600)".ExecuteNonQuery());
+
+
+            it["allows insert if foreign key matches"] = () =>
+            {
+                "insert into Customers([Name]) values('a name')".ExecuteNonQuery();
+
+                "insert into Users([Name], [CustomerId]) values('a name', 1)".ExecuteNonQuery();
+            };
         }
 
         void foreign_key_column_not_null()
@@ -191,6 +250,9 @@ namespace Oak.Tests.describe_Seed
                         [CustomerId] int NOT NULL FOREIGN KEY REFERENCES Customers(Id),
                     )
                 ");
+
+            it["the foreign key column does not accept nulls"] = 
+                expect<SqlException>(() => "insert into Users([Name], [CustomerId]) values('a name', null)".ExecuteNonQuery());
         }
 
         void generating_a_table_where_column_is_an_identity_column_and_primary_key()
@@ -214,27 +276,45 @@ namespace Oak.Tests.describe_Seed
                 ");
         }
 
-        void generating_a_table_with_identity_column_and_another_column()
+        void generating_composite_primary_keys()
         {
             before = () =>
                 columns = new dynamic[]
                 {
-                    new { Id = "int", Identity = true, PrimaryKey = true },
+                    new { Id = "int", PrimaryKey = true },
+                    new { CustomerId = "int", PrimaryKey = true },
                     new { Name = "nvarchar(255)" }
                 };
 
-            it["contains both columns and the primary key constraint"] = () =>
-               CommandShouldBe(@"
+            it["contains primary key constraint for both columns"] = () =>
+            {
+                CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
-                        [Id] int NOT NULL IDENTITY(1,1),
+                        [Id] int NOT NULL,
+                        [CustomerId] int NOT NULL,
                         [Name] nvarchar(255) NULL, 
                         CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
                         (
-                            [Id] ASC
+                            [Id] ASC,
+                            [CustomerId] ASC
                         )
                     )
                 ");
+            };
+
+            it["multi column primary key constraint is adhered to"] = () =>
+            {
+                try
+                {
+                    "insert into Users(Id, CustomerId) values(1,1)".ExecuteScalar();
+
+                    "insert into Users(Id, CustomerId) values(1,1)".ExecuteScalar();
+
+                    throw new InvalidOperationException("SqlException not thrown");
+                }
+                catch (SqlException) { }
+            };
         }
     }
 }
