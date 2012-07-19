@@ -98,7 +98,9 @@
     render: function() {
       var imageUrl;
       imageUrl = "http://placehold.it/130x90";
-      if (this.model.picture()) imageUrl = this.model.picture();
+      if (this.model.picture()) {
+        imageUrl = this.model.picture();
+      }
       if (!this.model.onBench()) {
         $(this.el).append($.tmpl(this.engageConsultant, {
           name: this.model.name(),
