@@ -289,6 +289,7 @@
     },
     create: function(consultant) {
       this.model = consultant;
+      $(this.el).find("#newConsultantName").val('');
       return $(this.el).modal('show');
     }
   }));

@@ -254,6 +254,7 @@ NewConsultantModal = new (Backbone.View.extend
   create: (consultant) ->
     @model = consultant
      
+    $(@el).find("#newConsultantName").val('')
     $(@el).modal('show')
   )
 

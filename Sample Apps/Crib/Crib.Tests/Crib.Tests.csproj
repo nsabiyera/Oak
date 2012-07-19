@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NSpec">
-      <HintPath>..\packages\nspec.0.9.61\lib\NSpec.dll</HintPath>
+      <HintPath>..\packages\nspec.0.9.62\lib\NSpec.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
