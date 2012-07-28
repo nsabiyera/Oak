@@ -31,7 +31,6 @@ namespace Oak.Tests
               end".ExecuteNonQuery();
         }
 
-        [Tag("wip")]
         void executing_stored_procs()
         {
             before = () =>
