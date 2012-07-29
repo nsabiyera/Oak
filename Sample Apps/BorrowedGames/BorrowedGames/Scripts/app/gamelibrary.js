@@ -70,7 +70,7 @@
     }
 
     function notify(message) {
-        growl.info(message, view.gameToAddTextBox.offset().top - 5);
+        growl.info(message, view.gameToAddTextBox.offset().top - 5, "icon-info-sign");
     }
 
     function clearSearchBox() {

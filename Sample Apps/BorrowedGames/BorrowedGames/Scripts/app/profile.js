@@ -6,7 +6,7 @@
         handleTextBox: null,
         updateHandlePlaceHolder: null,
         init: function () {
-            this.handleTextBox = $("<input type='text' id='handleTextBox' class='span4' style='margin-left: 3px' />");
+            this.handleTextBox = $("<input type='text' id='handleTextBox' class='span4' autocomplete='off' style='margin-left: 3px' />");
             this.handleHref = $("#handle");
             this.updateHandleButton = $("<input type='button' value='update handle' class='btn btn-primary' style='margin-left: 3px' />");
             this.cancelHandleButton = $("<input type='button' value='cancel' class='btn' style='margin-left: 3px' />");
@@ -35,9 +35,17 @@
 
         view.updateHandlePlaceHolder
             .append(view.handleTextBox.val(currentHandle))
-    		.append(view.updateHandleButton)
-    		.append(view.cancelHandleButton);
+            .append(view.updateHandleButton)
+            .append(view.cancelHandleButton);
 
+        view.handleTextBox.keydown(
+            function(e) {
+              if(e.keyCode == 13) {
+                e.preventDefault();
+                view.updateHandleButton.click();
+              }
+            });
+            
         view.updateHandleButton.one('click', function () {
             var handle = view.handleTextBox.val();
 

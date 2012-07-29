@@ -1,15 +1,19 @@
 ﻿<script src="@Url.Content("~/scripts/app/friends.js")"></script>
 
-<div id="friends">
-    <div class="title">Following <a id="closeFriendsTop" href="javascript:;" class="cancel" style="float: right">close</a></div>
-    <input type="text" id="handleToAdd" placeholder="type in the handle for users you want to follow..." style="font-size: 20px" />
-    <div style="margin-top: 10px; margin-bottom: 10px">
-        <a id="addHandle" href="javascript:;" class="add">follow</a>
-    </div>
-    <div id="handles"></div>
-    <div style="margin-top: 50px">
-        <a id="closeFriends" href="javascript:;" class="cancel">close</a>
-    </div>
+<div id="friends" class="modal hide" style="padding: 10px">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" id="closeFriendsTop" href="javascript:;">x</button>
+    <h3>Following</h3>
+    <hr/>
+    <input type="text" id="handleToAdd" placeholder="type in the handle for users you want to follow..." style="width: 100%" />
+    <a id="addHandle" href="javascript:;" class="btn btn-primary">follow</a>
+  </div>
+  <div class="modal-body">
+    <table id="handles" class="table table-condensed table-striped"></table>
+  </div>
+  <div class="modal-footer">
+      <a id="closeFriends" href="javascript:;" class="btn" data-dismiss="modal">close</a>
+  </div>
 </div>
 
 @if (ViewBag.HasFriends)
