@@ -6,10 +6,10 @@
         handleTextBox: null,
         updateHandlePlaceHolder: null,
         init: function () {
-            this.handleTextBox = $("<input id='handleTextBox' />");
+            this.handleTextBox = $("<input type='text' id='handleTextBox' class='input-medium' style='margin-left: 3px' />");
             this.handleHref = $("#handle");
-            this.updateHandleButton = $("<input type='button' value='update handle' />");
-            this.cancelHandleButton = $("<input type='button' value='cancel' />");
+            this.updateHandleButton = $("<input type='button' value='update handle' class='btn btn-primary' style='margin-left: 3px' />");
+            this.cancelHandleButton = $("<input type='button' value='cancel' class='btn' style='margin-left: 3px' />");
             this.updateHandlePlaceHolder = $("#updatePlaceHolder");
         }
     };

@@ -3,23 +3,19 @@
 }
 
 <h2>Login</h2>
-
+<hr />
 @{
     dynamic form = new DynamicForm(new { Email = "", Password = "" });
 }
 
 @if (ViewBag.Flash != null)
 {
-    @ViewBag.Flash
+    <div class="alert alert-error">@ViewBag.Flash</div>
 }
 
-@using(Html.BeginForm("LogOn", "Account"))
+@using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "well" }))
 {
-    @OakForm.Label(form.Email)
-    @OakForm.TextBox(form.Email)
-    @OakForm.Label(form.Password)
-    @OakForm.Password(form.Password)
-    <input type="submit" value="login" />
+    @OakForm.TextBox(form.Email(new Hash { { "placeholder", "email" }, { "class", "span4" }, { "display", "block" } }))
+    @OakForm.Password(form.Password(new Hash { { "placeholder", "password" }, { "class", "span4" }, { "display", "block" } }))
+    <input type="submit" value="login" class="btn btn-primary span2" /> @Html.ActionLink("register", "Register")
 }
-
-@Html.ActionLink("register", "Register")

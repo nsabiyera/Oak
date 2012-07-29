@@ -3,7 +3,7 @@
 <script src="@Url.Content("~/scripts/app/toggle.js")"></script>
 
     
-<div id="library" class="hidden modal">
+<div id="library">
     <div class="title">Your Game Library <a id="closeLibraryTop" href="javascript:;" style="float: right" class="cancel">close</a></div>
     <input type="text" id="gameToAdd" placeholder="type here to add game..." style="font-size: 20px" />
     <div id="games"></div>
@@ -27,12 +27,7 @@
     });
 </script>
 
-<div class="border">
-    <div class="info" id="showLibrary" style="cursor: pointer; padding-left: 30px">
-    @if (ViewBag.HasGames)
-    { <a href="javascript:;" style="text-decoration: none; color: #000000;">view your game library</a> }
-    else
-    { <a href="javascript:;" style="text-decoration: none; color: #000000;">looks like you have no games, click to add</a> }
-    </div>
-</div>
-
+@if (ViewBag.HasGames)
+{ <a href="javascript:;" id="showLibrary" class="btn btn-info">view your game library</a> }
+else
+{ <a href="javascript:;" id="showLibrary" class="btn btn-danger">looks like you have no games, click to add</a> }
