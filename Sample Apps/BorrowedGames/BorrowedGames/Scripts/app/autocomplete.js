@@ -60,7 +60,8 @@
             $results.css({
                 width: "0px",
                 top: "0px",
-                left: "0px"
+                left: "0px",
+                "z-index": "99999"
             });
         }
     }
@@ -69,7 +70,7 @@
         lastSearchResults = data;
         var element = $auto;
         $results.html('');
-        var finalHtml = "<table class='autocomplete'>";
+        var finalHtml = "<table class='table table-bordered' style='background-color: white'>";
 
         var currentValue = $(element).val().toLowerCase();
         for (index = 0; index < data.length; index++) {
@@ -109,9 +110,10 @@
 
         // reposition
         $results.css({
-            width: parseInt(iWidth) + "px",
-            top: (pos.y + $(element).height() + 5) + "px",
-            left: pos.x + "px"
+            width: (parseInt(iWidth) + 2) +"px",
+            top: (pos.y + $(element).height() + 10) + "px",
+            left: (pos.x + 8) + "px",
+            "z-index": "9999"
         });
     }
 
@@ -147,6 +149,7 @@
         $results.find("tr").each(
             function (index) {
                 $(this).removeClass('current');
+                $(this).css({ "background-color": "white" })
             });
 
         $(element).addClass('current');
@@ -159,9 +162,11 @@
                 if (index == activeIndex) {
                     currentId = $(this).attr('id');
                     $(this).addClass('current');
+                    $(this).css({ "background-color": "whitesmoke" })
                 }
                 else {
                     $(this).removeClass('current');
+                    $(this).css({ "background-color": "white" })
                 }
             });
     }
