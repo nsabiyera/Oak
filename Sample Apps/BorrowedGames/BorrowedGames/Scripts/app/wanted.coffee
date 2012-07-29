@@ -57,11 +57,6 @@ wantedGamesView = Backbone.View.extend
   render: ->
     $(@el).empty()
 
-    if(@wantedGames.length > 0)
-      $("#wantedGamesHeader").show()
-    else
-      $("#wantedGamesHeader").hide()
-
     @wantedGames.each (game) => @addGame(game)
 
   addGame: (game) ->
@@ -125,7 +120,7 @@ wantedGameView = Backbone.View.extend
   requestedGameTemplate:
     '
     <td class="span1">
-     <span class="label">requested</span>
+     <span class="label label-inverse">requested</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>

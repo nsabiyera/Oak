@@ -26,11 +26,12 @@
     console: function() {
       return this.get("Console");
     },
-    undo: function() {
+    undo: function(callback) {
       var _this = this;
       return $.post(this.get("UndoNotInterested"), {}, function() {
         preferred.getPreferredGames();
-        return _this.change();
+        _this.change();
+        return callback();
       });
     }
   });
@@ -73,7 +74,7 @@
   });
 
   unwantedGameView = Backbone.View.extend({
-    className: 'gameBoxSmall',
+    tagName: "tr",
     initialize: function() {
       return this.model.bind('change', this.apply, this);
     },
@@ -84,7 +85,11 @@
       "click .cancel": "undo"
     },
     undo: function() {
-      return this.model.undo();
+      var el;
+      el = this.el;
+      return this.model.undo(function() {
+        return $(el).fadeOut();
+      });
     },
     render: function() {
       var game;
@@ -92,23 +97,17 @@
         gameName: this.model.shortName()
       });
       $(this.el).html(game);
-      toolTip.init(game.find(".cancel"), "UndoUnwantedGame", "Want to give the game another shot?<br/>Remove it from qurantine.", "You get the idea...<br/>Remove it from qurantine.", function() {
-        return game.offset().left + 100;
-      }, function() {
-        return game.offset().top + -25;
+      game.find(".cancel").tooltip({
+        title: "<span style='font-size: 16px'>remove the game from qurantine</span>"
       });
       return this;
     },
     gameTemplate: '\
-    <div class="menubar">\
-      <a href="javascript:;" \
-         style="text-decoration: none; color: black; float: right; padding-left: 15px" \
-         class="cancel">&nbsp;</a>\
-      <div style="clear: both">&nbsp;</div>\
-    </div>\
-    <div style="font-size: 12px; height: 70px; padding-bottom: 3px">\
-      ${gameName}<br/>\
-    </div>\
+    <td class="span1">\
+     <span class="label label-important">qurantined</span>\
+    </td>\
+    <td>${gameName}</td>\
+    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>\
     '
   });
 
