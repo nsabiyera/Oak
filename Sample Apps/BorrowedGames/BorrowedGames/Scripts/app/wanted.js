@@ -70,11 +70,6 @@
     render: function() {
       var _this = this;
       $(this.el).empty();
-      if (this.wantedGames.length > 0) {
-        $("#wantedGamesHeader").show();
-      } else {
-        $("#wantedGamesHeader").hide();
-      }
       return this.wantedGames.each(function(game) {
         return _this.addGame(game);
       });
@@ -149,7 +144,7 @@
     ',
     requestedGameTemplate: '\
     <td class="span1">\
-     <span class="label">requested</span>\
+     <span class="label label-inverse">requested</span>\
     </td>\
     <td>${gameName}</td>\
     <td>${owner}</td>\

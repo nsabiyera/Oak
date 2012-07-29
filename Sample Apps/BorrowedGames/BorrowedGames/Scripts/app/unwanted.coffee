@@ -20,10 +20,11 @@ unwantedGame = Backbone.Model.extend
 
   console: -> @get("Console")
 
-  undo: ->
+  undo: (callback) ->
     $.post(@get("UndoNotInterested"), { }, =>
       preferred.getPreferredGames()
       @change()
+      callback()
     )
 
 unwantedGames = Backbone.Collection.extend
@@ -59,7 +60,7 @@ unwantedGamesView = Backbone.View.extend
     $(@el).append view.el
 
 unwantedGameView = Backbone.View.extend
-  className: 'gameBoxSmall'
+  tagName: "tr"
 
   initialize: ->
     @model.bind 'change', @apply, @
@@ -70,33 +71,24 @@ unwantedGameView = Backbone.View.extend
   events:
     "click .cancel": "undo"
 
-  undo: -> @model.undo()
+  undo: ->
+    el = @el
+    @model.undo(-> $(el).fadeOut())
 
   render: ->
     game = $.tmpl(@gameTemplate, { gameName: @model.shortName() })
 
     $(@el).html(game)
 
-    toolTip.init(
-      game.find(".cancel"),
-      "UndoUnwantedGame",
-      "Want to give the game another shot?<br/>Remove it from qurantine.",
-      "You get the idea...<br/>Remove it from qurantine.",
-      -> game.offset().left + 100,
-      -> game.offset().top + -25
-    )
+    game.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>remove the game from qurantine</span>" })
 
     return this
 
   gameTemplate:
     '
-    <div class="menubar">
-      <a href="javascript:;" 
-         style="text-decoration: none; color: black; float: right; padding-left: 15px" 
-         class="cancel">&nbsp;</a>
-      <div style="clear: both">&nbsp;</div>
-    </div>
-    <div style="font-size: 12px; height: 70px; padding-bottom: 3px">
-      ${gameName}<br/>
-    </div>
+    <td class="span1">
+     <span class="label label-important">qurantined</span>
+    </td>
+    <td>${gameName}</td>
+    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
     '
