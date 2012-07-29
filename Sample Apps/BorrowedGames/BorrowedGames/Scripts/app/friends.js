@@ -8,7 +8,7 @@
         addHandleButton: null,
         friendsContainer: null,
         handleAttribute: null,
-        friendSelectorById: function (handle) { return 'div[' + this.handleAttribute + '="' + handle + '"]'; },
+        friendSelectorById: function (handle) { return 'tr[' + this.handleAttribute + '="' + handle + '"]'; },
         init: function () {
             this.modal = $("#friends");
             this.showFriendsLink = $("#showFriends");
@@ -34,12 +34,12 @@
 
         view.init();
 
-        view.modal.hide();
+        view.modal.modal('hide');
 
         view.showFriendsLink.click(function () { show(); });
 
         var closeLogic = function () {
-            if (view.friendsContainer.find("div").length != 0) {
+            if (view.friendsContainer.find("tr").length != 0) {
                 view.showFriendsLink.html('view users you are following');
                 view.showFriendsLink.removeClass("btn-danger").addClass("btn-info")
             }
@@ -48,7 +48,7 @@
                 view.showFriendsLink.removeClass("btn-info").addClass("btn-danger")
             }
 
-            view.modal.fadeOut();
+            view.modal.modal('hide');
         };
 
         view.closeFriendsButton.click(closeLogic);
@@ -65,9 +65,7 @@
     }
 
     function show() {
-        view.modal.centerHorizontally();
-        view.modal.css({ top: view.modal.css("top") });
-        view.modal.fadeIn();
+        view.modal.modal('show');
 
         load();
     }
@@ -91,20 +89,18 @@
     }
 
     function $friendRecordFor(handle) {
-        var $friend = $("<div class='border' style='height: 30px; clear: all'>" + handle + "</div>");
+        var $friend = $("<td style='width: 100%'>" + handle + "</td>");
         $friend.attr(view.handleAttribute, handle);
 
-        $links = $("<div style='float: right'></div>");
+        $links = $("<td></td>");
 
         $links.append($deleteLinkFor(handle));
 
-        $friend.append($links);
-
-        return $friend;
+        return $("<tr></tr>").attr(view.handleAttribute, handle).append($friend).append($links);
     }
 
     function $deleteLinkFor(handle) {
-        var $deleteLink = $("<a href='javascript:;' style='text-decoration: none; color: black; display: block; margin: 5px;' class='delete'>remove</a>");
+        var $deleteLink = $("<a href='javascript:;' class='btn btn-danger'>remove</a>");
         $deleteLink.attr(view.handleAttribute, handle);
 
         $deleteLink.click(function () { removeHandle(handle); });

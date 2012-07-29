@@ -3,18 +3,18 @@
 <script src="@Url.Content("~/scripts/app/toggle.js")"></script>
 
     
-<div id="library" class="modal hide" style="padding: 10px">
+<div id="library" class="modal hide">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" id="closeLibraryTop" href="javascript:;">x</button>
     <h3>Your Game Library</h3>
     <hr/>
-    <input type="text" id="gameToAdd" style="width: 100%" placeholder="type here to add game..." style="font-size: 16px" />
+    <input type="text" id="gameToAdd" style="width: 100%" placeholder="type here to add game..." />
   </div>
   <div class="modal-body">
     <table id="games" class="table table-condensed table-striped"></table>
   </div>
-  <div style="modal-footer">
-    <a id="closeLibrary" href="javascript:;" class="btn btn-primary" data-dismiss="modal">close</a>
+  <div class="modal-footer">
+    <a id="closeLibrary" href="javascript:;" class="btn" data-dismiss="modal">close</a>
     <br/>
   </div>
 </div>
