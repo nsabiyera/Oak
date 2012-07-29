@@ -107,23 +107,23 @@ preferredGameView = Backbone.View.extend
 
     $(@el).html(game)
 
-    game.find(".cancel").tooltip({ "title": "if you aren't interested in the game, put it into qurantine", "placement": "right" })
+    game.find(".cancel").tooltip({ "title": "<span style='font-size: 16px'>if you aren't interested in the game, put it into qurantine<span>", "placement": "left" })
 
-    game.find(".request").tooltip({ "title": "request the game from " + @model.owner(), "placement": "right" })
+    game.find(".request").tooltip({ "title": "<span style='font-size: 16px'>request the game from " + @model.owner() + "<span>", "placement": "left" })
 
     return this
 
   gameTemplate:
     '
-      <td class="span2">
+      <td><a href="${searchString}" target="_blank">${gameName}</a></td>
+      <td>${owner}</td>
+      <td class="span1">
         <div class="btn-group">
-          <a class="btn dropdown-toggle span2" data-toggle="dropdown" href="javascript:;">options <span class="caret"></span></a>
+          <a class="btn dropdown-toggle span2 btn-primary" data-toggle="dropdown" href="javascript:;">options <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="javascript:;" class="request">request game</a></li>
             <li><a href="javascript:;" class="cancel">not interested</a></li>
           </ul>
         </div>
       </td>
-      <td><a style="color: black;" href="${searchString}" target="_blank">${gameName}</a></td>
-      <td>${owner}</td>
     '

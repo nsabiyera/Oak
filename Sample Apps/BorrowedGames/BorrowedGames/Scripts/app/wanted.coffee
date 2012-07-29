@@ -103,6 +103,8 @@ wantedGameView = Backbone.View.extend
   renderRequestedGame: ->
     game = $.tmpl(@requestedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
+    game.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>cancel game request</span>" })
+
     $(@el).html(game)
 
   renderBorrowedGame: ->
@@ -112,28 +114,20 @@ wantedGameView = Backbone.View.extend
 
   borrowedGameTemplate:
     '
-    <td class="span2">
-      <div class="btn-group">
-        <a class="btn dropdown-toggle span2" data-toggle="dropdown" href="javascript:;">borrowed <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="javascript:;" class="cancel">return game</a></li>
-        </ul>
-      </div>
+    <td class="span1">
+     <span class="label label-success">requested</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>
+    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
     '
 
   requestedGameTemplate:
     '
-    <td class="span2">
-      <div class="btn-group">
-        <a class="btn dropdown-toggle span2" data-toggle="dropdown" href="javascript:;">requested <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="javascript:;" class="cancel">cancel request</a></li>
-        </ul>
-      </div>
+    <td class="span1">
+     <span class="label">requested</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>
+    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
     '
