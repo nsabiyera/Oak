@@ -29,20 +29,22 @@
       if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
-    notInterested: function() {
+    notInterested: function(callback) {
       var _this = this;
       return $.post(this.get("NotInterested"), {}, function() {
         _this.deleted = true;
         unwanted.getUnwantedGames();
-        return _this.change();
+        _this.change();
+        return callback();
       });
     },
-    wantGame: function() {
+    wantGame: function(callback) {
       var _this = this;
       return $.post(this.get("WantGame"), {}, function() {
         _this.wanted = true;
         wanted.getWantedGames();
-        return _this.change();
+        _this.change();
+        return callback();
       });
     },
     owner: function() {
@@ -79,9 +81,6 @@
         });
         return $(_this.el).append(view.render().el);
       });
-      $(this.el).append($("<div />").css({
-        clear: "both"
-      }));
       if (this.preferredGames.length === 0) {
         return $(this.el).html('\
         <div class="info" id="showFriends" style="padding-left: 30px">\
@@ -93,7 +92,8 @@
   });
 
   preferredGameView = Backbone.View.extend({
-    className: 'gameBox',
+    tagName: "tr",
+    className: '',
     initialize: function() {
       return this.model.bind('change', this.apply, this);
     },
@@ -105,10 +105,18 @@
       "click .request": "wantGame"
     },
     notInterested: function() {
-      return this.model.notInterested();
+      var el;
+      el = this.el;
+      return this.model.notInterested(function() {
+        return $(el).fadeOut();
+      });
     },
     wantGame: function() {
-      return this.model.wantGame();
+      var el;
+      el = this.el;
+      return this.model.wantGame(function() {
+        return $(el).fadeOut();
+      });
     },
     render: function() {
       var game;
@@ -118,34 +126,28 @@
         owner: this.model.owner()
       });
       $(this.el).html(game);
-      toolTip.init(game.find(".request"), "WantGame", "Click here to request the game.", "You get the idea...<br/>Request game.", function() {
-        return game.offset().left + 100;
-      }, function() {
-        return requestLink.offset().top;
+      game.find(".cancel").tooltip({
+        "title": "if you aren't interested in the game, put it into qurantine",
+        "placement": "right"
       });
-      toolTip.init(game.find(".cancel"), "NotInterested", "Not interested?<br/>Click to remove it.", "You get the idea...<br/>Remove game.", function() {
-        return game.offset().left + 100;
-      }, function() {
-        return game.offset().top + -25;
+      game.find(".request").tooltip({
+        "title": "request the game from " + this.model.owner(),
+        "placement": "right"
       });
       return this;
     },
     gameTemplate: '\
-    <div class="menubar">\
-      <a href="javascript:;" \
-         style="text-decoration: none; color: black; float: right; padding-left: 15px" \
-         class="cancel">&nbsp;</a>\
-      <div style="clear: both">&nbsp;</div>\
-    </div>\
-    <div style="font-size: 12px; height: 70px; padding-bottom: 3px">\
-      <a style="color: black;" href="${searchString}" target="_blank">${gameName}</a><br/>\
-    </div>\
-    <div style="font-size: 12px; margin-top: 15px; padding-bottom: 3px">\
-      ${owner}\
-    </div>\
-    <div style="padding-bottom: 5px; margin-bottom: 10px; border-top: 1px silver solid">\
-      <a href="javascript:;" class="request" style="font-size: 12px">request game</a>\
-    </div>\
+      <td class="span2">\
+        <div class="btn-group">\
+          <a class="btn dropdown-toggle span2" data-toggle="dropdown" href="javascript:;">options <span class="caret"></span></a>\
+          <ul class="dropdown-menu">\
+            <li><a href="javascript:;" class="request">request game</a></li>\
+            <li><a href="javascript:;" class="cancel">not interested</a></li>\
+          </ul>\
+        </div>\
+      </td>\
+      <td><a style="color: black;" href="${searchString}" target="_blank">${gameName}</a></td>\
+      <td>${owner}</td>\
     '
   });
 

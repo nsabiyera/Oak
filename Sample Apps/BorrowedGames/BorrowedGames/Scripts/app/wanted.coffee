@@ -23,16 +23,18 @@ wantedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
-  undoRequest: ->
+  undoRequest: (callback) ->
     $.post(@get("DeleteWant"), { }, =>
       preferred.getPreferredGames()
       @change()
+      callback()
     )
 
-  returnGame: ->
+  returnGame: (callback) ->
     $.post(@get("ReturnGame"), { }, =>
       preferred.getPreferredGames()
       @change()
+      callback()
     )
 
 wantedGames = Backbone.Collection.extend
@@ -55,6 +57,11 @@ wantedGamesView = Backbone.View.extend
   render: ->
     $(@el).empty()
 
+    if(@wantedGames.length > 0)
+      $("#wantedGamesHeader").show()
+    else
+      $("#wantedGamesHeader").hide()
+
     @wantedGames.each (game) => @addGame(game)
 
   addGame: (game) ->
@@ -66,7 +73,9 @@ wantedGamesView = Backbone.View.extend
     $(@el).append view.el
 
 wantedGameView = Backbone.View.extend
-  className: 'border'
+  tagName: 'tr'
+
+  className: ''
 
   initialize: ->
     @model.bind 'change', @apply, @
@@ -78,9 +87,11 @@ wantedGameView = Backbone.View.extend
     "click .cancel": "delete"
 
   delete: ->
-    @model.undoRequest() if !@model.canReturnGame()
+    el = @el
 
-    @model.returnGame() if @model.canReturnGame()
+    @model.undoRequest(-> $(el).fadeOut()) if !@model.canReturnGame()
+
+    @model.returnGame(-> $(el).fadeOut()) if @model.canReturnGame()
 
   render: ->
     @renderRequestedGame() if !@model.canReturnGame()
@@ -94,55 +105,35 @@ wantedGameView = Backbone.View.extend
 
     $(@el).html(game)
 
-    toolTip.init(
-      game.find(".cancel"),
-      "UndoRequest",
-      "Don't want the game?<br/>Click to undo request.",
-      "Don't want the game?<br/>Click to undo request.",
-      -> game.find(".cancel").offset().left - 200,
-      -> game.find(".cancel").offset().top - 75
-    )
-
   renderBorrowedGame: ->
     game = $.tmpl(@borrowedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
-    $(@el).html(game) 
-
-    toolTip.init(
-      game.find(".cancel"),
-      "ReturnGame",
-      "All done with the game?<br/>Click to mark it as returned.",
-      "All done with the game?<br/>Click to mark it as returned.",
-      -> game.find(".cancel").offset().left - 225,
-      -> game.find(".cancel").offset().top - 75
-    )
+    $(@el).html(game)
 
   borrowedGameTemplate:
     '
-  <div class="menubar">
-    <a href="javascript:;"
-       style="text-decoration: none; color: black; float: right; padding-left: 15px"
-       class="cancel">&nbsp;</a>
-    <div style="clear: both">&nbsp;</div>
-  </div>
-    <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
-      Borrowed
-    </span>
-    <div style="font-size: 20px">${gameName}</div>
-    <div>${owner}</div>
+    <td class="span2">
+      <div class="btn-group">
+        <a class="btn dropdown-toggle span2" data-toggle="dropdown" href="javascript:;">borrowed <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="javascript:;" class="cancel">return game</a></li>
+        </ul>
+      </div>
+    </td>
+    <td>${gameName}</td>
+    <td>${owner}</td>
     '
 
   requestedGameTemplate:
     '
-  <div class="menubar">
-    <a href="javascript:;"
-       style="text-decoration: none; color: black; float: right; padding-left: 15px"
-       class="cancel">&nbsp;</a>
-    <div style="clear: both">&nbsp;</div>
-  </div>
-    <span style="float: right; font-size: 30px; color: silver; margin-right: 10px" class="brand">
-      Requested
-    </span>
-    <div style="font-size: 20px">${gameName}</div>
-    <div>${owner}</div>
+    <td class="span2">
+      <div class="btn-group">
+        <a class="btn dropdown-toggle span2" data-toggle="dropdown" href="javascript:;">requested <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="javascript:;" class="cancel">cancel request</a></li>
+        </ul>
+      </div>
+    </td>
+    <td>${gameName}</td>
+    <td>${owner}</td>
     '
