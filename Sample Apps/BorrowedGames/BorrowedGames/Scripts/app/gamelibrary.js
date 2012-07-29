@@ -8,7 +8,7 @@
         closeLibraryButton: null,
         gameIdAttribute: null,
         gamesSelector: null,
-        gameSelectorById: function (gameId) { return 'div[' + this.gameIdAttribute + '="' + gameId + '"]'; },
+        gameSelectorById: function (gameId) { return 'tr[' + this.gameIdAttribute + '="' + gameId + '"]'; },
         init: function () {
             this.gameToAddTextBox = $("#gameToAdd");
             this.games = $("#games");
@@ -17,7 +17,7 @@
             this.closeLibraryButton = $("#closeLibrary");
             this.closeLibraryButtonTop = $("#closeLibraryTop");
             this.gameIdAttribute = "data-game-id";
-            this.gamesSelector = "div[" + this.gameIdAttribute + "]";
+            this.gamesSelector = "td[" + this.gameIdAttribute + "]";
         }
     };
 
@@ -37,7 +37,7 @@
 
         view.init();
 
-        view.modal.hide();
+        view.modal.modal('hide');
 
         view.showLibraryLink.click(function () { show(); });
 
@@ -51,7 +51,7 @@
                 view.showLibraryLink.removeClass("btn-info").addClass("btn-danger")
             }
 
-            view.modal.fadeOut();
+            view.modal.modal('hide');
         };
 
         view.closeLibraryButton.click(closeLogic);
@@ -79,24 +79,23 @@
 
     function listGame(game) {
         view.games.append($gameRecordFor(game).hide().fadeIn('slow'));
+
     }
 
     function $gameRecordFor(game) {
-        var $game = $("<div class='border' style='height: 30px; clear: all'>" + game.Name +  " (" + game.Console + ")" + "</div>")
+        var $game = $("<td style='width: 100%'>" + game.Name +  " (" + game.Console + ")" + "</td>")
 
         $game.attr(view.gameIdAttribute, game.Id);
 
-        $links = $("<div style='float: right'></div>");
+        $links = $("<td></td>");
 
         $links.append($deleteLinkFor(game));
 
-        $game.append($links);
-
-        return $game;
+        return $("<tr></tr>").attr(view.gameIdAttribute, game.Id).append($game).append($links);
     }
 
     function $deleteLinkFor(game) {
-        var $deleteLink = $("<a href='javascript:;' style='text-decoration: none; color: black; display: block; margin: 5px;' class='delete'>remove</a>");
+        var $deleteLink = $("<a href='javascript:;' class='btn btn-danger'>remove</a>");
         $deleteLink.attr(view.gameIdAttribute, game.GameId);
 
         $deleteLink.click(function () { gameRemoved(game); });
@@ -117,9 +116,7 @@
     }
 
     function show() {
-        view.modal.centerHorizontally();
-        view.modal.css({ top: view.modal.css("top") });
-        view.modal.fadeIn();
+        view.modal.modal('show');
 
         load();
     }
@@ -133,7 +130,7 @@
     }
 
     function clearGamesList() {
-        view.games.children(view.gamesSelector).remove();
+        view.games.children().remove();
     }
 
     function gameRemoved(game) {
