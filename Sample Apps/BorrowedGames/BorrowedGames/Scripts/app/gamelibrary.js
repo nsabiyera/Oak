@@ -13,7 +13,7 @@
             this.gameToAddTextBox = $("#gameToAdd");
             this.games = $("#games");
             this.modal = $("#library");
-            this.showLibraryLink = $("#showLibrary a");
+            this.showLibraryLink = $("#showLibrary");
             this.closeLibraryButton = $("#closeLibrary");
             this.closeLibraryButtonTop = $("#closeLibraryTop");
             this.gameIdAttribute = "data-game-id";
@@ -39,14 +39,16 @@
 
         view.modal.hide();
 
-        view.showLibraryLink.parent().click(function () { show(); });
+        view.showLibraryLink.click(function () { show(); });
 
         var closeLogic = function () {
             if (hasGames()) {
                 view.showLibraryLink.html('view your game library');
+                view.showLibraryLink.removeClass("btn-danger").addClass("btn-info")
             }
             else {
                 view.showLibraryLink.html('looks like you have no games, click to add');
+                view.showLibraryLink.removeClass("btn-info").addClass("btn-danger")
             }
 
             view.modal.fadeOut();

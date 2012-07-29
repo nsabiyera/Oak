@@ -6,12 +6,25 @@
 
 <script src="@Url.Content("~/scripts/app/toolTip.js")"></script>
 
-<div style="float: right;" ><a href="@Url.RouteUrl(new { controller = "Account", action = "LogOff" })">log off</a></div>
-<h2>Hello, <a id="handle" style="color: #000000" href="javascript:;">@(ViewBag.Handle ?? "@nameless")</a><span id="updatePlaceHolder"></span></h2>
-
+<h2>Welcome</h2>
+<hr />
+<div class="well">
+<div>
+    <div style="font-size: 20px">
+      <a id="handle" href="javascript:;">@(ViewBag.Handle ?? "@nameless")</a>
+      <form class="form-inline"><span id="updatePlaceHolder"></span></form>
+    </div>
 @{
     Html.RenderPartial("~/views/home/_library.cshtml");
     Html.RenderPartial("~/views/home/_friends.cshtml");
+}
+<br />
+</div>
+
+</div>
+
+
+@{
     Html.RenderPartial("~/views/home/_games.cshtml");
 }
 

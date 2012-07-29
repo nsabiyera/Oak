@@ -1,6 +1,6 @@
 ﻿<script src="@Url.Content("~/scripts/app/friends.js")"></script>
 
-<div id="friends" class="hidden modal">
+<div id="friends">
     <div class="title">Following <a id="closeFriendsTop" href="javascript:;" class="cancel" style="float: right">close</a></div>
     <input type="text" id="handleToAdd" placeholder="type in the handle for users you want to follow..." style="font-size: 20px" />
     <div style="margin-top: 10px; margin-bottom: 10px">
@@ -12,14 +12,10 @@
     </div>
 </div>
 
-<div class="border">
-    <div class="info" id="showFriends" style="cursor: pointer; padding-left: 30px">
-    @if (ViewBag.HasFriends)
-    { <a href="javascript:;" style="text-decoration: none; color: #000000;">view users you are following</a> }
-    else
-    { <a href="javascript:;" style="text-decoration: none; color: #000000;">you aren't following anyone, click to add</a> }
-    </div>
-</div>
+@if (ViewBag.HasFriends)
+{ <a href="javascript:;" id="showFriends" class="btn btn-info">view users you are following</a> }
+else
+{ <a href="javascript:;" id="showFriends" class="btn btn-danger">you aren't following anyone, click to add</a> }
 
 <script>
     $(function () {

@@ -11,7 +11,7 @@
         friendSelectorById: function (handle) { return 'div[' + this.handleAttribute + '="' + handle + '"]'; },
         init: function () {
             this.modal = $("#friends");
-            this.showFriendsLink = $("#showFriends a");
+            this.showFriendsLink = $("#showFriends");
             this.closeFriendsButton = $("#closeFriends");
             this.closeFriendsButtonTop = $("#closeFriendsTop");
             this.handleTextBox = $("#handleToAdd");
@@ -34,16 +34,21 @@
 
         view.init();
 
-        view.showFriendsLink.parent().click(function () { show(); });
+        view.modal.hide();
+
+        view.showFriendsLink.click(function () { show(); });
 
         var closeLogic = function () {
-            view.modal.fadeOut();
             if (view.friendsContainer.find("div").length != 0) {
                 view.showFriendsLink.html('view users you are following');
+                view.showFriendsLink.removeClass("btn-danger").addClass("btn-info")
             }
             else {
                 view.showFriendsLink.html("you aren't following anyone, click to add");
+                view.showFriendsLink.removeClass("btn-info").addClass("btn-danger")
             }
+
+            view.modal.fadeOut();
         };
 
         view.closeFriendsButton.click(closeLogic);
