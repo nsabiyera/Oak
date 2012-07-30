@@ -90,5 +90,5 @@ unwantedGameView = Backbone.View.extend
      <span class="label label-important">qurantined</span>
     </td>
     <td>${gameName}</td>
-    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
+    <td class="span1"><i class="icon-arrow-up cancel" style="cursor: pointer"></i></td>
     '

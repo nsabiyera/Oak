@@ -105,12 +105,14 @@ wantedGameView = Backbone.View.extend
   renderBorrowedGame: ->
     game = $.tmpl(@borrowedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
 
+    game.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>the game has been returned</span>" })
+
     $(@el).html(game)
 
   borrowedGameTemplate:
     '
     <td class="span1">
-     <span class="label label-success">requested</span>
+     <span class="label label-success">currently borrowing</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>

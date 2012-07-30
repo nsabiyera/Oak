@@ -4,14 +4,15 @@
 <script src="@Url.Content("~/scripts/app/requested.js")"></script>
 
 <h3 id="requestedGamesHeader" style="display: none">Games friends are requesting from you</h3>
-<div id="requestedGames"></div>
+<hr/>
+<table id="requestedGames" class='table table-striped'></table>
 
 
 <h3>Games you have access to</h3>
 <hr/>
 <table id="wantedGames" class='table table-striped'></table>
 <table id="preferredGames" class='table table-striped'></table>
-<table id="unwantedGames"  class='table table-striped'></div>
+<table id="unwantedGames"  class='table table-striped'></table>
 
 <script>
     $(function () {

@@ -22,14 +22,16 @@ requestedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
-  giveGame: ->
+  giveGame: (callback) ->
     $.post(@get("GiveGame"), { }, =>
       requested.getRequestedGames()
+      callback()
     )
 
-  gameReturned: ->
+  gameReturned: (callback) ->
     $.post(@get("GameReturned"), { }, =>
       requested.getRequestedGames()
+      callback()
     )
 
   canGiveGame: ->
@@ -71,15 +73,19 @@ requestedGamesView = Backbone.View.extend
     $(@el).append view.el
 
 requestedGameView = Backbone.View.extend
-  className: "border"
+  tagName: "tr"
 
   events:
     "click .check" : "giveGame"
     "click .cancel" : "gameReturned"
 
-  giveGame: -> @model.giveGame()
+  giveGame: ->
+    el = @el
+    @model.giveGame(-> $(el).find(".check").tooltip("hide"))
 
-  gameReturned: -> @model.gameReturned()
+  gameReturned: ->
+    el = @el
+    @model.gameReturned(-> $(el).find(".cancel").tooltip("hide"))
 
   render: ->
     game = @genCanGiveTemplate() if @model.canGiveGame()
@@ -91,23 +97,28 @@ requestedGameView = Backbone.View.extend
     return this
 
   genCanGiveTemplate: ->
-    return $.tmpl(@canGiveGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+    gen = $.tmpl(@canGiveGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+    requestedBy = @model.requestedBy()
+    gen.find(".check").tooltip({ title: "<span style='font-size: 16px'>click this when you have given " + requestedBy + " the game, it'll start the count down for when the game needs to be returned</span>"})
+    return gen
 
   genReturnGame: ->
-    return $.tmpl(@returnGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+    gen = $.tmpl(@returnGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+    gen.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>the game has been returned to me</span>"})
+    return gen
 
   returnGameTemplate:
     '
-    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
-        <a class="cancel" href="javascript:;">The game has been returned</a>
-    </div>
-    <div style="width: 60%; font-size: 20px">${requestedBy} has borrowed<br /> ${gameName}</div>
+    <td>${requestedBy} is currently <span class="label label-success">borrowing</span> ${gameName}</td>
+    <td>
+        <i class="cancel icon-ok" style="cursor: pointer" href="javascript:;"></i>
+    </td>
     '
 
   canGiveGameTemplate:
     '
-    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">
-        <a class="check" href="javascript:;">I have given him the game</a>
-    </div>
-    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>
+    <td>${requestedBy} is <span class="label label-inverse">requesting</span>: ${gameName}</td>
+    <td>
+        <i class="check icon-share-alt" style="cursor: pointer" href="javascript:;"></i>
+    </td>
     '

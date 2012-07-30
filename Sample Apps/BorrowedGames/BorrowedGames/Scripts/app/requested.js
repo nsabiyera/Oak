@@ -29,16 +29,18 @@
       if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
-    giveGame: function() {
+    giveGame: function(callback) {
       var _this = this;
       return $.post(this.get("GiveGame"), {}, function() {
-        return requested.getRequestedGames();
+        requested.getRequestedGames();
+        return callback();
       });
     },
-    gameReturned: function() {
+    gameReturned: function(callback) {
       var _this = this;
       return $.post(this.get("GameReturned"), {}, function() {
-        return requested.getRequestedGames();
+        requested.getRequestedGames();
+        return callback();
       });
     },
     canGiveGame: function() {
@@ -86,16 +88,24 @@
   });
 
   requestedGameView = Backbone.View.extend({
-    className: "border",
+    tagName: "tr",
     events: {
       "click .check": "giveGame",
       "click .cancel": "gameReturned"
     },
     giveGame: function() {
-      return this.model.giveGame();
+      var el;
+      el = this.el;
+      return this.model.giveGame(function() {
+        return $(el).find(".check").tooltip("hide");
+      });
     },
     gameReturned: function() {
-      return this.model.gameReturned();
+      var el;
+      el = this.el;
+      return this.model.gameReturned(function() {
+        return $(el).find(".cancel").tooltip("hide");
+      });
     },
     render: function() {
       var game;
@@ -105,28 +115,39 @@
       return this;
     },
     genCanGiveTemplate: function() {
-      return $.tmpl(this.canGiveGameTemplate, {
+      var gen, requestedBy;
+      gen = $.tmpl(this.canGiveGameTemplate, {
         requestedBy: this.model.requestedBy(),
         gameName: this.model.shortName()
       });
+      requestedBy = this.model.requestedBy();
+      gen.find(".check").tooltip({
+        title: "<span style='font-size: 16px'>click this when you have given " + requestedBy + " the game, it'll start the count down for when the game needs to be returned</span>"
+      });
+      return gen;
     },
     genReturnGame: function() {
-      return $.tmpl(this.returnGameTemplate, {
+      var gen;
+      gen = $.tmpl(this.returnGameTemplate, {
         requestedBy: this.model.requestedBy(),
         gameName: this.model.shortName()
       });
+      gen.find(".cancel").tooltip({
+        title: "<span style='font-size: 16px'>the game has been returned to me</span>"
+      });
+      return gen;
     },
     returnGameTemplate: '\
-    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">\
-        <a class="cancel" href="javascript:;">The game has been returned</a>\
-    </div>\
-    <div style="width: 60%; font-size: 20px">${requestedBy} has borrowed<br /> ${gameName}</div>\
+    <td>${requestedBy} is currently <span class="label label-success">borrowing</span> ${gameName}</td>\
+    <td>\
+        <i class="cancel icon-ok" style="cursor: pointer" href="javascript:;"></i>\
+    </td>\
     ',
     canGiveGameTemplate: '\
-    <div style="float: right; margin-top: 15px; margin-right: 20px; font-size: 20px">\
-        <a class="check" href="javascript:;">I have given him the game</a>\
-    </div>\
-    <div style="width: 60%; font-size: 20px">${requestedBy} is requesting<br /> ${gameName}</div>\
+    <td>${requestedBy} is <span class="label label-inverse">requesting</span>: ${gameName}</td>\
+    <td>\
+        <i class="check icon-share-alt" style="cursor: pointer" href="javascript:;"></i>\
+    </td>\
     '
   });
 

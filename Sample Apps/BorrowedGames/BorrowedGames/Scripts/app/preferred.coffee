@@ -107,9 +107,9 @@ preferredGameView = Backbone.View.extend
 
     $(@el).html(game)
 
-    game.find(".cancel").tooltip({ "title": "<span style='font-size: 16px'>if you aren't interested in the game, put it into qurantine<span>", "placement": "left" })
+    game.find(".cancel").tooltip({ "title": "<span style='font-size: 16px'>if you aren't interested in the game, put it into qurantine<span>", "placement": "top" })
 
-    game.find(".request").tooltip({ "title": "<span style='font-size: 16px'>request the game from " + @model.owner() + "<span>", "placement": "left" })
+    game.find(".request").tooltip({ "title": "<span style='font-size: 16px'>request the game from " + @model.owner() + "<span>", "placement": "top" })
 
     return this
 
@@ -118,12 +118,7 @@ preferredGameView = Backbone.View.extend
       <td><a href="${searchString}" target="_blank">${gameName}</a></td>
       <td>${owner}</td>
       <td class="span1">
-        <div class="btn-group">
-          <a class="btn dropdown-toggle span2 btn-primary" data-toggle="dropdown" href="javascript:;">options <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="javascript:;" class="request">request game</a></li>
-            <li><a href="javascript:;" class="cancel">not interested</a></li>
-          </ul>
-        </div>
+        <i href="javascript:;" class="request icon-arrow-up" style="cursor: pointer"></i>
+        <i href="javascript:;" class="cancel icon-arrow-down" style="cursor: pointer"></i>
       </td>
     '
