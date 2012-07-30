@@ -272,7 +272,7 @@ namespace Oak.Tests
 
             it["converts whole object graph"] = () =>
             {
-                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror\'s Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
+                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
             };
         }
 
@@ -325,7 +325,7 @@ namespace Oak.Tests
                 objectToConvert = new
                 {
                     Quotes = @"""Quoted""",
-                    Ticks = @"'Ticked'",
+                    Ticks = @"'Ticked'", //ticks don't need to be escaped, jquery for some reason refuses to deserialize a payload if ticks are escaped when they dont need to be
                     BackSlashes = @"c:\Temp",
                     NewLine = "New" + Environment.NewLine + "Line"
                 };
@@ -335,7 +335,7 @@ namespace Oak.Tests
 
             it["special characters are escaped"] = () =>
             {
-                jsonString.should_be(@"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""\'Ticked\'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }");
+                jsonString.should_be(@"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }");
             };
         }
     }
