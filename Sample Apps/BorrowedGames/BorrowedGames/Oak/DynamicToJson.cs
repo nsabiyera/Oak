@@ -83,7 +83,7 @@ namespace Oak
 
         private static string Escape(string o)
         {
-            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("'", "\\'").Replace("\r", "\\r").Replace("\n", "\\n");
+            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
         }
 
         public static bool IsJsonString(dynamic o)
