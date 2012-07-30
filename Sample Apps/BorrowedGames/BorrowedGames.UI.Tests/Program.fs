@@ -15,9 +15,9 @@ test(fun _ ->
     requestGame()
     logOff()
     loginAs "user2"
-    wantedGamesList *= "Borrowed"
+    wantedGamesList *= "currently borrowing"
     click deleteBorrowedGameLink
-    wantedGamesList *!= "Borrowed")
+    wantedGamesList *!= "currently borrowing")
 
 test(fun _ -> 
     describe "registering a user"
@@ -32,9 +32,8 @@ test(fun _ ->
     describe "lender marks game as returned"
     requestGame()
     loginAs "user1"
-    "#requestedGames a" *= "The game has been returned"
     click gameReturnedLink
-    count "#requestedGames a" 0)
+    count "#requestedGames i" 0)
 
 run()
  

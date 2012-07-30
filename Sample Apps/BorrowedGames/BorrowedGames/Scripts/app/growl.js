@@ -3,7 +3,7 @@
     var $wrapper;
 
     function init() {
-        $growlArea = $("<div style='font-size: 20px'></div>");
+        $growlArea = $("<div class='growinfo' style='font-size: 20px'></div>");
         $growlArea.hide();
 
         $wrapper = $("<div class='alert alert-info span6' style='display: none;'></div>");
@@ -20,7 +20,7 @@
             
         $wrapper.css({ top: top, "position": "absolute", "z-index": 99999 });
         $growlArea.show();
-        $growlArea.html("<i class='" + icon + " pull-right'></i>" + message);
+        $growlArea.html(message);
         $wrapper.centerHorizontally();
         $wrapper.fadeIn().delay(2000).fadeOut();
         $wrapper.css("left", ($wrapper.position().left - 10) + "px");

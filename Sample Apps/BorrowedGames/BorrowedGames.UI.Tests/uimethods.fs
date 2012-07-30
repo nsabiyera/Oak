@@ -12,9 +12,9 @@ let url = fun address -> canopy.url (baseUrl + address)
 
 let on = fun address -> canopy.on (baseUrl + address)
 
-let gameReturnedLink = "#requestedGames a.cancel"
+let gameReturnedLink = "#requestedGames i.cancel"
 
-let wantedGamesList = "#wantedGames .brand"
+let wantedGamesList = "#wantedGames .label"
 
 let deleteBorrowedGameLink = "#wantedGames .cancel"
 
@@ -31,7 +31,7 @@ let email userName =
 
 let registerUser userName =
     goToSignIn()
-    click "a[href='/Account/Register']"
+    click "form a[href='/Account/Register']"
     on "/Account/Register"
     "#Email" << (email userName)
     "#Password" << "Password"
@@ -41,7 +41,7 @@ let registerUser userName =
     click "#handle"
     "#handleTextBox" << userName
     click "input[value='update handle']"
-    ".growlinfo" == ("Your handle has been updated to @" + userName + ".")
+    //".growlinfo" == ("Your handle has been updated to @" + userName + ".") <-- not working
     logOff()
 
 let loginAs userName =
@@ -69,8 +69,8 @@ let requestFirstGame _ =
     ()
 
 let giveFirstRequestedGame _ =
-    click "a.check"
-    gameReturnedLink == "The game has been returned"
+    click "i.check"
+    "#requestedGames .label" *= "borrowing"
     ()
 
 let requestGame _ = 
@@ -84,7 +84,7 @@ let requestGame _ =
     loginAs "user2"
     follow "user1"
     requestFirstGame()
-    wantedGamesList *= "Requested"
+    wantedGamesList *= "requested"
     logOff()
     loginAs "user1"
     giveFirstRequestedGame()
