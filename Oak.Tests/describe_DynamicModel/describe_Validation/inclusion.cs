@@ -3,16 +3,27 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class inclusion : nspec
+    class inclusion_for_type_with_auto_props : inclusion
     {
-        dynamic coffee;
+        void before_each()
+        {
+            coffee = new CoffeeWithAutoProperties();
+        }
+    }
 
-        bool isValid;
-
+    class inclusion_for_dynamic_type : inclusion
+    {
         void before_each()
         {
             coffee = new Coffee();
         }
+    }
+
+    abstract class inclusion : nspec
+    {
+        public dynamic coffee;
+
+        public bool isValid;
 
         void validating_inclusion()
         {

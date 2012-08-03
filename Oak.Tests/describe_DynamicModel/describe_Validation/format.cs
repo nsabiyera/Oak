@@ -3,16 +3,27 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class format : nspec
+    class format_for_class_with_auto_props : format
     {
-        dynamic product;
+        void before_each()
+        {
+            product = new ProductWithAutoProperties();
+        }
+    }
 
-        bool isValid;
-
+    class format_for_dynamic_class : format
+    {
         void before_each()
         {
             product = new Product();
         }
+    }
+
+    abstract class format : nspec
+    {
+        public dynamic product;
+
+        public bool isValid;
 
         void validating_format()
         {

@@ -436,9 +436,7 @@ namespace Massive
         {
             dynamic attributes = null;
 
-            if (o is DynamicModel) attributes = ((DynamicModel)o).HashExcludingDelegates();
-
-            if (o is Gemini) attributes = ((Gemini)o).HashExcludingDelegates();
+            if (o is DynamicModel || o is Gemini) attributes = ((Gemini)o).HashExcludingDelegates();
 
             else attributes = o.ToExpando();
 

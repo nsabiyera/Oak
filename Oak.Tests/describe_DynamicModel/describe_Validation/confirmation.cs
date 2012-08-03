@@ -6,32 +6,47 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    public class Persons : DynamicRepository
+    class confirmation_for_dynamic_object : confirmation
     {
+        private void before_each()
+        {
+            person = new Person();
 
+            person.Email = "user@example.com";
+
+            person.EmailConfirmation = "user@example.com";
+        }
     }
 
-    class confirmation : nspec
+    class confirmation_for_class_containing_auto_properties : confirmation
     {
-        Seed seed;  
+        private void before_each()
+        {
+            person = new PersonWithAutoProps();
 
-        dynamic person;
+            person.Email = "user@example.com";
 
-        bool isValid;
+            person.EmailConfirmation = "user@example.com";
+        }
+    }
 
-        Persons persons;
+    abstract class confirmation : nspec
+    {
+        public Seed seed;
+
+        public dynamic person;
+
+        public bool isValid;
+
+        public Persons persons;
 
         void before_each()
         {
             seed = new Seed();
+
             seed.PurgeDb();
 
-            person = new Person();
-
             persons = new Persons();
-
-            person.Email = "user@example.com";
-            person.EmailConfirmation = "user@example.com";
         }
 
         void confirming_password_is_entered()

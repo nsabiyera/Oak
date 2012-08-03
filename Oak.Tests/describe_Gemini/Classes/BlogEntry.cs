@@ -28,5 +28,7 @@ namespace Oak.Tests.describe_Gemini.Classes
                 return "";
             }
         }
+
+        public string Author { get; set; }
     }
 }

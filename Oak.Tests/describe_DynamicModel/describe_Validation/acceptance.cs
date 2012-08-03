@@ -3,14 +3,20 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class acceptance : nspec
+    class acceptance_for_class_that_contains_auto_props : acceptance
     {
-        dynamic legalDocument;
+        void before_each()
+        {
+            legalDocument = new LegalDocumentWithAutoProps();
 
-        bool isValid;
+            legalDocument.TermsOfService = true;
 
-        string error;
+            legalDocument.TypedOutAcceptance = "I Agree";
+        }
+    }
 
+    class acceptance_for_dynamic_class : acceptance
+    {
         void before_each()
         {
             legalDocument = new LegalDocument();
@@ -19,6 +25,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             legalDocument.TypedOutAcceptance = "I Agree";
         }
+    }
+
+    abstract class acceptance : nspec
+    {
+        public dynamic legalDocument;
+
+        public bool isValid;
+
+        public string error;
 
         void validating_acceptance()
         {

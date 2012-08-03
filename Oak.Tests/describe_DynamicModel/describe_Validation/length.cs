@@ -5,12 +5,21 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Length
 {
-    class length : nspec
+    class length_for_class_with_auto_properties : length
     {
-        dynamic essay;
+        void before_each()
+        {
+            essay = new EssayWithAutoProperties();
+            essay.Title = "valid title";
+            essay.Author = "bob";
+            essay.Publisher = "WorldWide";
+            essay.Version = "1";
+            essay.IsNull = "NotNullForNowSoThatWeDontBreakOtherTests";
+        }
+    }
 
-        bool isValid;
-
+    class length_for_dynamic_class : length
+    {
         void before_each()
         {
             essay = new Essay();
@@ -18,19 +27,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Length
             essay.Author = "bob";
             essay.Publisher = "WorldWide";
             essay.Version = "1";
-            essay.Year = "1990";
             essay.IsNull = "NotNullForNowSoThatWeDontBreakOtherTests";
         }
-        
-        void validating_length_of_with_types_that_dont_have_length_property()
-        {
-            context["property does not contain a length property"] = () =>
-            {
-                before = () => essay.Year = 1990;
+    }
+    
+    abstract class length : nspec
+    {
+        public dynamic essay;
 
-                it["should throw an exception"] = expect<RuntimeBinderException>(() => essay.IsValid());
-            };
-        }
+        public bool isValid;
 
         void validating_length_of()
         {

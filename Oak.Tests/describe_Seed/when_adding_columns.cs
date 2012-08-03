@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 
 namespace Oak.Tests.describe_Seed
 {
-    [Tag("wip")]
     class when_adding_columns : _seed
     {
         void before_each()
