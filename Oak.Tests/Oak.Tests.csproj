@@ -137,6 +137,7 @@
     <Compile Include="describe_DynamicModel\describe_Changes\core_behavior_for_tracking_changes.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Essay.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Order.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Persons.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Player.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\length.cs" />

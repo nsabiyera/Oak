@@ -19,6 +19,7 @@ namespace BattleShip.Models
 
         }
 
+
         IEnumerable<dynamic> Associates()
         {
             yield return new HasMany(gameSquares);

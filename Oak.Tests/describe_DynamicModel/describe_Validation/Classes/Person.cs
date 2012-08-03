@@ -21,4 +21,27 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
             yield return new Confirmation("Email");
         }
     }
+
+    public class PersonWithAutoProps : DynamicModel
+    {
+        public string Email {get; set;}
+
+        public string EmailConfirmation { get; set; }
+
+        public PersonWithAutoProps()
+            : this(new { })
+        {
+        }
+
+        public PersonWithAutoProps(object dto)
+            : base(dto)
+        {
+
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Confirmation("Email");
+        }
+    }
 }

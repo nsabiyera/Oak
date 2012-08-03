@@ -18,6 +18,7 @@ namespace Oak.Tests.describe_Gemini
                 blog = new ExpandoObject();
                 blog.Title = "Working With Oak";
                 blog.Body = "Oak is tight, yo.";
+                blog.Author = "Amir";
             };
 
             context["given that the dynamic blogged is wrapped with a gemini"] = () =>
@@ -39,6 +40,9 @@ namespace Oak.Tests.describe_Gemini
 
                 it["properites defined in the gemini override base properties"] = () =>
                     (gemini.Body as string).should_be("");
+
+                it["auto property is assigned as opposed to creating a new prop on the fly"] = () =>
+                    (gemini.Author as string).should_be("Amir");
             };
         }
 

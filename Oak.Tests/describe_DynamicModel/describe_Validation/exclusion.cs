@@ -3,18 +3,31 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class exclusion : nspec
+    class exclusion_for_dynamic_type : exclusion
     {
-        dynamic registration;
-
-        bool isValid;
-
         void before_each()
         {
             registration = new Registration();
 
             registration.UserName = "user";
         }
+    }
+
+    class exclusion_for_type_with_autoproperties : exclusion
+    {
+        void before_each()
+        {
+            registration = new RegistrationWithAutoProperties();
+
+            registration.UserName = "user";
+        }
+    }
+
+    abstract class exclusion : nspec
+    {
+        public dynamic registration;
+
+        public bool isValid;
 
         void validating_exclusions()
         {
