@@ -3,12 +3,23 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class numericality : nspec
+    class numericality_for_static_type : numericality
     {
-        dynamic player;
+        void before_each()
+        {
+            player = new PlayerWithAutoProps();
+            player.AveragePoints = 3.6;
+            player.Age = 22;
+            player.HeightInInches = 65;
+            player.WeightInPounds = 185;
+            player.NumberOfFingers = 10;
+            player.LuckyEvenNumber = 36;
+            player.LuckyOddNumber = 13;
+        }
+    }
 
-        bool isValid;
-
+    class numericality_for_dynamic_type : numericality
+    {
         void before_each()
         {
             player = new Player();
@@ -21,7 +32,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             player.LuckyOddNumber = 13;
         }
 
-        void validating_numericality_of()
+        void non_numeric_behavior()
         {
             act = () => isValid = player.IsValid();
 
@@ -32,18 +43,65 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 it["is not valid"] = () => isValid.should_be_false();
             };
 
-            context["average points is a number"] = () =>
-            {
-                before = () => player.AveragePoints = 3.6;
-
-                it["is valid"] = () => isValid.should_be_true();
-            };
-
             context["age is not a number"] = () =>
             {
                 before = () => player.Age = "not a number";
 
                 it["is not valid"] = () => isValid.should_be_false();
+            };
+
+            context["height in inches is not a number"] = () =>
+            {
+                before = () => player.HeightInInches = "not a number";
+
+                it["is not valid"] = () => isValid.should_be_false();
+            };
+
+            context["weight in pounds is not a number"] = () =>
+            {
+                before = () => player.WeightInPounds = "not a number";
+
+                it["is not valid"] = () => isValid.should_be_false();
+            };
+
+            context["lucky odd number is not a number"] = () =>
+            {
+                before = () => player.LuckyOddNumber = "not a number";
+
+                it["is not valid"] = () => isValid.should_be_false();
+            };
+
+            context["number of fingers is not a number"] = () =>
+            {
+                before = () => player.NumberOfFingers = "not a number";
+
+                it["is not valid"] = () => isValid.should_be_false();
+            };
+
+            context["lucky even number is not a number"] = () =>
+            {
+                before = () => player.LuckyEvenNumber = "not a number";
+
+                it["is not valid"] = () => isValid.should_be_false();
+            };
+        }
+    }
+
+    abstract class numericality : nspec
+    {
+        public dynamic player;
+
+        public bool isValid;
+
+        void validating_numericality_of()
+        {
+            act = () => isValid = player.IsValid();
+
+            context["average points is a number"] = () =>
+            {
+                before = () => player.AveragePoints = 3.6;
+
+                it["is valid"] = () => isValid.should_be_true();
             };
 
             context["age is not an integer"] = () =>
@@ -52,19 +110,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
                 it["is not valid"] = () => isValid.should_be_false();
             };
-            
+
             context["age is an integer"] = () =>
             {
                 before = () => player.Age = 22;
 
                 it["is valid"] = () => isValid.should_be_true();
-            };
-
-            context["height in inches is not a number"] = () =>
-            {
-                before = () => player.HeightInInches = "not a number";
-
-                it["is not valid"] = () => isValid.should_be_false();
             };
 
             context["height in inches is a number"] = () =>
@@ -95,13 +146,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 it["is valid"] = () => isValid.should_be_true();
             };
 
-            context["weight in pounds is not a number"] = () =>
-            {
-                before = () => player.WeightInPounds = "not a number";
-
-                it["is not valid"] = () => isValid.should_be_false();
-            };
-
             context["weight in pounds is a number but less than threshold"] = () =>
             {
                 before = () => player.WeightInPounds = 184.9;
@@ -121,13 +165,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 before = () => player.WeightInPounds = 185.1;
 
                 it["is valid"] = () => isValid.should_be_true();
-            };
-
-            context["number of fingers is not a number"] = () =>
-            {
-                before = () => player.NumberOfFingers = "not a number";
-
-                it["is not valid"] = () => isValid.should_be_false();
             };
 
             context["number of fingers is a number but less than threshold"] = () =>
@@ -150,7 +187,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
                 it["is valid"] = () => isValid.should_be_true();
             };
-            
+
             context["height in inches is a number but greater than upper threshold"] = () =>
             {
                 before = () => player.HeightInInches = 72.1;
@@ -192,13 +229,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
                 it["is valid"] = () => isValid.should_be_true();
             };
-            
-            context["lucky even number is not a number"] = () =>
-            {
-                before = () => player.LuckyEvenNumber = "not a number";
-
-                it["is not valid"] = () => isValid.should_be_false();
-            };
 
             context["lucky even number is a number but is not even"] = () =>
             {
@@ -212,13 +242,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 before = () => player.LuckyEvenNumber = 36;
 
                 it["is valid"] = () => isValid.should_be_true();
-            };
-
-            context["lucky odd number is not a number"] = () =>
-            {
-                before = () => player.LuckyOddNumber = "not a number";
-
-                it["is not valid"] = () => isValid.should_be_false();
             };
 
             context["lucky odd number is a number but is not odd"] = () =>

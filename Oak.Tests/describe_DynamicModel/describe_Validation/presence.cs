@@ -3,43 +3,34 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class presence : nspec
+    class presence_for_static_type : presence
     {
-        dynamic book;
+        void before_each()
+        {
+            book = new BookWithProps();
+        }
+    }
 
-        dynamic bookWithProps;
-
-        bool isValid;
-
+    class presence_for_dynamic_type : presence
+    {
         void before_each()
         {
             book = new Book();
-
-            bookWithProps = new BookWithProps();
         }
+    }
 
-        void validating_precense_for_a_class_with_auto_property_defined()
-        {
-            act = () => isValid = bookWithProps.IsValid();
+    abstract class presence : nspec
+    {
+        public dynamic book;
 
-            context["both title and body are specified"] = () =>
-            {
-                before = () =>
-                {
-                    bookWithProps.Title = "Title";
+        public bool isValid;
 
-                    bookWithProps.Body = "Body";
-                };
-
-                it["is valid"] = () => isValid.should_be_true();
-            };
-        }
 
         void validating_presense_of()
         {
             act = () => isValid = book.IsValid();
 
-            context["title is empty"] = () => 
+            context["title is empty"] = () =>
             {
                 before = () => book.Title = string.Empty;
 
@@ -68,9 +59,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () =>
                 {
-                    book = new Book(new 
-                    { 
-                        Title = default(string), 
+                    book = new Book(new
+                    {
+                        Title = default(string),
                         Body = default(string)
                     });
                 };

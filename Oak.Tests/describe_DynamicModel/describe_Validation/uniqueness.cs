@@ -3,15 +3,41 @@ using Oak.Tests.describe_DynamicModel.describe_Validation.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Validation
 {
-    class uniqueness : nspec
+    class uniquness_for_static_class : uniqueness
     {
-        Seed seed;
+        void before_each()
+        {
+            users.Projection = d => new UserWithAutoProperties(d);
+        }
 
-        Users users;
+        public override dynamic NewUser()
+        {
+            return new UserWithAutoProperties();
+        }
+    }
+    
+    class uniquness_for_dynamic_class : uniqueness
+    {
+        void before_each()
+        {
+            users.Projection = d => new User(d);
+        }
 
-        dynamic user;
+        public override dynamic NewUser()
+        {
+            return new User();
+        }
+    }
+    
+    abstract class uniqueness : nspec
+    {
+        public Seed seed;
 
-        dynamic userId;
+        public Users users;
+
+        public dynamic user;
+
+        public dynamic userId;
 
         void before_each()
         {
@@ -19,6 +45,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             users = new Users();
         }
+
+        public abstract dynamic NewUser();
 
         void describe_uniqueness()
         {
@@ -38,7 +66,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () =>
                 {
-                    user = new User();
+                    user = NewUser();
                     user.Email = "nottaken@example.com";
                 };
 
@@ -49,7 +77,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () =>
                 {
-                    user = new User();
+                    user = NewUser();
                     user.Email = "user@example.com";
                 };
 
