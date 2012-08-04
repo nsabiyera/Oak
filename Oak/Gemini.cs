@@ -115,13 +115,13 @@ namespace Oak
 
             foreach (var autoProperty in WritableAutoProperties())
             {
-                var dict = Expando as IDictionary<string, object>;
+                var dict = new Dictionary<string, object>(Expando as IDictionary<string, object>, StringComparer.InvariantCultureIgnoreCase);
 
                 if (dict.ContainsKey(autoProperty.Name))
                 {
                     autoProperty.SetValue(this, dict[autoProperty.Name], null);
 
-                    dict.Remove(autoProperty.Name);
+                    (Expando as IDictionary<string, object>).Remove(autoProperty.Name);
                 }
             }
 
