@@ -17,7 +17,7 @@ namespace Oak.Tests.describe_Gemini
 
         void before_each()
         {
-            blog = new ExpandoObject();
+            blog = new Prototype();
             blog.Title = "Some Name";
             blog.body = "Some Body";
             blog.BodySummary = "Body Summary";

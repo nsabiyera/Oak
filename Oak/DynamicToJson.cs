@@ -14,13 +14,13 @@ namespace Oak
         {
             if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>);
 
-            if(o is ExpandoObject) return Convert(o as IDictionary<string, object>);
+            if (o is Prototype) return Convert(o as IDictionary<string, object>);
 
             if (o is Gemini) return Convert(PublicAndDynamicProperties(o));
 
             if (IsJsonString(o) || IsJsonNumeric(o) || IsBool(o)) return Stringify(o);
 
-            return Convert((o as object).ToExpando());
+            return Convert((o as object).ToPrototype());
         }
 
         private static IDictionary<string, object> PublicAndDynamicProperties(dynamic o)
@@ -128,7 +128,7 @@ namespace Oak
 
         public static bool CanConvertObject(dynamic o)
         {
-            if (o is ExpandoObject) return true;
+            if (o is Prototype) return true;
 
             if (o is Gemini) return true;
 

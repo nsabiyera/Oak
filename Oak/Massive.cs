@@ -64,7 +64,7 @@ namespace Massive
                     p.DbType = DbType.String;
                     p.Size = 4000;
                 }
-                else if (item.GetType() == typeof(ExpandoObject))
+                else if (item.GetType() == typeof(Prototype))
                 {
                     var d = (IDictionary<string, object>)item;
                     p.Value = d.Values.FirstOrDefault();
@@ -131,7 +131,7 @@ namespace Massive
         /// </summary>
         public dynamic CreateFrom(NameValueCollection coll)
         {
-            dynamic result = new ExpandoObject();
+            dynamic result = new Prototype();
             var dc = (IDictionary<string, object>)result;
             var schema = Schema;
             //loop the collection, setting only what's in the Schema
@@ -186,7 +186,7 @@ namespace Massive
         {
             get
             {
-                dynamic result = new ExpandoObject();
+                dynamic result = new Prototype();
                 var schema = Schema;
                 foreach (dynamic column in schema)
                 {
@@ -438,7 +438,7 @@ namespace Massive
 
             if (o is DynamicModel || o is Gemini) attributes = ((Gemini)o).HashOfProperties();
 
-            else attributes = o.ToExpando();
+            else attributes = o.ToPrototype();
 
             var keysToRemove = new List<string>();
 
@@ -553,7 +553,7 @@ namespace Massive
         /// </summary>
         public virtual dynamic Paged(string where = "", string orderBy = "", string columns = "*", int pageSize = 20, int currentPage = 1, params object[] args)
         {
-            dynamic result = new ExpandoObject();
+            dynamic result = new Prototype();
             var countSQL = string.Format("SELECT COUNT({0}) FROM {1}", PrimaryKeyField, TableName);
             if (String.IsNullOrEmpty(orderBy))
                 orderBy = PrimaryKeyField;

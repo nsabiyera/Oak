@@ -11,7 +11,7 @@ namespace Oak.Tests.describe_DynamicModels
     {
         void describe_Any()
         {
-            before = () => models = new DynamicModels(new List<ExpandoObject>());
+            before = () => models = new DynamicModels(new List<Prototype>());
 
             context["matching single property"] = () =>
             {
@@ -26,7 +26,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new ExpandoObject();
+                        dynamic expando = new Prototype();
                         expando.Name = "Jane";
                         models.Models.Add(expando);
                     };
@@ -43,7 +43,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new ExpandoObject();
+                        dynamic expando = new Prototype();
                         expando.Name = "Jane";
                         expando.Age = 15;
                         models.Models.Add(expando);
@@ -56,7 +56,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new ExpandoObject();
+                        dynamic expando = new Prototype();
                         expando.Name = "Jane";
                         expando.Age = 10;
                         models.Models.Add(expando);
@@ -69,7 +69,7 @@ namespace Oak.Tests.describe_DynamicModels
 
         void describe_Where()
         {
-            before = () => models = new DynamicModels(new List<ExpandoObject>());
+            before = () => models = new DynamicModels(new List<Prototype>());
 
             context["matching single property"] = () =>
             {
@@ -84,7 +84,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new ExpandoObject();
+                        dynamic expando = new Prototype();
                         expando.Name = "Jane";
                         models.Models.Add(expando);
                     };
@@ -101,7 +101,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new ExpandoObject();
+                        dynamic expando = new Prototype();
                         expando.Name = "Jane";
                         expando.Age = 15;
                         models.Models.Add(expando);
@@ -114,7 +114,7 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new ExpandoObject();
+                        dynamic expando = new Prototype();
                         expando.Name = "Jane";
                         expando.Age = 10;
                         models.Models.Add(expando);
@@ -219,7 +219,7 @@ namespace Oak.Tests.describe_DynamicModels
         {
             context["first taking in a 'where clause'"] = () =>
             {
-                before = () => models = new DynamicModels(new List<ExpandoObject>());
+                before = () => models = new DynamicModels(new List<Prototype>());
 
                 act = () => resultForFirst = models.First(new { Name = "Jane" });
 
@@ -240,7 +240,7 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 before = () =>
                 {
-                    models = new DynamicModels(new List<ExpandoObject>());
+                    models = new DynamicModels(new List<Prototype>());
 
                     models.Models.Add(new Gemini(new { Name = "Jane" }));
                 };
@@ -255,7 +255,7 @@ namespace Oak.Tests.describe_DynamicModels
         {
             context["last taking in a 'where clause'"] = () =>
             {
-                before = () => models = new DynamicModels(new List<ExpandoObject>());
+                before = () => models = new DynamicModels(new List<Prototype>());
 
                 act = () => resultForFirst = models.Last(new { Name = "Jane" });
 
@@ -276,7 +276,7 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 before = () =>
                 {
-                    models = new DynamicModels(new List<ExpandoObject>());
+                    models = new DynamicModels(new List<Prototype>());
 
                     models.Models.Add(new Gemini(new { Name = "Jane" }));
                 };
@@ -293,13 +293,13 @@ namespace Oak.Tests.describe_DynamicModels
             {
                 before = () =>
                 {
-                    models = new DynamicModels(new List<ExpandoObject>());
+                    models = new DynamicModels(new List<Prototype>());
 
-                    dynamic expando = new ExpandoObject();
+                    dynamic expando = new Prototype();
                     expando.Value = "A";
                     models.Models.Add(expando);
 
-                    expando = new ExpandoObject();
+                    expando = new Prototype();
                     expando.Value = "B";
                     models.Models.Add(expando);
                 };
