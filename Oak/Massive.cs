@@ -374,8 +374,8 @@ namespace Massive
         public virtual DbCommand CreateInsertCommand(object o)
         {
             DbCommand result = null;
-            var expando = GetAttributesToSave(o);
-            var settings = (IDictionary<string, object>)expando;
+            var attributes = GetAttributesToSave(o);
+            var settings = (IDictionary<string, object>)attributes;
             var sbKeys = new StringBuilder();
             var sbVals = new StringBuilder();
             var stub = "INSERT INTO {0} ({1}) \r\n VALUES ({2})";
@@ -403,8 +403,8 @@ namespace Massive
         /// </summary>
         public virtual DbCommand CreateUpdateCommand(object o, object key)
         {
-            var expando = GetAttributesToSave(o);
-            var settings = (IDictionary<string, object>)expando;
+            var attributes = GetAttributesToSave(o);
+            var settings = (IDictionary<string, object>)attributes;
             var sbKeys = new StringBuilder();
             var stub = "UPDATE {0} SET {1} WHERE [{2}] = @{3}";
             var args = new List<object>();

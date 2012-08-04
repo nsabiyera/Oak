@@ -27,7 +27,7 @@ namespace Oak.Tests
 
         string jsonString;
 
-        void describe_expando_to_json()
+        void describe_prototype_to_json()
         {
             before = () =>
             {
@@ -44,7 +44,7 @@ namespace Oak.Tests
 
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
-            it["converts expando"] = () =>
+            it["converts prototype"] = () =>
                 jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7} }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null"));
         }
@@ -106,12 +106,12 @@ namespace Oak.Tests
         {
             before = () =>
             {
-                dynamic expando = new Prototype();
-                expando.Id = 1;
+                dynamic prototype = new Prototype();
+                prototype.Id = 1;
 
                 objectToConvert = new List<dynamic>
                 {
-                    expando,
+                    prototype,
                     new DynamicModel(new { Id = 2 }),
                     new Gemini(new { Id = 3 }),
                 };
@@ -126,7 +126,7 @@ namespace Oak.Tests
         {
             new Each<dynamic, bool, string>()
             {
-                { new Prototype(), true, "expando" },
+                { new Prototype(), true, "prototype" },
                 { new Gemini(), true, "gemini" },
                 { new DynamicModel(), true, "dynamic model" },
                 { new { Name = "Jane Doe" }, true, "anonymous type" },

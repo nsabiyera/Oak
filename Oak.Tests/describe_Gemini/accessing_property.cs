@@ -26,7 +26,7 @@ namespace Oak.Tests.describe_Gemini
                 (gemini.bodysummary as string).should_be("Body Summary");
         }
 
-        void properites_defined_on_underlying_expando()
+        void properites_defined_on_underlying_prototype()
         {
             before = () => gemini = new ParameterlessGemini();
 

@@ -26,9 +26,9 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new Prototype();
-                        expando.Name = "Jane";
-                        models.Models.Add(expando);
+                        dynamic prototype = new Prototype();
+                        prototype.Name = "Jane";
+                        models.Models.Add(prototype);
                     };
 
                     it["any returns true"] = () => resultForAny.should_be_true();
@@ -43,10 +43,10 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new Prototype();
-                        expando.Name = "Jane";
-                        expando.Age = 15;
-                        models.Models.Add(expando);
+                        dynamic prototype = new Prototype();
+                        prototype.Name = "Jane";
+                        prototype.Age = 15;
+                        models.Models.Add(prototype);
                     };
 
                     it["any returns true"] = () => resultForAny.should_be_true();
@@ -56,10 +56,10 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new Prototype();
-                        expando.Name = "Jane";
-                        expando.Age = 10;
-                        models.Models.Add(expando);
+                        dynamic prototype = new Prototype();
+                        prototype.Name = "Jane";
+                        prototype.Age = 10;
+                        models.Models.Add(prototype);
                     };
 
                     it["any returns false"] = () => resultForAny.should_be_false();
@@ -84,9 +84,9 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new Prototype();
-                        expando.Name = "Jane";
-                        models.Models.Add(expando);
+                        dynamic prototype = new Prototype();
+                        prototype.Name = "Jane";
+                        models.Models.Add(prototype);
                     };
 
                     it["returns item"] = () => resultList.Count().should_be(1);
@@ -101,10 +101,10 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new Prototype();
-                        expando.Name = "Jane";
-                        expando.Age = 15;
-                        models.Models.Add(expando);
+                        dynamic prototype = new Prototype();
+                        prototype.Name = "Jane";
+                        prototype.Age = 15;
+                        models.Models.Add(prototype);
                     };
 
                     it["returns item"] = () => resultList.Count().should_be(1);
@@ -114,10 +114,10 @@ namespace Oak.Tests.describe_DynamicModels
                 {
                     before = () =>
                     {
-                        dynamic expando = new Prototype();
-                        expando.Name = "Jane";
-                        expando.Age = 10;
-                        models.Models.Add(expando);
+                        dynamic prototype = new Prototype();
+                        prototype.Name = "Jane";
+                        prototype.Age = 10;
+                        models.Models.Add(prototype);
                     };
 
                     it["result list is empty"] = () => resultList.should_be_empty();
@@ -289,19 +289,19 @@ namespace Oak.Tests.describe_DynamicModels
 
         void describe_OrderBy()
         {
-            context["order by works for expando objects"] = () =>
+            context["order by works for prototype objects"] = () =>
             {
                 before = () =>
                 {
                     models = new DynamicModels(new List<Prototype>());
 
-                    dynamic expando = new Prototype();
-                    expando.Value = "A";
-                    models.Models.Add(expando);
+                    dynamic prototype = new Prototype();
+                    prototype.Value = "A";
+                    models.Models.Add(prototype);
 
-                    expando = new Prototype();
-                    expando.Value = "B";
-                    models.Models.Add(expando);
+                    prototype = new Prototype();
+                    prototype.Value = "B";
+                    models.Models.Add(prototype);
                 };
 
                 act = () => resultList = models.OrderBy(new { Value = "desc" });

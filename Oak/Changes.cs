@@ -50,13 +50,13 @@ namespace Oak
 
         private dynamic BeforeAfter(dynamic before, dynamic after)
         {
-            dynamic expando = new Prototype();
+            dynamic prototype = new Prototype();
 
-            expando.Original = before;
+            prototype.Original = before;
 
-            expando.New = after;
+            prototype.New = after;
 
-            return expando;
+            return prototype;
         }
 
         public dynamic Original(dynamic property)

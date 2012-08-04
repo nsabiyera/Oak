@@ -33,13 +33,13 @@ namespace Oak
         {
             var hash = (model as object).ToDictionary();
 
-            var expando = new Prototype() as IDictionary<string, object>;
+            var prototype = new Prototype() as IDictionary<string, object>;
 
-            hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => expando.Add(kvp.Key, kvp.Value));
+            hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => prototype.Add(kvp.Key, kvp.Value));
 
-            if (expando.Count == 1) return expando.First().Value;
+            if (prototype.Count == 1) return prototype.First().Value;
 
-            return expando;
+            return prototype;
         }
                
         public bool Any(dynamic options)
