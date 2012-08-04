@@ -95,7 +95,9 @@
     <Compile Include="describe_DynamicModel\Classes\Inventory.cs" />
     <Compile Include="describe_DynamicModel\Classes\InventoryItem.cs" />
     <Compile Include="describe_DynamicModel\core_behavior_for_dynamic_model.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\belongs_to.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_for_static_type.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_conventional_schema.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_unconventional_schema.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Author.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Authors.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blog.cs" />
