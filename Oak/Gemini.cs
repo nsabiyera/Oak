@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
     public class Prototype : DynamicObject, IDictionary<string, object>
     {
         Dictionary<string, object> members;
@@ -104,35 +105,35 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
 
-    //[DebuggerNonUserCode]
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         private bool initialized;
 
-        private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> Includes = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
+        private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> ExtendHooks = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
 
         private static List<KeyValuePair<Type, Action<dynamic>>> MethodHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
         private List<Type> types = new List<Type>();
 
-        private static List<KeyValuePair<Type, Action<dynamic>>> ClassHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
+        private static List<KeyValuePair<Type, Action<dynamic>>> InitializationHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
         private List<Type> extendedWith = new List<Type>();
 
         private static Dictionary<Type, List<MethodInfo>> MethodCache = new Dictionary<Type, List<MethodInfo>>();
 
-        private static Dictionary<Type, List<PropertyInfo>> PropertyCache = new Dictionary<Type, List<PropertyInfo>>();
+        private static Dictionary<Type, Dictionary<string, PropertyInfo>> PropertyCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
 
         public virtual List<Type> ExtendedWith()
         {
             return extendedWith;
         }
 
-        public dynamic Expando { get; set; }
+        public dynamic Expando { get; set; } //case invariant expando (ie prototype)
 
         public static void Extend<A, B>()
         {
-            Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(A), (i) =>
+            ExtendHooks.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(A), (i) =>
             {
                 i.Extend<B>();
 
@@ -142,17 +143,17 @@ namespace Oak
 
         public static void Extend<T>(Func<dynamic, dynamic> extension)
         {
-            Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), extension));
+            ExtendHooks.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), extension));
         }
 
         public static void Extend<T>(Action<dynamic> extension)
         {
-            Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), (i) => { extension(i); return null; }));
+            ExtendHooks.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), (i) => { extension(i); return null; }));
         }
 
         public static void Initialized<T>(Action<dynamic> callback)
         {
-            ClassHooks.Add(new KeyValuePair<Type, Action<dynamic>>(typeof(T), callback));
+            InitializationHooks.Add(new KeyValuePair<Type, Action<dynamic>>(typeof(T), callback));
         }
 
         public static void MethodDefined<T>(Action<dynamic> extension)
@@ -178,26 +179,30 @@ namespace Oak
 
         public Gemini(object dto)
         {
+            AttachDtoValues(dto);
+
+            ApplyValuesToWritableProperties();
+
+            AddRedefinableDelegates();
+
+            ConstructTypeHierarchy();
+
+            ApplyExtensions();
+
+            initialized = false;
+        }
+
+        private void AttachDtoValues(object dto)
+        {
             if (dto == null) dto = new Prototype();
 
             if (dto is Prototype) Expando = dto;
 
             else Expando = dto.ToPrototype();
+        }
 
-            foreach (var autoProperty in WritableAutoProperties())
-            {
-                var dict = Expando as IDictionary<string, object>;
-
-                if (dict.ContainsKey(autoProperty.Name))
-                {
-                    autoProperty.SetValue(this, dict[autoProperty.Name], null);
-
-                    (Expando as IDictionary<string, object>).Remove(autoProperty.Name);
-                }
-            }
-
-            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
-
+        private void ConstructTypeHierarchy()
+        {
             var currentType = this.GetType();
 
             while (currentType != typeof(object))
@@ -206,8 +211,16 @@ namespace Oak
 
                 currentType = currentType.BaseType;
             }
+        }
 
-            var includes = Includes.Where(s => types.Contains(s.Key));
+        private void AddRedefinableDelegates()
+        {
+            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
+        }
+
+        private void ApplyExtensions()
+        {
+            var includes = ExtendHooks.Where(s => types.Contains(s.Key));
 
             foreach (var include in includes)
             {
@@ -217,18 +230,42 @@ namespace Oak
 
                 (result.ToPrototype() as IDictionary<string, object>).ToList().ForEach(s => SetMember(s.Key, s.Value));
             }
-
-            initialized = false;
         }
 
-        private IEnumerable<PropertyInfo> WritableAutoProperties()
+        private void ApplyValuesToWritableProperties()
+        {
+            var props = WritableAutoProperties();
+
+            foreach (var key in props.Keys)
+            {
+                var propInfo = props[key];
+
+                var dict = Expando as IDictionary<string, object>;
+
+                if (dict.ContainsKey(propInfo.Name))
+                {
+                    propInfo.SetValue(this, dict[propInfo.Name], null);
+
+                    (Expando as IDictionary<string, object>).Remove(propInfo.Name);
+                }
+            }
+        }
+
+        private Dictionary<string, PropertyInfo> WritableAutoProperties()
         {
             if (!PropertyCache.ContainsKey(GetType()))
             {
-                PropertyCache.Add(GetType(), GetType().GetProperties().Where(s => s.CanWrite && s.Name != "Expando").ToList());
+                PropertyCache.Add(
+                    GetType(),
+                    PropertiesExcludingExpando().ToDictionary(s => s.Name));
             }
 
             return PropertyCache[GetType()];
+        }
+
+        private IEnumerable<PropertyInfo> PropertiesExcludingExpando()
+        {
+            return GetType().GetProperties().Where(s => s.CanWrite && s.Name != "Expando");
         }
 
         private void AddDynamicMember(MethodInfo method)
@@ -362,16 +399,12 @@ namespace Oak
             return TryGetMember(property, out result);
         }
 
-
-        Dictionary<string, PropertyInfo> instanceWritableAutoPropertyNames;
+        static Dictionary<string, PropertyInfo> emptyDictionary = new Dictionary<string, PropertyInfo>();
         Dictionary<string, PropertyInfo> InstanceWritableAutoProperties()
         {
-            if (instanceWritableAutoPropertyNames == null)
-            {
-                instanceWritableAutoPropertyNames = new Dictionary<string, PropertyInfo>(WritableAutoProperties().ToDictionary(s => s.Name));
-            }
+            if (PropertyCache.ContainsKey(GetType())) return PropertyCache[GetType()];
 
-            return instanceWritableAutoPropertyNames;
+            return emptyDictionary;
         }
 
         public bool TryGetMember(string name, out object result)
@@ -409,7 +442,7 @@ namespace Oak
 
             initialized = true;
 
-            var hooks = ClassHooks.Where(s => types.Contains(s.Key));
+            var hooks = InitializationHooks.Where(s => types.Contains(s.Key));
 
             foreach (var hook in hooks) hook.Value(this);
         }
@@ -507,9 +540,11 @@ namespace Oak
         {
             var dynamicProps = HashExcludingDelegates();
 
-            foreach(var prop in WritableAutoProperties())
+            var props = WritableAutoProperties();
+
+            foreach (var key in props.Keys)
             {
-                dynamicProps.Add(prop.Name, prop.GetValue(this, null));
+                dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
             }
 
             return dynamicProps;
@@ -624,11 +659,11 @@ namespace Oak
         {
             if (AllParametersAreNamed(args, argNames))
             {
-                var expando = new Prototype() as IDictionary<string, object>;
+                var prototype = new Prototype() as IDictionary<string, object>;
 
-                for (int i = 0; i < args.Count(); i++) expando.Add(argNames[i], args[i]);
+                for (int i = 0; i < args.Count(); i++) prototype.Add(argNames[i], args[i]);
 
-                return expando;
+                return prototype;
             }
 
             return args.FirstOrDefault();
@@ -641,22 +676,22 @@ namespace Oak
 
         public virtual dynamic Select(params string[] args)
         {
-            var expando = new Prototype() as IDictionary<string, object>;
+            var prototype = new Prototype() as IDictionary<string, object>;
 
-            args.ForEach(s => expando.Add(s, GetMember(s)));
+            args.ForEach(s => prototype.Add(s, GetMember(s)));
 
-            return new Gemini(expando);
+            return new Gemini(prototype);
         }
 
         public virtual dynamic Exclude(params string[] args)
         {
-            var expando = (HashOfProperties() as IDictionary<string, object>).ToList();
+            var prototype = (HashOfProperties() as IDictionary<string, object>).ToList();
 
             var dictionary = new Prototype() as IDictionary<string, object>;
 
             args = args.Select(s => s.ToLower()).ToArray();
 
-            expando.ForEach(s =>
+            prototype.ForEach(s =>
             {
                 if (!args.Contains(s.Key.ToLower())) dictionary.Add(s.Key, GetMember(s.Key));
             });

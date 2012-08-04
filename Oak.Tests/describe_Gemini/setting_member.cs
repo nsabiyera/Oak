@@ -13,19 +13,19 @@ namespace Oak.Tests.describe_Gemini
     {
         void when_setting_property_of_gemini()
         {
-            it["sets property on underlying expando"] = () =>
+            it["sets property on underlying prototype"] = () =>
             {
                 gemini.Title = "Some other name";
                 (blog.Title as string).should_be("Some other name");
             };
 
-            it["sets property of underlying expando even if property's first letter doesn't match case"] = () =>
+            it["sets property of underlying prototype even if property's first letter doesn't match case"] = () =>
             {
                 gemini.title = "Some other name";
                 (blog.Title as string).should_be("Some other name");
             };
 
-            it["sets property of underlying expando even if property's first letter is capitalized, but underlying property is lowercase"] = () =>
+            it["sets property of underlying prototype even if property's first letter is capitalized, but underlying property is lowercase"] = () =>
             {
                 gemini.Body = "Some other name";
                 (blog.body as string).should_be("Some other name");
