@@ -291,17 +291,27 @@ namespace Oak
             return TryGetMember(property, out result);
         }
 
+
+        Dictionary<string, PropertyInfo> instanceWritableAutoPropertyNames;
+        Dictionary<string, PropertyInfo> InstanceWritableAutoProperties()
+        {
+            if (instanceWritableAutoPropertyNames == null)
+            {
+                instanceWritableAutoPropertyNames = new Dictionary<string, PropertyInfo>(WritableAutoProperties().ToDictionary(s => s.Name));
+            }
+
+            return instanceWritableAutoPropertyNames;
+        }
+
         public bool TryGetMember(string name, out object result)
         {
             InitializeIfNeeded(name);
 
             var dictionary = Hash();
 
-            var prop = WritableAutoProperties().FirstOrDefault(s => s.Name == name);
-
-            if (prop != null)
+            if (InstanceWritableAutoProperties().ContainsKey(name))
             {
-                result = prop.GetValue(this, null);
+                result = InstanceWritableAutoProperties()[name].GetValue(this, null);
                 return true;
             }
 
@@ -333,6 +343,13 @@ namespace Oak
 
             result = null;
             return false;
+        }
+
+        public dynamic InitializeExtensions()
+        {
+            InitializeIfNeeded(null);
+
+            return this;
         }
 
         void InitializeIfNeeded(string property)

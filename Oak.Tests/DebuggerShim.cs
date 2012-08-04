@@ -9,7 +9,7 @@ public class DebuggerShim
     //[Test]
     public void debug()
     {
-        var tagOrClassName = "class_or_tag_you_want_to_debug";
+        var tagOrClassName = "changes_core_behavior_for_static_object";
 
         var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 

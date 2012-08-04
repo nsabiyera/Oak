@@ -8,17 +8,75 @@ using Oak.Tests.describe_DynamicModel.describe_Changes.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Changes
 {
-    class core_behavior_for_tracking_changes : nspec
+    class changes_core_behavior_for_static_object : core_behavior_for_tracking_changes
     {
-        dynamic person;
+        public override dynamic NewPerson(object dto)
+        {
+            return new PersonWithAutoProps(dto).InitializeExtensions();
+        }
+    }
 
-        dynamic gemini;
+    class changes_core_behavior_for_dyanmic_object : core_behavior_for_tracking_changes
+    {
+        public override dynamic NewPerson(object dto)
+        {
+            return new Person(dto);
+        }
+
+        void change_tracking_can_be_added_directly_to_gemini()
+        {
+            before = () =>
+            {
+                gemini = new Gemini(new { FirstName = "Amir" });
+
+                new Changes(gemini);
+            };
+
+            it["change tracking methods exist when changes is mixed in"] = () =>
+                ((bool)gemini.HasChanged()).should_be(false);
+        }
+
+        void deleting_a_property()
+        {
+            act = () =>
+            {
+                person = new Person(new { FirstName = "Jane" });
+
+                person.DeleteMember("FirstName");
+            };
+
+            it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
+
+            it["lists changes"] = () =>
+            {
+                IDictionary<string, dynamic> changes = person.Changes();
+
+                (changes["FirstName"].Original as object).should_be("Jane");
+                (changes["FirstName"].New as object).should_be(null);
+            };
+
+            context["different property is added"] = () =>
+            {
+                act = () => person.SetMember("LastName", "");
+
+                it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
+            };
+        }
+    }
+    
+    abstract class core_behavior_for_tracking_changes : nspec
+    {
+        public dynamic person;
+
+        public dynamic gemini;
+
+        public abstract dynamic NewPerson(object dto);
 
         void tracking_changes_after_new_instantiation_of_model()
         {
             act = () =>
             {
-                person = new Person();
+                person = NewPerson(null);
             };
 
             it["has no changes"] = () => ((bool)person.HasChanged()).should_be_false();
@@ -66,7 +124,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
         {
             act = () =>
             {
-                person = new Person(new { FirstName = "Jane" });
+                person = NewPerson(new { FirstName = "Jane" });
             };
 
             it["has no changes"] = () => ((bool)person.HasChanged()).should_be_false();
@@ -102,46 +160,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
 
                 it["isn't considered a change"] = () => ((bool)person.HasChanged()).should_be_false();
             };
-        }
-
-        void deleting_a_property()
-        {
-            act = () =>
-            {
-                person = new Person(new { FirstName = "Jane" });
-
-                person.DeleteMember("FirstName");
-            };
-
-            it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
-
-            it["lists changes"] = () =>
-            {
-                IDictionary<string, dynamic> changes = person.Changes();
-
-                (changes["FirstName"].Original as object).should_be("Jane");
-                (changes["FirstName"].New as object).should_be(null);
-            };
-
-            context["different property is added"] = () =>
-            {
-                act = () => person.SetMember("LastName", "");
-
-                it["has changes"] = () => ((bool)person.HasChanged()).should_be_true();
-            };
-        }
-
-        void change_tracking_can_be_added_directly_to_gemini()
-        {
-            before = () =>
-            {
-                gemini = new Gemini(new { FirstName = "Amir" });
-
-                new Changes(gemini);
-            };
-
-            it["change tracking methods exist when changes is mixed in"] = () =>
-                ((bool)gemini.HasChanged()).should_be(false);
         }
     }
 }
