@@ -5,6 +5,22 @@ using System.Text;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Changes.Classes
 {
+    public class PersonWithAutoProps : DynamicModel
+    {
+        public PersonWithAutoProps(object dto)
+            : base(dto)
+        {
+            
+        }
+
+        public PersonWithAutoProps()
+        {
+            
+        }
+
+        public string FirstName { get; set; }
+    }
+
     public class Person : DynamicModel
     {
         public Person()

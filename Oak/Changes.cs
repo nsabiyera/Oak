@@ -8,13 +8,13 @@ namespace Oak
 {
     public class Changes
     {
-        dynamic @this;
+        dynamic gemini;
 
         IDictionary<string, dynamic> originalValues;
 
         IDictionary<string, dynamic> CurrentValues()
         {
-            return @this.Hash();
+            return gemini.HashOfProperties();
         }
 
         public Changes(dynamic gemini)
@@ -25,9 +25,9 @@ namespace Oak
 
             gemini.SetMember("Changes", new DynamicFunctionWithParam(GetChanges));
 
-            originalValues = new Dictionary<string, object>(gemini.Hash());
+            originalValues = new Dictionary<string, object>(gemini.HashOfProperties());
 
-            @this = gemini;
+            this.gemini = gemini;
         }
 
         public dynamic GetChanges(dynamic property)
