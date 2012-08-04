@@ -21,8 +21,11 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return 
-            new HasMany(comments);
+            yield return
+            new HasMany(comments) { ForeignKey = "BlogId" };
+
+            yield return
+            new HasMany(comments, "Roses") { ForeignKey = "BlogId" }; //a rose by any other name
         }
 
         public int Id { get; set; }

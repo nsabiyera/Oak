@@ -156,7 +156,7 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            ForeignKey = ForeignKeyFor(model);
+            ForeignKey = ForeignKey ?? ForeignKeyFor(model);
 
             var toTable = Repository.GetType().Name;
 
@@ -184,7 +184,7 @@ namespace Oak
         {
             var entity = new Gemini(attributes);
 
-            entity.SetMember(ForeignKeyFor(model), model.GetMember(Id()));
+            entity.SetMember(ForeignKey, model.GetMember(Id()));
 
             return Repository.Projection(entity);
         }

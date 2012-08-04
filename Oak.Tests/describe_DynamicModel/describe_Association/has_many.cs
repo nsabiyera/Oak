@@ -9,35 +9,57 @@ using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    class has_many : nspec
+    [Tag("wip")]
+    class has_many_for_static_type :has_many
     {
-        Seed seed;
+        void before_each()
+        {
+            blogs = new Blogs();
 
-        dynamic blogId;
+            blogs.Projection = d => new BlogWithAutoProps(d).InitializeExtensions();
 
-        dynamic otherBlogId;
+            comments = new Comments();
 
-        dynamic commentId;
+            comments.Projection = d => new CommentWithAutoProps(d).InitializeExtensions();
+        }
+    }
 
-        IEnumerable<dynamic> blogComments;
+    [Tag("wip")]
+    class has_many_for_dynamic_type : has_many
+    {
+        void before_each()
+        {
+            blogs = new Blogs();
 
-        IEnumerable<dynamic> blogCommentIds;
+            comments = new Comments();
+        }
+    }
 
-        Blogs blogs;
+    abstract class has_many : nspec
+    {
+        public Seed seed;
 
-        dynamic blog;
+        public dynamic blogId;
 
-        dynamic comment;
+        public dynamic otherBlogId;
 
-        Comments comments;
+        public dynamic commentId;
+
+        public IEnumerable<dynamic> blogComments;
+
+        public IEnumerable<dynamic> blogCommentIds;
+
+        public Blogs blogs;
+
+        public dynamic blog;
+
+        public dynamic comment;
+
+        public Comments comments;
 
         void before_each()
         {
             seed = new Seed();
-
-            blogs = new Blogs();
-
-            comments = new Comments();
         }
 
         void describe_has_many()
