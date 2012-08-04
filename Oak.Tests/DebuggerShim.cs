@@ -9,7 +9,7 @@ public class DebuggerShim
     //[Test]
     public void debug()
     {
-        var tagOrClassName = "changes_core_behavior_for_static_object";
+        var tagOrClassName = "has_many_for_static_type";
 
         var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 

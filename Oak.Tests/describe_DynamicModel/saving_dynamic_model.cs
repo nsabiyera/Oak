@@ -7,15 +7,31 @@ using Oak.Tests.describe_DynamicModel.Classes;
 
 namespace Oak.Tests.describe_DynamicModel
 {
-    class saving_dynamic_model : nspec
+    class saving_dynamic_model_for_static_type : saving_dynamic_model
     {
-        Seed seed;
+        public override dynamic NewInventoryItem(object o)
+        {
+            return new InventoryItemWithAutoProps(o);
+        }
+    }
 
-        dynamic item;
+    class saving_dynamic_model_for_dynamic_type : saving_dynamic_model
+    {
+        public override dynamic NewInventoryItem(object o)
+        {
+            return new InventoryItem(o);
+        }
+    }
+    
+    abstract class saving_dynamic_model : nspec
+    {
+        public Seed seed;
 
-        Inventory inventory;
+        public dynamic item;
 
-        dynamic itemId;
+        public Inventory inventory;
+
+        public dynamic itemId;
 
         void before_each()
         {
@@ -32,11 +48,13 @@ namespace Oak.Tests.describe_DynamicModel
             }).ExecuteNonQuery();
         }
 
+        public abstract dynamic NewInventoryItem(object o);
+
         void saving_model()
         {
             context["new model"] = () =>
             {
-                before = () => item = new InventoryItem(new { Sku = "1112212" });
+                before = () => item = NewInventoryItem(new { Sku = "1112212" });
 
                 act = () => item.Id = inventory.Insert(item);
 
