@@ -15,7 +15,7 @@ namespace Oak.Tests.describe_Gemini
         {
             before = () =>
             {
-                blog = new ExpandoObject();
+                blog = new Prototype();
                 blog.Title = "Working With Oak";
                 blog.Body = "Oak is tight, yo.";
                 blog.Author = "Amir";

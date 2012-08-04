@@ -85,7 +85,7 @@ namespace Oak
         {
             if (options == null) options = new { discardCache = false };
 
-            options = (options as object).ToExpando();
+            options = (options as object).ToPrototype();
 
             return options.discardCache;
         }

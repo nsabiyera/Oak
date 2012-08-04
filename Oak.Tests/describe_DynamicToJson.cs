@@ -31,7 +31,7 @@ namespace Oak.Tests
         {
             before = () =>
             {
-                objectToConvert = new ExpandoObject();
+                objectToConvert = new Prototype();
                 objectToConvert.Id = 15;
                 objectToConvert.String = "hello";
                 objectToConvert.Char = 'a';
@@ -106,7 +106,7 @@ namespace Oak.Tests
         {
             before = () =>
             {
-                dynamic expando = new ExpandoObject();
+                dynamic expando = new Prototype();
                 expando.Id = 1;
 
                 objectToConvert = new List<dynamic>
@@ -126,14 +126,14 @@ namespace Oak.Tests
         {
             new Each<dynamic, bool, string>()
             {
-                { new ExpandoObject(), true, "expando" },
+                { new Prototype(), true, "expando" },
                 { new Gemini(), true, "gemini" },
                 { new DynamicModel(), true, "dynamic model" },
                 { new { Name = "Jane Doe" }, true, "anonymous type" },
                 { "Jane Doe", false, "string" },
-                { new List<object> { new ExpandoObject(), new Gemini(), new DynamicModel() }, true, "list containing convertable types" },
+                { new List<object> { new Prototype(), new Gemini(), new DynamicModel() }, true, "list containing convertable types" },
                 { new List<string>() { "Jane", "Doe" }, false, "list of string" },
-                { new List<object> { new { Name = "Jane Doe" }, new ExpandoObject(), new Gemini() }, true, "list containing gemini's and anonymous types" },
+                { new List<object> { new { Name = "Jane Doe" }, new Prototype(), new Gemini() }, true, "list containing gemini's and anonymous types" },
                 { new List<object> { new { Name = "Jane Doe" }, "Foobar" }, false, "list containing convertable types and non convertable types" },
                 { new List<string>(), true, "empty list" }
             }.Do((entity, expectedResult, type) =>

@@ -34,7 +34,7 @@ namespace Oak
         {
             if (property != null) return ChangesFor(property);
 
-            var dictionary = new ExpandoObject() as IDictionary<string, object>;
+            var dictionary = new Prototype() as IDictionary<string, object>;
 
             var keys = CurrentValues().Keys.Union(originalValues.Keys).Distinct();
 
@@ -50,7 +50,7 @@ namespace Oak
 
         private dynamic BeforeAfter(dynamic before, dynamic after)
         {
-            dynamic expando = new ExpandoObject();
+            dynamic expando = new Prototype();
 
             expando.Original = before;
 
