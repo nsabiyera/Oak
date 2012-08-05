@@ -80,6 +80,7 @@ namespace Oak
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return (Enumerable() as System.Collections.IEnumerable).GetEnumerator(); }
     }
 
+    [DebuggerNonUserCode]
     public static class HelpfulExtensions
     {
         public static void ForEach(this object enumerable, Action<dynamic> action)
@@ -234,7 +235,7 @@ namespace Oak
 
         private void ApplyValuesToWritableProperties()
         {
-            var props = WritableAutoProperties();
+            var props = AutoProperties();
 
             foreach (var key in props.Keys)
             {
@@ -242,7 +243,7 @@ namespace Oak
 
                 var dict = Expando as IDictionary<string, object>;
 
-                if (dict.ContainsKey(propInfo.Name))
+                if (dict.ContainsKey(propInfo.Name) && propInfo.CanWrite)
                 {
                     propInfo.SetValue(this, dict[propInfo.Name], null);
 
@@ -251,7 +252,7 @@ namespace Oak
             }
         }
 
-        private Dictionary<string, PropertyInfo> WritableAutoProperties()
+        private Dictionary<string, PropertyInfo> AutoProperties()
         {
             if (!PropertyCache.ContainsKey(GetType()))
             {
@@ -265,7 +266,7 @@ namespace Oak
 
         private IEnumerable<PropertyInfo> PropertiesExcludingExpando()
         {
-            return GetType().GetProperties().Where(s => s.CanWrite && s.Name != "Expando");
+            return GetType().GetProperties().Where(s => s.Name != "Expando");
         }
 
         private void AddDynamicMember(MethodInfo method)
@@ -400,11 +401,9 @@ namespace Oak
         }
 
         static Dictionary<string, PropertyInfo> emptyDictionary = new Dictionary<string, PropertyInfo>();
-        Dictionary<string, PropertyInfo> InstanceWritableAutoProperties()
+        Dictionary<string, PropertyInfo> InstanceAutoProperties()
         {
-            if (PropertyCache.ContainsKey(GetType())) return PropertyCache[GetType()];
-
-            return emptyDictionary;
+            return PropertyCache[GetType()];
         }
 
         public bool TryGetMember(string name, out object result)
@@ -419,9 +418,9 @@ namespace Oak
                 return true;
             }
 
-            if (InstanceWritableAutoProperties().ContainsKey(name))
+            if (InstanceAutoProperties().ContainsKey(name))
             {
-                result = InstanceWritableAutoProperties()[name].GetValue(this, null);
+                result = InstanceAutoProperties()[name].GetValue(this, null);
                 return true;
             }
 
@@ -512,6 +511,12 @@ namespace Oak
                 return true;
             }
 
+            if (InstanceAutoProperties().ContainsKey(property))
+            {
+                InstanceAutoProperties()[property].SetValue(this, value, null);
+                return true;
+            }
+
             dictionary.Add(property, value);
 
             if (!suppress)
@@ -540,10 +545,12 @@ namespace Oak
         {
             var dynamicProps = HashExcludingDelegates();
 
-            var props = WritableAutoProperties();
+            var props = AutoProperties();
 
             foreach (var key in props.Keys)
             {
+                if (props[key].CanRead == false) continue;
+
                 dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
             }
 

@@ -9,5 +9,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             Projection = d => new Game(d);
         }
+
+        public override object Insert(dynamic o)
+        {
+            return base.Insert(o.Exclude("Id") as object);
+        }
     }
 }

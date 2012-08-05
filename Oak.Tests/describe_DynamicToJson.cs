@@ -10,6 +10,7 @@ namespace Oak.Tests
 {
     public class SomeDynamicModel : DynamicModel
     {
+        string voodoo;
         public SomeDynamicModel(object dto)
             : base(dto)
         {
@@ -19,13 +20,27 @@ namespace Oak.Tests
         {
             get { return "SomeName"; }
         }
+
+        public string Voodoo
+        {
+            set
+            {
+                voodoo = value;
+            }
+        }
     }
 
+    [Tag("wip")]
     class describe_DynamicToJson : nspec
     {
         dynamic objectToConvert;
 
         string jsonString;
+
+        void before_each()
+        {
+            jsonString = null;
+        }
 
         void describe_prototype_to_json()
         {
@@ -53,13 +68,6 @@ namespace Oak.Tests
         {
             before = () =>
             {
-
-            };
-
-            act = () =>
-
-            it["converts gemini"] = () => { };
-            {
                 objectToConvert = new Gemini(new
                 {
                     Id = 15,
@@ -70,9 +78,12 @@ namespace Oak.Tests
                     Guid = Guid.Empty,
                     Decimal = (decimal)15,
                 });
+            };
 
-                jsonString = DynamicToJson.Convert(objectToConvert);
+            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
+            it["converts gemini"] = () =>
+            {
                 jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15));
 

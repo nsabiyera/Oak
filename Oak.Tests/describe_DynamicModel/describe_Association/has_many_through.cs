@@ -8,32 +8,39 @@ using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    class has_many_through : nspec
+    class has_many_through_for_static_type : has_many_through
     {
-        dynamic game;
+        void before_each()
+        {
+            seed = new Seed();
 
-        dynamic gearsOfWarGameId;
+            users = new Users();
 
-        dynamic mirrorsEdgeGameId;
+            users.Projection = d => new UserWithAutoProps(d).InitializeExtensions();
 
-        Seed seed;
+            games = new Games();
 
-        IEnumerable<dynamic> userGames;
+            library = new Library();
+        }
 
-        IEnumerable<dynamic> gamesIds;
+        void retriving_games_for_user_library()
+        {
+            before = () => SetupGameLibraryScenario();
 
-        dynamic userId;
+            act = () => userGames = users.Single(userId).Games();
 
-        dynamic user;
+            it["contains game for user"] = () =>
+                (userGames.First().Title as string).should_be("Gears of War");
 
-        dynamic otherUser;
+            it["has a reference back to the user the game belongs to"] = () =>
+            {
+                (userGames.First().UserWithAutoProps.Email as string).should_be("user@example.com");
+            };
+        }
+    }
 
-        Users users;
-
-        Games games;
-
-        Library library;
-
+    class has_many_through_for_dynamic_type : has_many_through
+    {
         void before_each()
         {
             seed = new Seed();
@@ -45,49 +52,80 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             library = new Library();
         }
 
-        void describe_has_many_through()
+        void retriving_games_for_user_library()
         {
-            context["given users have a library of games (user has games through library)"] = () =>
-            {
-                before = () =>
-                {
-                    seed.PurgeDb();
+            before = () => SetupGameLibraryScenario();
 
-                    seed.CreateTable("Users", new dynamic[] {
+            act = () => userGames = users.Single(userId).Games();
+
+            it["contains game for user"] = () =>
+                (userGames.First().Title as string).should_be("Gears of War");
+
+            it["has a reference back to the user the game belongs to"] = () =>
+            {
+                (userGames.First().User.Email as string).should_be("user@example.com");
+            };
+        }
+    }
+
+    abstract class has_many_through : nspec
+    {
+        public dynamic game;
+
+        public dynamic gearsOfWarGameId;
+
+        public dynamic mirrorsEdgeGameId;
+
+        public Seed seed;
+
+        public IEnumerable<dynamic> userGames;
+
+        public IEnumerable<dynamic> gamesIds;
+
+        public dynamic userId;
+
+        public dynamic user;
+
+        public dynamic otherUser;
+
+        public Users users;
+
+        public Games games;
+
+        public Library library;
+
+        public void SetupGameLibraryScenario()
+        {
+            seed.PurgeDb();
+
+            seed.CreateTable("Users", new dynamic[] {
                         new { Id = "int", Identity = true, PrimaryKey = true },
                         new { Email = "nvarchar(255)" }
                     }).ExecuteNonQuery();
 
-                    seed.CreateTable("Games", new dynamic[] {
+            seed.CreateTable("Games", new dynamic[] {
                         new { Id = "int", Identity = true, PrimaryKey = true },
                         new { Title = "nvarchar(255)" }
                     }).ExecuteNonQuery();
 
-                    seed.CreateTable("Library", new dynamic[] {
+            seed.CreateTable("Library", new dynamic[] {
                         new { Id = "int", Identity = true, PrimaryKey = true },
                         new { UserId = "int", ForeignKey = "Users(Id)" },
                         new { GameId = "int", ForeignKey = "Games(Id)" },
                     }).ExecuteNonQuery();
 
-                    userId = new { Email = "user@example.com" }.InsertInto("Users");
+            userId = new { Email = "user@example.com" }.InsertInto("Users");
 
-                    gearsOfWarGameId = new { Title = "Gears of War" }.InsertInto("Games");
+            gearsOfWarGameId = new { Title = "Gears of War" }.InsertInto("Games");
 
-                    new { UserId = userId, GameId = gearsOfWarGameId }.InsertInto("Library");
-                };
+            new { UserId = userId, GameId = gearsOfWarGameId }.InsertInto("Library");
+        }
 
-                context["retriving games for user's library"] = () =>
-                {
-                    act = () => userGames = users.Single(userId).Games();
-
-                    it["contains game for user"] = () =>
-                        (userGames.First().Title as string).should_be("Gears of War");
-
-                    it["has a reference back to the user the game belongs to"] = () =>
-                    {
-                        (userGames.First().User.Email as string).should_be("user@example.com");
-                    };
-                };
+        void describe_has_many_through()
+        {
+            context["given users have a library of games (user has games through library)"] = () =>
+            {
+                before = () => SetupGameLibraryScenario();
 
                 context["cacheing"] = () =>
                 {
@@ -125,7 +163,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
 
         void newing_up_has_many_association()
         {
-            before = () => user = new User(new { Id = 100 });
+            before = () =>
+            {
+                SetupGameLibraryScenario();
+
+                user = new User(new { Id = 100 });
+            };
 
             context["building a game for user"] = () =>
             {

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Dynamic;
 using Oak;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace System
 {
     //object extensions not part of massive
+    [DebuggerNonUserCode]
     public static class TypeExtensions
     {
         public static bool IsOfType<T>(this object o)
@@ -21,6 +23,7 @@ namespace System
         }
     }
 
+    [DebuggerNonUserCode]
     public static class DynamicExtensions
     {
         public static dynamic ToPrototype(this object o)

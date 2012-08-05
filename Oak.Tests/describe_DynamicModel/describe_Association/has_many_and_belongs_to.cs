@@ -8,7 +8,6 @@ using Oak.Tests.describe_DynamicModel.describe_Association.Classes.Unconventiona
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    [Tag("wip")]
     class has_many_and_belongs_to_static_type : has_many_and_belongs_to
     {
         void before_each()
