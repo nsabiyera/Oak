@@ -482,6 +482,8 @@ namespace Massive
                 {
                     if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
 
+                    else if (IsIdentityInsertException(ex)) throw TryExcludingIdentity(ex);
+
                     else throw;
                 }
             }
@@ -491,6 +493,30 @@ namespace Massive
             if (int.TryParse(result.ToString(), out outInt)) return outInt;
 
             return result;
+        }
+
+        private bool IsIdentityInsertException(SqlException ex)
+        {
+            return ex.Message.Contains("Cannot insert explicit value for identity column in table");
+        }
+
+        private InvalidOperationException TryExcludingIdentity(SqlException ex)
+        {
+            return new InvalidOperationException(
+@"Looks like you are trying to save a property that is considered an Identity column.
+To exclude unwanted properties, override the IDictionary<string, object> GetAttributesToSave(object o) method on your repository.
+Here is an example of how to exclude unwanted properties: 
+
+public class " + this.GetType().Name + @" : " + this.GetType().BaseType.Name + @"
+{
+    public override IDictionary<string, object> GetAttributesToSave(object o)
+    {
+        return base.GetAttributesToSave(o).Exclude(""Id""); //this would be your identity column
+    }
+}
+
+Sql Exception: 
+" + ex.Message);
         }
 
         private bool IsInvalidColumnException(SqlException ex)
