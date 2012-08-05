@@ -22,6 +22,81 @@ namespace Oak.Tests.describe_DynamicModel
             return new InventoryItem(o);
         }
     }
+
+    [Tag("wip")]
+    class saving_model_that_contains_properties_that_dont_map_to_column : nspec
+    {
+        public Seed seed;
+
+        public dynamic item;
+
+        public Inventory inventory;
+
+        public dynamic itemId;
+
+        void before_each()
+        {
+            inventory = new Inventory();
+
+            seed = new Seed();
+
+            seed.PurgeDb();
+
+            seed.CreateTable("Inventory", new dynamic[] 
+            {
+                new { Id = "int", Identity = true, PrimaryKey = true },
+                new { Sku = "nvarchar(255)" }
+            }).ExecuteNonQuery();
+        }
+
+        void inserting_model_with_invalid_props()
+        {
+            it["gives friendly exception"] = () =>
+            {
+                try
+                {
+                    var item = new InventoryItemWithCustomProps(new { Sku = "Foobar" });
+
+                    inventory.Insert(item);
+
+                    throw new Exception("the correct InvalidOperationException wasn't thrown");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ex.Message.should_contain("override the IDictionary<string, object> GetAttributesToSave(object o) method on your repository");
+
+                    ex.InnerException.should_be(null); //setting the inner exception screws up the YSOD in mvc
+                }
+            };
+        }
+
+        void updating_model_with_invalid_props()
+        {
+            it["gives friendly exception"] = () =>
+            {
+                itemId = new { Sku = "Foobar1" }.InsertInto("Inventory");
+
+                try
+                {
+                    inventory.Projection = d => new InventoryItemWithCustomProps(d);
+
+                    var item = inventory.Single(itemId);
+
+                    item.Sku = "New Sku";
+
+                    inventory.Update(item, item.Id);
+
+                    throw new Exception("the correct InvalidOperationException wasn't thrown");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ex.Message.should_contain("override the IDictionary<string, object> GetAttributesToSave(object o) method on your repository");
+
+                    ex.InnerException.should_be(null); //setting the inner exception screws up the YSOD in mvc
+                }
+            };
+        }
+    }
     
     abstract class saving_dynamic_model : nspec
     {

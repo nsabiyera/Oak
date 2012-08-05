@@ -315,7 +315,17 @@ namespace Massive
                     {
                         cmd.Connection = conn;
                         cmd.Transaction = tx;
-                        result += cmd.ExecuteNonQuery();
+                        try
+                        {
+                            result += cmd.ExecuteNonQuery();    
+                        }
+                        catch (SqlException ex)
+                        {
+                            if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
+
+                            else throw;
+                        }
+                        
                     }
                     tx.Commit();
                 }
@@ -406,7 +416,7 @@ namespace Massive
             return result;
         }
 
-        public virtual dynamic GetAttributesToSave(object o)
+        public virtual IDictionary<string, object> GetAttributesToSave(object o)
         {
             dynamic attributes = null;
 
@@ -433,7 +443,7 @@ namespace Massive
 
             return o is ValueType;
         }
-        
+
         /// <summary>
         /// Removes one or more records from the DB according to the passed-in WHERE
         /// </summary>
@@ -460,11 +470,20 @@ namespace Massive
             dynamic result = 0;
             using (var conn = OpenConnection())
             {
-                var cmd = CreateInsertCommand(o);
-                cmd.Connection = conn;
-                cmd.ExecuteNonQuery();
-                cmd.CommandText = "SELECT @@IDENTITY as newID";
-                result = cmd.ExecuteScalar();
+                try
+                {
+                    var cmd = CreateInsertCommand(o);
+                    cmd.Connection = conn;
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "SELECT @@IDENTITY as newID";
+                    result = cmd.ExecuteScalar();
+                }
+                catch (SqlException ex)
+                {
+                    if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
+
+                    else throw;
+                }
             }
 
             int outInt = 0;
@@ -473,6 +492,31 @@ namespace Massive
 
             return result;
         }
+
+        private bool IsInvalidColumnException(SqlException ex)
+        {
+            return ex.Message.Contains("Invalid column name");
+        }
+
+        private InvalidOperationException TryExcludingColumn(SqlException ex)
+        {
+            return new InvalidOperationException(
+@"Looks like you are trying to save a property that doesn't exist in your database.
+To exclude unwanted properties, override the IDictionary<string, object> GetAttributesToSave(object o) method on your repository.
+Here is an example of how to exclude unwanted properties: 
+
+public class " + this.GetType().Name + @" : " + this.GetType().BaseType.Name + @"
+{
+    public override IDictionary<string, object> GetAttributesToSave(object o)
+    {
+        return base.GetAttributesToSave(o).Exclude(""SomeProperty"", ""AnotherProperty"");
+    }
+}
+
+Sql Exception: 
+" + ex.Message);
+        }
+
         /// <summary>
         /// Updates a record in the database. You can pass in an Anonymous object, an ExpandoObject,
         /// A regular old POCO, or a NameValueCollection from a Request.Form or Request.QueryString

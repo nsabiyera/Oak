@@ -21,6 +21,11 @@ namespace System
         {
             return o is T;
         }
+
+        public static IDictionary<string, object> Exclude(this IDictionary<string, object> dictionary, params string[] keys)
+        {
+            return dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
+        }
     }
 
     [DebuggerNonUserCode]
