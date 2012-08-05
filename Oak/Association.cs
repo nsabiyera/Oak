@@ -587,7 +587,7 @@ namespace Oak
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using)
-                    .Replace("{fromColumn}", fromColumn), model.Expando.Id as object)
+                    .Replace("{fromColumn}", fromColumn), model.Prototype.Id as object)
                     .FirstOrDefault();
         }
 

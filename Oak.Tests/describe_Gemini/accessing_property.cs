@@ -34,14 +34,14 @@ namespace Oak.Tests.describe_Gemini
 
             context["tacking on properties after the fact is allowed"] = () =>
             {
-                act = () => gemini.Expando.NewProp = "new prop";
+                act = () => gemini.Prototype.NewProp = "new prop";
 
                 it["new prop is accessible"] = () => (gemini.NewProp as string).should_be("new prop");
             };
 
             context["tacking on methods after the fact is allowed"] = () =>
             {
-                act = () => gemini.Expando.NewProp = new Func<string, string>((s) => s.ToUpper());
+                act = () => gemini.Prototype.NewProp = new Func<string, string>((s) => s.ToUpper());
 
                 it["new method is accessible"] = () => (gemini.NewProp("hello") as string).should_be("HELLO");
             };

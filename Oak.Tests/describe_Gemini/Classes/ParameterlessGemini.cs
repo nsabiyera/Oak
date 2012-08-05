@@ -12,8 +12,8 @@ namespace Oak.Tests.describe_Gemini.Classes
     {
         public ParameterlessGemini()
         {
-            Expando.FirstName = "";
-            Expando.LastName = "";
+            Prototype.FirstName = "";
+            Prototype.LastName = "";
         }
     }
 }

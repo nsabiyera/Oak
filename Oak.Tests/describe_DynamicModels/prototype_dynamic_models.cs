@@ -7,7 +7,7 @@ using System.Dynamic;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    class expando_dynamic_models : _dynamic_models
+    class prototype_dynamic_models : _dynamic_models
     {
         void describe_Any()
         {

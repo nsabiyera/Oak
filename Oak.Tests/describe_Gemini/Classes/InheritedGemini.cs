@@ -18,14 +18,14 @@ namespace Oak.Tests.describe_Gemini.Classes
 
         public string FirstLetter()
         {
-            return (Expando.Title as string).First().ToString();
+            return (Prototype.Title as string).First().ToString();
         }
 
         public string FirstName
         {
             get
             {
-                return (Expando.Title as string).Split(' ').First();
+                return (Prototype.Title as string).Split(' ').First();
             }
         }
     }

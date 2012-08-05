@@ -33,7 +33,7 @@ namespace System
 
             if (o.GetType() == typeof(Prototype)) return o;
             if (o is ExpandoObject) return new Prototype(o as IDictionary<string, object>);
-            if (o is Gemini) return ((Gemini)o).Expando;
+            if (o is Gemini) return ((Gemini)o).Prototype;
 
             if (o.GetType() == typeof(NameValueCollection) || o.GetType().IsSubclassOf(typeof(NameValueCollection)))
             {
