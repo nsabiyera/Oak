@@ -95,7 +95,7 @@ namespace Massive
         public static dynamic RecordToGemini(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             dynamic e = new Gemini();
-            var d = e.Expando as IDictionary<string, object>;
+            var d = e.Prototype as IDictionary<string, object>;
             for (int i = 0; i < rdr.FieldCount; i++)
                 d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
             return projection(e);
