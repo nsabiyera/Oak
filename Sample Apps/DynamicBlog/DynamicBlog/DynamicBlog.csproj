@@ -106,6 +106,7 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Oak\ReleaseNotes.txt" />
     <Content Include="rake-dot-net-usage.txt" />
     <Content Include="Scripts\json2.js" />
     <Content Include="specwatchr-usage.txt" />

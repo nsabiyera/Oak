@@ -36,18 +36,18 @@ namespace DynamicBlog.Models
 
         public void AddComment(string comment)
         {
-            comments.Insert(new { BlogId = Expando.Id, Text = comment });
+            comments.Insert(new { BlogId = _.Id, Text = comment });
         }
 
         public string Summary
         {
             get
             {
-                if (Expando.Body == null) return "";
+                if (_.Body == null) return "";
 
-                if (Expando.Body.Length > 50) return Expando.Body.Substring(0, 50);
+                if (_.Body.Length > 50) return _.Body.Substring(0, 50);
 
-                return Expando.Body;
+                return Prototype.Body;
             }
         }
     }

@@ -9,7 +9,7 @@ public class DebuggerShim
     //[Test]
     public void debug()
     {
-        var tagOrClassName = "class_or_tag_you_want_to_debug";
+        var tagOrClassName = "describe_HomeController";
 
         var invocation = new RunnerInvocation(Assembly.GetExecutingAssembly().Location, tagOrClassName);
 

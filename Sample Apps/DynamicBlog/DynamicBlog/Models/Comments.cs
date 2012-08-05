@@ -8,5 +8,6 @@ namespace DynamicBlog.Models
 {
     public class Comments : DynamicRepository
     {
+
     }
 }
