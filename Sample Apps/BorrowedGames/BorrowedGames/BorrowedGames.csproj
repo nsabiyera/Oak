@@ -157,6 +157,7 @@
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Global.asax" />
+    <Content Include="Oak\ReleaseNotes.txt" />
     <Content Include="Scripts\app\autocomplete.js" />
     <Content Include="Scripts\app\friends.js" />
     <Content Include="Scripts\app\gamelibrary.js" />
@@ -245,10 +246,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="App_Code\OakForm.cshtml" />
     <Content Include="packages.config" />
     <Content Include="Views\Home\_Library.cshtml" />
     <Content Include="Views\Home\_Friends.cshtml" />
+    <Content Include="App_Code\OakForm.cshtml" />
     <None Include="sass\screen.scss" />
     <Content Include="Views\Home\_Games.cshtml" />
     <None Include="Scripts\app\preferred.coffee">

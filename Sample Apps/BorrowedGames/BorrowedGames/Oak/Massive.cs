@@ -64,7 +64,7 @@ namespace Massive
                     p.DbType = DbType.String;
                     p.Size = 4000;
                 }
-                else if (item.GetType() == typeof(ExpandoObject))
+                else if (item.GetType() == typeof(Prototype))
                 {
                     var d = (IDictionary<string, object>)item;
                     p.Value = d.Values.FirstOrDefault();
@@ -78,10 +78,11 @@ namespace Massive
             }
             cmd.Parameters.Add(p);
         }
+
         /// <summary>
         /// Turns an IDataReader to a Dynamic list of things
         /// </summary>
-        public static List<dynamic> ToExpandoList(this IDataReader rdr, Func<dynamic, dynamic> projection)
+        public static List<dynamic> ToGeminiList(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             var result = new List<dynamic>();
             while (rdr.Read())
@@ -90,10 +91,11 @@ namespace Massive
             }
             return result;
         }
+
         public static dynamic RecordToGemini(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             dynamic e = new Gemini();
-            var d = e.Expando as IDictionary<string, object>;
+            var d = e.Prototype as IDictionary<string, object>;
             for (int i = 0; i < rdr.FieldCount; i++)
                 d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
             return projection(e);
@@ -124,34 +126,6 @@ namespace Massive
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
             ConnectionProfile = connectionProfile;
             Projection = (d) => d;
-        }
-
-        /// <summary>
-        /// Creates a new Expando from a Form POST - white listed against the columns in the DB
-        /// </summary>
-        public dynamic CreateFrom(NameValueCollection coll)
-        {
-            dynamic result = new ExpandoObject();
-            var dc = (IDictionary<string, object>)result;
-            var schema = Schema;
-            //loop the collection, setting only what's in the Schema
-            foreach (var item in coll.Keys)
-            {
-                var exists = schema.Any(x => x.COLUMN_NAME.ToLower() == item.ToString().ToLower());
-                if (exists)
-                {
-                    var key = item.ToString();
-                    var val = coll[key];
-                    if (!String.IsNullOrEmpty(val))
-                    {
-                        //what to do here? If it's empty... set it to NULL?
-                        //if it's a string value - let it go through if it's NULLABLE?
-                        //Empty? WTF?
-                        dc.Add(key, val);
-                    }
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -186,7 +160,7 @@ namespace Massive
         {
             get
             {
-                dynamic result = new ExpandoObject();
+                dynamic result = new Prototype();
                 var schema = Schema;
                 foreach (dynamic column in schema)
                 {
@@ -235,7 +209,7 @@ namespace Massive
                 cmd.AddParams(args);
                 cmd.Connection.Open();
                 var task = Task.Factory.FromAsync<IDataReader>(cmd.BeginExecuteReader, cmd.EndExecuteReader, null);
-                task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList(Projection)));
+                task.ContinueWith(x => callback.Invoke(x.Result.ToGeminiList(Projection)));
                 //make sure this is closed off.
                 conn.Close();
             }
@@ -374,8 +348,8 @@ namespace Massive
         public virtual DbCommand CreateInsertCommand(object o)
         {
             DbCommand result = null;
-            var expando = GetAttributesToSave(o);
-            var settings = (IDictionary<string, object>)expando;
+            var attributes = GetAttributesToSave(o);
+            var settings = (IDictionary<string, object>)attributes;
             var sbKeys = new StringBuilder();
             var sbVals = new StringBuilder();
             var stub = "INSERT INTO {0} ({1}) \r\n VALUES ({2})";
@@ -403,8 +377,8 @@ namespace Massive
         /// </summary>
         public virtual DbCommand CreateUpdateCommand(object o, object key)
         {
-            var expando = GetAttributesToSave(o);
-            var settings = (IDictionary<string, object>)expando;
+            var attributes = GetAttributesToSave(o);
+            var settings = (IDictionary<string, object>)attributes;
             var sbKeys = new StringBuilder();
             var stub = "UPDATE {0} SET {1} WHERE [{2}] = @{3}";
             var args = new List<object>();
@@ -436,11 +410,9 @@ namespace Massive
         {
             dynamic attributes = null;
 
-            if (o is DynamicModel) attributes = ((DynamicModel)o).HashExcludingDelegates();
+            if (o is DynamicModel || o is Gemini) attributes = ((Gemini)o).HashOfProperties();
 
-            if (o is Gemini) attributes = ((Gemini)o).HashExcludingDelegates();
-
-            else attributes = o.ToExpando();
+            else attributes = o.ToPrototype();
 
             var keysToRemove = new List<string>();
 
@@ -494,6 +466,11 @@ namespace Massive
                 cmd.CommandText = "SELECT @@IDENTITY as newID";
                 result = cmd.ExecuteScalar();
             }
+
+            int outInt = 0;
+
+            if (int.TryParse(result.ToString(), out outInt)) return outInt;
+
             return result;
         }
         /// <summary>
@@ -555,7 +532,7 @@ namespace Massive
         /// </summary>
         public virtual dynamic Paged(string where = "", string orderBy = "", string columns = "*", int pageSize = 20, int currentPage = 1, params object[] args)
         {
-            dynamic result = new ExpandoObject();
+            dynamic result = new Prototype();
             var countSQL = string.Format("SELECT COUNT({0}) FROM {1}", PrimaryKeyField, TableName);
             if (String.IsNullOrEmpty(orderBy))
                 orderBy = PrimaryKeyField;

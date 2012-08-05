@@ -10,5 +10,10 @@ namespace BorrowedGames.Repositories
         {
             Projection = d => new NotInterestedGame(d);
         }
+
+        public override object Insert(dynamic o)
+        {
+            return base.Insert(o.Exclude("Name", "Console") as object);
+        }
     }
 }

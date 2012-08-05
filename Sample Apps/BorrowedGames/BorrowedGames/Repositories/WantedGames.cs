@@ -13,5 +13,20 @@ namespace BorrowedGames.Repositories
         {
             Projection = d => new WantedGame(d);
         }
+
+        public override object Insert(object o)
+        {
+            return base.Insert(ExcludeProps(o));
+        }
+
+        public override int Update(object o, object key)
+        {
+            return base.Update(ExcludeProps(o), key);
+        }
+
+        object ExcludeProps(dynamic o)
+        {
+            return o.Exclude("Name", "Console");
+        }
     }
 }
