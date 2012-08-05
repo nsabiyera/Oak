@@ -18,7 +18,7 @@ namespace Oak.Tests.describe_Gemini.Classes
 
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(Expando.Title);
+            return !string.IsNullOrEmpty(Prototype.Title);
         }
 
         public string Body

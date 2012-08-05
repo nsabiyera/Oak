@@ -126,7 +126,7 @@ namespace Oak.Tests.describe_DynamicModel
 
         dynamic Properties()
         {
-            return Model().Expando;
+            return Model().Prototype;
         }
 
         DynamicModel Model()

@@ -85,7 +85,7 @@
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />
-    <Compile Include="describe_DynamicModels\expando_dynamic_models.cs" />
+    <Compile Include="describe_DynamicModels\prototype_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\gemini_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_one_relation.cs" />

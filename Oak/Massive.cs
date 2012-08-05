@@ -78,10 +78,11 @@ namespace Massive
             }
             cmd.Parameters.Add(p);
         }
+
         /// <summary>
         /// Turns an IDataReader to a Dynamic list of things
         /// </summary>
-        public static List<dynamic> ToExpandoList(this IDataReader rdr, Func<dynamic, dynamic> projection)
+        public static List<dynamic> ToGeminiList(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             var result = new List<dynamic>();
             while (rdr.Read())
@@ -90,6 +91,7 @@ namespace Massive
             }
             return result;
         }
+
         public static dynamic RecordToGemini(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
             dynamic e = new Gemini();
@@ -124,34 +126,6 @@ namespace Massive
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
             ConnectionProfile = connectionProfile;
             Projection = (d) => d;
-        }
-
-        /// <summary>
-        /// Creates a new Expando from a Form POST - white listed against the columns in the DB
-        /// </summary>
-        public dynamic CreateFrom(NameValueCollection coll)
-        {
-            dynamic result = new Prototype();
-            var dc = (IDictionary<string, object>)result;
-            var schema = Schema;
-            //loop the collection, setting only what's in the Schema
-            foreach (var item in coll.Keys)
-            {
-                var exists = schema.Any(x => x.COLUMN_NAME.ToLower() == item.ToString().ToLower());
-                if (exists)
-                {
-                    var key = item.ToString();
-                    var val = coll[key];
-                    if (!String.IsNullOrEmpty(val))
-                    {
-                        //what to do here? If it's empty... set it to NULL?
-                        //if it's a string value - let it go through if it's NULLABLE?
-                        //Empty? WTF?
-                        dc.Add(key, val);
-                    }
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -235,7 +209,7 @@ namespace Massive
                 cmd.AddParams(args);
                 cmd.Connection.Open();
                 var task = Task.Factory.FromAsync<IDataReader>(cmd.BeginExecuteReader, cmd.EndExecuteReader, null);
-                task.ContinueWith(x => callback.Invoke(x.Result.ToExpandoList(Projection)));
+                task.ContinueWith(x => callback.Invoke(x.Result.ToGeminiList(Projection)));
                 //make sure this is closed off.
                 conn.Close();
             }

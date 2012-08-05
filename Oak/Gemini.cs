@@ -130,7 +130,7 @@ namespace Oak
             return extendedWith;
         }
 
-        public dynamic Expando { get; set; } //case invariant expando (ie prototype)
+        public dynamic Prototype { get; set; } //this used to be called Expando
 
         public static void Extend<A, B>()
         {
@@ -197,9 +197,9 @@ namespace Oak
         {
             if (dto == null) dto = new Prototype();
 
-            if (dto is Prototype) Expando = dto;
+            if (dto is Prototype) Prototype = dto;
 
-            else Expando = dto.ToPrototype();
+            else Prototype = dto.ToPrototype();
         }
 
         private void ConstructTypeHierarchy()
@@ -241,13 +241,13 @@ namespace Oak
             {
                 var propInfo = props[key];
 
-                var dict = Expando as IDictionary<string, object>;
+                var dict = Prototype as IDictionary<string, object>;
 
                 if (dict.ContainsKey(propInfo.Name) && propInfo.CanWrite)
                 {
                     propInfo.SetValue(this, dict[propInfo.Name], null);
 
-                    (Expando as IDictionary<string, object>).Remove(propInfo.Name);
+                    (Prototype as IDictionary<string, object>).Remove(propInfo.Name);
                 }
             }
         }
@@ -258,15 +258,15 @@ namespace Oak
             {
                 PropertyCache.Add(
                     GetType(),
-                    PropertiesExcludingExpando().ToDictionary(s => s.Name));
+                    PropertiesExcludingPrototype().ToDictionary(s => s.Name));
             }
 
             return PropertyCache[GetType()];
         }
 
-        private IEnumerable<PropertyInfo> PropertiesExcludingExpando()
+        private IEnumerable<PropertyInfo> PropertiesExcludingPrototype()
         {
-            return GetType().GetProperties().Where(s => s.Name != "Expando");
+            return GetType().GetProperties().Where(s => s.Name != "Prototype");
         }
 
         private void AddDynamicMember(MethodInfo method)
@@ -538,7 +538,7 @@ namespace Oak
         {
             InitializeIfNeeded("Hash");
 
-            return Expando as IDictionary<string, object>;
+            return Prototype as IDictionary<string, object>;
         }
 
         public virtual IDictionary<string, object> HashOfProperties()

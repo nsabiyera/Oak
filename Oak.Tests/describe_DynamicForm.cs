@@ -34,7 +34,7 @@ namespace Oak.Tests
         {
             get
             {
-                return (Expando.Name as string).ToUpper();
+                return (Prototype.Name as string).ToUpper();
             }
         }
     }
@@ -226,7 +226,7 @@ namespace Oak.Tests
             {
                 entity = new DynamicModel();
 
-                entity.Expando.Title = "Some Title";
+                entity.Prototype.Title = "Some Title";
 
                 form = new DynamicForm(entity);
             };

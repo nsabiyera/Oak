@@ -18,7 +18,7 @@ namespace Oak.Tests.describe_Gemini.Classes
 
         public string LastLetter()
         {
-            return (Expando.Title as string).Last().ToString();
+            return (Prototype.Title as string).Last().ToString();
         }
     }
 }
