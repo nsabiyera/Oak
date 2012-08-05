@@ -6,6 +6,10 @@ gemini-edge 0.0.8+
 cambium 1.2.3+
 =============== CHANGES ==================
 - Camibum and company now plays nice with auto properties.
+  If you get the Invalid column name Exception, you can remove properties from
+  Gemini's using the Exclude() method.  Override your repository's Insert() and
+  Update() methods to exclude these columns from being persisted.
+  Example: 
 - Added InitializeExtensions method. If you want to leverage mix-ins, 
   this method need to be explicitly called in the constructor of classes
   that use *static* autoproperties. Invocation is automatically done
