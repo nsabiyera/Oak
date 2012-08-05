@@ -406,7 +406,7 @@ namespace Massive
             return result;
         }
 
-        public virtual dynamic GetAttributesToSave(object o)
+        public virtual IDictionary<string, object> GetAttributesToSave(object o)
         {
             dynamic attributes = null;
 

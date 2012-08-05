@@ -14,7 +14,7 @@ namespace BorrowedGames.Repositories
             Projection = d => new WantedGame(d);
         }
 
-        public override dynamic GetAttributesToSave(object o)
+        public override IDictionary<string, object> GetAttributesToSave(object o)
         {
             return base.GetAttributesToSave(o).Exclude("Name", "Console");
         }

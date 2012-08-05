@@ -11,9 +11,9 @@ namespace BorrowedGames.Repositories
             Projection = d => new NotInterestedGame(d);
         }
 
-        public override object Insert(dynamic o)
+        public override System.Collections.Generic.IDictionary<string, object> GetAttributesToSave(object o)
         {
-            return base.Insert(o.Exclude("Name", "Console") as object);
+            return base.GetAttributesToSave(o).Exclude("Name", "Console");
         }
     }
 }
