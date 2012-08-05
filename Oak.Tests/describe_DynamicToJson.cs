@@ -30,7 +30,6 @@ namespace Oak.Tests
         }
     }
 
-    [Tag("wip")]
     class describe_DynamicToJson : nspec
     {
         dynamic objectToConvert;
