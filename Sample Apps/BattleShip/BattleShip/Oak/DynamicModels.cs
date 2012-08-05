@@ -33,18 +33,18 @@ namespace Oak
         {
             var hash = (model as object).ToDictionary();
 
-            var expando = new ExpandoObject() as IDictionary<string, object>;
+            var prototype = new Prototype() as IDictionary<string, object>;
 
-            hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => expando.Add(kvp.Key, kvp.Value));
+            hash.Where(s => properties.Contains(s.Key)).ForEach(kvp => prototype.Add(kvp.Key, kvp.Value));
 
-            if (expando.Count == 1) return expando.First().Value;
+            if (prototype.Count == 1) return prototype.First().Value;
 
-            return expando;
+            return prototype;
         }
                
         public bool Any(dynamic options)
         {
-            options = (options as object).ToExpando();
+            options = (options as object).ToPrototype();
 
             foreach (dynamic model in Models) if (IsMatch(options, model)) return true;
 
@@ -88,7 +88,7 @@ namespace Oak
 
         public dynamic OrderBy(dynamic options)
         {
-            var dict = (options as object).ToExpando() as IDictionary<string, object>;
+            var dict = (options as object).ToPrototype() as IDictionary<string, object>;
 
             dynamic results = Models.AsEnumerable();
 
@@ -125,7 +125,7 @@ namespace Oak
 
         public DynamicModels Where(dynamic options)
         {
-            options = (options as object).ToExpando();
+            options = (options as object).ToPrototype();
 
             var results = new List<dynamic>();
 
@@ -145,7 +145,7 @@ namespace Oak
         {
             if (model is Gemini) return model.Hash();
 
-            return (model as object).ToExpando();
+            return (model as object).ToPrototype();
         }
 
         private dynamic ValueFor(dynamic value)

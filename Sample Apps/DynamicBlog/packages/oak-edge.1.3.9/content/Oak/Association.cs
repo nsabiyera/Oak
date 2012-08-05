@@ -85,7 +85,7 @@ namespace Oak
         {
             if (options == null) options = new { discardCache = false };
 
-            options = (options as object).ToExpando();
+            options = (options as object).ToPrototype();
 
             return options.discardCache;
         }
@@ -156,7 +156,7 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            ForeignKey = ForeignKeyFor(model);
+            ForeignKey = ForeignKey ?? ForeignKeyFor(model);
 
             var toTable = Repository.GetType().Name;
 
@@ -184,7 +184,7 @@ namespace Oak
         {
             var entity = new Gemini(attributes);
 
-            entity.SetMember(ForeignKeyFor(model), model.GetMember(Id()));
+            entity.SetMember(ForeignKey, model.GetMember(Id()));
 
             return Repository.Projection(entity);
         }
@@ -251,8 +251,6 @@ namespace Oak
 
     public class HasManyThrough : Association
     {
-        string fromColumn;
-
         string toTable;
 
         string throughTable;
@@ -266,6 +264,8 @@ namespace Oak
         DynamicModels selectManyRelatedToCache;
 
         public string ForeignKey { get; set; }
+
+        public string FromColumn { get; set; }
 
         public HasManyThrough(DynamicRepository repository, DynamicRepository through)
             : this(repository, through, null)
@@ -286,7 +286,7 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            fromColumn = ForeignKeyFor(model);
+            FromColumn = FromColumn ?? ForeignKeyFor(model);
 
             toTable = Repository.GetType().Name;
 
@@ -316,7 +316,7 @@ namespace Oak
 
                 if (cachedCollection != null) return cachedCollection;
 
-                var models = (Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model)) as IEnumerable<dynamic>).ToList();
+                var models = (Repository.Query(InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, model)) as IEnumerable<dynamic>).ToList();
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 
@@ -334,11 +334,11 @@ namespace Oak
 
             if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
 
-            var many = Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray())).ToList();
+            var many = Repository.Query(InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray())).ToList();
 
             foreach (var item in many)
             {
-                var model = models.First(s => s.Id == item.GetMember(fromColumn));
+                var model = models.First(s => s.Id == item.GetMember(FromColumn));
 
                 item.SetMember(model.GetType().Name, model);
             }
@@ -587,7 +587,7 @@ namespace Oak
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using)
-                    .Replace("{fromColumn}", fromColumn), model.Expando.Id as object)
+                    .Replace("{fromColumn}", fromColumn), model.Prototype.Id as object)
                     .FirstOrDefault();
         }
 

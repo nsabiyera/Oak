@@ -69,7 +69,7 @@ namespace Oak
 
             if (entity is Gemini)
             {
-                var underlyingValues = entity.Expando as IDictionary<string, object>;
+                var underlyingValues = entity.Prototype as IDictionary<string, object>;
 
                 if (!underlyingValues.ContainsKey(name)) throw new InvalidOperationException("The Gemini that you passed into DynamicForm does not contain the property called " + name + ".");
 

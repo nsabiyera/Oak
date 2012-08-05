@@ -8,6 +8,79 @@ using System.Reflection;
 
 namespace Oak
 {
+    [DebuggerNonUserCode]
+    public class Prototype : DynamicObject, IDictionary<string, object>
+    {
+        Dictionary<string, object> members;
+
+        public Prototype() { members = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase); }
+
+        public Prototype(IDictionary<string, object> dictionary)
+        {
+            members = new Dictionary<string, object>(dictionary, StringComparer.InvariantCultureIgnoreCase);
+        }
+
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            if (!members.ContainsKey(binder.Name)) members.Add(binder.Name, null);
+
+            members[binder.Name] = value;
+
+            return true;
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            if (members.ContainsKey(binder.Name))
+            {
+                result = members[binder.Name];
+
+                return true;
+            };
+
+            result = null;
+
+            return false;
+        }
+
+        public void Add(string key, object value) { members.Add(key, value); }
+
+        public bool ContainsKey(string key) { return members.ContainsKey(key); }
+
+        public ICollection<string> Keys { get { return members.Keys; } }
+
+        public bool Remove(string key) { return members.Remove(key); }
+
+        public bool TryGetValue(string key, out object value) { return members.TryGetValue(key, out value); }
+
+        public ICollection<object> Values { get { return members.Values; } }
+
+        public object this[string key] { get { return members[key]; } set { members[key] = value; } }
+
+        ICollection<KeyValuePair<string, object>> Collection() { return members; }
+
+        public void Add(KeyValuePair<string, object> item) { Collection().Add(item); }
+
+        public void Clear() { Collection().Clear(); }
+
+        public bool Contains(KeyValuePair<string, object> item) { return Collection().Contains(item); }
+
+        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex) { Collection().CopyTo(array, arrayIndex); }
+
+        public int Count { get { return Collection().Count; } }
+
+        public bool IsReadOnly { get { return Collection().IsReadOnly; } }
+
+        public bool Remove(KeyValuePair<string, object> item) { return Collection().Remove(item); }
+
+        IEnumerable<KeyValuePair<string,object>> Enumerable() { return members; }
+
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() { return Enumerable().GetEnumerator(); }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return (Enumerable() as System.Collections.IEnumerable).GetEnumerator(); }
+    }
+
+    [DebuggerNonUserCode]
     public static class HelpfulExtensions
     {
         public static void ForEach(this object enumerable, Action<dynamic> action)
@@ -38,28 +111,30 @@ namespace Oak
     {
         private bool initialized;
 
-        private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> Includes = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
+        private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> ExtendHooks = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
 
         private static List<KeyValuePair<Type, Action<dynamic>>> MethodHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
         private List<Type> types = new List<Type>();
 
-        private static List<KeyValuePair<Type, Action<dynamic>>> ClassHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
+        private static List<KeyValuePair<Type, Action<dynamic>>> InitializationHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
         private List<Type> extendedWith = new List<Type>();
 
-        private static Dictionary<Type, List<MethodInfo>> ReflectionCache = new Dictionary<Type, List<MethodInfo>>();
+        private static Dictionary<Type, List<MethodInfo>> MethodCache = new Dictionary<Type, List<MethodInfo>>();
+
+        private static Dictionary<Type, Dictionary<string, PropertyInfo>> PropertyCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
 
         public virtual List<Type> ExtendedWith()
         {
             return extendedWith;
         }
 
-        public dynamic Expando { get; set; }
+        public dynamic Prototype { get; set; } //this used to be called Expando
 
         public static void Extend<A, B>()
         {
-            Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(A), (i) =>
+            ExtendHooks.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(A), (i) =>
             {
                 i.Extend<B>();
 
@@ -69,17 +144,17 @@ namespace Oak
 
         public static void Extend<T>(Func<dynamic, dynamic> extension)
         {
-            Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), extension));
+            ExtendHooks.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), extension));
         }
 
         public static void Extend<T>(Action<dynamic> extension)
         {
-            Includes.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), (i) => { extension(i); return null; }));
+            ExtendHooks.Add(new KeyValuePair<Type, Func<dynamic, dynamic>>(typeof(T), (i) => { extension(i); return null; }));
         }
 
         public static void Initialized<T>(Action<dynamic> callback)
         {
-            ClassHooks.Add(new KeyValuePair<Type, Action<dynamic>>(typeof(T), callback));
+            InitializationHooks.Add(new KeyValuePair<Type, Action<dynamic>>(typeof(T), callback));
         }
 
         public static void MethodDefined<T>(Action<dynamic> extension)
@@ -105,14 +180,30 @@ namespace Oak
 
         public Gemini(object dto)
         {
-            if (dto == null) dto = new ExpandoObject();
+            AttachDtoValues(dto);
 
-            if (dto is ExpandoObject) Expando = dto;
+            ApplyValuesToWritableProperties();
 
-            else Expando = dto.ToExpando();
+            AddRedefinableDelegates();
 
-            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
+            ConstructTypeHierarchy();
 
+            ApplyExtensions();
+
+            initialized = false;
+        }
+
+        private void AttachDtoValues(object dto)
+        {
+            if (dto == null) dto = new Prototype();
+
+            if (dto is Prototype) Prototype = dto;
+
+            else Prototype = dto.ToPrototype();
+        }
+
+        private void ConstructTypeHierarchy()
+        {
             var currentType = this.GetType();
 
             while (currentType != typeof(object))
@@ -121,8 +212,16 @@ namespace Oak
 
                 currentType = currentType.BaseType;
             }
+        }
 
-            var includes = Includes.Where(s => types.Contains(s.Key));
+        private void AddRedefinableDelegates()
+        {
+            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
+        }
+
+        private void ApplyExtensions()
+        {
+            var includes = ExtendHooks.Where(s => types.Contains(s.Key));
 
             foreach (var include in includes)
             {
@@ -130,10 +229,44 @@ namespace Oak
 
                 if (result == null) continue;
 
-                (result.ToExpando() as IDictionary<string, object>).ToList().ForEach(s => SetMember(s.Key, s.Value));
+                (result.ToPrototype() as IDictionary<string, object>).ToList().ForEach(s => SetMember(s.Key, s.Value));
+            }
+        }
+
+        private void ApplyValuesToWritableProperties()
+        {
+            var props = AutoProperties();
+
+            foreach (var key in props.Keys)
+            {
+                var propInfo = props[key];
+
+                var dict = Prototype as IDictionary<string, object>;
+
+                if (dict.ContainsKey(propInfo.Name) && propInfo.CanWrite)
+                {
+                    propInfo.SetValue(this, dict[propInfo.Name], null);
+
+                    (Prototype as IDictionary<string, object>).Remove(propInfo.Name);
+                }
+            }
+        }
+
+        private Dictionary<string, PropertyInfo> AutoProperties()
+        {
+            if (!PropertyCache.ContainsKey(GetType()))
+            {
+                PropertyCache.Add(
+                    GetType(),
+                    PropertiesExcludingPrototype().ToDictionary(s => s.Name));
             }
 
-            initialized = false;
+            return PropertyCache[GetType()];
+        }
+
+        private IEnumerable<PropertyInfo> PropertiesExcludingPrototype()
+        {
+            return GetType().GetProperties().Where(s => s.Name != "Prototype");
         }
 
         private void AddDynamicMember(MethodInfo method)
@@ -234,7 +367,7 @@ namespace Oak
         {
             if (type == typeof(Gemini) || type == typeof(object)) return new List<MethodInfo>();
 
-            if (ReflectionCache.ContainsKey(type)) return ReflectionCache[type];
+            if (MethodCache.ContainsKey(type)) return MethodCache[type];
 
             var delegates = type
                 .GetMethods(PrivateFlags())
@@ -242,7 +375,7 @@ namespace Oak
 
             delegates.AddRange(DynamicDelegates(type.BaseType));
 
-            ReflectionCache.Add(type, delegates);
+            MethodCache.Add(type, delegates);
 
             return delegates;
         }
@@ -267,6 +400,12 @@ namespace Oak
             return TryGetMember(property, out result);
         }
 
+        static Dictionary<string, PropertyInfo> emptyDictionary = new Dictionary<string, PropertyInfo>();
+        Dictionary<string, PropertyInfo> InstanceAutoProperties()
+        {
+            return PropertyCache[GetType()];
+        }
+
         public bool TryGetMember(string name, out object result)
         {
             InitializeIfNeeded(name);
@@ -279,28 +418,21 @@ namespace Oak
                 return true;
             }
 
-            if (dictionary.ContainsKey(Capitalized(name)))
+            if (InstanceAutoProperties().ContainsKey(name))
             {
-                result = dictionary[Capitalized(name)];
-                return true;
-            }
-
-            if (dictionary.ContainsKey(name.ToLower()))
-            {
-                result = dictionary[name.ToLower()];
-                return true;
-            }
-
-            var fuzzyMatch = Fuzzy(dictionary, name);
-
-            if (dictionary.ContainsKey(fuzzyMatch))
-            {
-                result = dictionary[fuzzyMatch];
+                result = InstanceAutoProperties()[name].GetValue(this, null);
                 return true;
             }
 
             result = null;
             return false;
+        }
+
+        public dynamic InitializeExtensions()
+        {
+            InitializeIfNeeded(null);
+
+            return this;
         }
 
         void InitializeIfNeeded(string property)
@@ -309,7 +441,7 @@ namespace Oak
 
             initialized = true;
 
-            var hooks = ClassHooks.Where(s => types.Contains(s.Key));
+            var hooks = InitializationHooks.Where(s => types.Contains(s.Key));
 
             foreach (var hook in hooks) hook.Value(this);
         }
@@ -379,23 +511,9 @@ namespace Oak
                 return true;
             }
 
-            if (dictionary.ContainsKey(Capitalized(property)))
+            if (InstanceAutoProperties().ContainsKey(property))
             {
-                dictionary[Capitalized(property)] = value;
-                return true;
-            }
-
-            if (dictionary.ContainsKey(property.ToLower()))
-            {
-                dictionary[property.ToLower()] = value;
-                return true;
-            }
-
-            var fuzzyMatch = Fuzzy(dictionary, property);
-
-            if (dictionary.ContainsKey(fuzzyMatch))
-            {
-                dictionary[fuzzyMatch] = value;
+                InstanceAutoProperties()[property].SetValue(this, value, null);
                 return true;
             }
 
@@ -420,12 +538,28 @@ namespace Oak
         {
             InitializeIfNeeded("Hash");
 
-            return Expando as IDictionary<string, object>;
+            return Prototype as IDictionary<string, object>;
+        }
+
+        public virtual IDictionary<string, object> HashOfProperties()
+        {
+            var dynamicProps = HashExcludingDelegates();
+
+            var props = AutoProperties();
+
+            foreach (var key in props.Keys)
+            {
+                if (props[key].CanRead == false) continue;
+
+                dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
+            }
+
+            return dynamicProps;
         }
 
         public virtual IDictionary<string, object> HashExcludingDelegates()
         {
-            var dictionary = new ExpandoObject() as IDictionary<string, object>;
+            var dictionary = new Prototype() as IDictionary<string, object>;
 
             var delegates = Delegates();
 
@@ -532,11 +666,11 @@ namespace Oak
         {
             if (AllParametersAreNamed(args, argNames))
             {
-                var expando = new ExpandoObject() as IDictionary<string, object>;
+                var prototype = new Prototype() as IDictionary<string, object>;
 
-                for (int i = 0; i < args.Count(); i++) expando.Add(argNames[i], args[i]);
+                for (int i = 0; i < args.Count(); i++) prototype.Add(argNames[i], args[i]);
 
-                return expando;
+                return prototype;
             }
 
             return args.FirstOrDefault();
@@ -549,22 +683,22 @@ namespace Oak
 
         public virtual dynamic Select(params string[] args)
         {
-            var expando = new ExpandoObject() as IDictionary<string, object>;
+            var prototype = new Prototype() as IDictionary<string, object>;
 
-            args.ForEach(s => expando.Add(s, GetMember(s)));
+            args.ForEach(s => prototype.Add(s, GetMember(s)));
 
-            return new Gemini(expando);
+            return new Gemini(prototype);
         }
 
         public virtual dynamic Exclude(params string[] args)
         {
-            var expando = (Hash() as IDictionary<string, object>).ToList();
+            var prototype = (HashOfProperties() as IDictionary<string, object>).ToList();
 
-            var dictionary = new ExpandoObject() as IDictionary<string, object>;
+            var dictionary = new Prototype() as IDictionary<string, object>;
 
             args = args.Select(s => s.ToLower()).ToArray();
 
-            expando.ForEach(s =>
+            prototype.ForEach(s =>
             {
                 if (!args.Contains(s.Key.ToLower())) dictionary.Add(s.Key, GetMember(s.Key));
             });
