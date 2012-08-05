@@ -16,27 +16,11 @@ namespace Oak
 
             if (o is Prototype) return Convert(o as IDictionary<string, object>);
 
-            if (o is Gemini) return Convert(PublicAndDynamicProperties(o));
+            if (o is Gemini) return Convert(o.HashOfProperties());
 
             if (IsJsonString(o) || IsJsonNumeric(o) || IsBool(o)) return Stringify(o);
 
             return Convert((o as object).ToPrototype());
-        }
-
-        private static IDictionary<string, object> PublicAndDynamicProperties(dynamic o)
-        {
-            Dictionary<string, object> properties = new Dictionary<string,object>();
-
-            (o.Hash() as IDictionary<string, object>).ForEach(kvp => properties.Add(kvp.Key, kvp.Value));
-
-            (o as object)
-                .GetType()
-                .GetProperties()
-                .ForEach<PropertyInfo>(kvp => properties.Add(kvp.Name, kvp.GetValue(o, null)));
-
-            if (properties.ContainsKey("Expando")) properties.Remove("Expando");
-
-            return properties;
         }
 
         public static string Convert(IEnumerable<dynamic> o)

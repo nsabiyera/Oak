@@ -492,6 +492,11 @@ namespace Massive
                 cmd.CommandText = "SELECT @@IDENTITY as newID";
                 result = cmd.ExecuteScalar();
             }
+
+            int outInt = 0;
+
+            if (int.TryParse(result.ToString(), out outInt)) return outInt;
+
             return result;
         }
         /// <summary>

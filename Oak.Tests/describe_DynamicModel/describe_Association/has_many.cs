@@ -9,7 +9,6 @@ using Oak.Tests.describe_DynamicModel.describe_Association.Classes;
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    [Tag("wip")]
     class has_many_for_static_type :has_many
     {
         void before_each()
@@ -24,7 +23,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         }
     }
 
-    [Tag("wip")]
     class has_many_for_dynamic_type : has_many
     {
         void before_each()
