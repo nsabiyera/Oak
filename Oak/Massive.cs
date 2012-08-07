@@ -110,10 +110,16 @@ namespace Massive
         DbProviderFactory _factory;
         ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
+        public static bool WriteDevLog { get; set; }
 
         public DynamicRepository(string tableName = "", string primaryKeyField = "")
             : this(null, tableName, primaryKeyField)
         {
+        }
+
+        static DynamicRepository()
+        {
+            WriteDevLog = false;
         }
 
         public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
@@ -242,8 +248,10 @@ namespace Massive
         /// </summary>
         DbCommand CreateCommand(string sql, DbConnection conn, params object[] args)
         {
-            System.Console.Out.WriteLine(sql);
-            System.Console.Out.WriteLine(string.Join(",", args));
+            if(WriteDevLog)
+            {
+                System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");    
+            }
             var result = _factory.CreateCommand();
             result.Connection = conn;
             result.CommandText = sql;
