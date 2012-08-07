@@ -87,7 +87,12 @@ watchr dotnet.watchr.rb (starts your feedback loop)
 </li>
 </ul>
 
-<h2><b>Frictionless</b> Development Cycle - Oak's Walking Skeleton</h2>
+<h3><a href="#sampleapps">Jump to the Sample Apps</a></h3>
+<br />
+<h1>It's all about reducing friction</h1>
+<hr/>
+
+<h2>Frictionless Development Cycle - Oak's Walking Skeleton</h2>
 <p>Oak has an addicting development life cycle that incorporates rapid application development, fast feedback loops, testing, and UI automation. Watch the video to see Oak in action:</p>
 <div id="media">
    <object id="csSWF" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="650" height="450">
@@ -116,14 +121,39 @@ watchr dotnet.watchr.rb (starts your feedback loop)
 
  <br/>
 
- <h2><b>Frictionless</b> Data Access, Change Tracking and Validation - Oak's dynamic Entity Model: Cambium</h2>
+ <h2>Frictionless Data Access, Change Tracking and Validation - Oak's dynamic Entity Model: Cambium</h2>
  <p>Oak has a dynamic entity model called Cambium. Cambium makes validating, detecting changes, saving, retrieving, and defining associations ridiculously easy. Check out the <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/">Sample Apps</a> and the <a href="https://github.com/amirrajan/oak/wiki">Wiki</a> for more info.  Here is a sneak peek at what Cambium can do:</p>
+<div id="media">
+   <object id="csSWF1" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="650" height="450">
+      <param name="movie" value="Validations_controller.swf" />
+      <param name="scale" value="showall" />
+      <param name="bgcolor" value="#1a1a1a" />
+      <param name="allowfullscreen" value="true" />
+      <param name="allowscriptaccess" value="always" />
+      <param name="flashvars" value="tocdoc=left&amp;showsearch=false&amp;autostart=false&amp;autohide=true&amp;xmp=Validations_config.xml&amp;content=Validations.mp4&amp;thumb=ValidationsFirstFrame.png&amp;containerwidth=1280&amp;containerheight=1024&amp;smoothing=true&amp;enablejsapi=true&amp;fullscreen=true&amp;windowbox=false&amp;showbranding=false&amp;showstartscreen=true&amp;showendscreen=true&amp;basecolor=272727&amp;loop=false" />
+      <!--[if !IE]>-->
+      <object type="application/x-shockwave-flash" data="Validations_controller.swf" width="650" height="450">
+         <param name="scale" value="showall" />
+         <param name="bgcolor" value="#1a1a1a" />
+         <param name="allowfullscreen" value="true" />
+         <param name="allowscriptaccess" value="always" />
+         <param name="flashvars" value="tocdoc=left&amp;showsearch=false&amp;autostart=false&amp;autohide=true&amp;xmp=Validations_config.xml&amp;content=Validations.mp4&amp;thumb=ValidationsFirstFrame.png&amp;containerwidth=1280&amp;containerheight=1024&amp;smoothing=true&amp;enablejsapi=true&amp;fullscreen=true&amp;windowbox=false&amp;showbranding=false&amp;showstartscreen=true&amp;showendscreen=true&amp;basecolor=272727&amp;loop=false" />
+      <!--<![endif]-->
+         <div id="noUpdate">
+             <p>The Camtasia Studio video content presented here requires JavaScript to be enabled and the latest version of the Adobe Flash Player. If you are using a browser with JavaScript disabled please enable it now. Otherwise, please update your version of the free Adobe Flash Player by <a href="http://www.adobe.com/go/getflashplayer">downloading here</a>. </p>
+         </div>
+      <!--[if !IE]>-->
+      </object>
+      <!--<![endif]-->
+   </object>
+  </div>
 
+ <br/>
+ <h3>You get all this:</h3>
 <pre>
-//here is a sample 
-Blogs blogs = new Blogs();
-Comments comments = new Comments();
-dynamic blog = new Blog();
+Blogs blogs = new Blogs(); //data access by convention
+Comments comments = new Comments(); //data access by convention
+dynamic blog = new Blog(); //new up a blog, validate, then save
 blog.Name = "";
 blog.IsValid(); //this would be false
 blog.FirstError(); //this would return "Name is Required"
@@ -131,20 +161,23 @@ blog.Name = "Blog Name";
 blog.Id = blogs.Insert(blog); //inserts into the database returns an Id
 var comment = blog.Comments().New(new { Body = "new comment" });
 comments.Insert(comment); //inserts comment into database
-var firstComment = blog.Comments(new { discardCache = true }).First();
+var firstComment = blog.Comments(discardCache: true).First();
 firstComment.Body; //this is "new comment"
 firstComment.Blog().Name; //this is "Blog Name"
 dynamic anotherBlog = new Blog();
 anotherBlog.Name = "Blog Name";
 anotherBlog.IsValid(); //this would return false, Name must be unique
 anotherBlog.FirstError(); //this would return "Name is taken"
-
-//here are the backing classes
+</pre>
+ <h3>By writing <b>just</b> this:</h3>
+<pre>
+<b>//data access</b>
 public class Blogs : DynamicRepository 
 {
     public Blogs() { Project = d =&gt; new Blog(d); }
 }
 
+<b>//data access</b>
 public class Comments : DynamicRepository 
 { 
     public Comments() { Project = d =&gt; new Comment(d); }
@@ -152,11 +185,13 @@ public class Comments : DynamicRepository
 
 public class Blog : DynamicModel
 {
+    <b>//validation, name is required and must be unique</b>
     IEnumerable&lt;dynamic&gt; Validates() {
         yield return new Presense("Name");
         yield return new Uniqueness("Name");
     }
 
+    <b>//a blog has many comments</b>
     IEnumerable&lt;dynamic&gt; Associates() {
         yield return HasMany(comments);
     }
@@ -169,10 +204,12 @@ public class Blog : DynamicModel
 
 public class Comment : DynamicModel
 {
+    <b>//validation, body is required</b>
     IEnumerable&lt;dynamic&gt; Validates() {
         yield return new Presense("Body");
     }
 
+    <b>//a comment belongs to a blog</b>
     IEnumerable&lt;dynamic&gt; Associates() {
         yield return BelongsTo(blogs);
     }
@@ -220,8 +257,13 @@ seed.CreateTable("Comments",
 <p>
   Oak comes installed with a suite of rake scripts that will build your solution, deploy your web app, run NSpec tests and run UI automation tests.  These scripts can be leveraged directly by your build servers.
 </p>
-
-
+<div id="sampleapps"></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<h1>Sample Apps</h1>
+<hr/>
 <h2>Explore the sample apps: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
 <p>This is..you guessed it...a blogging app.</p>
 <ul>
