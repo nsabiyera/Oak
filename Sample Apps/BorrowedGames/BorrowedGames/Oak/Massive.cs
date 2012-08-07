@@ -197,6 +197,8 @@ namespace Massive
             {
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
 
+                if (WriteDevLog) LogSql(sql, args);
+
                 while (rdr.Read())
                 {
                     yield return rdr.RecordToGemini(Projection);
@@ -225,12 +227,29 @@ namespace Massive
         {
             using (var rdr = CreateCommand(sql, connection, args).ExecuteReader())
             {
+                if (WriteDevLog) LogSql(sql, args);
+
                 while (rdr.Read())
                 {
                     yield return rdr.RecordToGemini(Projection); ;
                 }
             }
         }
+
+        void LogSql(string sql, params object[] args)
+        {
+            System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");
+        }
+
+        private void LogSql(DbCommand cmd)
+        {
+            var args = new List<object>();
+
+            cmd.Parameters.ForEach<SqlParameter>(s => args.Add(s.Value));
+
+            LogSql(cmd.CommandText, args.ToArray());
+        }
+
         /// <summary>
         /// Returns a single result
         /// </summary>
@@ -248,10 +267,6 @@ namespace Massive
         /// </summary>
         DbCommand CreateCommand(string sql, DbConnection conn, params object[] args)
         {
-            if(WriteDevLog)
-            {
-                System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");    
-            }
             var result = _factory.CreateCommand();
             result.Connection = conn;
             result.CommandText = sql;
@@ -327,7 +342,7 @@ namespace Massive
                         cmd.Transaction = tx;
                         try
                         {
-                            result += cmd.ExecuteNonQuery();    
+                            result += cmd.ExecuteNonQuery();
                         }
                         catch (SqlException ex)
                         {
@@ -335,7 +350,7 @@ namespace Massive
 
                             else throw;
                         }
-                        
+
                     }
                     tx.Commit();
                 }
@@ -390,6 +405,9 @@ namespace Massive
                 result.CommandText = sql;
             }
             else throw new InvalidOperationException("Can't parse this object to the database - there are no properties set");
+
+            if (WriteDevLog) if (WriteDevLog) LogSql(result);
+
             return result;
         }
         /// <summary>
@@ -423,6 +441,9 @@ namespace Massive
                 result.CommandText = string.Format(stub, TableName, keys, PrimaryKeyField, counter);
             }
             else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
+
+            if (WriteDevLog) if (WriteDevLog) LogSql(result);
+
             return result;
         }
 
@@ -469,7 +490,12 @@ namespace Massive
             {
                 sql += where.Trim().StartsWith("where", StringComparison.CurrentCultureIgnoreCase) ? where : "WHERE " + where;
             }
-            return CreateCommand(sql, null, args);
+
+            var result = CreateCommand(sql, null, args);
+
+            if (WriteDevLog) if (WriteDevLog) LogSql(result);
+
+            return result;
         }
         /// <summary>
         /// Adds a record to the database. You can pass in an Anonymous object, an ExpandoObject,

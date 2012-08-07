@@ -110,10 +110,16 @@ namespace Massive
         DbProviderFactory _factory;
         ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
+        public static bool WriteDevLog { get; set; }
 
         public DynamicRepository(string tableName = "", string primaryKeyField = "")
             : this(null, tableName, primaryKeyField)
         {
+        }
+
+        static DynamicRepository()
+        {
+            WriteDevLog = false;
         }
 
         public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
@@ -242,6 +248,10 @@ namespace Massive
         /// </summary>
         DbCommand CreateCommand(string sql, DbConnection conn, params object[] args)
         {
+            if(WriteDevLog)
+            {
+                System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");    
+            }
             var result = _factory.CreateCommand();
             result.Connection = conn;
             result.CommandText = sql;
@@ -482,6 +492,8 @@ namespace Massive
                 {
                     if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
 
+                    else if (IsIdentityInsertException(ex)) throw TryExcludingIdentity(ex);
+
                     else throw;
                 }
             }
@@ -491,6 +503,30 @@ namespace Massive
             if (int.TryParse(result.ToString(), out outInt)) return outInt;
 
             return result;
+        }
+
+        private bool IsIdentityInsertException(SqlException ex)
+        {
+            return ex.Message.Contains("Cannot insert explicit value for identity column in table");
+        }
+
+        private InvalidOperationException TryExcludingIdentity(SqlException ex)
+        {
+            return new InvalidOperationException(
+@"Looks like you are trying to save a property that is considered an Identity column.
+To exclude unwanted properties, override the IDictionary<string, object> GetAttributesToSave(object o) method on your repository.
+Here is an example of how to exclude unwanted properties: 
+
+public class " + this.GetType().Name + @" : " + this.GetType().BaseType.Name + @"
+{
+    public override IDictionary<string, object> GetAttributesToSave(object o)
+    {
+        return base.GetAttributesToSave(o).Exclude(""Id""); //this would be your identity column
+    }
+}
+
+Sql Exception: 
+" + ex.Message);
         }
 
         private bool IsInvalidColumnException(SqlException ex)
