@@ -109,6 +109,11 @@ namespace Oak
     [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
+        static Gemini()
+        {
+            Gemini.Initialized<Gemini>(d => d.AddRedefinableDelegates());
+        }
+
         private bool initialized;
 
         private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> ExtendHooks = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
@@ -184,8 +189,6 @@ namespace Oak
 
             ApplyValuesToWritableProperties();
 
-            AddRedefinableDelegates();
-
             ConstructTypeHierarchy();
 
             ApplyExtensions();
@@ -214,7 +217,7 @@ namespace Oak
             }
         }
 
-        private void AddRedefinableDelegates()
+        public void AddRedefinableDelegates()
         {
             foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
         }
