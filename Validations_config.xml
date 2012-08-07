@@ -1,8 +1,8 @@
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/" xmlns:xmpG="http://ns.adobe.com/xap/1.0/g/" xmlns:tsc="http://www.techsmith.com/xmp/tsc/" xmlns:tscDM="http://www.techsmith.com/xmp/tscDM/" xmlns:tscHS="http://www.techsmith.com/xmp/tscHS/" xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#" xmlns:stFnt="http://ns.adobe.com/xap/1.0/sType/Font#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-      <rdf:Description tsc:version="1.2.0" dc:date="2012-04-03 08:56:50 PM" dc:title="OakInAction" tscDM:firstFrame="FirstFrame.png">
-         <xmpDM:duration xmpDM:scale="1/1000" xmpDM:value="821000"/>
-         <xmpDM:videoFrameSize stDim:unit="pixel" stDim:h="1024" stDim:w="1280"/>
+      <rdf:Description tsc:version="1.2.0" dc:date="2012-08-05 07:20:47 PM" dc:title="Validations" tscDM:firstFrame="FirstFrame.png">
+         <xmpDM:duration xmpDM:scale="1/1000" xmpDM:value="622866"/>
+         <xmpDM:videoFrameSize stDim:unit="pixel" stDim:h="1044" stDim:w="1920"/>
          <tsc:langName>
             <rdf:Bag>
                <rdf:li xml:lang="en-US">English</rdf:li></rdf:Bag>
@@ -27,7 +27,7 @@
             <rdf:Description>
                <tscDM:files>
                   <rdf:Seq>
-                     <rdf:li xmpDM:name="0" xmpDM:value="OakInAction.mp4"/><rdf:li xmpDM:name="1" xmpDM:value="FirstFrame.png"/></rdf:Seq>
+                     <rdf:li xmpDM:name="0" xmpDM:value="Validations.mp4"/><rdf:li xmpDM:name="1" xmpDM:value="FirstFrame.png"/></rdf:Seq>
                </tscDM:files>
             </rdf:Description>
          </tscDM:contentList>
