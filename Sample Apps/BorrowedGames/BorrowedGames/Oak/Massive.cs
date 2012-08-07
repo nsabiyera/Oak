@@ -242,6 +242,8 @@ namespace Massive
         /// </summary>
         DbCommand CreateCommand(string sql, DbConnection conn, params object[] args)
         {
+            System.Console.Out.WriteLine("\r\n" + "=============="sql + "\r\n" + string.Join(",", args));
+            System.Console.Out.WriteLine();
             var result = _factory.CreateCommand();
             result.Connection = conn;
             result.CommandText = sql;

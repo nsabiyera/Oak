@@ -34,6 +34,9 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.10\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="FluentNHibernate, Version=1.3.0.727, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <HintPath>..\Libraries\FluentNHibernate.dll</HintPath>
     </Reference>
@@ -184,7 +187,7 @@
     <Compile Include="describe_Gemini\extending_gemini.cs" />
     <Compile Include="describe_Gemini\gemini_methods.cs" />
     <Compile Include="describe_Gemini\inheritance_of_gemini.cs" />
-    <Compile Include="describe_Gemini\performance.cs" />
+    <Compile Include="describe_Gemini\performance_against_nunit.cs" />
     <Compile Include="describe_Gemini\setting_member.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_ParamsModelBinder.cs" />
