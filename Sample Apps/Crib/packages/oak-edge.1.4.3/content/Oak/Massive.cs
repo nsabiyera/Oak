@@ -406,7 +406,7 @@ namespace Massive
             }
             else throw new InvalidOperationException("Can't parse this object to the database - there are no properties set");
 
-            if (WriteDevLog) if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSql(result);
 
             return result;
         }
@@ -442,7 +442,7 @@ namespace Massive
             }
             else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
 
-            if (WriteDevLog) if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSql(result);
 
             return result;
         }
@@ -493,7 +493,7 @@ namespace Massive
 
             var result = CreateCommand(sql, null, args);
 
-            if (WriteDevLog) if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSql(result);
 
             return result;
         }
