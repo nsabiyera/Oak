@@ -12,6 +12,7 @@ using System.Configuration;
 
 namespace Oak.Tests.describe_Gemini
 {
+    [Tag("wip")]
     class performance : nspec
     {
         DateTime finish;
@@ -31,12 +32,12 @@ namespace Oak.Tests.describe_Gemini
 
             var oakTime = TimeToRetrieve100kRowsFromOak();
 
-            oakTime.should_be_less_or_equal_to(nhTime);
+            oakTime.should_be_less_than(nhTime);
         }
 
-        int TotalSeconds(TimeSpan time)
+        double TotalSeconds(TimeSpan time)
         {
-            return Convert.ToInt32(time.TotalSeconds);
+            return time.TotalSeconds;
         }
 
         void CreateTable()
@@ -85,7 +86,7 @@ namespace Oak.Tests.describe_Gemini
                 .BuildSessionFactory();
         }
 
-        private int TimeToRetrieve100kRowsFromNHibernate()
+        private double TimeToRetrieve100kRowsFromNHibernate()
         {
             var sessionFactory = BuildSessionFactory();
 
@@ -103,7 +104,7 @@ namespace Oak.Tests.describe_Gemini
             }
         }
 
-        private int TimeToRetrieve100kRowsFromOak()
+        private double TimeToRetrieve100kRowsFromOak()
         {
             start = DateTime.Now;
 
