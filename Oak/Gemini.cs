@@ -13,7 +13,7 @@ namespace Oak
     {
         Dictionary<string, object> members;
 
-        public Prototype() { members = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase); }
+        public Prototype() { members = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase); }
 
         public Prototype(IDictionary<string, object> dictionary)
         {
@@ -178,13 +178,16 @@ namespace Oak
 
         }
 
+        static Gemini()
+        {
+            Gemini.Initialized<Gemini>(d => d.AddRedefinableDelegates());
+        }
+
         public Gemini(object dto)
         {
             AttachDtoValues(dto);
 
             ApplyValuesToWritableProperties();
-
-            AddRedefinableDelegates();
 
             ConstructTypeHierarchy();
 
@@ -214,7 +217,7 @@ namespace Oak
             }
         }
 
-        private void AddRedefinableDelegates()
+        public void AddRedefinableDelegates()
         {
             foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
         }

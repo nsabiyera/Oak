@@ -23,7 +23,6 @@ namespace Oak.Tests.describe_DynamicModel
         }
     }
 
-    [Tag("wip")]
     class saving_model_that_contains_an_identity_column : nspec
     {
         public Seed seed;
