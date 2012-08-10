@@ -29,8 +29,6 @@ namespace Oak.Tests.describe_DynamicModel
         
         public Inventory inventory;
 
-        public dynamic itemId;
-
         void before_each()
         {
             inventory = new Inventory();
