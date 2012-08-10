@@ -13,11 +13,11 @@ namespace Oak
     {
         Dictionary<string, object> members;
 
-        public Prototype() { members = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase); }
+        public Prototype() { members = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase); }
 
         public Prototype(IDictionary<string, object> dictionary)
         {
-            members = new Dictionary<string, object>(dictionary, StringComparer.InvariantCultureIgnoreCase);
+            members = new Dictionary<string, object>(dictionary, StringComparer.OrdinalIgnoreCase);
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
