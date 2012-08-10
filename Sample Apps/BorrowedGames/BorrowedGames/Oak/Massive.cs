@@ -110,10 +110,16 @@ namespace Massive
         DbProviderFactory _factory;
         ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
+        public static bool WriteDevLog { get; set; }
 
         public DynamicRepository(string tableName = "", string primaryKeyField = "")
             : this(null, tableName, primaryKeyField)
         {
+        }
+
+        static DynamicRepository()
+        {
+            WriteDevLog = false;
         }
 
         public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
@@ -191,6 +197,8 @@ namespace Massive
             {
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
 
+                if (WriteDevLog) LogSql(sql, args);
+
                 while (rdr.Read())
                 {
                     yield return rdr.RecordToGemini(Projection);
@@ -219,12 +227,29 @@ namespace Massive
         {
             using (var rdr = CreateCommand(sql, connection, args).ExecuteReader())
             {
+                if (WriteDevLog) LogSql(sql, args);
+
                 while (rdr.Read())
                 {
                     yield return rdr.RecordToGemini(Projection); ;
                 }
             }
         }
+
+        void LogSql(string sql, params object[] args)
+        {
+            System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");
+        }
+
+        private void LogSql(DbCommand cmd)
+        {
+            var args = new List<object>();
+
+            cmd.Parameters.ForEach<SqlParameter>(s => args.Add(s.Value));
+
+            LogSql(cmd.CommandText, args.ToArray());
+        }
+
         /// <summary>
         /// Returns a single result
         /// </summary>
@@ -317,7 +342,7 @@ namespace Massive
                         cmd.Transaction = tx;
                         try
                         {
-                            result += cmd.ExecuteNonQuery();    
+                            result += cmd.ExecuteNonQuery();
                         }
                         catch (SqlException ex)
                         {
@@ -325,7 +350,7 @@ namespace Massive
 
                             else throw;
                         }
-                        
+
                     }
                     tx.Commit();
                 }
@@ -380,6 +405,9 @@ namespace Massive
                 result.CommandText = sql;
             }
             else throw new InvalidOperationException("Can't parse this object to the database - there are no properties set");
+
+            if (WriteDevLog) LogSql(result);
+
             return result;
         }
         /// <summary>
@@ -413,6 +441,9 @@ namespace Massive
                 result.CommandText = string.Format(stub, TableName, keys, PrimaryKeyField, counter);
             }
             else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
+
+            if (WriteDevLog) LogSql(result);
+
             return result;
         }
 
@@ -459,7 +490,12 @@ namespace Massive
             {
                 sql += where.Trim().StartsWith("where", StringComparison.CurrentCultureIgnoreCase) ? where : "WHERE " + where;
             }
-            return CreateCommand(sql, null, args);
+
+            var result = CreateCommand(sql, null, args);
+
+            if (WriteDevLog) LogSql(result);
+
+            return result;
         }
         /// <summary>
         /// Adds a record to the database. You can pass in an Anonymous object, an ExpandoObject,
@@ -482,6 +518,8 @@ namespace Massive
                 {
                     if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
 
+                    else if (IsIdentityInsertException(ex)) throw TryExcludingIdentity(ex);
+
                     else throw;
                 }
             }
@@ -491,6 +529,30 @@ namespace Massive
             if (int.TryParse(result.ToString(), out outInt)) return outInt;
 
             return result;
+        }
+
+        private bool IsIdentityInsertException(SqlException ex)
+        {
+            return ex.Message.Contains("Cannot insert explicit value for identity column in table");
+        }
+
+        private InvalidOperationException TryExcludingIdentity(SqlException ex)
+        {
+            return new InvalidOperationException(
+@"Looks like you are trying to save a property that is considered an Identity column.
+To exclude unwanted properties, override the IDictionary<string, object> GetAttributesToSave(object o) method on your repository.
+Here is an example of how to exclude unwanted properties: 
+
+public class " + this.GetType().Name + @" : " + this.GetType().BaseType.Name + @"
+{
+    public override IDictionary<string, object> GetAttributesToSave(object o)
+    {
+        return base.GetAttributesToSave(o).Exclude(""Id""); //this would be your identity column
+    }
+}
+
+Sql Exception: 
+" + ex.Message);
         }
 
         private bool IsInvalidColumnException(SqlException ex)

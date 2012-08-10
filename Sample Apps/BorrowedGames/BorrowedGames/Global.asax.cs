@@ -37,7 +37,7 @@ namespace BorrowedGames
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            ModelBinders.Binders.Add(typeof(object), new ParamsModelBinder());
+            BootStrap.Init();
         }
     }
 }
