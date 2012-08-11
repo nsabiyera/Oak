@@ -5,11 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using BorrowedGames.Models;
 using Oak;
+using BorrowedGames.Repositories;
 
 namespace BorrowedGames.Controllers
 {
     public class GamesController : BaseController
     {
+        Games games = new Games();
+
         public dynamic Preferred()
         {
             return Json(LinksForPreferredGames(User().PreferredGames()));
@@ -66,6 +69,20 @@ namespace BorrowedGames.Controllers
             User().GameReturned(gameId, byUserId);
         }
 
+        public void Favorite(int gameId)
+        {
+            var game = games.Single(gameId);
+
+            game.FavoritedBy(User());
+        }
+
+        public void Unfavorite(int gameId)
+        {
+            var game = games.Single(gameId);
+
+            game.UnfavoritedBy(User());
+        }
+
         public void ReturnGame(int gameId, int toUserId)
         {
             User().ReturnGame(gameId, toUserId);
@@ -89,6 +106,25 @@ namespace BorrowedGames.Controllers
                     gameId = s.Id,
                     followingId = s.Owner.Id
                 });
+
+                if(s.IsFavorited)
+                {
+                    s.UnfavoriteGame = Url.RouteUrl(new
+                    {
+                        controller = "Games",
+                        action = "Unfavorite",
+                        gameId = s.Id
+                    });    
+                }
+                else
+                {
+                    s.FavoriteGame = Url.RouteUrl(new
+                    {
+                        controller = "Games",
+                        action = "Favorite",
+                        gameId = s.Id
+                    });
+                }
             });
 
             return games;

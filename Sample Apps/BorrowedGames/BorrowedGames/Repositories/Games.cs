@@ -4,11 +4,17 @@ using System.Linq;
 using System.Text;
 using Massive;
 using Oak;
+using BorrowedGames.Models;
 
 namespace BorrowedGames.Repositories
 {
     public class Games : DynamicRepository
     {
+        public Games()
+        {
+            Projection = d => new Game(d);
+        }
+
         public IEnumerable<dynamic> StartsWith(string name)
         {
             return Like(name + "%");

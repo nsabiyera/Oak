@@ -20,6 +20,8 @@ namespace BorrowedGames.Models
 
         WantedGames wantedGames = new WantedGames();
 
+        FavoritedGames favoritedGames = new FavoritedGames();
+
         public User(object dto)
             : base(dto)
         {
@@ -44,6 +46,9 @@ namespace BorrowedGames.Models
 
             yield return
             new HasMany(friendAssociations);
+
+            yield return
+            new HasMany(favoritedGames);
         }
 
         public IEnumerable<dynamic> Validates()
@@ -208,8 +213,9 @@ namespace BorrowedGames.Models
                         SharesConsole(s.Console) &&
                         HasNotBeenRequested(s))
                     .Select(PreferredGame)
-                    .OrderBy(s => s.Name)
-                    .ToList();
+                    .OrderByDescending(s => s.IsFavorited)
+                    .ThenBy(s => s.Name)
+                    .ToModels();
 
             return preferredGames;
         }
@@ -229,7 +235,7 @@ namespace BorrowedGames.Models
                 game.Name,
                 game.Console,
                 Owner = game.User.Select("Id", "Handle")
-            });
+            }, _.FavoritedGames().Any(new { gameId = game.Id }));
         }
 
         private dynamic WantedGame(dynamic game)

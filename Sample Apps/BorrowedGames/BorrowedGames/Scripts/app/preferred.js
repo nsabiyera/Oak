@@ -40,6 +40,21 @@
         return callback();
       });
     },
+    isFavorited: function() {
+      return this.get("IsFavorited");
+    },
+    favorite: function() {
+      var _this = this;
+      return $.post(this.get("FavoriteGame"), {}, function() {
+        return preferred.getPreferredGames();
+      });
+    },
+    unfavorite: function() {
+      var _this = this;
+      return $.post(this.get("UnfavoriteGame"), {}, function() {
+        return preferred.getPreferredGames();
+      });
+    },
     wantGame: function(callback) {
       var _this = this;
       return $.post(this.get("WantGame"), {}, function() {
@@ -106,7 +121,8 @@
     },
     events: {
       "click .cancel": "notInterested",
-      "click .request": "wantGame"
+      "click .request": "wantGame",
+      "click .favorite": "toggleFavorite"
     },
     notInterested: function() {
       var el;
@@ -122,12 +138,28 @@
         return $(el).fadeOut();
       });
     },
+    toggleFavorite: function() {
+      if (this.model.isFavorited()) {
+        $(this.el).find(".icon-star").tooltip('hide');
+        $(this.el).find(".icon-star-empty").tooltip('hide');
+        return this.model.unfavorite();
+      } else {
+        $(this.el).find(".icon-star").tooltip('hide');
+        $(this.el).find(".icon-star-empty").tooltip('hide');
+        return this.model.favorite();
+      }
+    },
     render: function() {
-      var game;
+      var game, starClass;
+      starClass = "icon-star-empty";
+      if (this.model.isFavorited()) {
+        starClass = "icon-star";
+      }
       game = $.tmpl(this.gameTemplate, {
         gameName: this.model.shortName(),
         searchString: this.model.reviewUrl(),
-        owner: this.model.owner()
+        owner: this.model.owner(),
+        starClass: starClass
       });
       $(this.el).html(game);
       game.find(".cancel").tooltip({
@@ -138,12 +170,21 @@
         "title": "<span style='font-size: 16px'>request the game from " + this.model.owner() + "<span>",
         "placement": "top"
       });
+      game.find(".icon-star-empty").tooltip({
+        "title": "<span style='font-size: 16px'>bring the game to the top of your list<span>",
+        "placement": "top"
+      });
+      game.find(".icon-star").tooltip({
+        "title": "<span style='font-size: 16px'>bring the game down from its pedestal<span>",
+        "placement": "top"
+      });
       return this;
     },
     gameTemplate: '\
       <td><a href="${searchString}" target="_blank">${gameName}</a></td>\
       <td>${owner}</td>\
-      <td class="span1">\
+      <td class="span2">\
+        <i href="javascript:;" class="favorite ${starClass}" style="cursor: pointer; color: red"></i>\
         <i href="javascript:;" class="request icon-arrow-up" style="cursor: pointer"></i>\
         <i href="javascript:;" class="cancel icon-arrow-down" style="cursor: pointer"></i>\
       </td>\

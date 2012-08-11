@@ -48,6 +48,8 @@ namespace Oak.Controllers
             yield return AddReturnDateToWantedGames;
 
             yield return CreateEmailHistorys;
+
+            yield return CreateFavoritedGames;
         }
 
         public Func<dynamic> Current()
@@ -134,6 +136,14 @@ namespace Oak.Controllers
                 UserId(),
                 new { CreatedAt = "datetime" }
             });
+        }
+
+        public string CreateFavoritedGames()
+        {
+            return Seed.CreateTable("FavoritedGames", Seed.Id(),
+                GameId(),
+                UserId()
+            );
         }
 
         private object Id()

@@ -30,6 +30,18 @@ library = Backbone.Model.extend
       callback()
     )
 
+  isFavorited: -> @get("IsFavorited")
+
+  favorite: ->
+    $.post(@get("FavoriteGame"), { }, =>
+      preferred.getPreferredGames()
+    )
+
+  unfavorite: ->
+    $.post(@get("UnfavoriteGame"), { }, =>
+      preferred.getPreferredGames()
+    )
+
   wantGame: (callback) ->
     $.post(@get("WantGame"), { }, =>
       @wanted = true
@@ -93,6 +105,7 @@ preferredGameView = Backbone.View.extend
   events:
     "click .cancel": "notInterested"
     "click .request": "wantGame"
+    "click .favorite": "toggleFavorite"
 
   notInterested: ->
     el = @el
@@ -102,8 +115,22 @@ preferredGameView = Backbone.View.extend
     el = @el
     @model.wantGame(-> $(el).fadeOut())
 
+  toggleFavorite: ->
+    if @model.isFavorited()
+      $(@el).find(".icon-star").tooltip('hide')
+      $(@el).find(".icon-star-empty").tooltip('hide')
+      @model.unfavorite()
+    else
+      $(@el).find(".icon-star").tooltip('hide')
+      $(@el).find(".icon-star-empty").tooltip('hide')
+      @model.favorite()
+
   render: ->
-    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), searchString: @model.reviewUrl(), owner: @model.owner() })
+    starClass = "icon-star-empty"
+
+    starClass = "icon-star" if @model.isFavorited()
+
+    game = $.tmpl(@gameTemplate, { gameName: @model.shortName(), searchString: @model.reviewUrl(), owner: @model.owner(), starClass: starClass })
 
     $(@el).html(game)
 
@@ -111,13 +138,18 @@ preferredGameView = Backbone.View.extend
 
     game.find(".request").tooltip({ "title": "<span style='font-size: 16px'>request the game from " + @model.owner() + "<span>", "placement": "top" })
 
+    game.find(".icon-star-empty").tooltip({ "title": "<span style='font-size: 16px'>bring the game to the top of your list<span>", "placement": "top" })
+
+    game.find(".icon-star").tooltip({ "title": "<span style='font-size: 16px'>bring the game down from its pedestal<span>", "placement": "top" })
+
     return this
 
   gameTemplate:
     '
       <td><a href="${searchString}" target="_blank">${gameName}</a></td>
       <td>${owner}</td>
-      <td class="span1">
+      <td class="span2">
+        <i href="javascript:;" class="favorite ${starClass}" style="cursor: pointer; color: red"></i>
         <i href="javascript:;" class="request icon-arrow-up" style="cursor: pointer"></i>
         <i href="javascript:;" class="cancel icon-arrow-down" style="cursor: pointer"></i>
       </td>
