@@ -8,7 +8,6 @@ using Oak.Tests.describe_DynamicModel.describe_Association.Classes.Unconventiona
 
 namespace Oak.Tests.describe_DynamicModel.describe_Association
 {
-    [Tag("wip")]
     class has_many_and_belongs_to_eager_loading : has_many_and_belongs_to
     {
         public object student1Id, student2Id, course1Id, course2Id;

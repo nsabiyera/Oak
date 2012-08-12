@@ -19,9 +19,13 @@ namespace Oak.Tests.describe_DynamicModels
 
         Users users;
 
+        Emails emails;
+
         void before_each()
         {
             users = new Users();
+
+            emails = new Emails();
 
             seed.PurgeDb();
 
@@ -156,6 +160,19 @@ namespace Oak.Tests.describe_DynamicModels
                 selectMany = userCollection.Emails().Aliases();
 
                 selectMany.Count().should_be(1);
+            };
+
+            it["the parent collection is also cached", "wip"] = () =>
+            {
+                dynamic allEmails = emails.All();
+
+                allEmails.Aliases();
+
+                var firstEmail = allEmails.First();
+
+                new { EmailId = email1Id, Name = "Alias2" }.InsertInto("Aliases");
+
+                ((int)firstEmail.Aliases().Count()).should_be(1);
             };
 
             it["allows the discarding of cache"] = () =>
