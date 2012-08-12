@@ -133,6 +133,54 @@ namespace Oak
         }
     }
 
+    public class SelectMany
+    {
+        public DynamicModels Cache { get; set; }
+
+        public bool ShouldDiscardCache(dynamic options)
+        {
+            if (options == null) options = new { discardCache = false };
+
+            options = (options as object).ToPrototype();
+
+            return options.discardCache;
+        }
+
+        public DynamicModels Execute(dynamic options,
+            DynamicRepository repository,
+            string associationName,
+            string selectClause,
+            IEnumerable<dynamic> models,
+            string parentMemberName)
+        {
+            if (ShouldDiscardCache(options)) Cache = null;
+
+            if (Cache != null) return Cache;
+
+            var many = repository.Query(selectClause).ToList();
+
+            foreach (var item in many)
+            {
+                var model = models.First(s => s.Id == item.GetMember(parentMemberName));
+
+                item.SetMember(model.GetType().Name, model);
+            }
+
+            foreach (var model in models)
+            {
+                var assocation = model.AssociationNamed(associationName);
+
+                var relatedTo = many.Select(s => s.GetMember(model.GetType().Name).Equals(model));
+
+                assocation.SelectMany.Cache = new DynamicModels(relatedTo);
+            }
+
+            Cache = new DynamicModels(many);
+
+            return Cache;
+        }
+    }
+
     public class HasMany : Association
     {
         DynamicModels cachedCollection;
@@ -363,7 +411,7 @@ namespace Oak
     {
         dynamic cachedCollection;
 
-        DynamicModels selectManyRelatedToCache;
+        public SelectMany SelectMany { get; set; }
 
         string throughTable;
 
@@ -396,6 +444,8 @@ namespace Oak
 
         public void Init(dynamic model)
         {
+            SelectMany = new SelectMany();
+
             throughTable = CrossRefenceTable ?? throughTable;
 
             fromColumn = FromColumn ?? ForeignKeyFor(model);
@@ -454,22 +504,9 @@ namespace Oak
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
         {
-            if (DiscardCache(options)) selectManyRelatedToCache = null;
+            var sql = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray());
 
-            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
-
-            var many = Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray())).ToList();
-
-            foreach (var item in many)
-            {
-                var model = models.First(s => s.Id == item.GetMember(fromColumn));
-
-                item.SetMember(model.GetType().Name, model);
-            }
-
-            selectManyRelatedToCache = new DynamicModels(many);
-
-            return selectManyRelatedToCache;
+            return SelectMany.Execute(options, Repository, Named, sql, models, fromColumn);
         }
     }
 
@@ -615,7 +652,7 @@ namespace Oak
         public BelongsTo(DynamicRepository repository)
             : this(repository, null)
         {
-            
+
         }
 
         public BelongsTo(DynamicRepository repository, string named)
