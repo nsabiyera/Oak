@@ -85,6 +85,7 @@
     <Compile Include="describe_DynamicModels\Classes\User.cs" />
     <Compile Include="describe_DynamicModels\Classes\Users.cs" />
     <Compile Include="describe_DynamicModels\Classes\Warehouses.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading.cs" />
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />

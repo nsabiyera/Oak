@@ -162,7 +162,7 @@ namespace Oak.Tests.describe_DynamicModels
                 selectMany.Count().should_be(1);
             };
 
-            it["the parent collection is also cached", "wip"] = () =>
+            it["the parent collection is also cached"] = () =>
             {
                 dynamic allEmails = emails.All();
 

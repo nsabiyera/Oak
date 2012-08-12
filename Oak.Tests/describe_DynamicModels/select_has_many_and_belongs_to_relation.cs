@@ -63,8 +63,9 @@ namespace Oak.Tests.describe_DynamicModels
             it["performs a select many for all entries in the collection"] = () =>
             {
                 var selectMany = (students.All() as dynamic).Courses();
+
+                ((int)selectMany.Count()).should_be(2);
             };
         }
-
     }
 }
