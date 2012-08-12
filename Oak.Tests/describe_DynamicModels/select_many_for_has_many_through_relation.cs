@@ -136,6 +136,19 @@ namespace Oak.Tests.describe_DynamicModels
                 selectMany.Count().should_be(1);
             };
 
+            it["cache is also applied for parent entries"] = () =>
+            {
+                var playerCollection = players.All() as dynamic;
+
+                var firstPlayer = playerCollection.First();
+
+                playerCollection.Games();
+
+                new { PlayerId = player1Id, GameId = game1Id }.InsertInto("Library");
+
+                ((int)firstPlayer.Games().Count()).should_be(1);
+            };
+
             it["allows the discarding of cache"] = () =>
             {
                 var playerCollection = players.All() as dynamic;

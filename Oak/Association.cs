@@ -183,11 +183,9 @@ namespace Oak
 
     public class HasMany : Association
     {
-        DynamicModels cachedCollection;
-
         public string ForeignKey { get; set; }
 
-        DynamicModels selectManyRelatedToCache;
+        public SelectMany SelectMany { get; set; }
 
         public HasMany(DynamicRepository repository)
             : this(repository, null)
@@ -204,6 +202,8 @@ namespace Oak
 
         public void Init(dynamic model)
         {
+            SelectMany = new SelectMany();
+
             ForeignKey = ForeignKey ?? ForeignKeyFor(model);
 
             var toTable = Repository.GetType().Name;
@@ -241,15 +241,15 @@ namespace Oak
         {
             return (options) =>
             {
-                if (DiscardCache(options)) cachedCollection = null;
+                if (SelectMany.ShouldDiscardCache(options)) SelectMany.Cache = null;
 
-                if (cachedCollection != null) return cachedCollection;
+                if (SelectMany.Cache != null) return SelectMany.Cache;
 
-                cachedCollection = new DynamicModels(Repository.Query(SelectClause(model)));
+                SelectMany.Cache = new DynamicModels(Repository.Query(SelectClause(model)));
 
-                AddNewAssociationMethod(cachedCollection, model);
+                AddNewAssociationMethod(SelectMany.Cache, model);
 
-                return cachedCollection;
+                return SelectMany.Cache;
             };
         }
 
@@ -265,24 +265,9 @@ namespace Oak
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
         {
-            if (DiscardCache(options)) selectManyRelatedToCache = null;
-
-            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
-
             var query = SelectClause(models.ToArray());
 
-            var many = Repository.Query(query).ToList();
-
-            foreach (var item in many)
-            {
-                var model = models.First(s => s.Id == item.GetMember(ForeignKey));
-
-                item.SetMember(model.GetType().Name, model);
-            }
-
-            selectManyRelatedToCache = new DynamicModels(many);
-
-            return selectManyRelatedToCache;
+            return SelectMany.Execute(options, Repository, Named, query, models, ForeignKey);
         }
 
         private string SelectClause(params dynamic[] models)
@@ -307,9 +292,7 @@ namespace Oak
 
         DynamicRepository through;
 
-        DynamicModels cachedCollection;
-
-        DynamicModels selectManyRelatedToCache;
+        public SelectMany SelectMany { get; set; }
 
         public string ForeignKey { get; set; }
 
@@ -334,6 +317,8 @@ namespace Oak
 
         public void Init(dynamic model)
         {
+            SelectMany = new SelectMany();
+
             FromColumn = FromColumn ?? ForeignKeyFor(model);
 
             toTable = Repository.GetType().Name;
@@ -360,40 +345,27 @@ namespace Oak
         {
             return (options) =>
             {
-                if (DiscardCache(options)) cachedCollection = null;
+                if (SelectMany.ShouldDiscardCache(options)) SelectMany.Cache = null;
 
-                if (cachedCollection != null) return cachedCollection;
+                if (SelectMany.Cache != null) return SelectMany.Cache;
 
                 var models = (Repository.Query(InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, model)) as IEnumerable<dynamic>).ToList();
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 
-                cachedCollection = new DynamicModels(models);
+                SelectMany.Cache = new DynamicModels(models);
 
-                AddNewAssociationMethod(cachedCollection, model);
+                AddNewAssociationMethod(SelectMany.Cache, model);
 
-                return cachedCollection;
+                return SelectMany.Cache;
             };
         }
 
         public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
         {
-            if (DiscardCache(options)) selectManyRelatedToCache = null;
+            string sql = InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray());
 
-            if (selectManyRelatedToCache != null) return selectManyRelatedToCache;
-
-            var many = Repository.Query(InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray())).ToList();
-
-            foreach (var item in many)
-            {
-                var model = models.First(s => s.Id == item.GetMember(FromColumn));
-
-                item.SetMember(model.GetType().Name, model);
-            }
-
-            selectManyRelatedToCache = new DynamicModels(many);
-
-            return selectManyRelatedToCache;
+            return SelectMany.Execute(options, Repository, Named, sql, models, FromColumn);
         }
 
         private DynamicFunction QueryIds(dynamic model)
