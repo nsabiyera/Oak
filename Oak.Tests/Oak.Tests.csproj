@@ -69,6 +69,9 @@
     <Compile Include="describe_DynamicForm.cs" />
     <Compile Include="describe_DynamicModels\Classes\Aliases.cs" />
     <Compile Include="describe_DynamicModels\Classes\Authors.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Book.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Books.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Chapters.cs" />
     <Compile Include="describe_DynamicModels\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModels\Classes\Comments.cs" />
     <Compile Include="describe_DynamicModels\Classes\DistributionChannels.cs" />
@@ -79,12 +82,17 @@
     <Compile Include="describe_DynamicModels\Classes\Player.cs" />
     <Compile Include="describe_DynamicModels\Classes\Players.cs" />
     <Compile Include="describe_DynamicModels\Classes\Posts.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Presenters.cs" />
     <Compile Include="describe_DynamicModels\Classes\Profiles.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Screencast.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Screencasts.cs" />
     <Compile Include="describe_DynamicModels\Classes\Store.cs" />
     <Compile Include="describe_DynamicModels\Classes\Stores.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Tags.cs" />
     <Compile Include="describe_DynamicModels\Classes\User.cs" />
     <Compile Include="describe_DynamicModels\Classes\Users.cs" />
     <Compile Include="describe_DynamicModels\Classes\Warehouses.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_has_many.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_and_belongs_to.cs" />
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
