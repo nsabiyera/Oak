@@ -39,9 +39,9 @@ namespace Oak.Tests.describe_DynamicModels
         }
     }
 
-    class eager_loading : _dynamic_models
+    class eager_loading_for_has_many_and_belongs_to : _dynamic_models
     {
-        object screencastId, presenterId, presenter2Id, tagId, tag2Id;
+        object screencastId, screencast2Id, presenterId, presenter2Id, tagId, tag2Id;
 
         dynamic screencasts;
 
@@ -75,6 +75,8 @@ namespace Oak.Tests.describe_DynamicModels
 
             screencastId = new { Title = "Oak" }.InsertInto("Screencasts");
 
+            screencast2Id = new { Title = "Cambium" }.InsertInto("Screencasts");
+
             presenterId = new { Name = "Amir" }.InsertInto("Presenters");
 
             presenter2Id = new { Name = "Another" }.InsertInto("Presenters");
@@ -90,13 +92,9 @@ namespace Oak.Tests.describe_DynamicModels
 
         void it_loads_and_caches_each_child_collection_specified()
         {
-            var allScreencasts = screencasts.All();
+            var allScreencasts = screencasts.All().Include("Presenters", "Tags");
 
-            allScreencasts.Presenters();
-
-            allScreencasts.Tags();
-
-            ((int)allScreencasts.Count()).should_be(1);
+            ((int)allScreencasts.Count()).should_be(2);
 
             new { presenterId = presenter2Id, screencastId }.InsertInto("PresentersScreencasts");
 
@@ -107,6 +105,12 @@ namespace Oak.Tests.describe_DynamicModels
             ((int)firstScreencast.Presenters().Count()).should_be(1);
 
             ((int)firstScreencast.Tags().Count()).should_be(1);
+
+            var lastScreencast = allScreencasts.Last();
+
+            new { presenterId = presenter2Id, screencastId = screencast2Id }.InsertInto("PresentersScreencasts");
+
+            ((int)lastScreencast.Presenters().Count()).should_be(0);
         }
     }
 }

@@ -170,14 +170,12 @@ namespace Oak
             {
                 var assocation = model.AssociationNamed(associationName);
 
-                var relatedTo = many.Select(s => s.GetMember(model.GetType().Name).Equals(model));
+                var relatedTo = many.Where(s => s.GetMember(model.GetType().Name).Equals(model)).Select(s => s);
 
                 assocation.SelectMany.Cache = new DynamicModels(relatedTo);
             }
 
-            Cache = new DynamicModels(many);
-
-            return Cache;
+            return new DynamicModels(many);
         }
     }
 
