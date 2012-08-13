@@ -205,5 +205,21 @@ namespace Oak
         {
             return Models.GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            var fullString = base.ToString();
+
+            fullString += "========= Entries ===========" + Environment.NewLine;
+
+            foreach (var model in Models)
+            {
+                fullString += model + Environment.NewLine;
+            }
+
+            fullString += "=============================" + Environment.NewLine;
+
+            return fullString;
+        }
     }
 }

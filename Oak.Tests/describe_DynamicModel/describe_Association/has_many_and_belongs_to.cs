@@ -35,6 +35,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             new { studentId = student2Id, courseId = course2Id }.InsertInto("CoursesStudents");
         }
 
+        [Tag("wip")]
         void retrieval_of_relationship_is_performed_at_the_collection_level()
         {
             act = () =>
