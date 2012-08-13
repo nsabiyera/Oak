@@ -1,4 +1,15 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.2.6+
+oak-edge 1.4.7+
+gemini 1.1.4+
+cambium 1.2.4+
+=============== CHANGES ==================
+- Eager loading for collections added.  Example is here: https://github.com/amirrajan/Oak/blob/master/Oak.Tests/describe_DynamicModels/eager_loading_for_has_many_and_belongs_to.cs#L95
+
+
+
+============== FOR VERSIONS ==============
+
 oak 2.2.5+
 oak-edge 1.3.3+
 gemini 1.1.4+
