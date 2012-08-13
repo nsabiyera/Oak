@@ -4,41 +4,10 @@ using System.Linq;
 using System.Text;
 using Massive;
 using NSpec;
+using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    public class Screencasts : DynamicRepository
-    {
-        public Screencasts()
-        {
-            Projection = d => new Screencast(d);
-        }
-    }
-
-    public class Presenters : DynamicRepository { }
-
-    public class Tags : DynamicRepository { }
-
-    public class Screencast : DynamicModel
-    {
-        Presenters presenters = new Presenters();
-
-        Screencasts screencasts = new Screencasts();
-
-        Tags tags = new Tags();
-
-        public Screencast(object dto) : base(dto) { }
-
-        public Screencast() { }
-
-        IEnumerable<dynamic> Associates()
-        {
-            yield return new HasManyAndBelongsTo(presenters, screencasts);
-
-            yield return new HasManyAndBelongsTo(tags, screencasts);
-        }
-    }
-
     class eager_loading_for_has_many_and_belongs_to : _dynamic_models
     {
         object screencastId, screencast2Id, presenterId, presenter2Id, tagId, tag2Id;

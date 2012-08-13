@@ -133,7 +133,7 @@ namespace Oak
         }
     }
 
-    public class SelectMany
+    public class EagerLoadMany
     {
         public DynamicModels Cache { get; set; }
 
@@ -172,7 +172,7 @@ namespace Oak
 
                 var relatedTo = many.Where(s => s.GetMember(model.GetType().Name).Equals(model)).Select(s => s);
 
-                assocation.SelectMany.Cache = new DynamicModels(relatedTo);
+                assocation.EagerLoadMany.Cache = new DynamicModels(relatedTo);
             }
 
             return new DynamicModels(many);
@@ -183,7 +183,7 @@ namespace Oak
     {
         public string ForeignKey { get; set; }
 
-        public SelectMany SelectMany { get; set; }
+        public EagerLoadMany EagerLoadMany { get; set; }
 
         public HasMany(DynamicRepository repository)
             : this(repository, null)
@@ -200,7 +200,7 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            SelectMany = new SelectMany();
+            EagerLoadMany = new EagerLoadMany();
 
             ForeignKey = ForeignKey ?? ForeignKeyFor(model);
 
@@ -239,15 +239,15 @@ namespace Oak
         {
             return (options) =>
             {
-                if (SelectMany.ShouldDiscardCache(options)) SelectMany.Cache = null;
+                if (EagerLoadMany.ShouldDiscardCache(options)) EagerLoadMany.Cache = null;
 
-                if (SelectMany.Cache != null) return SelectMany.Cache;
+                if (EagerLoadMany.Cache != null) return EagerLoadMany.Cache;
 
-                SelectMany.Cache = new DynamicModels(Repository.Query(SelectClause(model)));
+                EagerLoadMany.Cache = new DynamicModels(Repository.Query(SelectClause(model)));
 
-                AddNewAssociationMethod(SelectMany.Cache, model);
+                AddNewAssociationMethod(EagerLoadMany.Cache, model);
 
-                return SelectMany.Cache;
+                return EagerLoadMany.Cache;
             };
         }
 
@@ -261,11 +261,11 @@ namespace Oak
             };
         }
 
-        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
             var query = SelectClause(models.ToArray());
 
-            return SelectMany.Execute(options, Repository, Named, query, models, ForeignKey);
+            return EagerLoadMany.Execute(options, Repository, Named, query, models, ForeignKey);
         }
 
         private string SelectClause(params dynamic[] models)
@@ -290,7 +290,7 @@ namespace Oak
 
         DynamicRepository through;
 
-        public SelectMany SelectMany { get; set; }
+        public EagerLoadMany EagerLoadMany { get; set; }
 
         public string ForeignKey { get; set; }
 
@@ -315,7 +315,7 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            SelectMany = new SelectMany();
+            EagerLoadMany = new EagerLoadMany();
 
             FromColumn = FromColumn ?? ForeignKeyFor(model);
 
@@ -343,27 +343,27 @@ namespace Oak
         {
             return (options) =>
             {
-                if (SelectMany.ShouldDiscardCache(options)) SelectMany.Cache = null;
+                if (EagerLoadMany.ShouldDiscardCache(options)) EagerLoadMany.Cache = null;
 
-                if (SelectMany.Cache != null) return SelectMany.Cache;
+                if (EagerLoadMany.Cache != null) return EagerLoadMany.Cache;
 
                 var models = (Repository.Query(InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, model)) as IEnumerable<dynamic>).ToList();
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 
-                SelectMany.Cache = new DynamicModels(models);
+                EagerLoadMany.Cache = new DynamicModels(models);
 
-                AddNewAssociationMethod(SelectMany.Cache, model);
+                AddNewAssociationMethod(EagerLoadMany.Cache, model);
 
-                return SelectMany.Cache;
+                return EagerLoadMany.Cache;
             };
         }
 
-        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
             string sql = InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray());
 
-            return SelectMany.Execute(options, Repository, Named, sql, models, FromColumn);
+            return EagerLoadMany.Execute(options, Repository, Named, sql, models, FromColumn);
         }
 
         private DynamicFunction QueryIds(dynamic model)
@@ -379,7 +379,7 @@ namespace Oak
 
     public class HasManyAndBelongsTo : Association
     {
-        public SelectMany SelectMany { get; set; }
+        public EagerLoadMany EagerLoadMany { get; set; }
 
         string throughTable;
 
@@ -412,7 +412,7 @@ namespace Oak
 
         public void Init(dynamic model)
         {
-            SelectMany = new SelectMany();
+            EagerLoadMany = new EagerLoadMany();
 
             throughTable = CrossRefenceTable ?? throughTable;
 
@@ -452,9 +452,9 @@ namespace Oak
         {
             return (options) =>
             {
-                if (SelectMany.ShouldDiscardCache(options)) SelectMany.Cache = null;
+                if (EagerLoadMany.ShouldDiscardCache(options)) EagerLoadMany.Cache = null;
 
-                if (SelectMany.Cache != null) return SelectMany.Cache;
+                if (EagerLoadMany.Cache != null) return EagerLoadMany.Cache;
 
                 string innerJoinSelectClause = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model);
 
@@ -462,19 +462,19 @@ namespace Oak
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 
-                SelectMany.Cache = new DynamicModels(models);
+                EagerLoadMany.Cache = new DynamicModels(models);
 
-                AddNewAssociationMethod(SelectMany.Cache, model);
+                AddNewAssociationMethod(EagerLoadMany.Cache, model);
 
-                return SelectMany.Cache;
+                return EagerLoadMany.Cache;
             };
         }
 
-        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
             var sql = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray());
 
-            return SelectMany.Execute(options, Repository, Named, sql, models, fromColumn);
+            return EagerLoadMany.Execute(options, Repository, Named, sql, models, fromColumn);
         }
     }
 
@@ -509,7 +509,7 @@ namespace Oak
             return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
         }
 
-        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
             List<dynamic> collection = new List<dynamic>();
 
@@ -596,7 +596,7 @@ namespace Oak
                     .FirstOrDefault();
         }
 
-        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
             List<dynamic> collection = new List<dynamic>();
 
@@ -636,7 +636,7 @@ namespace Oak
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
-        public IEnumerable<dynamic> SelectManyRelatedTo(IEnumerable<dynamic> models, dynamic options)
+        public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
             List<dynamic> collection = new List<dynamic>();
 
