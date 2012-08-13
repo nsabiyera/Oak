@@ -170,14 +170,12 @@ namespace Oak
             {
                 var assocation = model.AssociationNamed(associationName);
 
-                var relatedTo = many.Select(s => s.GetMember(model.GetType().Name).Equals(model));
+                var relatedTo = many.Where(s => s.GetMember(model.GetType().Name).Equals(model)).Select(s => s);
 
                 assocation.SelectMany.Cache = new DynamicModels(relatedTo);
             }
 
-            Cache = new DynamicModels(many);
-
-            return Cache;
+            return new DynamicModels(many);
         }
     }
 
@@ -381,8 +379,6 @@ namespace Oak
 
     public class HasManyAndBelongsTo : Association
     {
-        dynamic cachedCollection;
-
         public SelectMany SelectMany { get; set; }
 
         string throughTable;
@@ -456,9 +452,9 @@ namespace Oak
         {
             return (options) =>
             {
-                if (DiscardCache(options)) cachedCollection = null;
+                if (SelectMany.ShouldDiscardCache(options)) SelectMany.Cache = null;
 
-                if (cachedCollection != null) return cachedCollection;
+                if (SelectMany.Cache != null) return SelectMany.Cache;
 
                 string innerJoinSelectClause = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model);
 
@@ -466,11 +462,11 @@ namespace Oak
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 
-                cachedCollection = new DynamicModels(models);
+                SelectMany.Cache = new DynamicModels(models);
 
-                AddNewAssociationMethod(cachedCollection, model);
+                AddNewAssociationMethod(SelectMany.Cache, model);
 
-                return cachedCollection;
+                return SelectMany.Cache;
             };
         }
 

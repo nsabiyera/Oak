@@ -41,7 +41,7 @@ namespace Oak
 
             return prototype;
         }
-               
+
         public bool Any(dynamic options)
         {
             options = (options as object).ToPrototype();
@@ -170,7 +170,7 @@ namespace Oak
 
             dynamic options = null;
 
-            if(args.Any()) options = args[0];
+            if (args.Any()) options = args[0];
 
             var association = Models[0].AssociationNamed(collectionName);
 
@@ -189,9 +189,37 @@ namespace Oak
             return Models.GetEnumerator();
         }
 
+        public DynamicModels Include(params string[] methods)
+        {
+            var result = new object();
+
+            methods.ForEach(s => 
+            {
+                SelectMany(s, new object[] { }, out result);
+            });
+
+            return this;
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Models.GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            var fullString = base.ToString();
+
+            fullString += "========= Entries ===========" + Environment.NewLine;
+
+            foreach (var model in Models)
+            {
+                fullString += model + Environment.NewLine;
+            }
+
+            fullString += "=============================" + Environment.NewLine;
+
+            return fullString;
         }
     }
 }
