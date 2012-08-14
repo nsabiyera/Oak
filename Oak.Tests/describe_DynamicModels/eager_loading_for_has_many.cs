@@ -8,10 +8,9 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    [Tag("wip")]
     class eager_loading_for_has_many : nspec
     {
-        Seed seed = new Seed();
+        Seed seed;
 
         object book1Id, book2Id;
 
