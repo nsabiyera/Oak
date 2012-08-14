@@ -94,6 +94,7 @@
     <Compile Include="describe_DynamicModels\Classes\Warehouses.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_and_belongs_to.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_has_many_through.cs" />
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />
