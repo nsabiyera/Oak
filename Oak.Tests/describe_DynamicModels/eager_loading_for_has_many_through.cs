@@ -88,8 +88,6 @@ namespace Oak.Tests.describe_DynamicModels
 
         void it_eager_loads_child_collections_and_caches_them()
         {
-            DynamicRepository.WriteDevLog = true;
-
             dynamic allStores = stores.All().Include("Suppliers");
 
             new { StoreId = store1Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
