@@ -46,7 +46,7 @@ namespace Oak.Tests.describe_DynamicModels
             new { BookId = book2Id, Name = "Chapter 2" }.InsertInto("Chapters");
         }
 
-        void specify_it_eager_loads_child_collections_and_caches_them()
+        void it_eager_loads_child_collections_and_caches_them()
         {
             var allBooks = books.All().Include("Chapters");
 
