@@ -79,6 +79,8 @@
     <Compile Include="describe_DynamicModels\Classes\Emails.cs" />
     <Compile Include="describe_DynamicModels\Classes\Games.cs" />
     <Compile Include="describe_DynamicModels\Classes\Library.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Market.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Markets.cs" />
     <Compile Include="describe_DynamicModels\Classes\Player.cs" />
     <Compile Include="describe_DynamicModels\Classes\Players.cs" />
     <Compile Include="describe_DynamicModels\Classes\Posts.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="describe_DynamicModels\Classes\Screencasts.cs" />
     <Compile Include="describe_DynamicModels\Classes\Store.cs" />
     <Compile Include="describe_DynamicModels\Classes\Stores.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Suppliers.cs" />
+    <Compile Include="describe_DynamicModels\Classes\SupplyChains.cs" />
     <Compile Include="describe_DynamicModels\Classes\Tags.cs" />
     <Compile Include="describe_DynamicModels\Classes\User.cs" />
     <Compile Include="describe_DynamicModels\Classes\Users.cs" />

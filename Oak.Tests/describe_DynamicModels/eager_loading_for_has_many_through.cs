@@ -4,69 +4,34 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Massive;
+using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    public class Stores : DynamicRepository
-    {
-        public Stores()
-        {
-            Projection = d => new Store(d);
-        }   
-    }
-
-    public class Store : DynamicModel
-    {
-        Suppliers suppliers = new Suppliers();
-
-        SupplyChains supplyChains = new SupplyChains();
-
-        public Store(object dto)
-            : base(dto)
-        {
-            
-        }
-
-        IEnumerable<dynamic> Associates()
-        {
-            yield return new HasManyThrough(suppliers, supplyChains);
-        }
-    }
-
-    public class Suppliers : DynamicRepository
-    {
-        
-    }
-
-    public class SupplyChains : DynamicRepository
-    {
-        
-    }
-
     [Tag("wip")]
     class eager_loading_for_has_many_through : nspec
     {
         Seed seed;
 
-        dynamic stores;
+        dynamic markets;
 
-        object store1Id, store2Id, supplier1Id, supplier2Id;
+        object market1Id, market2Id, supplier1Id, supplier2Id;
 
         void before_each()
         {
             seed = new Seed();
 
-            stores = new Stores();
+            markets = new Markets();
 
             seed.PurgeDb();
 
-            seed.CreateTable("Stores",
+            seed.CreateTable("Markets",
                 seed.Id(),
                 new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("SupplyChains",
                 seed.Id(),
-                new { StoreId = "int" },
+                new { MarketId = "int" },
                 new { SupplierId = "int" }).ExecuteNonQuery();
 
             seed.CreateTable("Suppliers",
@@ -77,26 +42,26 @@ namespace Oak.Tests.describe_DynamicModels
 
             supplier2Id = new { Name = "Supplier 2" }.InsertInto("Suppliers");
 
-            store1Id = new { Name = "Store 1" }.InsertInto("Stores");
+            market1Id = new { Name = "Market 1" }.InsertInto("Markets");
 
-            store2Id = new { Name = "Store 2" }.InsertInto("Stores");
+            market2Id = new { Name = "Market 2" }.InsertInto("Markets");
 
-            new { StoreId = store1Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
+            new { MarketId = market1Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
 
-            new { StoreId = store2Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
+            new { MarketId = market2Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
         }
 
         void it_eager_loads_child_collections_and_caches_them()
         {
-            dynamic allStores = stores.All().Include("Suppliers");
+            dynamic allMarkets = markets.All().Include("Suppliers");
 
-            new { StoreId = store1Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
+            new { MarketId = market1Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
 
-            new { StoreId = store2Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
+            new { MarketId = market2Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
 
-            ((int)allStores.First().Suppliers().Count()).should_be(1);
+            ((int)allMarkets.First().Suppliers().Count()).should_be(1);
 
-            ((int)allStores.Last().Suppliers().Count()).should_be(1);
+            ((int)allMarkets.Last().Suppliers().Count()).should_be(1);
         }
     }
 }

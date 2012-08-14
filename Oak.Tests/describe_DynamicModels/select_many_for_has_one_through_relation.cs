@@ -59,7 +59,7 @@ namespace Oak.Tests.describe_DynamicModels
 
             act = () => models = stores.All();
 
-            it["returns associated enties as collection"] = () =>
+            it["returns associated entries as collection"] = () =>
             {
                 var warehouses = models.Warehouses();
 
