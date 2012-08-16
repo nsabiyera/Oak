@@ -120,6 +120,7 @@ namespace Massive
         static DynamicRepository()
         {
             WriteDevLog = false;
+            LogSql = LogSqlDelegate;
         }
 
         public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
@@ -197,7 +198,7 @@ namespace Massive
             {
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
 
-                if (WriteDevLog) LogSql(sql, args);
+                if (WriteDevLog) LogSql(this, sql, args);
 
                 while (rdr.Read())
                 {
@@ -227,7 +228,7 @@ namespace Massive
         {
             using (var rdr = CreateCommand(sql, connection, args).ExecuteReader())
             {
-                if (WriteDevLog) LogSql(sql, args);
+                if (WriteDevLog) LogSql(this, sql, args);
 
                 while (rdr.Read())
                 {
@@ -236,18 +237,27 @@ namespace Massive
             }
         }
 
-        void LogSql(string sql, params object[] args)
+        public static Action<object, string, object[]> LogSql { get; set; }
+
+        public static void LogSqlDelegate(object sender, string sql, object[] args)
         {
-            System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");
+            if (args == null) args = new object[0];
+
+            System.Console.Out.WriteLine(
+                "\r\n==============\r\n" + 
+                sender.GetType().Name + 
+                "\r\n==============\r\n" + 
+                sql + "\r\n" + string.Join(",", args) + 
+                "\r\n==============\r\n");
         }
 
-        private void LogSql(DbCommand cmd)
+        private void LogSqlCommand(DbCommand cmd)
         {
             var args = new List<object>();
 
             cmd.Parameters.ForEach<SqlParameter>(s => args.Add(s.Value));
 
-            LogSql(cmd.CommandText, args.ToArray());
+            LogSql(this, cmd.CommandText, args.ToArray());
         }
 
         /// <summary>
@@ -406,7 +416,7 @@ namespace Massive
             }
             else throw new InvalidOperationException("Can't parse this object to the database - there are no properties set");
 
-            if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSqlCommand(result);
 
             return result;
         }
@@ -442,7 +452,7 @@ namespace Massive
             }
             else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
 
-            if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSqlCommand(result);
 
             return result;
         }
@@ -493,7 +503,7 @@ namespace Massive
 
             var result = CreateCommand(sql, null, args);
 
-            if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSqlCommand(result);
 
             return result;
         }

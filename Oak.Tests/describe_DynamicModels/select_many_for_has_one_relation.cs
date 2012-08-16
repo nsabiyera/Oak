@@ -52,13 +52,13 @@ namespace Oak.Tests.describe_DynamicModels
 
             it["returns associated entities as collection"] = () =>
             {
-                var users = models.Profiles();
+                var allProfiles = models.Profiles();
 
-                (users.First().DisplayName as string).should_be("Jane");
+                (allProfiles.First().DisplayName as string).should_be("Jane");
 
-                (users.Last().DisplayName as string).should_be("John");
+                (allProfiles.Last().DisplayName as string).should_be("John");
 
-                (users.First().User.Name as string).should_be("Jane Doe");
+                (allProfiles.First().User.Name as string).should_be("Jane Doe");
             };
         }
     }
