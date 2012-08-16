@@ -69,8 +69,12 @@
     <Compile Include="describe_DynamicForm.cs" />
     <Compile Include="describe_DynamicModels\Classes\Aliases.cs" />
     <Compile Include="describe_DynamicModels\Classes\Authors.cs" />
+    <Compile Include="describe_DynamicModels\Classes\BluePrint.cs" />
+    <Compile Include="describe_DynamicModels\Classes\BluePrints.cs" />
     <Compile Include="describe_DynamicModels\Classes\Book.cs" />
     <Compile Include="describe_DynamicModels\Classes\Books.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Car.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Cars.cs" />
     <Compile Include="describe_DynamicModels\Classes\Chapters.cs" />
     <Compile Include="describe_DynamicModels\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModels\Classes\Comments.cs" />
@@ -96,9 +100,12 @@
     <Compile Include="describe_DynamicModels\Classes\User.cs" />
     <Compile Include="describe_DynamicModels\Classes\Users.cs" />
     <Compile Include="describe_DynamicModels\Classes\Warehouses.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_belongs_to.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_and_belongs_to.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_through.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_has_one.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_has_one_through.cs" />
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />

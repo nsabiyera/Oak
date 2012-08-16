@@ -482,8 +482,6 @@ namespace Oak
     {
         public string ForeignKey { get; set; }
 
-        public dynamic HasOneModel { get; set; }
-
         public HasOne(DynamicRepository repository)
             : this(repository, null)
         {
@@ -511,16 +509,30 @@ namespace Oak
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            List<dynamic> collection = new List<dynamic>();
+            var foreignKeyName = ForeignKeyName(models.First());
 
-            models.ForEach(s =>
+            var ones = @"
+            select * from {fromTable} 
+            where {foreignKey}
+            in ({inClause})"
+                .Replace("{fromTable}", Repository.TableName)
+                .Replace("{foreignKey}", foreignKeyName)
+                .Replace("{inClause}", InClause(models));
+
+            var onesResult = new List<dynamic>(Repository.Query(ones));
+
+            foreach (var item in onesResult)
             {
-                var hasOne = s.GetMember(Named)(new { discardCache = false });
-                hasOne.SetMember(s.GetType().Name, s);
-                collection.Add(hasOne);
-            });
+                var model = models.Single(s => s.Id == item.GetMember(foreignKeyName));
 
-            return new DynamicModels(collection);
+                var association = model.AssociationNamed(Named);
+
+                association.Model = model;
+
+                item.SetMember(model.GetType().Name, model);
+            }
+
+            return new DynamicModels(onesResult);
         }
 
         public dynamic GetModelOrCache(dynamic model, dynamic options)
@@ -575,39 +587,54 @@ namespace Oak
                 Repository.GetType().Name,
                 through.GetType().Name,
                 ForeignKeyFor(Repository),
-                model)();
+                new List<dynamic>() { model })();
 
             return Model;
         }
 
-        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, dynamic model)
+        public string InnerJoinSelectClause(string fromColumn, string toTable, string throughTable, string @using, List<dynamic> models)
         {
-            return () => Repository.Query(
-                @"
-                select {toTable}.*
+            return @"
+                select {toTable}.*, {throughTable}.{fromColumn}
                 from {throughTable}
                 inner join {toTable}
                 on {throughTable}.{using} = {toTable}.Id
-                where {fromColumn} = @0"
+                where {fromColumn} in ({in})"
                     .Replace("{toTable}", toTable)
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using)
-                    .Replace("{fromColumn}", fromColumn), model.Prototype.Id as object)
-                    .FirstOrDefault();
+                    .Replace("{fromColumn}", fromColumn)
+                    .Replace("{in}", InClause(models));
+        }
+
+        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, List<dynamic> models)
+        {
+            return () => Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, @using, models)).FirstOrDefault();
         }
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            List<dynamic> collection = new List<dynamic>();
+            var foreignKeyName = ForeignKeyName(models.First());
 
-            models.ForEach(s =>
+            var sql = InnerJoinSelectClause(foreignKeyName,
+                Repository.GetType().Name,
+                through.GetType().Name,
+                ForeignKeyFor(Repository), models.ToList());
+
+            var onesThrough = new List<dynamic>(Repository.Query(sql));
+
+            foreach (var item in onesThrough)
             {
-                var hasOne = s.GetMember(Named)(new { discardCache = false });
-                hasOne.SetMember(s.GetType().Name, s);
-                collection.Add(hasOne);
-            });
+                var model = models.Single(s => s.Id == item.GetMember(foreignKeyName));
 
-            return new DynamicModels(collection);
+                var association = model.AssociationNamed(Named);
+
+                association.Model = model;
+
+                item.SetMember(model.GetType().Name, model);
+            }
+
+            return new DynamicModels(onesThrough);
         }
     }
 
@@ -626,11 +653,16 @@ namespace Oak
         public BelongsTo(DynamicRepository repository, string named)
         {
             this.Repository = repository;
+
             Named = named ?? Singular(repository);
         }
 
         public void Init(dynamic model)
         {
+            ForeignKey = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
+
+            PrimaryKey = string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey;
+
             model.SetMember(
                 Named,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
@@ -638,16 +670,28 @@ namespace Oak
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            List<dynamic> collection = new List<dynamic>();
+            var ones = @"
+            select * from {fromTable} 
+            where {primaryKey}
+            in ({inClause})"
+                .Replace("{fromTable}", Repository.TableName)
+                .Replace("{primaryKey}", PrimaryKey)
+                .Replace("{inClause}", InClause(models));
 
-            models.ForEach(s =>
+            var belongsResult = new List<dynamic>(Repository.Query(ones));
+
+            foreach (var item in belongsResult)
             {
-                var belongsTo = s.GetMember(Named)(new { discardCache = false });
-                belongsTo.SetMember(s.GetType().Name, s);
-                collection.Add(belongsTo);
-            });
+                var model = models.Single(s => s.Id == item.GetMember(PrimaryKey));
 
-            return new DynamicModels(collection);
+                var association = model.AssociationNamed(Named);
+
+                association.Model = model;
+
+                item.SetMember(model.GetType().Name, model);
+            }
+
+            return new DynamicModels(belongsResult);
         }
 
         public dynamic GetModelOrCache(dynamic model, dynamic options)
@@ -656,13 +700,9 @@ namespace Oak
 
             if (Model != null) return Model;
 
-            string foreignKeyName = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
+            string whereClause = string.Format("{0} = @0", PrimaryKey);
 
-            string primaryKeyName = string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey;
-
-            string whereClause = string.Format("{0} = @0", primaryKeyName);
-
-            Model = Repository.SingleWhere(whereClause, model.GetMember(foreignKeyName));
+            Model = Repository.SingleWhere(whereClause, model.GetMember(ForeignKey));
 
             return Model;
         }

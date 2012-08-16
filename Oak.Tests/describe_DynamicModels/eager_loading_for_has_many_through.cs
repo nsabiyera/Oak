@@ -8,7 +8,6 @@ using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    [Tag("wip")]
     class eager_loading_for_has_many_through : nspec
     {
         Seed seed;
