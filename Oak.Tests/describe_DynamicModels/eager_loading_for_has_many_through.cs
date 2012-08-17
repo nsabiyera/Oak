@@ -62,5 +62,23 @@ namespace Oak.Tests.describe_DynamicModels
 
             ((int)allMarkets.Last().Suppliers().Count()).should_be(1);
         }
+
+        [Tag("wip")]
+        void specify_eager_loaded_collections_retain_creation_methods()
+        {
+            dynamic firstMarket = markets.All().Include("Suppliers", "SupplyChains").First();
+
+            var supplier = firstMarket.Suppliers().New(new { Name = "Market 3" });
+
+            var supplierId = new Suppliers().Insert(supplier);
+
+            var supplyChain = firstMarket.SupplyChains().New(new { SupplierId = supplierId });
+
+            new SupplyChains().Insert(supplyChain);
+
+            firstMarket = markets.All().Include("Suppliers").First();
+
+            ((int)firstMarket.Suppliers().Count()).should_be(2);
+        }
     }
 }

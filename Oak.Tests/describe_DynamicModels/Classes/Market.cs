@@ -18,6 +18,8 @@ namespace Oak.Tests.describe_DynamicModels.Classes
 
         IEnumerable<dynamic> Associates()
         {
+            yield return new HasMany(supplyChains);
+
             yield return new HasManyThrough(suppliers, supplyChains);
         }
     }
