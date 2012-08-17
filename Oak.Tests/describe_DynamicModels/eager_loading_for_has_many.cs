@@ -46,6 +46,7 @@ namespace Oak.Tests.describe_DynamicModels
             new { BookId = book2Id, Name = "Chapter 2" }.InsertInto("Chapters");
         }
 
+        
         void it_eager_loads_child_collections_and_caches_them()
         {
             var allBooks = books.All().Include("Chapters");
@@ -57,6 +58,19 @@ namespace Oak.Tests.describe_DynamicModels
             new { BookId = book2Id, Name = "Chapter 3" }.InsertInto("Chapters");
 
             ((int)allBooks.Last().Chapters().Count()).should_be(2);
+        }
+
+        void specify_eager_loaded_collections_retain_creation_methods()
+        {
+            var firstBook = books.All().Include("Chapters").First();
+
+            var chapter = firstBook.Chapters().New(new { Name = "Chapter 3" });
+
+            new Chapters().Insert(chapter);
+
+            firstBook = books.All().Include("Chapters").First();
+
+            ((int)firstBook.Chapters().Count()).should_be(3);
         }
     }
 }

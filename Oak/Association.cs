@@ -173,6 +173,8 @@ namespace Oak
                 var relatedTo = many.Where(s => s.GetMember(model.GetType().Name).Equals(model)).Select(s => s);
 
                 assocation.EagerLoadMany.Cache = new DynamicModels(relatedTo);
+
+                assocation.AddNewAssociationMethod(assocation.EagerLoadMany.Cache, model);
             }
 
             return new DynamicModels(many);

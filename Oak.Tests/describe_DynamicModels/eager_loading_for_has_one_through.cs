@@ -8,7 +8,6 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    [Tag("wip")]
     class eager_loading_for_has_one_through : nspec
     {
         Seed seed;
