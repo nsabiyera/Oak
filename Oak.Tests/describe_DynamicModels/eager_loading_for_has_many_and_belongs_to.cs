@@ -10,7 +10,7 @@ namespace Oak.Tests.describe_DynamicModels
 {
     class eager_loading_for_has_many_and_belongs_to : _dynamic_models
     {
-        object screencastId, screencast2Id, presenterId, presenter2Id, tagId, tag2Id;
+        object screencastId, screencast2Id, presenterId, tagId, tag2Id;
 
         dynamic screencasts;
 
