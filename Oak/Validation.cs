@@ -127,6 +127,13 @@ namespace Oak
             return Property + " is invalid.";
         }
 
+        public dynamic StringifyValue(dynamic entity)
+        {
+            var value = PropertyValueIn(entity);
+
+            return (value ?? "").ToString();
+        }
+
         public dynamic PropertyValueIn(dynamic entity)
         {
             return PropertyValueIn(Property, entity);
@@ -206,7 +213,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return Regex.IsMatch(PropertyValueIn(entity) as string ?? "", With);
+            return Regex.IsMatch(StringifyValue(entity), With);
         }
     }
 
@@ -243,7 +250,7 @@ namespace Oak
 
         public bool Validate(dynamic entity)
         {
-            return !string.IsNullOrEmpty(PropertyValueIn(entity));
+            return !string.IsNullOrEmpty(StringifyValue(entity));
         }
     }
 

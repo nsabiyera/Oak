@@ -25,7 +25,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
         public bool isValid;
 
-
         void validating_presense_of()
         {
             act = () => isValid = book.IsValid();
@@ -50,6 +49,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 {
                     book.Title = "Some Title";
                     book.Body = "Some Body";
+                    book.Id = 100;
                 };
 
                 it["is valid"] = () => isValid.should_be_true();
