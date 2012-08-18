@@ -44,6 +44,8 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
             yield return new Presence("Title");
 
             yield return new Presence("Body");
+
+            yield return new Presence("Id");
         }
     }
 }

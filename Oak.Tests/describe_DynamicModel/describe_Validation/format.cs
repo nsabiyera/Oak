@@ -31,21 +31,49 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             context["product code does not match format of all characters"] = () =>
             {
-                before = () => product.Code = "1232123";
+                before = () =>
+                {
+                    product.Code = "1232123";
+                    product.ProductId = 123456;
+                };
 
                 it["is invalid"] = () => isValid.should_be_false();
             };
 
             context["product code matches format of all characters"] = () =>
             {
-                before = () => product.Code = "ABD";
+                before = () =>
+                {
+                    product.Code = "ABD";
+                    product.ProductId = 123456;
+                };
 
                 it["is valid"] = () => isValid.should_be_true();
             };
 
+            context["product id does not match regex"] = () =>
+            {
+                before = () =>
+                {
+                    product.Code = "ABD";
+                    product.ProductId = 1231;
+                };
+
+                it["is invalid"] = () =>
+                {   
+                    product.IsValid();
+                    (product.Errors()[0].Value as string).should_be("ProductId is invalid.");
+                    isValid.should_be_false();
+                };
+            };
+
             context["product code is null"] = () =>
             {
-                before = () => product.Code = default(string);
+                before = () =>
+                {
+                    product.Code = default(string);
+                    product.ProductId = null;
+                };
 
                 it["is invalid"] = () => isValid.should_be_false();
             };

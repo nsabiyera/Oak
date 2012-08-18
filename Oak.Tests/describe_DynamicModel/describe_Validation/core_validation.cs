@@ -40,6 +40,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 {
                     book.Title = string.Empty;
                     book.Body = string.Empty;
+                    book.Id = 100;
                 };
 
                 it["contains 2 errors"] = () => ((int)book.Errors().Count).should_be(2);
@@ -53,6 +54,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 {
                     book.Title = "Title";
                     book.Body = string.Empty;
+                    book.Id = 100;
                 };
 
                 it["contains 1 error"] = () => ((int)book.Errors().Count).should_be(1);
@@ -67,7 +69,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             context["setting the title with a lower case T and body with lower case b"] = () =>
             {
-                before = () => book = new Book(new { title = "Title", body = "Body" });
+                before = () => book = new Book(new { title = "Title", body = "Body", id = 100 });
 
                 it["is still valid"] = () => isValid.should_be_true();
             };
