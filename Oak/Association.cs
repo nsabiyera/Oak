@@ -102,7 +102,7 @@ namespace Oak
                 .Replace("{toTable}", toTable)
                 .Replace("{throughTable}", throughTable)
                 .Replace("{using}", foreignKey)
-                .Replace("{inClause}", InClause(models));
+                .Replace("{inClause}", InClause(models, Id()));
         }
 
         public void AddReferenceBackToModel(dynamic association, dynamic model)
@@ -110,9 +110,9 @@ namespace Oak
             association.SetMember(model.GetType().Name, Model);
         }
 
-        public string InClause(IEnumerable<dynamic> models)
+        public string InClause(IEnumerable<dynamic> models, string member)
         {
-            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(Id()))));
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))));
         }
 
         public virtual void AddNewAssociationMethod(DynamicModels collection, dynamic model)
@@ -278,7 +278,7 @@ namespace Oak
                 where {foreignKey} in ({inClause})"
                 .Replace("{childTable}", TableName)
                 .Replace("{foreignKey}", ForeignKey)
-                .Replace("{inClause}", InClause(models));
+                .Replace("{inClause}", InClause(models, Id()));
         }
     }
 
@@ -519,7 +519,7 @@ namespace Oak
             in ({inClause})"
                 .Replace("{fromTable}", Repository.TableName)
                 .Replace("{foreignKey}", foreignKeyName)
-                .Replace("{inClause}", InClause(models));
+                .Replace("{inClause}", InClause(models,Id()));
 
             var onesResult = new List<dynamic>(Repository.Query(ones));
 
@@ -529,7 +529,7 @@ namespace Oak
 
                 var association = model.AssociationNamed(Named);
 
-                association.Model = model;
+                association.Model = item;
 
                 item.SetMember(model.GetType().Name, model);
             }
@@ -606,7 +606,7 @@ namespace Oak
                     .Replace("{throughTable}", throughTable)
                     .Replace("{using}", @using)
                     .Replace("{fromColumn}", fromColumn)
-                    .Replace("{in}", InClause(models));
+                    .Replace("{in}", InClause(models, Id()));
         }
 
         private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, List<dynamic> models)
@@ -678,17 +678,17 @@ namespace Oak
             in ({inClause})"
                 .Replace("{fromTable}", Repository.TableName)
                 .Replace("{primaryKey}", PrimaryKey)
-                .Replace("{inClause}", InClause(models));
+                .Replace("{inClause}", InClause(models, ForeignKey));
 
             var belongsResult = new List<dynamic>(Repository.Query(ones));
 
             foreach (var item in belongsResult)
             {
-                var model = models.Single(s => s.Id == item.GetMember(PrimaryKey));
+                var model = models.Single(s => item.Id == s.GetMember(ForeignKey));
 
                 var association = model.AssociationNamed(Named);
 
-                association.Model = model;
+                association.Model = item;
 
                 item.SetMember(model.GetType().Name, model);
             }

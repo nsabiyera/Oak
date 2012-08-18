@@ -25,21 +25,27 @@ namespace Oak.Tests.describe_DynamicModels
             cars = new Cars();
 
             seed.CreateTable("Cars",
-                seed.Id(),
+                new { Id = "int" },
                 new { Model = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("BluePrints",
-                seed.Id(),
+                new { Id = "int" },
                 new { CarId = "int" },
                 new { Sku = "nvarchar(255)" }).ExecuteNonQuery();
 
-            car1Id = new { Model = "car 1" }.InsertInto("Cars");
+            car1Id = 100;
+            new { Id = car1Id, Model = "car 1" }.InsertInto("Cars");
 
-            car2Id = new { Model = "car 2" }.InsertInto("Cars");
+            car2Id = 200;
+            new { Id = car2Id, Model = "car 2" }.InsertInto("Cars");
 
-            bluePrint1Id = new { CarId = car1Id, Sku = "Sku 1" }.InsertInto("BluePrints");
-            
-            bluePrint2Id = new { CarId = car2Id, Sku = "Sku 2" }.InsertInto("BluePrints");
+            bluePrint1Id = 300;
+                
+            new { Id = bluePrint1Id, CarId = car1Id, Sku = "Sku 1" }.InsertInto("BluePrints");
+
+            bluePrint2Id = 400;
+
+            new { Id = bluePrint2Id, CarId = car2Id, Sku = "Sku 2" }.InsertInto("BluePrints");
         }
 
         void it_eager_loads_and_caches()
@@ -60,13 +66,15 @@ namespace Oak.Tests.describe_DynamicModels
 
             var firstBluePrint = allCars.First().BluePrint();
 
+            (firstBluePrint.Sku as string).should_be("Sku 1");
+
             var lastBluePrint = allCars.Last().BluePrint();
 
             sqlQueries.Count.should_be(2);
 
             sqlQueries.First().should_contain("SELECT * FROM Cars");
 
-            sqlQueries.Last().should_contain("in ('1','2')");
+            sqlQueries.Last().should_contain("in ('100','200')");
         }
     }
 }

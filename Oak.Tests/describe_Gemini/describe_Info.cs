@@ -20,7 +20,7 @@ namespace Oak.Tests.describe_Gemini
         {
             var info = gemini.__Info__() as string;
 
-            info.should_be(@"this (dynamic)
+            info.should_be(@"this (Gemini)
   FirstName (String): Jane
   LastName (String): Doe
 ");
@@ -32,7 +32,7 @@ namespace Oak.Tests.describe_Gemini
 
             var info = gemini.__Info__() as string;
 
-            info.should_be(@"this (dynamic)
+            info.should_be(@"this (Gemini)
   FirstName (String): Jane
   LastName (String): Doe
   Body (null)
@@ -45,7 +45,7 @@ namespace Oak.Tests.describe_Gemini
 
             var info = gemini.__Info__() as string;
 
-            info.should_be(@"this (dynamic)
+            info.should_be(@"this (Gemini)
   FirstName (String): Jane
   LastName (String): Doe
   SayHello (DynamicFunction)

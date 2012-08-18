@@ -65,6 +65,10 @@ namespace Oak.Tests.describe_DynamicModels
                 var selectMany = (students.All() as dynamic).Courses();
 
                 ((int)selectMany.Count()).should_be(2);
+
+                var firstCourse = selectMany.First();
+
+                (firstCourse.Student.Name as string).should_be("Amir");
             };
         }
     }

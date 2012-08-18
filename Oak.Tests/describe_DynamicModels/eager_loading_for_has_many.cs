@@ -25,39 +25,62 @@ namespace Oak.Tests.describe_DynamicModels
             seed.PurgeDb();
 
             seed.CreateTable("Books",
-                seed.Id(),
+                new { Id = "int" },
                 new { Title = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("Chapters",
-                seed.Id(),
+                new { Id = "int" },
                 new { BookId = "int" },
                 new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
-            book1Id = new { Title = "book 1" }.InsertInto("Books");
+            book1Id = 100;
+                
+            new { Id = book1Id, Title = "book 1" }.InsertInto("Books");
 
-            new { BookId = book1Id, Name = "Chapter 1" }.InsertInto("Chapters");
+            new { Id = 200, BookId = book1Id, Name = "Chapter I" }.InsertInto("Chapters");
 
-            new { BookId = book1Id, Name = "Chapter 2" }.InsertInto("Chapters");
+            new { Id = 300, BookId = book1Id, Name = "Chapter II" }.InsertInto("Chapters");
 
-            book2Id = new { Title = "book 2" }.InsertInto("Books");
+            book2Id = 400;
 
-            new { BookId = book2Id, Name = "Chapter 1" }.InsertInto("Chapters");
+            new { Id = book2Id, Title = "book 2" }.InsertInto("Books");
 
-            new { BookId = book2Id, Name = "Chapter 2" }.InsertInto("Chapters");
+            new { Id = 500, BookId = book2Id, Name = "Chapter 1" }.InsertInto("Chapters");
+
+            new { Id = 600, BookId = book2Id, Name = "Chapter 2" }.InsertInto("Chapters");
         }
 
-        
         void it_eager_loads_child_collections_and_caches_them()
         {
-            var allBooks = books.All().Include("Chapters");
+            List<string> sqlQueries = new List<string>();
 
-            new { BookId = book1Id, Name = "Chapter 3" }.InsertInto("Chapters");
+            DynamicRepository.WriteDevLog = true;
+
+            DynamicRepository.LogSql = new Action<object, string, object[]>(
+                (sender, sql, @params) =>
+                {
+                    sqlQueries.Add(sql);
+                });
+
+            var allBooks = books.All().Include("Chapters");
 
             ((int)allBooks.First().Chapters().Count()).should_be(2);
 
-            new { BookId = book2Id, Name = "Chapter 3" }.InsertInto("Chapters");
+            var chapters = allBooks.First().Chapters();
+
+            (chapters.First().Name as string).should_be("Chapter I");
+
+            (chapters.Last().Name as string).should_be("Chapter II");
 
             ((int)allBooks.Last().Chapters().Count()).should_be(2);
+
+            chapters = allBooks.Last().Chapters();
+
+            (chapters.First().Name as string).should_be("Chapter 1");
+
+            (chapters.Last().Name as string).should_be("Chapter 2");
+
+            sqlQueries.Count.should_be(2);
         }
 
         void specify_eager_loaded_collections_retain_creation_methods()

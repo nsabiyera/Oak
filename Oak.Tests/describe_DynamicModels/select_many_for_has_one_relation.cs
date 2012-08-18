@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace Oak.Tests.describe_DynamicModels
 {
+    [Tag("wip")]
     class select_many_for_has_one_relation : _dynamic_models
     {
         Users users;
