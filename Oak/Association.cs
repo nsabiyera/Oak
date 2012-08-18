@@ -684,7 +684,7 @@ namespace Oak
 
             foreach (var item in belongsResult)
             {
-                var model = models.Single(s => item.Id == s.GetMember(ForeignKey));
+                var model = models.Single(s => item.GetMember(PrimaryKey) == s.GetMember(ForeignKey));
 
                 var association = model.AssociationNamed(Named);
 
