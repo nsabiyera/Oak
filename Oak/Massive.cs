@@ -668,7 +668,7 @@ Sql Exception:
             result.TotalPages = result.TotalRecords / pageSize;
             if (result.TotalRecords % pageSize > 0)
                 result.TotalPages += 1;
-            result.Items = Query(string.Format(sql, columns, TableName), args);
+            result.Items = new DynamicModels(Query(string.Format(sql, columns, TableName), args));
             return result;
         }
 
