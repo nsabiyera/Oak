@@ -25,21 +25,29 @@ namespace Oak.Tests.describe_DynamicModels
             bluePrints = new BluePrints();
 
             seed.CreateTable("Cars",
-                seed.Id(),
+                new { Id = "int" },
                 new { Model = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("BluePrints",
-                seed.Id(),
+                new { Id = "int" },
                 new { CarId = "int" },
                 new { Sku = "nvarchar(255)" }).ExecuteNonQuery();
 
-            car1Id = new { Model = "car 1" }.InsertInto("Cars");
+            car1Id = 100;
 
-            car2Id = new { Model = "car 2" }.InsertInto("Cars");
+            new { Id = car1Id, Model = "car 1" }.InsertInto("Cars");
 
-            bluePrint1Id = new { CarId = car1Id, Sku = "Sku 1" }.InsertInto("BluePrints");
+            car2Id = 200;
+
+            new { Id = car2Id, Model = "car 2" }.InsertInto("Cars");
+
+            bluePrint1Id = 300;
             
-            bluePrint2Id = new { CarId = car2Id, Sku = "Sku 2" }.InsertInto("BluePrints");
+            new { Id = bluePrint1Id, CarId = car1Id, Sku = "Sku 1" }.InsertInto("BluePrints");
+            
+            bluePrint2Id = 400;
+
+            new { Id = bluePrint2Id, CarId = car2Id, Sku = "Sku 2" }.InsertInto("BluePrints");
         }
 
         void it_eager_loads_and_caches()
@@ -58,15 +66,19 @@ namespace Oak.Tests.describe_DynamicModels
 
             var allCars = allBluePrints.Car();
 
-            var firstCar = allBluePrints.First().Car();
+            ((string)allBluePrints.First().Sku).should_be("Sku 1");
 
-            var lastCar = allBluePrints.Last().Car();
+            ((string)allBluePrints.First().Car().Model).should_be("car 1");
+
+            ((string)allBluePrints.Last().Sku).should_be("Sku 2");
+
+            ((string)allBluePrints.Last().Car().Model).should_be("car 2");
 
             sqlQueries.Count.should_be(2);
 
             sqlQueries.First().should_contain("SELECT * FROM BluePrints");
 
-            sqlQueries.Last().should_contain("in ('1','2')");
+            sqlQueries.Last().should_contain("in ('100','200')");
         }
     }
 }

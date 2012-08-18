@@ -25,54 +25,71 @@ namespace Oak.Tests.describe_DynamicModels
             seed.PurgeDb();
 
             seed.CreateTable("Markets",
-                seed.Id(),
+                new { Id = "int" },
                 new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("SupplyChains",
-                seed.Id(),
+                new { Id = "int" },
                 new { MarketId = "int" },
                 new { SupplierId = "int" }).ExecuteNonQuery();
 
             seed.CreateTable("Suppliers",
-                seed.Id(),
+                new { Id = "int" },
                 new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
-            supplier1Id = new { Name = "Supplier 1" }.InsertInto("Suppliers");
+            supplier1Id = 100;
+            new { Id = supplier1Id, Name = "Supplier 1" }.InsertInto("Suppliers");
 
-            supplier2Id = new { Name = "Supplier 2" }.InsertInto("Suppliers");
+            supplier2Id = 200;
+            new { Id = supplier2Id, Name = "Supplier 2" }.InsertInto("Suppliers");
 
-            market1Id = new { Name = "Market 1" }.InsertInto("Markets");
+            market1Id = 300;
+            new { Id = market1Id, Name = "Market 1" }.InsertInto("Markets");
 
-            market2Id = new { Name = "Market 2" }.InsertInto("Markets");
+            market2Id = 400;
+            new { Id = market2Id, Name = "Market 2" }.InsertInto("Markets");
 
-            new { MarketId = market1Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
+            new { Id = 500, MarketId = market1Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
 
-            new { MarketId = market2Id, SupplierId = supplier1Id }.InsertInto("SupplyChains");
+            new { Id = 600, MarketId = market2Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
         }
 
         void it_eager_loads_child_collections_and_caches_them()
         {
+            List<string> sqlQueries = new List<string>();
+
+            DynamicRepository.WriteDevLog = true;
+
+            DynamicRepository.LogSql = new Action<object, string, object[]>(
+                (sender, sql, @params) =>
+                {
+                    sqlQueries.Add(sql);
+                });
+
             dynamic allMarkets = markets.All().Include("Suppliers");
-
-            new { MarketId = market1Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
-
-            new { MarketId = market2Id, SupplierId = supplier2Id }.InsertInto("SupplyChains");
 
             ((int)allMarkets.First().Suppliers().Count()).should_be(1);
 
+            (allMarkets.First().Suppliers().First().Name as string).should_be("Supplier 1");
+
             ((int)allMarkets.Last().Suppliers().Count()).should_be(1);
+
+            (allMarkets.Last().Suppliers().First().Name as string).should_be("Supplier 2");
+
+            sqlQueries.Count.should_be(2);
         }
 
-        [Tag("wip")]
         void specify_eager_loaded_collections_retain_creation_methods()
         {
             dynamic firstMarket = markets.All().Include("Suppliers", "SupplyChains").First();
 
-            var supplier = firstMarket.Suppliers().New(new { Name = "Market 3" });
+            var supplierId = 1000;
 
-            var supplierId = new Suppliers().Insert(supplier);
+            var supplier = firstMarket.Suppliers().New(new { Id = supplierId, Name = "Market 3" });
 
-            var supplyChain = firstMarket.SupplyChains().New(new { SupplierId = supplierId });
+            new Suppliers().Insert(supplier);
+
+            var supplyChain = firstMarket.SupplyChains().New(new { Id = 900, SupplierId = supplierId });
 
             new SupplyChains().Insert(supplyChain);
 

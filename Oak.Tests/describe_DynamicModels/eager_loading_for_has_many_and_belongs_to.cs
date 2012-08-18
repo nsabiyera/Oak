@@ -21,38 +21,46 @@ namespace Oak.Tests.describe_DynamicModels
             seed.PurgeDb();
 
             seed.CreateTable("Screencasts",
-                seed.Id(),
+                new { Id = "int" },
                 new { Title = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("Presenters",
-                seed.Id(),
+                new { Id = "int" },
                 new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("Tags",
-                seed.Id(),
+                new { Id = "int" },
                 new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
             seed.CreateTable("PresentersScreencasts",
-                seed.Id(),
+                new { Id = "int" },
                 new { PresenterId = "int" },
                 new { ScreencastId = "int" }).ExecuteNonQuery();
 
             seed.CreateTable("ScreencastsTags",
-                seed.Id(),
+                new { Id = "int" },
                 new { ScreencastId = "int" },
                 new { TagId = "int" }).ExecuteNonQuery();
 
-            screencastId = new { Title = "Oak" }.InsertInto("Screencasts");
+            screencastId = 100;
 
-            screencast2Id = new { Title = "Cambium" }.InsertInto("Screencasts");
+            new { Id = screencastId, Title = "Oak" }.InsertInto("Screencasts");
 
-            presenterId = new { Name = "Amir" }.InsertInto("Presenters");
+            screencast2Id = 200;
 
-            presenter2Id = new { Name = "Another" }.InsertInto("Presenters");
+            new { Id = screencast2Id, Title = "Cambium" }.InsertInto("Screencasts");
 
-            tagId = new { Name = "dynamic" }.InsertInto("Tags");
+            presenterId = 300;
 
-            tag2Id = new { Name = "orm" }.InsertInto("Tags");
+            new { Id = presenterId, Name = "Amir" }.InsertInto("Presenters");
+
+            tagId = 400;
+                
+            new { Id = tagId, Name = "dynamic" }.InsertInto("Tags");
+
+            tag2Id = 500;
+                
+            new { Id = tag2Id, Name = "orm" }.InsertInto("Tags");
 
             new { presenterId, screencastId }.InsertInto("PresentersScreencasts");
 
@@ -61,25 +69,39 @@ namespace Oak.Tests.describe_DynamicModels
 
         void it_loads_and_caches_each_child_collection_specified()
         {
+            List<string> sqlQueries = new List<string>();
+
+            DynamicRepository.WriteDevLog = true;
+
+            DynamicRepository.LogSql = new Action<object, string, object[]>(
+                (sender, sql, @params) =>
+                {
+                    sqlQueries.Add(sql);
+                });
+
             var allScreencasts = screencasts.All().Include("Presenters", "Tags");
 
             ((int)allScreencasts.Count()).should_be(2);
-
-            new { presenterId = presenter2Id, screencastId }.InsertInto("PresentersScreencasts");
-
-            new { screencastId, tagId = tag2Id }.InsertInto("ScreencastsTags");
 
             var firstScreencast = allScreencasts.First();
 
             ((int)firstScreencast.Presenters().Count()).should_be(1);
 
+            var presenters = firstScreencast.Presenters();
+
+            (presenters.First().Name as string).should_be("Amir");
+
             ((int)firstScreencast.Tags().Count()).should_be(1);
+
+            var tags = firstScreencast.Tags();
+
+            (tags.First().Name as string).should_be("dynamic");
 
             var lastScreencast = allScreencasts.Last();
 
-            new { presenterId = presenter2Id, screencastId = screencast2Id }.InsertInto("PresentersScreencasts");
-
             ((int)lastScreencast.Presenters().Count()).should_be(0);
+
+            sqlQueries.Count.should_be(3);
         }
     }
 }
