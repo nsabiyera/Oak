@@ -525,13 +525,16 @@ namespace Oak
 
             foreach (var item in onesResult)
             {
-                var model = models.Single(s => s.Id == item.GetMember(foreignKeyName));
+                var model = models.FirstOrDefault(s => s.Id == item.GetMember(foreignKeyName));
 
-                var association = model.AssociationNamed(Named);
+                if (model != null) //need to add a test of why this cant be null, this is here if the entity doesn't have an assocation reference
+                {
+                    var association = model.AssociationNamed(Named);
 
-                association.Model = item;
+                    association.Model = item;
 
-                item.SetMember(model.GetType().Name, model);
+                    item.SetMember(model.GetType().Name, model);
+                }
             }
 
             return new DynamicModels(onesResult);
@@ -627,13 +630,16 @@ namespace Oak
 
             foreach (var item in onesThrough)
             {
-                var model = models.Single(s => s.Id == item.GetMember(foreignKeyName));
+                var model = models.FirstOrDefault(s => s.Id == item.GetMember(foreignKeyName));
 
-                var association = model.AssociationNamed(Named);
+                if (model != null)  //need to add a test of why this cant be null, this is here if the entity doesn't have an assocation reference
+                {
+                    var association = model.AssociationNamed(Named);
 
-                association.Model = model;
+                    association.Model = model;
 
-                item.SetMember(model.GetType().Name, model);
+                    item.SetMember(model.GetType().Name, model);    
+                }
             }
 
             return new DynamicModels(onesThrough);
@@ -684,13 +690,16 @@ namespace Oak
 
             foreach (var item in belongsResult)
             {
-                var model = models.Single(s => item.GetMember(PrimaryKey) == s.GetMember(ForeignKey));
+                var model = models.FirstOrDefault(s => item.GetMember(PrimaryKey) == s.GetMember(ForeignKey));
+                
+                if(model != null) //need to add a test of why this cant be null, this is here if the entity doesn't have an assocation reference
+                {
+                    var association = model.AssociationNamed(Named);
 
-                var association = model.AssociationNamed(Named);
+                    association.Model = item;
 
-                association.Model = item;
-
-                item.SetMember(model.GetType().Name, model);
+                    item.SetMember(model.GetType().Name, model);    
+                }
             }
 
             return new DynamicModels(belongsResult);
