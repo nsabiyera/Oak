@@ -7,7 +7,6 @@ using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    [Tag("wip")]
     class eager_loading_for_belongs_to_with_overridden_primary_key : nspec
     {
         dynamic agents;

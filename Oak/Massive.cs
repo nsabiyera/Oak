@@ -673,6 +673,35 @@ Sql Exception:
         }
 
         /// <summary>
+        /// Returns a dynamic PagedResult. Result properties are Items, TotalPages, and TotalRecords.
+        /// </summary>
+        public virtual dynamic PagedQuery(string sql, string where = "", string orderBy = "", string columns = "*", int pageSize = 20, int currentPage = 1, params object[] args)
+        {
+            dynamic result = new Prototype();
+            var countSQL = string.Format("SELECT COUNT({0}) FROM ({1}) as result", PrimaryKeyField, sql);
+            if (String.IsNullOrEmpty(orderBy))
+                orderBy = PrimaryKeyField;
+
+            if (!string.IsNullOrEmpty(where))
+            {
+                if (!where.Trim().StartsWith("where", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    where = " WHERE " + where;
+                }
+            }
+            var sql2 = string.Format("SELECT {0} FROM (SELECT ROW_NUMBER() OVER (ORDER BY {2}) AS Row, {0} FROM ({3}) as result {4}) AS Paged ", columns, pageSize, orderBy, sql, where);
+            var pageStart = (currentPage - 1) * pageSize;
+            sql2 += string.Format(" WHERE Row > {0} AND Row <={1}", pageStart, (pageStart + pageSize));
+            countSQL += where;
+            result.TotalRecords = Scalar(countSQL, args);
+            result.TotalPages = result.TotalRecords / pageSize;
+            if (result.TotalRecords % pageSize > 0)
+                result.TotalPages += 1;
+            result.Items = new DynamicModels(Query(string.Format(sql2, columns, TableName), args));
+            return result;
+        }
+
+        /// <summary>
         /// Returns a single row from the database
         /// </summary>
         public virtual dynamic SingleWhere(string where, params object[] args)
