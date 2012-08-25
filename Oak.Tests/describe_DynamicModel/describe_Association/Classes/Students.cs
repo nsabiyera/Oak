@@ -25,5 +25,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             Projection = d => new Student(d);
         }
+
+
     }
 }

@@ -46,5 +46,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             yield return new HasManyAndBelongsTo(courses, students);
         }
+
+        void AssociateCourse(dynamic courseId)
+        {
+            _.Courses().Repository.Insert(new { studentId = _.Id, courseId });
+        }
     }
 }

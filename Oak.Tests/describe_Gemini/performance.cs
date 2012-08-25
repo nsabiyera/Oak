@@ -12,7 +12,6 @@ using System.Configuration;
 
 namespace Oak.Tests.describe_Gemini
 {
-    [Tag("wip")]
     class performance : nspec
     {
         DateTime finish;

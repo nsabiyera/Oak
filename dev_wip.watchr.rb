@@ -53,7 +53,11 @@ watch('.*.\.cs$') do
   results = @sh.execute "rake wip"
 
   if(!tests_passed? results)
-    @growl.execute "sad panda", "tests failed", "red"
+    if(results =~ /FAILURES/)
+      @growl.execute "sad panda", results[results.index("**** FAILURES ****")..-1], "red"
+    else
+      @growl.execute "sad panda", results, "red"
+    end
   else
     @growl.execute "passed", "passed", "green"
   end

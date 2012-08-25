@@ -64,6 +64,46 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
         }
     }
 
+    [Tag("wip")]
+    class saving_has_many_belongs_to : has_many_and_belongs_to
+    {
+        public object student1Id, student2Id, course1Id, course2Id;
+
+        dynamic studentsResult;
+
+        dynamic coursesResult;
+
+        void before_each()
+        {
+            seed.PurgeDb();
+
+            BuildCommonTables();
+
+            student1Id = new { Name = "Jane" }.InsertInto("Students");
+
+            student2Id = new { Name = "John" }.InsertInto("Students");
+
+            course1Id = new { Name = "History" }.InsertInto("Courses");
+
+            course2Id = new { Name = "Science" }.InsertInto("Courses");
+        }
+
+        void it_works()
+        {
+            students.All().Count().should_be(2);
+
+            var student = students.Single(student1Id);
+
+            var repository = student.Courses().Repository;
+
+            student.AssociateCourse(course1Id);
+
+            student = students.Single(student1Id);
+
+            (student.Courses().Count() as object).should_be(1);
+        }
+    }
+
     class has_many_and_belongs_to_static_type : has_many_and_belongs_to
     {
         void before_each()

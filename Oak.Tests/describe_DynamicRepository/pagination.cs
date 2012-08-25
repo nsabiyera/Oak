@@ -7,7 +7,6 @@ using Oak.Tests.describe_DynamicRepository.Classes;
 
 namespace Oak.Tests.describe_DynamicRepository
 {
-    [Tag("wip")]
     class pagination : nspec
     {
         Seed seed;
@@ -80,9 +79,9 @@ namespace Oak.Tests.describe_DynamicRepository
 
         void specify_paged_for_repo()
         {
-            var result = records.Paged("Name like @0", args: "%10%").Items;
+            var result = records.Paged("Name like @0", pageSize: 5, args: "%10%").Items;
 
-            ((int)result.Count()).should_be(10);
+            ((int)result.Count()).should_be(5);
         }
 
         void specify_paged_query_for_repo()
@@ -92,9 +91,9 @@ namespace Oak.Tests.describe_DynamicRepository
                   from records r 
                   inner join otherrecords other 
                   on r.Id = other.RecordId 
-                  where Name2 like @0", args: "%30%").Items;
+                  where Name2 like @0", pageSize: 5, args: "%30%").Items;
 
-            ((int)result.Count()).should_be(10);
+            ((int)result.Count()).should_be(5);
         }
     }
 }
