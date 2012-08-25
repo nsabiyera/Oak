@@ -115,6 +115,11 @@ namespace Oak
             return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))));
         }
 
+        public virtual void AddRepository(DynamicModels collection, DynamicRepository repository)
+        {
+            collection.SetMember("Repository", repository);
+        }
+
         public virtual void AddNewAssociationMethod(DynamicModels collection, dynamic model)
         {
             collection.SetMember(
@@ -467,6 +472,8 @@ namespace Oak
                 EagerLoadMany.Cache = new DynamicModels(models);
 
                 AddNewAssociationMethod(EagerLoadMany.Cache, model);
+
+                AddRepository(EagerLoadMany.Cache, new DynamicRepository(throughTable));
 
                 return EagerLoadMany.Cache;
             };

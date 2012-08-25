@@ -14,7 +14,7 @@ using Dapper;
 
 namespace Oak.Tests.describe_Gemini
 {
-    [Tag("wip,performance")]
+    [Tag("performance")]
     abstract class performance : nspec
     {
         public DateTime finish;

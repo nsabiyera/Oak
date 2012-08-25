@@ -42,3 +42,8 @@ desc "run nspec tests"
 task :tests_excluding_performance => :build do
   sh @test_runner_command + " --tag ~performance"
 end
+
+desc "generates ctags"
+task :tags do
+  sh "ctags --recurse --exclude=\"Sample Apps\""
+end
