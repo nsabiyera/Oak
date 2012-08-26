@@ -123,6 +123,23 @@ watchr dotnet.watchr.rb (starts your feedback loop)
 
  <h2>Frictionless Data Access, Change Tracking and Validation - Oak's dynamic Entity Model: Cambium</h2>
  <p>Oak has a dynamic entity model called Cambium. Cambium makes validating, detecting changes, saving, retrieving, and defining associations ridiculously easy. Check out the <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/">Sample Apps</a> and the <a href="https://github.com/amirrajan/oak/wiki">Wiki</a> for more info.  Here is a sneak peek at what Cambium can do:</p>
+ <h3>Validations</h3>
+ <pre>dynamic blog = new Blog(); //new up a blog, validate
+blog.Name = "";
+blog.IsValid(); //this would be false
+blog.FirstError(); //this would return "Name is Required"
+
+public class Blog : DynamicModel
+{
+    <b>//validation, name is required</b>
+    IEnumerable&lt;dynamic&gt; Validates() {
+        yield return new Presense("Name");
+    }
+
+    Blogs blogs = new Blogs();
+    public Blog(object dto) : base(dto) { }
+    public Blog() : base() { }
+}</pre>
 <div id="media">
    <object id="csSWF1" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="650" height="450">
       <param name="movie" value="Validations_controller.swf" />
@@ -149,6 +166,34 @@ watchr dotnet.watchr.rb (starts your feedback loop)
   </div>
 
  <br/>
+ <h3>Associations</h3>
+ <pre>
+Blogs blogs = new Blogs(); //data access by convention
+Comments comments = new Comments(); //data access by convention
+dynamic blog = new Blog();
+blog.Name = "Blog Name";
+blog.Id = blogs.Insert(blog); //inserts into the database returns an Id
+var comment = blog.Comments().New(new { Body = "new comment" });
+comments.Insert(comment); //inserts comment into database
+
+public class Blogs : DynamicRepository 
+{
+    public Blogs() { Projection = d =&gt; new Blog(d); }
+}
+
+public class Comments : DynamicRepository { }
+
+public class Blog : DynamicModel
+{
+    <b>//a blog has many comments</b>
+    IEnumerable&lt;dynamic&gt; Associates() {
+        yield return HasMany(comments);
+    }
+
+    Comments comments = new Comments();
+    public Blog(object dto) : base(dto) { }
+    public Blog() : base() { }
+} </pre>
 <div id="media">
  <object id="csSWF2" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="650" height="450">
     <param name="movie" value="Associations_controller.swf" />
@@ -176,77 +221,6 @@ watchr dotnet.watchr.rb (starts your feedback loop)
 
 
  <br/>
- <h3>You get all this:</h3>
-<pre>
-Blogs blogs = new Blogs(); //data access by convention
-Comments comments = new Comments(); //data access by convention
-dynamic blog = new Blog(); //new up a blog, validate, then save
-blog.Name = "";
-blog.IsValid(); //this would be false
-blog.FirstError(); //this would return "Name is Required"
-blog.Name = "Blog Name";
-blog.Id = blogs.Insert(blog); //inserts into the database returns an Id
-var comment = blog.Comments().New(new { Body = "new comment" });
-comments.Insert(comment); //inserts comment into database
-var firstComment = blog.Comments(discardCache: true).First();
-firstComment.Body; //this is "new comment"
-firstComment.Blog().Name; //this is "Blog Name"
-dynamic anotherBlog = new Blog();
-anotherBlog.Name = "Blog Name";
-anotherBlog.IsValid(); //this would return false, Name must be unique
-anotherBlog.FirstError(); //this would return "Name is taken"
-</pre>
- <h3>By writing <b>just</b> this:</h3>
-<pre>
-<b>//data access</b>
-public class Blogs : DynamicRepository 
-{
-    public Blogs() { Project = d =&gt; new Blog(d); }
-}
-
-<b>//data access</b>
-public class Comments : DynamicRepository 
-{ 
-    public Comments() { Project = d =&gt; new Comment(d); }
-}
-
-public class Blog : DynamicModel
-{
-    <b>//validation, name is required and must be unique</b>
-    IEnumerable&lt;dynamic&gt; Validates() {
-        yield return new Presense("Name");
-        yield return new Uniqueness("Name");
-    }
-
-    <b>//a blog has many comments</b>
-    IEnumerable&lt;dynamic&gt; Associates() {
-        yield return HasMany(comments);
-    }
-
-    Blogs blogs = new Blogs();
-    Comments comments = new Comments();
-    public Blog(object dto) : base(dto) { }
-    public Blog() : base() { }
-}
-
-public class Comment : DynamicModel
-{
-    <b>//validation, body is required</b>
-    IEnumerable&lt;dynamic&gt; Validates() {
-        yield return new Presense("Body");
-    }
-
-    <b>//a comment belongs to a blog</b>
-    IEnumerable&lt;dynamic&gt; Associates() {
-        yield return BelongsTo(blogs);
-    }
-
-    Blogs blogs = new Blogs();
-    public Comment(object dto) : base(dto) { }
-    public Comment() : base() { }
-}
-</pre>
-
 <h2>Frictionless Schema Generation - Oak's Seed</h2>
 <p>Schema generation should be simple. Period.  Here's what simple looks like:</p>
 <pre>
