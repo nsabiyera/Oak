@@ -9,5 +9,4 @@ $connections |foreach {
 }
 Enable-PSRemoting -force
 set-item wsman:localhost\Shell\MaxMemoryPerShellMB 2048
-icm -computer localhost { C:\development\oak\sample%20apps\borrowedgames\borrowedgames.ui.tests\bin\debug\borrowedgames.ui.tests.exe }
-
+icm -computer localhost { & 'C:\Development\Oak\Sample Apps\BorrowedGames\BorrowedGames.UI.Tests\bin\Debug\BorrowedGames.UI.Tests.exe' }

@@ -38,6 +38,9 @@ task :default => [:build, :deploy]
 desc "run ui automation tests"
 task :ui => [:build, :ui_tests]
 
+desc "run ui tests as headless"
+task :headless => [:build, :headless_tests]
+
 desc "builds the solution"
 task :build => :rake_dot_net_initialize do
   @sln.build @solution_name 
@@ -129,6 +132,11 @@ task :ui_tests do
   sh "BorrowedGames.UI.Tests\\bin\\Debug\\BorrowedGames.UI.Tests.exe"
 end
 
+desc "runs ui tests headless (without building)"
+task :headless_tests do
+  sh "powershell .\\headless.ps1"
+end
+
 desc "purges the database and regenerates schema"
 task :regen_db => :build do
   sh regen_db_command("Data Source=(local);Initial Catalog=BorrowedGames;Integrated Security=true")
@@ -147,3 +155,7 @@ def regen_db_command connection_string
   return "#{ exe_location } \"#{ connection_string }\""
 end
 
+desc "create ctags file"
+task :tags do
+  sh "ctags --recurse"
+end
