@@ -500,6 +500,19 @@ namespace Oak.Controllers
             return new EmptyResult();
         }
 
+        /// <summary>
+        /// Execute this command to write all the scripts to sql files.
+        /// </summary>
+        [HttpPost]
+        public ActionResult Export()
+        {
+            var exportPath = Server.MapPath("~");
+
+            Seed.Export(exportPath, Schema.Scripts());
+
+            return Content("Scripts executed to: " + exportPath);
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             filterContext.Result = Content(filterContext.Exception.Message);

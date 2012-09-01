@@ -149,6 +149,12 @@ task :import => :build do
   sh "BorrowedGames.Import\\bin\\debug\\BorrowedGames.Import.exe"
 end
 
+desc "if you have the nuget package oak installed, use this to export scripts to .sql files"
+task :export => :rake_dot_net_initialize do
+  puts Net::HTTP.post_form(URI.parse("http://localhost:#{@website_port.to_s}/seed/Export"), { })
+end
+
+
 def regen_db_command connection_string
   exe_location = "BorrowedGames.SchemaGen\\bin\\debug\\BorrowedGames.SchemaGen.exe"
 
