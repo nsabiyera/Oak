@@ -120,6 +120,7 @@ namespace Massive
         static DynamicRepository()
         {
             WriteDevLog = false;
+            LogSql = LogSqlDelegate;
         }
 
         public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
@@ -197,7 +198,7 @@ namespace Massive
             {
                 var rdr = CreateCommand(sql, conn, args).ExecuteReader();
 
-                if (WriteDevLog) LogSql(sql, args);
+                if (WriteDevLog) LogSql(this, sql, args);
 
                 while (rdr.Read())
                 {
@@ -227,7 +228,7 @@ namespace Massive
         {
             using (var rdr = CreateCommand(sql, connection, args).ExecuteReader())
             {
-                if (WriteDevLog) LogSql(sql, args);
+                if (WriteDevLog) LogSql(this, sql, args);
 
                 while (rdr.Read())
                 {
@@ -236,18 +237,27 @@ namespace Massive
             }
         }
 
-        void LogSql(string sql, params object[] args)
+        public static Action<object, string, object[]> LogSql { get; set; }
+
+        public static void LogSqlDelegate(object sender, string sql, object[] args)
         {
-            System.Console.Out.WriteLine("\r\n==============\r\n" + sql + "\r\n" + string.Join(",", args) + "\r\n==============\r\n");
+            if (args == null) args = new object[0];
+
+            System.Console.Out.WriteLine(
+                "\r\n==============\r\n" + 
+                sender.GetType().Name + 
+                "\r\n==============\r\n" + 
+                sql + "\r\n" + string.Join(",", args) + 
+                "\r\n==============\r\n");
         }
 
-        private void LogSql(DbCommand cmd)
+        private void LogSqlCommand(DbCommand cmd)
         {
             var args = new List<object>();
 
             cmd.Parameters.ForEach<SqlParameter>(s => args.Add(s.Value));
 
-            LogSql(cmd.CommandText, args.ToArray());
+            LogSql(this, cmd.CommandText, args.ToArray());
         }
 
         /// <summary>
@@ -406,7 +416,7 @@ namespace Massive
             }
             else throw new InvalidOperationException("Can't parse this object to the database - there are no properties set");
 
-            if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSqlCommand(result);
 
             return result;
         }
@@ -442,7 +452,7 @@ namespace Massive
             }
             else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
 
-            if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSqlCommand(result);
 
             return result;
         }
@@ -493,7 +503,7 @@ namespace Massive
 
             var result = CreateCommand(sql, null, args);
 
-            if (WriteDevLog) LogSql(result);
+            if (WriteDevLog) LogSqlCommand(result);
 
             return result;
         }
@@ -658,7 +668,36 @@ Sql Exception:
             result.TotalPages = result.TotalRecords / pageSize;
             if (result.TotalRecords % pageSize > 0)
                 result.TotalPages += 1;
-            result.Items = Query(string.Format(sql, columns, TableName), args);
+            result.Items = new DynamicModels(Query(string.Format(sql, columns, TableName), args));
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a dynamic PagedResult. Result properties are Items, TotalPages, and TotalRecords.
+        /// </summary>
+        public virtual dynamic PagedQuery(string sql, string where = "", string orderBy = "", string columns = "*", int pageSize = 20, int currentPage = 1, params object[] args)
+        {
+            dynamic result = new Prototype();
+            var countSQL = string.Format("SELECT COUNT({0}) FROM ({1}) as result", PrimaryKeyField, sql);
+            if (String.IsNullOrEmpty(orderBy))
+                orderBy = PrimaryKeyField;
+
+            if (!string.IsNullOrEmpty(where))
+            {
+                if (!where.Trim().StartsWith("where", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    where = " WHERE " + where;
+                }
+            }
+            var sql2 = string.Format("SELECT {0} FROM (SELECT ROW_NUMBER() OVER (ORDER BY {2}) AS Row, {0} FROM ({3}) as result {4}) AS Paged ", columns, pageSize, orderBy, sql, where);
+            var pageStart = (currentPage - 1) * pageSize;
+            sql2 += string.Format(" WHERE Row > {0} AND Row <={1}", pageStart, (pageStart + pageSize));
+            countSQL += where;
+            result.TotalRecords = Scalar(countSQL, args);
+            result.TotalPages = result.TotalRecords / pageSize;
+            if (result.TotalRecords % pageSize > 0)
+                result.TotalPages += 1;
+            result.Items = new DynamicModels(Query(string.Format(sql2, columns, TableName), args));
             return result;
         }
 
