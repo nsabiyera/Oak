@@ -29,9 +29,7 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) {
-        name = name.substring(0, 40) + "... ";
-      }
+      if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
     undoRequest: function(callback) {
@@ -113,12 +111,8 @@
       }
     },
     render: function() {
-      if (!this.model.canReturnGame()) {
-        this.renderRequestedGame();
-      }
-      if (this.model.canReturnGame()) {
-        this.renderBorrowedGame();
-      }
+      if (!this.model.canReturnGame()) this.renderRequestedGame();
+      if (this.model.canReturnGame()) this.renderBorrowedGame();
       return this;
     },
     renderRequestedGame: function() {
@@ -146,10 +140,13 @@
     borrowedGameTemplate: '\
     <td class="span1">\
      <span class="label label-success">currently borrowing</span>\
+     <span class="label label-info">30 days left</span>\
+     <span class="label label-warning">10 day(s) left</span>\
+     <span class="label label-important">overdue, return game</span>\
     </td>\
     <td>${gameName}</td>\
     <td>${owner}</td>\
-    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>\
+    <td class="span2"><i class="icon-remove cancel" style="cursor: pointer"></i></td>\
     ',
     requestedGameTemplate: '\
     <td class="span1">\
@@ -157,7 +154,7 @@
     </td>\
     <td>${gameName}</td>\
     <td>${owner}</td>\
-    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>\
+    <td class="span2"><i class="icon-remove cancel" style="cursor: pointer">&nbsp;</i></td>\
     '
   });
 

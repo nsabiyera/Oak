@@ -7,7 +7,7 @@ using BorrowedGames.Models;
 
 namespace BorrowedGames.Tests.Controllers.describe_GamesController
 {
-    [Tag("describe_User,describe_WantedGame,describe_GamesController,describe_RequestedGame")]
+    [Tag("describe_User,describe_WantedGame,describe_GamesController,describe_RequestedGame,describe_LendedGame")]
     class giving_game : _games_controller
     {
         void a_game_has_been_requested()
@@ -26,11 +26,16 @@ namespace BorrowedGames.Tests.Controllers.describe_GamesController
                 act = () => controller.GiveGame(gearsOfWarId, friendId);
 
                 it["the games return date is set to one month from today"] = () =>
+                {
                     ((DateTime?)FirstRequestedGame(gearsOfWarId, friendId).ReturnDate).should_be(OneMonthFromToday());
+                    ((int)FirstRequestedGame(gearsOfWarId, friendId).DaysOut).should_be(0);
+                    ((DateTime?)FirstWantedGame(friendId).ReturnDate).should_be(OneMonthFromToday());
+                    ((int)FirstWantedGame(friendId).DaysLeft).should_be_greater_than(27);
+                };
 
                 it["the game is considered borrowed"] = () =>
                     ((int)FirstBorrowedGame(friendId).Id).should_be(gearsOfWarId);
-
+                
                 it["requested game cannot be given again (hypermedia link is removed)"] = () =>
                     ((bool)FirstRequestedGame(gearsOfWarId, friendId).RespondsTo("GiveGame")).should_be_false();
 

@@ -117,7 +117,7 @@ requestedGameView = Backbone.View.extend
 
   canGiveGameTemplate:
     '
-    <td>${requestedBy} is <span class="label label-inverse">requesting</span>: ${gameName}</td>
+    <td>${requestedBy} is <span class="label label-inverse">requesting</span> ${gameName}</td>
     <td>
         <i class="check icon-share-alt" style="cursor: pointer" href="javascript:;"></i>
     </td>

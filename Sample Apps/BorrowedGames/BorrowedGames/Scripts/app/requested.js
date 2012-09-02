@@ -26,9 +26,7 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) {
-        name = name.substring(0, 40) + "... ";
-      }
+      if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
     giveGame: function(callback) {
@@ -111,12 +109,8 @@
     },
     render: function() {
       var game;
-      if (this.model.canGiveGame()) {
-        game = this.genCanGiveTemplate();
-      }
-      if (!this.model.canGiveGame()) {
-        game = this.genReturnGame();
-      }
+      if (this.model.canGiveGame()) game = this.genCanGiveTemplate();
+      if (!this.model.canGiveGame()) game = this.genReturnGame();
       $(this.el).html(game);
       return this;
     },
@@ -150,7 +144,7 @@
     </td>\
     ',
     canGiveGameTemplate: '\
-    <td>${requestedBy} is <span class="label label-inverse">requesting</span>: ${gameName}</td>\
+    <td>${requestedBy} is <span class="label label-inverse">requesting</span> ${gameName}</td>\
     <td>\
         <i class="check icon-share-alt" style="cursor: pointer" href="javascript:;"></i>\
     </td>\

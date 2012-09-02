@@ -113,10 +113,13 @@ wantedGameView = Backbone.View.extend
     '
     <td class="span1">
      <span class="label label-success">currently borrowing</span>
+     <span class="label label-info">30 days left</span>
+     <span class="label label-warning">10 day(s) left</span>
+     <span class="label label-important">overdue, return game</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>
-    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
+    <td class="span2"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
     '
 
   requestedGameTemplate:
@@ -126,5 +129,5 @@ wantedGameView = Backbone.View.extend
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>
-    <td class="span1"><i class="icon-remove cancel" style="cursor: pointer"></i></td>
+    <td class="span2"><i class="icon-remove cancel" style="cursor: pointer">&nbsp;</i></td>
     '

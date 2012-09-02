@@ -240,13 +240,18 @@ namespace BorrowedGames.Models
 
         private dynamic WantedGame(dynamic game)
         {
-            var isBorrowed = WantedGame(game.Id, _.Id, game.User.Id).ReturnDate != null;
+            var returnDate = WantedGame(game.Id, _.Id, game.User.Id).ReturnDate;
+            var isBorrowed = returnDate != null;
+            int? daysLeft = null;
+            if(isBorrowed) daysLeft = Convert.ToInt32((returnDate - DateTime.Today).TotalDays); 
 
             return new Gemini(new
             {
                 game.Id,
                 game.Name,
                 game.Console,
+                ReturnDate = returnDate,
+                DaysLeft = daysLeft,
                 Owner = game.User.Select("Id", "Handle"),
                 IsBorrowed = new DynamicFunction(() => isBorrowed)
             });
