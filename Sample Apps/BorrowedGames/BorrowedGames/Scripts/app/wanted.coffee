@@ -16,9 +16,11 @@ wantedGame = Backbone.Model.extend
 
   canReturnGame: -> @get("ReturnGame")
 
+  daysLeft: -> @get("DaysLeft")
+
   shortName: ->
     name = @name()
-    
+
     name = name.substring(0, 40) + "... " if name.length > 41
 
     name += " (" + @console() + ")"
@@ -103,7 +105,15 @@ wantedGameView = Backbone.View.extend
     $(@el).html(game)
 
   renderBorrowedGame: ->
-    game = $.tmpl(@borrowedGameTemplate, { gameName: @model.shortName(), owner: @model.owner() })
+    daysLeft = @model.daysLeft()
+    daysLeftClass = "label-info"
+    daysLeftText = daysLeft + " day(s) left"
+    daysLeftClass = "label-warning" if daysLeft <= 10
+    daysLeftClass = "label-important" if daysLeft <= 0
+    daysLeftText = "overdue, return game" if daysLeft <= 0
+    
+
+    game = $.tmpl(@borrowedGameTemplate, { gameName: @model.shortName(), owner: @model.owner(), daysLeft: daysLeftText, daysLeftClass: daysLeftClass })
 
     game.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>the game has been returned</span>" })
 
@@ -112,10 +122,8 @@ wantedGameView = Backbone.View.extend
   borrowedGameTemplate:
     '
     <td class="span1">
-     <span class="label label-success">currently borrowing</span>
-     <span class="label label-info">30 days left</span>
-     <span class="label label-warning">10 day(s) left</span>
-     <span class="label label-important">overdue, return game</span>
+      <span class="label label-success">currently borrowing</span>
+      <span class="label ${daysLeftClass}">${daysLeft}</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>
@@ -125,7 +133,7 @@ wantedGameView = Backbone.View.extend
   requestedGameTemplate:
     '
     <td class="span1">
-     <span class="label label-inverse">requested</span>
+      <span class="label label-inverse">requested</span>
     </td>
     <td>${gameName}</td>
     <td>${owner}</td>

@@ -26,6 +26,9 @@
     canReturnGame: function() {
       return this.get("ReturnGame");
     },
+    daysLeft: function() {
+      return this.get("DaysLeft");
+    },
     shortName: function() {
       var name;
       name = this.name();
@@ -127,10 +130,18 @@
       return $(this.el).html(game);
     },
     renderBorrowedGame: function() {
-      var game;
+      var daysLeft, daysLeftClass, daysLeftText, game;
+      daysLeft = this.model.daysLeft();
+      daysLeftClass = "label-info";
+      daysLeftText = daysLeft + " day(s) left";
+      if (daysLeft <= 10) daysLeftClass = "label-warning";
+      if (daysLeft <= 0) daysLeftClass = "label-important";
+      if (daysLeft <= 0) daysLeftText = "overdue, return game";
       game = $.tmpl(this.borrowedGameTemplate, {
         gameName: this.model.shortName(),
-        owner: this.model.owner()
+        owner: this.model.owner(),
+        daysLeft: daysLeftText,
+        daysLeftClass: daysLeftClass
       });
       game.find(".cancel").tooltip({
         title: "<span style='font-size: 16px'>the game has been returned</span>"
@@ -139,10 +150,8 @@
     },
     borrowedGameTemplate: '\
     <td class="span1">\
-     <span class="label label-success">currently borrowing</span>\
-     <span class="label label-info">30 days left</span>\
-     <span class="label label-warning">10 day(s) left</span>\
-     <span class="label label-important">overdue, return game</span>\
+      <span class="label label-success">currently borrowing</span>\
+      <span class="label ${daysLeftClass}">${daysLeft}</span>\
     </td>\
     <td>${gameName}</td>\
     <td>${owner}</td>\
@@ -150,7 +159,7 @@
     ',
     requestedGameTemplate: '\
     <td class="span1">\
-     <span class="label label-inverse">requested</span>\
+      <span class="label label-inverse">requested</span>\
     </td>\
     <td>${gameName}</td>\
     <td>${owner}</td>\

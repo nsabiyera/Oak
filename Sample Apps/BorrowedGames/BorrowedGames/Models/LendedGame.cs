@@ -10,7 +10,7 @@ namespace BorrowedGames.Models
 
         public int DaysOut
         {
-            get { return Days(DateGiven - DateTime.Today); }
+            get { return Days(DateTime.Today - DateGiven); }
         }
 
         public int DaysLeft

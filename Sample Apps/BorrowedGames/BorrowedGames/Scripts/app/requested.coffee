@@ -15,6 +15,8 @@ requestedGame = Backbone.Model.extend
 
   requestedBy: -> @get("RequestedBy").Handle
 
+  daysOut: -> @get("DaysOut")
+
   shortName: ->
     name = @name()
     
@@ -103,14 +105,20 @@ requestedGameView = Backbone.View.extend
     return gen
 
   genReturnGame: ->
-    gen = $.tmpl(@returnGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName() })
+    daysOut = @model.daysOut()
+    if daysOut == 0
+      daysOut = "just borrowed"
+    else
+      daysOut = daysOut.toString() + " day(s) so far"
+    
+    gen = $.tmpl(@returnGameTemplate, { requestedBy: @model.requestedBy(), gameName: @model.shortName(), daysOut: daysOut })
     gen.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>the game has been returned to me</span>"})
     return gen
 
   returnGameTemplate:
     '
-    <td>${requestedBy} is currently <span class="label label-success">borrowing</span> ${gameName}</td>
-    <td>
+    <td>${requestedBy} is currently <span class="label label-success">borrowing</span> ${gameName} - ${daysOut}</td>
+    <td class="span2">
         <i class="cancel icon-ok" style="cursor: pointer" href="javascript:;"></i>
     </td>
     '
@@ -118,7 +126,7 @@ requestedGameView = Backbone.View.extend
   canGiveGameTemplate:
     '
     <td>${requestedBy} is <span class="label label-inverse">requesting</span> ${gameName}</td>
-    <td>
+    <td class="span2">
         <i class="check icon-share-alt" style="cursor: pointer" href="javascript:;"></i>
     </td>
     '

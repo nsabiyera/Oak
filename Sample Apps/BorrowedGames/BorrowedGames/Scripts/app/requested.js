@@ -23,6 +23,9 @@
     requestedBy: function() {
       return this.get("RequestedBy").Handle;
     },
+    daysOut: function() {
+      return this.get("DaysOut");
+    },
     shortName: function() {
       var name;
       name = this.name();
@@ -127,10 +130,17 @@
       return gen;
     },
     genReturnGame: function() {
-      var gen;
+      var daysOut, gen;
+      daysOut = this.model.daysOut();
+      if (daysOut === 0) {
+        daysOut = "just borrowed";
+      } else {
+        daysOut = daysOut.toString() + " day(s) so far";
+      }
       gen = $.tmpl(this.returnGameTemplate, {
         requestedBy: this.model.requestedBy(),
-        gameName: this.model.shortName()
+        gameName: this.model.shortName(),
+        daysOut: daysOut
       });
       gen.find(".cancel").tooltip({
         title: "<span style='font-size: 16px'>the game has been returned to me</span>"
@@ -138,14 +148,14 @@
       return gen;
     },
     returnGameTemplate: '\
-    <td>${requestedBy} is currently <span class="label label-success">borrowing</span> ${gameName}</td>\
-    <td>\
+    <td>${requestedBy} is currently <span class="label label-success">borrowing</span> ${gameName} - ${daysOut}</td>\
+    <td class="span2">\
         <i class="cancel icon-ok" style="cursor: pointer" href="javascript:;"></i>\
     </td>\
     ',
     canGiveGameTemplate: '\
     <td>${requestedBy} is <span class="label label-inverse">requesting</span> ${gameName}</td>\
-    <td>\
+    <td class="span2">\
         <i class="check icon-share-alt" style="cursor: pointer" href="javascript:;"></i>\
     </td>\
     '
