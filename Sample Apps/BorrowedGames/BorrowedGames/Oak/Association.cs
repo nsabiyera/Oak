@@ -47,7 +47,7 @@ namespace Oak
         }
     }
 
-    public class Association
+    public class Association : Gemini
     {
         public string Named { get; set; }
 
