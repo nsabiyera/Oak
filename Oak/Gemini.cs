@@ -114,6 +114,13 @@ namespace Oak
             Gemini.Initialized<Gemini>(d => d.AddRedefinableDelegates());
         }
 
+        public static implicit operator bool(Gemini @this)
+        {
+            if (@this == null) return false;
+
+            return true;
+        }
+
         private bool initialized;
 
         private static List<KeyValuePair<Type, Func<dynamic, dynamic>>> ExtendHooks = new List<KeyValuePair<Type, Func<dynamic, dynamic>>>();
