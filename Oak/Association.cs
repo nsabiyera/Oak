@@ -36,7 +36,7 @@ namespace Oak
         {
             var association = referencedAssociations.FirstOrDefault(s => s.Named == collectionName || s.Named == Singularize(collectionName));
 
-            if (!association) throw new InvalidOperationException("No association named " + collectionName + " exists.");
+            if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
 
             return association;
         }
