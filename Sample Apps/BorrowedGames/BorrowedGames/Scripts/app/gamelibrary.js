@@ -39,6 +39,10 @@
 
         view.modal.modal('hide');
 
+        view.modal.on('hide', function () {
+            autocomplete.inactivate();
+        });
+
         view.showLibraryLink.click(function () { show(); });
 
         var closeLogic = function () {
@@ -117,6 +121,8 @@
 
     function show() {
         view.modal.modal('show');
+
+        autocomplete.activate();
 
         load();
     }

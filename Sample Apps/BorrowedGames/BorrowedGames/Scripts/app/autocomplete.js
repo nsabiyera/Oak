@@ -67,6 +67,11 @@
     }
 
     function populateSearchResults(data, key, value) {
+        if(!active) {
+            $results.html("");
+            return;
+        }
+
         lastSearchResults = data;
         var element = $auto;
         $results.html('');
@@ -173,7 +178,7 @@
 
     function initializeResults() {
         results = document.createElement("div");
-        $results = $(results);
+        $results = $(results).attr('id', 'autocompletesearchresults');
         $results.css('position', 'absolute');
         $results.css({ width: "0px", top: "0px", left: "0px" });
         $("body").append(results);
@@ -199,5 +204,14 @@
         activeIndex = -1;
     }
 
-    this.exports(init, populateSearchResults);
+    var active = true;
+    function inactivate() {
+        active = false;
+    }
+
+    function activate() {
+        active = true;
+    }
+
+    this.exports(init, populateSearchResults, inactivate, activate);
 });
