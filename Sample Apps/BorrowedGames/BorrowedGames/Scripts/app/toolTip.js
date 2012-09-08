@@ -34,9 +34,7 @@
       $element.click(function() {
         if ($toolTip) {
           $toolTip.fadeOut(function() {
-            if ($toolTip) {
-              return $toolTip.remove();
-            }
+            if ($toolTip) return $toolTip.remove();
           });
         }
         return toolTips[key].disable();
@@ -62,9 +60,7 @@
       }, function() {
         if ($toolTip) {
           return $toolTip.fadeOut(function() {
-            if ($toolTip) {
-              return $toolTip.remove();
-            }
+            if ($toolTip) return $toolTip.remove();
           });
         }
       });

@@ -3,7 +3,7 @@
     var $wrapper;
 
     function init() {
-        $growlArea = $("<div class='growinfo' style='font-size: 20px'></div>");
+        $growlArea = $("<div class='growlinfo' style='font-size: 20px'></div>");
         $growlArea.hide();
 
         $wrapper = $("<div class='alert alert-info span6' style='display: none;'></div>");
