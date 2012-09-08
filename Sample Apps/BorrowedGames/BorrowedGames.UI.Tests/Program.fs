@@ -8,7 +8,7 @@ open setupmethods
 
 start "firefox"
 
-before <- fun _ -> logOff()
+before(fun _ -> logOff())
 
 test(fun _ ->
     describe "borrower returns game"
