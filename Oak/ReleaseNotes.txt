@@ -4,8 +4,17 @@ oak-edge 1.4.7+
 gemini 1.1.4+
 cambium 1.2.9+
 =============== CHANGES ==================
-- Eager loading for collections added.  Example is here: https://github.com/amirrajan/Oak/blob/master/Oak.Tests/describe_DynamicModels/eager_loading_for_has_many_and_belongs_to.cs#L95
+- Added StrongParameters module to protect against mass assignment via SetMembers, here is an example usage:
 
+
+
+============== FOR VERSIONS ==============
+oak 2.2.9+
+oak-edge 1.4.7+
+gemini 1.1.4+
+cambium 1.2.9+
+=============== CHANGES ==================
+- Eager loading for collections added.  Example is here: https://github.com/amirrajan/Oak/blob/master/Oak.Tests/describe_DynamicModels/eager_loading_for_has_many_and_belongs_to.cs#L95
 
 
 ============== FOR VERSIONS ==============
