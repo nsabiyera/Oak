@@ -3,6 +3,7 @@ using NSpec;
 
 namespace Oak.Tests.describe_Gemini
 {
+    [Tag("wip")]
     class describe_Info : nspec
     {
         dynamic gemini;
@@ -21,6 +22,7 @@ namespace Oak.Tests.describe_Gemini
             var info = gemini.__Info__() as string;
 
             info.should_be(@"this (Gemini)
+  SetMembers (DynamicFunctionWithParam)
   FirstName (String): Jane
   LastName (String): Doe
 ");
@@ -33,6 +35,7 @@ namespace Oak.Tests.describe_Gemini
             var info = gemini.__Info__() as string;
 
             info.should_be(@"this (Gemini)
+  SetMembers (DynamicFunctionWithParam)
   FirstName (String): Jane
   LastName (String): Doe
   Body (null)
@@ -46,6 +49,7 @@ namespace Oak.Tests.describe_Gemini
             var info = gemini.__Info__() as string;
 
             info.should_be(@"this (Gemini)
+  SetMembers (DynamicFunctionWithParam)
   FirstName (String): Jane
   LastName (String): Doe
   SayHello (DynamicFunction)
