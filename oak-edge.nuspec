@@ -29,6 +29,7 @@
     <file src="Oak\Validation.cs" target="content\Oak\Validation.cs" />
     <file src="Oak\Association.cs" target="content\Oak\Association.cs" />
     <file src="Oak\Changes.cs" target="content\Oak\Changes.cs" />
+    <file src="Oak\StrongParameters.cs" target="content\Oak\StrongParameters.cs" />
     <file src="Oak\BootStrap.cs" target="content\Oak\BootStrap.cs" />
     <file src="Oak\ReleaseNotes.txt" target="content\Oak\ReleaseNotes.txt" />
     <file src="Oak\Controllers\SeedController.cs" target="content\Controllers\SeedController.cs" />
