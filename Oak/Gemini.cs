@@ -558,9 +558,25 @@ namespace Oak
 
             foreach (var key in props.Keys)
             {
-                if (props[key].CanRead == false) continue;
+                if (!props[key].CanRead) continue;
 
                 dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
+            }
+
+            return dynamicProps;
+        }
+
+        public virtual IDictionary<string, object> HashOfWritableProperties()
+        {
+            var dynamicProps = HashExcludingDelegates();
+
+            var props = AutoProperties();
+
+            foreach (var key in props.Keys)
+            {
+                if (!props[key].CanWrite) continue;
+
+                if(props[key].CanRead) dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
             }
 
             return dynamicProps;
