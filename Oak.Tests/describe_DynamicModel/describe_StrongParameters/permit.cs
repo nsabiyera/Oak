@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_DynamicModel.describe_StrongParameters
 {
-    [Tag("wip")]
     class permit : nspec
     {
         void specify_permitted_parameters_are_allowed_to_be_set_view_mass_assignment()
