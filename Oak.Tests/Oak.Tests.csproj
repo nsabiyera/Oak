@@ -190,8 +190,13 @@
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Product.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
+    <Compile Include="describe_DynamicRepository\Classes\Book.cs" />
+    <Compile Include="describe_DynamicRepository\Classes\Books.cs" />
+    <Compile Include="describe_DynamicRepository\Classes\Chapter.cs" />
+    <Compile Include="describe_DynamicRepository\Classes\Chapters.cs" />
     <Compile Include="describe_DynamicRepository\Classes\OtherRecords.cs" />
     <Compile Include="describe_DynamicRepository\Classes\Records.cs" />
+    <Compile Include="describe_DynamicRepository\detecting_inefficient_queries.cs" />
     <Compile Include="describe_DynamicRepository\inserting_and_updating.cs" />
     <Compile Include="describe_DynamicRepository\executing_procs.cs" />
     <Compile Include="describe_DynamicRepository\pagination.cs" />

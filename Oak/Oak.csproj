@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Association.cs" />
     <Compile Include="BootStrap.cs" />
+    <Compile Include="Bullet.cs" />
     <Compile Include="Changes.cs" />
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="ConnectionProfile.cs" />

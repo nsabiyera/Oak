@@ -239,16 +239,24 @@ namespace Massive
 
         public static Action<object, string, object[]> LogSql { get; set; }
 
+        public static object ConsoleLogLock = new object();
         public static void LogSqlDelegate(object sender, string sql, object[] args)
         {
-            if (args == null) args = new object[0];
+            lock (ConsoleLogLock)
+            {
+                if (args == null) args = new object[0];
 
-            System.Console.Out.WriteLine(
-                "\r\n==============\r\n" + 
-                sender.GetType().Name + 
-                "\r\n==============\r\n" + 
-                sql + "\r\n" + string.Join(",", args) + 
-                "\r\n==============\r\n");
+                System.Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+                System.Console.Out.WriteLine(
+                    "\r\n==============\r\n" +
+                    sender.GetType().Name + " on thread " + System.Threading.Thread.CurrentThread.GetHashCode() +
+                    "\r\n==============\r\n" +
+                    sql + "\r\n" + string.Join(",", args) +
+                    "\r\n==============\r\n");
+
+                System.Console.ResetColor();    
+            }
         }
 
         private void LogSqlCommand(DbCommand cmd)

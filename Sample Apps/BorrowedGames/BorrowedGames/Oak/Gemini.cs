@@ -96,6 +96,11 @@ namespace Oak
 
             foreach (var item in temp) action(item);
         }
+
+        public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            return !source.Any(predicate);
+        }
     }
 
     public delegate dynamic DynamicFunction();
@@ -106,7 +111,6 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
 
-    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         static Gemini()
@@ -368,13 +372,15 @@ namespace Oak
 
         public IEnumerable<MethodInfo> DynamicDelegates(Type type)
         {
-            if (type == typeof(Gemini) || type == typeof(object)) return new List<MethodInfo>();
+            if (type == typeof(object)) return new List<MethodInfo>();
 
             if (MethodCache.ContainsKey(type)) return MethodCache[type];
 
             var delegates = type
                 .GetMethods(PrivateFlags())
                 .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
+
+            if (type == typeof(Gemini)) delegates.RemoveAll(s => s.Name != "SetMembers");
 
             delegates.AddRange(DynamicDelegates(type.BaseType));
 
@@ -478,9 +484,9 @@ namespace Oak
             TrySetMember(property, value, suppress: false);
         }
 
-        public virtual void SetMembers(object o)
+        void SetMembers(dynamic o)
         {
-            var dictionary = o.ToDictionary();
+            var dictionary = (o as object).ToDictionary();
 
             foreach (var item in dictionary) SetMember(item.Key, item.Value);
         }
@@ -642,6 +648,8 @@ namespace Oak
                 var argsToInvokeWith = args.FirstOrDefault() as dynamic;
 
                 if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+
+                else if (args.Count() > 1) argsToInvokeWith = args;
 
                 function = () => member.Invoke(argsToInvokeWith);
             };

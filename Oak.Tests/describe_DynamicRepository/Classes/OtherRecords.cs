@@ -6,5 +6,5 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicRepository.Classes
 {
-    class OtherRecords : DynamicRepository { }
+    public class OtherRecords : DynamicRepository { }
 }

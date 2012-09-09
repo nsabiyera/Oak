@@ -30,7 +30,7 @@ namespace BorrowedGames.Controllers
 
         public dynamic NotInterested()
         {
-            return Json(LinksForNotInterestedGames(User().NotInterestedGames()));
+            return Json(LinksForNotInterestedGames(User().NotInterestedGames().Include("Game").ToList()));
         }
 
         [HttpPost]

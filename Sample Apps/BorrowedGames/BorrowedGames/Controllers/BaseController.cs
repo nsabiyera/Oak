@@ -24,9 +24,12 @@ namespace BorrowedGames.Controllers
             return new DynamicJsonResult(o);
         }
 
+        dynamic cachedUser = null;
         public new dynamic User()
         {
-            return users.ForEmail(Email());
+            if (cachedUser == null) cachedUser = users.ForEmail(Email());
+
+            return cachedUser;
         }
 
         public int UserId()

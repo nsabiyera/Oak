@@ -96,6 +96,11 @@ namespace Oak
 
             foreach (var item in temp) action(item);
         }
+
+        public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            return !source.Any(predicate);
+        }
     }
 
     public delegate dynamic DynamicFunction();
