@@ -28,6 +28,20 @@ gemini 1.1.4+
 cambium 1.2.9+
 =============== CHANGES ==================
 - Added StrongParameters module to protect against mass assignment via SetMembers, here is an example usage:
+    dynamic securedObject = new Gemini(new { FirstName = "Jane", LastName = "Doe" });
+
+    securedObject.Extend<StrongParameters>();
+
+    securedObject.Permit("FirstName", "LastName");
+
+    //this line would throw an error if set members are attempted on properties
+    //that weren't premitted
+    securedObject.SetMembers(new { FirstName = "First", LastName = "Last" });
+
+    (securedObject.FirstName as string).should_be("First");
+
+    (securedObject.LastName as string).should_be("Last");
+    
 
 
 
