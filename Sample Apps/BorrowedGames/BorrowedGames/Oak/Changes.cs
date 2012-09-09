@@ -25,7 +25,7 @@ namespace Oak
 
             gemini.SetMember("Changes", new DynamicFunctionWithParam(GetChanges));
 
-            originalValues = new Dictionary<string, object>(gemini.HashOfProperties());
+            originalValues = new Dictionary<string, object>(gemini.HashOfWritableProperties());
 
             this.gemini = gemini;
         }

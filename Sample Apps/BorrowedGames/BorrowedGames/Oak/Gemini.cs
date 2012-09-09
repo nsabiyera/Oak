@@ -566,6 +566,22 @@ namespace Oak
             return dynamicProps;
         }
 
+        public virtual IDictionary<string, object> HashOfWritableProperties()
+        {
+            var dynamicProps = HashExcludingDelegates();
+
+            var props = AutoProperties();
+
+            foreach (var key in props.Keys)
+            {
+                if (props[key].CanWrite == false) continue;
+
+                dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
+            }
+
+            return dynamicProps;
+        }
+
         public virtual IDictionary<string, object> HashExcludingDelegates()
         {
             var dictionary = new Prototype() as IDictionary<string, object>;

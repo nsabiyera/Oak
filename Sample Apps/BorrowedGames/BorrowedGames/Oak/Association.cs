@@ -705,7 +705,7 @@ namespace Oak
 
                     association.Model = item;
 
-                    item.SetMember(model.GetType().Name, model);    
+                    item.SetMember(model.GetType().Name, model);
                 }
             }
 
