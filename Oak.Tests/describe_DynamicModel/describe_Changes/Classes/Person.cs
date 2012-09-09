@@ -10,15 +10,23 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes.Classes
         public PersonWithAutoProps(object dto)
             : base(dto)
         {
-            
+
         }
 
         public PersonWithAutoProps()
         {
-            
+
         }
 
         public string FirstName { get; set; }
+
+        public string OnlyGettable
+        {
+            get
+            {
+                return "only gettable";
+            }
+        }
     }
 
     public class Person : DynamicModel

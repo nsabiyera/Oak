@@ -286,6 +286,7 @@ namespace Oak.Tests
             };
         }
 
+        [Tag("wip")]
         void converting_dynamic_model()
         {
             before = () =>

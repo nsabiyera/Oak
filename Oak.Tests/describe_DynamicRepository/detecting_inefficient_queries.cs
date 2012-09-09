@@ -64,64 +64,64 @@ namespace Oak.Tests.describe_DynamicRepository
             };
         }
 
-        void specify_inefficient_query_is_detected_on_has_many_association()
-        {
-            var booksReturned = books.All();
+        //void specify_inefficient_query_is_detected_on_has_many_association()
+        //{
+        //    var booksReturned = books.All();
 
-            booksReturned.ForEach(s => s.Chapters());
+        //    booksReturned.ForEach(s => s.Chapters());
 
-            var queries = Bullet.InefficientQueries(recordedQueries);
+        //    var queries = Bullet.InefficientQueries(recordedQueries);
 
-            queries.Count().should_be(2);
+        //    queries.Count().should_be(2);
 
-            (queries.First().Query as string).should_contain("where BookId in ('100')");
-            (queries.First().Reason as string).should_contain("N+1");
+        //    (queries.First().Query as string).should_contain("where BookId in ('100')");
+        //    (queries.First().Reason as string).should_contain("N+1");
 
-            (queries.Last().Query as string).should_contain("where BookId in ('400')");
-            (queries.Last().Reason as string).should_contain("N+1");
-        }
+        //    (queries.Last().Query as string).should_contain("where BookId in ('400')");
+        //    (queries.Last().Reason as string).should_contain("N+1");
+        //}
 
-        void specify_inefficient_query_is_detected_on_belongs_to_association()
-        {
-            var allChapters = chapters.All();
+        //void specify_inefficient_query_is_detected_on_belongs_to_association()
+        //{
+        //    var allChapters = chapters.All();
 
-            allChapters.ForEach(s => s.Book());
+        //    allChapters.ForEach(s => s.Book());
 
-            var queries = Bullet.InefficientQueries(recordedQueries);
+        //    var queries = Bullet.InefficientQueries(recordedQueries);
 
-            queries.Count().should_be(1);
+        //    queries.Count().should_be(1);
 
-            queries.ForEach(s =>
-            {
-                Console.WriteLine(s.Query);
-                Console.WriteLine(s.Reason);
-            });
+        //    queries.ForEach(s =>
+        //    {
+        //        Console.WriteLine(s.Query);
+        //        Console.WriteLine(s.Reason);
+        //    });
 
-            (queries.First().Query as string).should_contain("SELECT * FROM Books");
-            (queries.First().Reason as string).should_contain("N+1");
-        }
+        //    (queries.First().Query as string).should_contain("SELECT * FROM Books");
+        //    (queries.First().Reason as string).should_contain("N+1");
+        //}
 
-        void specify_inefficient_query_is_detected_on_redundant_selects()
-        {
-            var booksReturned = books.All();
-            booksReturned = books.All();
-            booksReturned = books.All();
+        //void specify_inefficient_query_is_detected_on_redundant_selects()
+        //{
+        //    var booksReturned = books.All();
+        //    booksReturned = books.All();
+        //    booksReturned = books.All();
 
-            var queries = Bullet.InefficientQueries(recordedQueries);
+        //    var queries = Bullet.InefficientQueries(recordedQueries);
 
-            queries.Count().should_be(1);
+        //    queries.Count().should_be(1);
 
-            (queries.First().Query as string).should_contain("SELECT * FROM Books");
-            (queries.First().Reason as string).should_contain("redundant");
-        }
+        //    (queries.First().Query as string).should_contain("SELECT * FROM Books");
+        //    (queries.First().Reason as string).should_contain("redundant");
+        //}
 
-        void specify_dissimilar_queries_are_not_considered_ineffecient()
-        {
-            Bullet.InefficientQueries(new List<string> 
-            { 
-                "select * from Blogs",
-                "select * from Comments"
-            }).should_be(false);
-        }
+        //void specify_dissimilar_queries_are_not_considered_ineffecient()
+        //{
+        //    Bullet.InefficientQueries(new List<string> 
+        //    { 
+        //        "select * from Blogs",
+        //        "select * from Comments"
+        //    }).should_be(false);
+        //}
     }
 }
