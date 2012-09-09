@@ -8,6 +8,24 @@ using System.Text;
 
 namespace Oak
 {
+    public class SqlQueryLog
+    {
+        public SqlQueryLog(object sender, string query, string stackTrace, int threadId, object[] args)
+        {
+            Sender = sender;
+            Query = query;
+            StackTrace = stackTrace;
+            ThreadId = threadId;
+            Args = args;
+        }
+
+        public object Sender { get; set; }
+        public string Query { get; set; }
+        public string StackTrace { get; set; }
+        public int ThreadId { get; set; }
+        public object[] Args { get; set; }
+    }
+
     public class Bullet
     {
         static string redundantQueryErrorMessage =
@@ -21,71 +39,71 @@ comments.All().Include(""Blog"").";
 DynamicRepository, use the Include() method, for example: 
 blogs.All().Include(""Comments"", ""Tags"").";
 
-        public static IEnumerable<dynamic> InefficientQueries(List<Tuple<string, string, int>> sqlAndStackTrace)
+        public static IEnumerable<dynamic> InefficientQueries(List<SqlQueryLog> log)
         {
             var inefficientQueries = new List<dynamic>();
 
-            var orderedSql = new List<dynamic>();
+            var lookup = new HashSet<Guid>();
 
-            for (int i = 0; i < sqlAndStackTrace.Count; i++)
+            var logWithIds = new List<dynamic>();
+
+            for (int i = 0; i < log.Count; i++)
             {
-                var record = sqlAndStackTrace[i];
+                var record = log[i];
 
-                orderedSql.Add(new Gemini(new
+                logWithIds.Add(new Gemini(new
                 {
-                    Order = i,
-                    Query = record.Item1,
-                    StackTrace = record.Item2,
-                    ThreadId = record.Item3
+                    Id = Guid.NewGuid(),
+                    record.Query,
+                    record.StackTrace,
+                    record.ThreadId
                 }));
             }
 
-            var grouped = orderedSql.GroupBy(s => s.ThreadId);
+            var comparisons =
+                from first in logWithIds
+                from second in logWithIds
+                select new { first, second };
 
-            foreach(var group in grouped)
+            foreach (var comparison in comparisons)
             {
-                EachConsecutive2(group.OrderBy(s => s.Order), (first, second) =>
+                var first = comparison.first;
+                var second = comparison.second;
+
+                if (first.Id == second.Id) continue;
+
+                if (IsExactStringMatch(first.Query, second.Query))
                 {
-                    if (IsExactStringMatch(first.Query, second.Query))
-                    {
-                        inefficientQueries.Add(new Gemini(new
-                        {
-                            Query = first.Query,
-                            Reason = redundantQueryErrorMessage,
-                            StackTrace = ScrubStackTrace(first.StackTrace),
-                            ThreadId = first.ThreadId
-                        }));
+                    AddQuery(inefficientQueries, first, redundantQueryErrorMessage, lookup);
 
-                        inefficientQueries.Add(new Gemini(new
-                        {
-                            Query = second.Query,
-                            Reason = redundantQueryErrorMessage,
-                            StackTrace = ScrubStackTrace(second.StackTrace),
-                            ThreadId = second.ThreadId
-                        }));
-                    }
-                    else if (IsSqlSimilar(first.Query, second.Query))
-                    {
-                        inefficientQueries.Add(new Gemini(new
-                        {
-                            Query = first.Query,
-                            Reason = nPlusOneQueryErrorMessage,
-                            StackTrace = ScrubStackTrace(first.StackTrace),
-                            ThreadId = first.ThreadId
-                        }));
+                    AddQuery(inefficientQueries, second, redundantQueryErrorMessage, lookup);
+                }
+                else if (IsSqlSimilar(first.Query, second.Query))
+                {
+                    AddQuery(inefficientQueries, first, nPlusOneQueryErrorMessage, lookup);
 
-                        inefficientQueries.Add(new Gemini(new
-                        {
-                            Query = second.Query,
-                            Reason = nPlusOneQueryErrorMessage,
-                            StackTrace = ScrubStackTrace(second.StackTrace),
-                            ThreadId = second.ThreadId
-                        }));
-                    }
-                });    
+                    AddQuery(inefficientQueries, second, nPlusOneQueryErrorMessage, lookup);
+                }
             }
 
             return new DynamicModels(inefficientQueries);
+        }
+
+        public static void AddQuery(List<dynamic> inefficientQueries, dynamic queryLog, string reason, HashSet<Guid> lookup)
+        {
+            if (!lookup.Contains(queryLog.Id))
+            {
+                inefficientQueries.Add(new Gemini(new
+                {
+                    Id = queryLog.Id,
+                    Query = queryLog.Query,
+                    Reason = reason,
+                    StackTrace = ScrubStackTrace(queryLog.StackTrace),
+                    ThreadId = queryLog.ThreadId
+                }));
+
+                lookup.Add(queryLog.Id);
+            }
         }
 
         public static bool IsSqlSimilar(string first, string second)

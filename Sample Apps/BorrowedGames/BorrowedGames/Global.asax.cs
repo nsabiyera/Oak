@@ -13,6 +13,11 @@ namespace BorrowedGames
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        public MvcApplication()
+        {
+            DebugBootStrap.Init(this);
+        }
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());

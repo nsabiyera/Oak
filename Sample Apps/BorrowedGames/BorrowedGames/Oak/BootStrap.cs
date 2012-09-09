@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Threading;
 
 namespace Oak
 {
@@ -11,59 +12,79 @@ namespace Oak
         public static void Init()
         {
             ModelBinders.Binders.Add(new KeyValuePair<Type, IModelBinder>(typeof(object), new ParamsModelBinder()));
+        }
+    }
+
+    public static class DebugBootStrap
+    {
+        [ThreadStatic]
+        public static List<SqlQueryLog> SqlQueries = new List<SqlQueryLog>();
+
+        public static void Init(HttpApplication mvcApplication)
+        {
+            mvcApplication.EndRequest += new EventHandler(mvcApplication_EndRequest);
 
             if (IsInDebugMode())
             {
                 Massive.DynamicRepository.WriteDevLog = true;
-                var currentLog = Massive.DynamicRepository.LogSql;
-                Massive.DynamicRepository.LogSql = (sender, sql, args) =>
+
+                Massive.DynamicRepository.LogSql = (sender, query, args) =>
                 {
                     lock (Massive.DynamicRepository.ConsoleLogLock)
                     {
-                        BulletActionFilter.sqlQueries.Add(
-                            new Tuple<string, string, int>(
-                                sql,
+                        if (SqlQueries == null) SqlQueries = new List<SqlQueryLog>();
+
+                        SqlQueries.Add(
+                            new SqlQueryLog(sender,
+                                query,
                                 Environment.StackTrace,
-                                System.Threading.Thread.CurrentThread.ManagedThreadId));
+                                Thread.CurrentThread.ManagedThreadId,
+                                args));
                     }
-
-                    currentLog(sender, sql, args);
                 };
-
-                GlobalFilters.Filters.Add(new BulletActionFilter());
             }
+
+            mvcApplication.Error += (sender, e) =>
+            {
+                lock (Massive.DynamicRepository.ConsoleLogLock)
+                {
+                    var error = mvcApplication.Server.GetLastError().ToString();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Out.WriteLine("======== Exception Occurred ==========");
+                    Console.Out.WriteLine(Bullet.ScrubStackTrace(error));
+                    Console.Out.WriteLine("====================================\n\n");
+                    Console.ResetColor(); 
+                }
+            };
         }
 
-        public static bool IsInDebugMode()
+        static void mvcApplication_EndRequest(object sender, EventArgs e)
         {
-            return System.Diagnostics.Process.GetCurrentProcess().ProcessName == "iisexpress";
-        }
-    }
-
-    public class BulletActionFilter : ActionFilterAttribute
-    {
-        public static List<Tuple<string, string, int>> sqlQueries = new List<Tuple<string, string, int>>();
-
-        public BulletActionFilter()
-        {
-        }
-
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            
-        }
-
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
-        {
-            var queries = Bullet.InefficientQueries(sqlQueries);
+            SqlQueries = SqlQueries ?? new List<SqlQueryLog>();
 
             lock (Massive.DynamicRepository.ConsoleLogLock)
             {
+                if (SqlQueries.Any())
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.Out.WriteLine("======== Queries executed ==========");
+
+                    SqlQueries.ForEach(s =>
+                    {
+                        Massive.DynamicRepository.LogSqlDelegate(s.Sender, s.Query, s.Args);
+                    });
+
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.Out.WriteLine("====================================\n\n");
+                    Console.ResetColor();    
+                }
+
+                var queries = Bullet.InefficientQueries(SqlQueries);
+
                 queries.ForEach(s =>
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Out.WriteLine("==== Possible Inefficient Query ====");
-                    Console.Out.WriteLine("For request: " + filterContext.HttpContext.Request.Url);
                     Console.Out.WriteLine("For thread: " + s.ThreadId);
                     Console.Out.WriteLine("\n");
                     Console.Out.WriteLine(s.Query);
@@ -76,8 +97,13 @@ namespace Oak
                     Console.ResetColor();
                 });
 
-                sqlQueries.Clear();
+                SqlQueries.Clear();
             }
+        }
+
+        public static bool IsInDebugMode()
+        {
+            return System.Diagnostics.Process.GetCurrentProcess().ProcessName == "iisexpress";
         }
     }
 }

@@ -91,6 +91,7 @@
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\LendedGame.cs" />
+    <Compile Include="Models\LibraryEntry.cs" />
     <Compile Include="Oak\Association.cs" />
     <Compile Include="Oak\BootStrap.cs" />
     <Compile Include="Oak\Bullet.cs" />

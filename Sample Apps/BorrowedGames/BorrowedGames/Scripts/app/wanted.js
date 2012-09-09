@@ -32,9 +32,7 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 41) {
-        name = name.substring(0, 40) + "... ";
-      }
+      if (name.length > 41) name = name.substring(0, 40) + "... ";
       return name += " (" + this.console() + ")";
     },
     undoRequest: function(callback) {
@@ -116,12 +114,8 @@
       }
     },
     render: function() {
-      if (!this.model.canReturnGame()) {
-        this.renderRequestedGame();
-      }
-      if (this.model.canReturnGame()) {
-        this.renderBorrowedGame();
-      }
+      if (!this.model.canReturnGame()) this.renderRequestedGame();
+      if (this.model.canReturnGame()) this.renderBorrowedGame();
       return this;
     },
     renderRequestedGame: function() {
@@ -140,15 +134,9 @@
       daysLeft = this.model.daysLeft();
       daysLeftClass = "label-info";
       daysLeftText = daysLeft + " day(s) left";
-      if (daysLeft <= 10) {
-        daysLeftClass = "label-warning";
-      }
-      if (daysLeft <= 0) {
-        daysLeftClass = "label-important";
-      }
-      if (daysLeft <= 0) {
-        daysLeftText = "overdue, return game";
-      }
+      if (daysLeft <= 10) daysLeftClass = "label-warning";
+      if (daysLeft <= 0) daysLeftClass = "label-important";
+      if (daysLeft <= 0) daysLeftText = "overdue, return game";
       game = $.tmpl(this.borrowedGameTemplate, {
         gameName: this.model.shortName(),
         owner: this.model.owner(),
