@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using Oak;
 using System.Diagnostics;
 using Massive;
+using System.Threading;
 
 //thank you Rob Conery for this awesome file https://github.com/robconery/massive
 
@@ -239,16 +240,19 @@ namespace Massive
 
         public static Action<object, string, object[]> LogSql { get; set; }
 
-        public static void LogSqlDelegate(object sender, string sql, object[] args)
+        public static object ConsoleLogLock = new object();
+        public static void LogSqlDelegate(object sender, string query, object[] args)
         {
-            if (args == null) args = new object[0];
+            lock (ConsoleLogLock)
+            {
+                if (args == null) args = new object[0];
 
-            System.Console.Out.WriteLine(
-                "\r\n==============\r\n" + 
-                sender.GetType().Name + 
-                "\r\n==============\r\n" + 
-                sql + "\r\n" + string.Join(",", args) + 
-                "\r\n==============\r\n");
+                System.Console.Out.WriteLine(
+                    "\r\n==============\r\n\n" +
+                    "[" + sender.GetType().Name + "], Thread [" + Thread.CurrentThread.ManagedThreadId + "]\n\n" +
+                    query + "\r\n" + string.Join(",", args) +
+                    "\r\n==============\r\n");
+            }
         }
 
         private void LogSqlCommand(DbCommand cmd)
