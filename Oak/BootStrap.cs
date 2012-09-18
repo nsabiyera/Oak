@@ -12,6 +12,21 @@ namespace Oak
         public static void Init()
         {
             ModelBinders.Binders.Add(new KeyValuePair<Type, IModelBinder>(typeof(object), new ParamsModelBinder()));
+
+            if (DebugBootStrap.IsInDebugMode() && !DebugBootStrap.IsInitialized)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Howdy! It looks like you've upgraded from an older version of Oak.  Add the following line to your Global.asax.cs to get AWESOME dev logs in your IISExpress window: ");
+                Console.WriteLine(@"
+//inside of Global.asax.cs
+//constructor for your mvc application
+public MvcApplication()
+{
+    DebugBootStrap.Init(this);
+}
+");
+                Console.ResetColor();
+            }
         }
     }
 
@@ -20,8 +35,17 @@ namespace Oak
         [ThreadStatic]
         public static List<SqlQueryLog> SqlQueries = new List<SqlQueryLog>();
 
+        public static bool IsInitialized { get; set; }
+
+        static DebugBootStrap()
+        {
+            IsInitialized = false;
+        }
+
         public static void Init(HttpApplication mvcApplication)
         {
+            IsInitialized = true;
+
             mvcApplication.EndRequest += new EventHandler(mvcApplication_EndRequest);
 
             if (IsInDebugMode())
@@ -53,7 +77,7 @@ namespace Oak
                     Console.Out.WriteLine("======== Exception Occurred ==========");
                     Console.Out.WriteLine(Bullet.ScrubStackTrace(error));
                     Console.Out.WriteLine("====================================\n\n");
-                    Console.ResetColor(); 
+                    Console.ResetColor();
                 }
             };
         }
@@ -76,7 +100,7 @@ namespace Oak
 
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.Out.WriteLine("====================================\n\n");
-                    Console.ResetColor();    
+                    Console.ResetColor();
                 }
 
                 var queries = Bullet.InefficientQueries(SqlQueries);
