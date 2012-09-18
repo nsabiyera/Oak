@@ -71,6 +71,7 @@
     <Compile Include="Models\Comments.cs" />
     <Compile Include="Oak\Association.cs" />
     <Compile Include="Oak\BootStrap.cs" />
+    <Compile Include="Oak\Bullet.cs" />
     <Compile Include="Oak\Changes.cs" />
     <Compile Include="Oak\ConnectionProfile.cs" />
     <Compile Include="Oak\DynamicForm.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Oak\ParamsModelBinder.cs" />
     <Compile Include="Oak\Query.cs" />
     <Compile Include="Oak\Seed.cs" />
+    <Compile Include="Oak\StrongParameters.cs" />
     <Compile Include="Oak\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

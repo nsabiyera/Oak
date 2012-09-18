@@ -17,7 +17,7 @@ namespace Oak
         {
             if (o is Gemini)
             {
-                WriteName(stringBuilder, tab, name, "dynamic", null);
+                WriteName(stringBuilder, tab, name, o.GetType().Name, null);
 
                 var dictionary = (o as Gemini).Hash();
 

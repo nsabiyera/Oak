@@ -11,6 +11,11 @@ namespace DynamicBlog
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        public MvcApplication()
+        {
+            DebugBootStrap.Init(this);
+        }
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -27,7 +32,6 @@ namespace DynamicBlog
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
-
         }
 
         protected void Application_Start()

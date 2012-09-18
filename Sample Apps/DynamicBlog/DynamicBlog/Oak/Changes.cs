@@ -10,24 +10,24 @@ namespace Oak
     {
         dynamic gemini;
 
-        IDictionary<string, dynamic> originalValues;
+        IDictionary<string, dynamic> OriginalValues { get; set; }
 
         IDictionary<string, dynamic> CurrentValues()
         {
-            return gemini.HashOfProperties();
+            return gemini.HashOfWritableProperties();
         }
 
         public Changes(dynamic gemini)
         {
+            this.gemini = gemini;
+
             gemini.SetMember("HasChanged", new DynamicFunctionWithParam(HasChanged));
 
             gemini.SetMember("Original", new DynamicFunctionWithParam(Original));
 
             gemini.SetMember("Changes", new DynamicFunctionWithParam(GetChanges));
 
-            originalValues = new Dictionary<string, object>(gemini.HashOfProperties());
-
-            this.gemini = gemini;
+            OriginalValues = new Dictionary<string, object>(CurrentValues());
         }
 
         public dynamic GetChanges(dynamic property)
@@ -36,7 +36,7 @@ namespace Oak
 
             var dictionary = new Prototype() as IDictionary<string, object>;
 
-            var keys = CurrentValues().Keys.Union(originalValues.Keys).Distinct();
+            var keys = CurrentValues().Keys.Union(OriginalValues.Keys).Distinct();
 
             foreach (var key in keys) if (HasPropertyChanged(key)) dictionary.Add(key, ChangesFor(key));
 
@@ -61,7 +61,9 @@ namespace Oak
 
         public dynamic Original(dynamic property)
         {
-            return NullOrValueFor(originalValues, property);
+            if (property == null) return OriginalValues;
+
+            return NullOrValueFor(OriginalValues, property);
         }
 
         public dynamic Current(dynamic property)
