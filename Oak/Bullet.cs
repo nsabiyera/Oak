@@ -39,6 +39,10 @@ comments.All().Include(""Blog"").";
 DynamicRepository, use the Include() method, for example: 
 blogs.All().Include(""Comments"", ""Tags"").";
 
+        static string closeButMayNotBeInefficient = 
+@"These queries look pretty close, but have different execution paths
+and may not be inefficient, it's worth looking at.";
+
         public static IEnumerable<dynamic> InefficientQueries(List<SqlQueryLog> log)
         {
             var inefficientQueries = new List<dynamic>();
@@ -72,17 +76,23 @@ blogs.All().Include(""Comments"", ""Tags"").";
 
                 if (first.Id == second.Id) continue;
 
-                if (IsExactStringMatch(first.Query, second.Query))
+                if (IsExactMatch(first, second))
                 {
                     AddQuery(inefficientQueries, first, redundantQueryErrorMessage, lookup);
 
                     AddQuery(inefficientQueries, second, redundantQueryErrorMessage, lookup);
                 }
-                else if (IsSqlSimilar(first.Query, second.Query))
+                else if (HasSimilarExecutionPath(first, second))
                 {
                     AddQuery(inefficientQueries, first, nPlusOneQueryErrorMessage, lookup);
 
                     AddQuery(inefficientQueries, second, nPlusOneQueryErrorMessage, lookup);
+                }
+                else if (HasSimilarQuery(first, second))
+                {
+                    AddQuery(inefficientQueries, first, closeButMayNotBeInefficient, lookup);
+
+                    AddQuery(inefficientQueries, second,  closeButMayNotBeInefficient, lookup);
                 }
             }
 
@@ -106,17 +116,31 @@ blogs.All().Include(""Comments"", ""Tags"").";
             }
         }
 
-        public static bool IsSqlSimilar(string first, string second)
+        public static bool HasSimilarQuery(dynamic first, dynamic second) 
         {
-            return SqlExcludingInStatement(first) == SqlExcludingInStatement(second);
+            return ExcludingInClause(first.Query) == ExcludingInClause(second.Query) &&
+                first.ThreadId == second.ThreadId;
         }
 
-        private static bool IsExactStringMatch(string first, string second)
+        public static bool HasSimilarExecutionPath(dynamic first, dynamic second)
         {
-            return first == second;
+            return ExcludingInClause(first.Query) == ExcludingInClause(second.Query) &&
+                HasSameExecutionPath(first, second);
         }
 
-        public static string SqlExcludingInStatement(string sql)
+        private static bool IsExactMatch(dynamic first, dynamic second)
+        {
+            return first.Query == second.Query &&
+                HasSameExecutionPath(first, second);
+        }
+
+        public static bool HasSameExecutionPath(dynamic first, dynamic second)
+        {
+            return first.ThreadId == second.ThreadId &&
+                first.StackTrace == second.StackTrace;
+        }
+
+        public static string ExcludingInClause(string sql)
         {
             return Regex.Replace(sql, @" in \([^)]*\)", "");
         }
