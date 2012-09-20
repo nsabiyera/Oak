@@ -8,120 +8,70 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicRepository
 {
+    [Tag("wip")]
     class detecting_inefficient_queries : nspec
     {
-        Seed seed;
-
-        object book1Id, book2Id;
-
-        List<string> recordedQueries;
-
-        Books books;
-
-        Chapters chapters;
-
-        void before_each()
+        void specify_exact_matches_on_the_same_thread_and_stack_trace_are_considered_inefficient()
         {
-            seed = new Seed();
+            var sqlLog = new SqlQueryLog(this,
+                "select * from User where email = 'user@example.com'",
+                "stack trace",
+                50,
+                null);
 
-            books = new Books();
+            var sqlLog2 = new SqlQueryLog(this,
+                "select * from User where email = 'user@example.com'",
+                "stack trace",
+                50,
+                null);
 
-            chapters = new Chapters();
+            var inefficientQueries = Bullet.InefficientQueries(new [] { sqlLog, sqlLog2 }.ToList());
 
-            seed.PurgeDb();
+            inefficientQueries.Count().should_be(2);
 
-            seed.CreateTable("Books",
-                new { Id = "int" },
-                new { Title = "nvarchar(255)" }).ExecuteNonQuery();
-
-            seed.CreateTable("Chapters",
-                new { Id = "int" },
-                new { BookId = "int" },
-                new { Name = "nvarchar(255)" }).ExecuteNonQuery();
-
-            book1Id = 100;
-
-            new { Id = book1Id, Title = "book 1" }.InsertInto("Books");
-
-            new { Id = 200, BookId = book1Id, Name = "Chapter I" }.InsertInto("Chapters");
-
-            new { Id = 300, BookId = book1Id, Name = "Chapter II" }.InsertInto("Chapters");
-
-            book2Id = 400;
-
-            new { Id = book2Id, Title = "book 2" }.InsertInto("Books");
-
-            new { Id = 500, BookId = book2Id, Name = "Chapter 1" }.InsertInto("Chapters");
-
-            new { Id = 600, BookId = book2Id, Name = "Chapter 2" }.InsertInto("Chapters");
-
-            recordedQueries = new List<string>();
-
-            DynamicRepository.WriteDevLog = true;
-            DynamicRepository.LogSql = (sender, sql, args) =>
-            {
-                recordedQueries.Add(sql);
-            };
+            (inefficientQueries.First().Reason as string).should_contain("redundant");
         }
 
-        //void specify_inefficient_query_is_detected_on_has_many_association()
-        //{
-        //    var booksReturned = books.All();
+        void specify_similiar_queries_are_considered_nPlus1_if_the_where_clause_is_different_but_the_stack_and_thread_are_the_same()
+        {
+            var sqlLog = new SqlQueryLog(this,
+                "select * from User where email in ('user@example.com')",
+                "stack trace",
+                50,
+                null);
 
-        //    booksReturned.ForEach(s => s.Chapters());
+            var sqlLog2 = new SqlQueryLog(this,
+                "select * from User where email in ('user2@example.com')",
+                "stack trace",
+                50,
+                null);
 
-        //    var queries = Bullet.InefficientQueries(recordedQueries);
+            var inefficientQueries = Bullet.InefficientQueries(new [] { sqlLog, sqlLog2 }.ToList());
 
-        //    queries.Count().should_be(2);
+            inefficientQueries.Count().should_be(2);
 
-        //    (queries.First().Query as string).should_contain("where BookId in ('100')");
-        //    (queries.First().Reason as string).should_contain("N+1");
+            (inefficientQueries.First().Reason as string).should_contain("N+1");
+        }
 
-        //    (queries.Last().Query as string).should_contain("where BookId in ('400')");
-        //    (queries.Last().Reason as string).should_contain("N+1");
-        //}
+        void specify_queries_on_the_same_thread_with_different_stacktraces_are_worth_looking_at_but_my_not_be_inefficient()
+        {
+            var sqlLog = new SqlQueryLog(this,
+                "select * from User where email in ('user@example.com')",
+                "stack trace",
+                50,
+                null);
 
-        //void specify_inefficient_query_is_detected_on_belongs_to_association()
-        //{
-        //    var allChapters = chapters.All();
+            var sqlLog2 = new SqlQueryLog(this,
+                "select * from User where email in ('user2@example.com')",
+                "stack trace 2",
+                50,
+                null);
 
-        //    allChapters.ForEach(s => s.Book());
+            var inefficientQueries = Bullet.InefficientQueries(new [] { sqlLog, sqlLog2 }.ToList());
 
-        //    var queries = Bullet.InefficientQueries(recordedQueries);
+            inefficientQueries.Count().should_be(2);
 
-        //    queries.Count().should_be(1);
-
-        //    queries.ForEach(s =>
-        //    {
-        //        Console.WriteLine(s.Query);
-        //        Console.WriteLine(s.Reason);
-        //    });
-
-        //    (queries.First().Query as string).should_contain("SELECT * FROM Books");
-        //    (queries.First().Reason as string).should_contain("N+1");
-        //}
-
-        //void specify_inefficient_query_is_detected_on_redundant_selects()
-        //{
-        //    var booksReturned = books.All();
-        //    booksReturned = books.All();
-        //    booksReturned = books.All();
-
-        //    var queries = Bullet.InefficientQueries(recordedQueries);
-
-        //    queries.Count().should_be(1);
-
-        //    (queries.First().Query as string).should_contain("SELECT * FROM Books");
-        //    (queries.First().Reason as string).should_contain("redundant");
-        //}
-
-        //void specify_dissimilar_queries_are_not_considered_ineffecient()
-        //{
-        //    Bullet.InefficientQueries(new List<string> 
-        //    { 
-        //        "select * from Blogs",
-        //        "select * from Comments"
-        //    }).should_be(false);
-        //}
+            (inefficientQueries.First().Reason as string).should_contain("may not be inefficient");
+        }
     }
 }
