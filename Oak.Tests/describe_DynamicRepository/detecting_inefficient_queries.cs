@@ -32,7 +32,7 @@ namespace Oak.Tests.describe_DynamicRepository
             (inefficientQueries.First().Reason as string).should_contain("redundant");
         }
 
-        void specify_similiar_queries_are_considered_nPlus1_if_the_where_clause_is_different_but_the_stack_and_thread_are_the_same()
+        void specify_similiar_queries_are_considered_nPlus1_if_the_where_in_clause_is_different_but_the_stack_and_thread_are_the_same()
         {
             var sqlLog = new SqlQueryLog(this,
                 "select * from User where email in ('user@example.com')",

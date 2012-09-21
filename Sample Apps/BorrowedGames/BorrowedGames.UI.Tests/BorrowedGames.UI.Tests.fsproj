@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="canopy">
-      <HintPath>..\packages\canopy.0.5.1\lib\canopy.dll</HintPath>
+      <HintPath>..\packages\canopy.0.5.7\lib\canopy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.Core">
@@ -62,7 +62,7 @@
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.9\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -71,11 +71,11 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="WebDriver">
-      <HintPath>..\packages\Selenium.WebDriver.2.24.0\lib\net40\WebDriver.dll</HintPath>
+      <HintPath>..\packages\Selenium.WebDriver.2.25.1\lib\net40\WebDriver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebDriver.Support">
-      <HintPath>..\packages\Selenium.Support.2.24.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <HintPath>..\packages\Selenium.Support.2.25.1\lib\net40\WebDriver.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
