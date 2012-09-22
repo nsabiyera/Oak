@@ -23,73 +23,12 @@ namespace Oak.Controllers
         /// </summary>
         public IEnumerable<Func<dynamic>> Scripts()
         {
-            yield return CreateSampleTable;
-
-            yield return AlterSampleTable;
-
-            yield return AdHocChange;
+            return null;
         }
 
-        //here is a sample of how you create a table
-        //use Seed's CreateTable method
-        //when you create a new method, make sure you return it
-        //from the Scripts method body
-        public string CreateSampleTable()
-        {
-            return Seed.CreateTable("SampleTable", new dynamic[] 
-            { 
-                //create anonymous types for each column you want
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                //here are other ways you can create a primary key column
-                //or new { Id = "uniqueidentifier", PrimaryKey = true },
-                //or Seed.Id(),
-                //or Seed.GuidId(),
-
-                //here is how you would create a column named Foo with a default value
-                new { Foo = "nvarchar(max)", Default = "Hello" },
-
-                //here is how you would create a nullable column
-                new { Bar = "int", Nullable = false }
-            });
-        }
-
-        //here is a sample of how to alter a table
-        public string AlterSampleTable()
-        {
-            return Seed.AddColumns("SampleTable", new dynamic[] 
-            {
-                new { AnotherColumn = "bigint" },
-                new { YetAnotherColumn = "nvarchar(max)" }
-            });
-        }
-
-        //you can run a suite of ad hoc queries by
-        //creating a method that returns an IEnumerable of string.
-        public IEnumerable<string> AdHocChange()
-        {
-            //hey look, you can just do an ad hoc read
-            var reader = "select * from SampleTable".ExecuteReader();
-
-            while (reader.Read())
-            {
-                //do stuff here like yield return strings
-            }
-
-            var name = "select top 1 name from sysobjects".ExecuteScalar() as string;
-
-            yield return "drop table SampleTable";
-        }
-
-        //here is how you would create sample entries, if you have
-        //the rake-dot-net nuget package, you can run the command
-        //'rake sample' to generate these sample entries
         public void SampleEntries()
         {
-            new
-            {
-                Title = "Hello World",
-                Body = "Lorem Ipsum"
-            }.InsertInto("Blogs");
+
         }
 
         public Seed Seed { get; set; }

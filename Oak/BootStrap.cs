@@ -30,9 +30,16 @@ namespace Oak
 
             Recommendations = new List<Recommendation> 
             {
+                new SqlServerNameIsIncorrect(),
                 new CreateDbRecommendation(),
+                new LoginFailedRecommendation(),
+                new TutorialCreateBlogs(),
+                new TutorialCreateComments(),
                 new CreateTableRecommendation(),
                 new FirstTimeRecommendation(),
+                new TutorialBlogIsValid(),
+                new TutorialCommentsRecommendation(),
+                new TutorialAddComment(),
                 new NoDefinitionOnGeminiRecommendation(),
                 new NoDefinitionOnDerivedGeminiRecommendation(),
                 new InvalidColumnRecommendation()
@@ -58,7 +65,6 @@ namespace Oak
 
                     if (printQueryStrings)
                     {
-
                         Console.Out.WriteLine("Query String:");
                         var qs = mvcApplication.Request.QueryString;
                         Console.Out.WriteLine(string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s])) + "\n");
@@ -67,11 +73,8 @@ namespace Oak
 
                     if (printForm)
                     {
-
                         Console.Out.WriteLine("Content:");
                         Console.Out.WriteLine(new DynamicParams(mvcApplication.Request.Form, null) + "\n");
-
-
                     }
 
                     if (printForm || printQueryStrings)
@@ -132,10 +135,10 @@ namespace Oak
 
             List<string> recos = new List<string>();
 
+            recos.Add(OriginalStackTrace(error));
+
             foreach (var reco in applicable)
             {
-                recos.Add(OriginalStackTrace(error));
-
                 recos.Add(reco.GetRecommendation(error));
             }
 
@@ -249,17 +252,14 @@ namespace Oak
         public override string GetRecommendation(Exception e)
         {
             return @"
-<h2>Hello World from Oak</h2>
+<h2>Try Oak using this tutorial</h2>
 This is probably the first time you've run Oak for this solution. <strong>Be sure to visit
 the website at some point and take a look at the screencasts and sample apps (STRONGLY recommended): 
 <a href=""http://amirrajan.github.com/Oak"" target=""_blank"">Oak's Github Page</a></strong>.
-Here is something you can put in your HomeController's Index method and View/Index.cshtml (a simple ""Hello World""):
+If you want to try Oak out in an interactive way, do the following:<br/>
+Update HomeController.cs and put the follwing <strong>between the namespace block</strong>:
+<h3>The Controller</h3>
 <pre>
-========== inside HomeController.cs ===========
-//add the following using statements
-using Massive; 
-using Oak;
-
 //here is how you setup up a dynamic repository
 public class Blogs : DynamicRepository { }
 
@@ -311,19 +311,25 @@ public class HomeController : Controller
         return RedirectToAction(""Index"");
     }
 }
-
-//========== inside Home/Index.cshtml ==========
+</pre>
+<h3>The View</h3>
+Create an Index.cshtml page for the Index action and add the following code there:
+<pre>
 @{
     ViewBag.Title = ""Index"";
 }
 
 &lt;h2&gt;Hello World&lt;/h2&gt;
+&lt;div&gt;
+ If this page came up successfully, you're doing good! Go ahead and create a blog (try to create blogs with duplicate names).
+&lt;/div&gt;
+&lt;br /&gt;
 @if (ViewBag.Flash != null)
 {
     &lt;div style=""color:Red""&gt;@ViewBag.Flash&lt;/div&gt;
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm())  
 {
     @Html.TextBox(""Name"")
     &lt;input type=""submit"" value=""create"" /&gt;
@@ -333,6 +339,10 @@ public class HomeController : Controller
 {
     &lt;div&gt;
         &lt;pre&gt;@blog&lt;/pre&gt;
+        &lt;br /&gt;
+        &lt;div&gt;
+            Almost there, you have comments listing, lets try to add one.
+        &lt;/div&gt;
         &lt;br /&gt;
         @using (Html.BeginForm(""Comments"", ""Home"", FormMethod.Post))
         {
@@ -348,6 +358,49 @@ public class HomeController : Controller
         }
     }
 
+    public class SqlServerNameIsIncorrect : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is SqlException && e.ToString().Contains("A network-related or instance-specific error occurred");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            var text = e.ToString();
+
+            return @"
+<h2>Update the web config with your server instance</h2>
+    It doesn't look like I could connect to your SQL Server instace.  Update the web.config to point to a SQL Server instance.  Here is what's there now:
+    <pre>{connectionString}</pre>
+</body>
+</html>
+".Replace("{connectionString}", new ConnectionProfile().ConnectionString)
+ .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(text));
+        }
+    }
+
+    public class LoginFailedRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is SqlException && e.ToString().Contains("Login failed for user");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            var text = e.ToString();
+
+            return @"
+<h2>Update the web config with your login credentials</h2>
+    It doesn't look like the login credentials in the connection string are correct.  Update the web.config with valid credentials.  Here is what's there now:
+    <pre>{connectionString}</pre>
+</body>
+</html>
+".Replace("{connectionString}", new ConnectionProfile().ConnectionString)
+ .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(text));
+        }
+    }
 
     public class CreateDbRecommendation : Recommendation
     {
@@ -371,6 +424,108 @@ public class HomeController : Controller
         }
     }
 
+    public class TutorialCreateBlogs : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is SqlException && e.ToString().Contains("Invalid object name 'Blogs'.");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Tutorial: Create the Blogs table using SeedController</h2>
+It looks like you are trying to access an object in the database that doesn't exist.  
+Go to Controller\SeedController.cs and add a method to the Schema class to generate the Blogs table (keep in mind
+that the default convention for Oak is a pluralized table name).<br/><br/>
+Here is an example of creating this schema:
+<pre>
+    public class Schema //this class already exists in SeedController.cs
+    {
+        //this is the method you'll want to alter
+        public IEnumerable&lt;Func&lt;dynamic&gt;&gt; Scripts()
+        {
+            //replace all content inside of the Scripts() method with this line
+            yield return CreateBlogsTable; //return just the <strong>pointer</strong> to the function
+        }
+
+        public string CreateBlogsTable() //here is the function definition
+        {
+            //this is an example, your table name may be different
+            //for more information on schema generation <a href=""https://github.com/amirrajan/Oak/wiki/Creating-schema-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
+            return Seed.CreateTable(""Blogs"",
+                Seed.Id(),
+                new { Name = ""nvarchar(255)"" },
+                new { Body = ""nvarchar(max)"" }
+            );
+        }
+    }
+
+</pre>
+
+After adding the function to create your table.  Run this command to execute 
+the script (the console window you use to execute this command must have ruby support):
+<pre>rake reset</pre>";
+        }
+    }
+
+    public class TutorialCreateComments : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is SqlException && e.ToString().Contains("Invalid object name 'Comments'");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Tutorial: Create the Comments table using SeedController</h2>
+It looks like you are trying to access an object in the database that doesn't exist.  
+Go to Controller\SeedController.cs and add a method to the Schema class to generate the Comments table (keep in mind
+that the default convention for Oak is a pluralized table name).<br/><br/>
+Here is an example of creating this schema:
+<pre>
+    public class Schema //this class already exists in SeedController.cs
+    {
+        //this is the method you'll want to alter
+        public IEnumerable&lt;Func&lt;dynamic&gt;&gt; Scripts()
+        {
+            yield return CreateBlogsTable;
+            
+            yield return CreateCommentsTable; //return just the <strong>pointer</strong> to the function
+        }
+
+        public string CreateBlogsTable() //here is the function definition
+        {
+            //this is an example, your table name may be different
+            //for more information on schema generation <a href=""https://github.com/amirrajan/Oak/wiki/Creating-schema-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
+            return Seed.CreateTable(""Comments"",
+                Seed.Id(),
+                new { Name = ""nvarchar(255)"" },
+                new { Body = ""nvarchar(max)"" }
+            );
+        }
+
+        public string CreateCommentsTable() //here is the function definition
+        {
+            //this is an example, your table name may be different
+            //for more information on schema generation <a href=""https://github.com/amirrajan/Oak/wiki/Creating-schema-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
+            return Seed.CreateTable(""Blogs"",
+                Seed.Id(),
+                new { BlogId = ""int"", ForeignKey = ""Blogs(Id)"" },
+                new { Body = ""nvarchar(max)"" }
+            );
+        }
+    }
+
+</pre>
+
+After adding the function to create your table.  Run this command to execute 
+the script (the console window you use to execute this command must have ruby support):
+<pre>rake reset</pre>";
+        }
+    }
+
     public class CreateTableRecommendation : Recommendation
     {
         public override bool CanRecommend(Exception e)
@@ -381,7 +536,7 @@ public class HomeController : Controller
         public override string GetRecommendation(Exception e)
         {
             return @"
-<h2>Use SeedController to create table</h2>
+<h2>Using SeedController to create tables (in general)</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
 Go to Controller\SeedController.cs and add a method to the Schema class to generate your table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
@@ -442,6 +597,87 @@ You can then run this command to <strong>purge</strong> your database and regen 
         }
     }
 
+    public class TutorialCommentsRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e.ToString().Contains("'Oak.Gemini' does not contain a definition for 'Comments'");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Tutorial: Updated blogs repository to return a Blog instead of a Gemini</h2>
+By default dynamic repository returns a ""typeless"" dynamic object (called Gemini).  To get comments
+retrieving, the first thing we need to do is return a Blog from the database.  The way we do this 
+is by defining a projection:
+<pre>
+//our Hello World example
+public class Blogs : DynamicRepository 
+{
+    public Blogs()
+    {
+        Projection = dto =&gt; new Blog(dto); //this is a projection
+    }
+}
+
+public class Blog : DynamicModel 
+{
+    Blogs blogs = new Blogs();
+
+    public Blog() { }
+
+    public Blog(object dto) : base(dto) { }
+
+    IEnumerable<dynamic> Validates()
+    {
+        //and define the association
+        //for othere examples of validations check out the Oak wiki
+        yield return new Uniqueness(""Name"", blogs);
+    }
+}
+</pre>
+
+<h2>Tutorial: give Blog an association to Comments</h2>
+With the projection in place, you will now get back a dynamically typed object 
+(as opposed to just a Gemini). Any query that is executed from a ""projected"" 
+dynamic repository (in this case Blogs) will go through this mapping.  Now that the project
+is in place we can add an association to blog to return comments. <strong>Here is how you 
+say ""A blog has many comments""</strong>:
+<pre>
+//define the repository to retrieve comments
+public class Comments : DynamicRepository { }
+
+public class Blog : DynamicModel 
+{
+    Blogs blogs = new Blogs();
+    
+    //define comments
+    Comments comments = new Comments();
+
+    public Blog() { }
+
+    public Blog(object dto) : base(dto) { }
+
+    IEnumerable&lt;dynamic&gt; Validates()
+    {
+        //and define the association
+        //for othere examples of validations check out the Oak wiki
+        yield return new Uniqueness(""Name"", blogs);
+    }
+
+    //add an Associates method to add the Comments() method
+    IEnumerable&lt;dynamic&gt; Associates()
+    {
+        //and define the association
+        //for othere examples of associations <a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""_blank"">check out the Oak wiki</a>
+        yield return new HasMany(comments);
+    }
+}</pre>
+";
+        }
+    }
+
     public class NoDefinitionOnGeminiRecommendation : Recommendation
     {
         public override bool CanRecommend(Exception e)
@@ -452,7 +688,7 @@ You can then run this command to <strong>purge</strong> your database and regen 
         public override string GetRecommendation(Exception e)
         {
             return @"
-<h2>Inspect the object or setup a database Projection</h2>
+<h2>Inspect the object or setup a database Projection (general debugging)</h2>
 
 <h3>To inspect the object and debug</h3>
 The Gemini object has quite a few <a href=""https://github.com/amirrajan/Oak/wiki/Gemini-First-Look"" target=""_blank"">introspection methods</a> 
@@ -516,6 +752,108 @@ For more information on dynamic repository methods, take a look at
         }
     }
 
+    public class TutorialBlogIsValid : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e.ToString().Contains("Blog' does not contain a definition for 'IsValid'");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Tutorial: Add Validations to Blog</h2>
+If you are performing validations on your objects you can add validation methods through
+Oak.  Here is an example of a validation, <strong>Blog names must be unique</strong>:
+<pre>
+public class Blog : DynamicModel 
+{
+    //initialize blogs
+    Blogs blogs = new Blogs();
+
+    public Blog() { }
+
+    public Blog(object dto) : base(dto) { }
+
+    //add a Validates method to add the IsValid() method
+    IEnumerable&lt;dynamic&gt; Validates()
+    {
+        //and define the association
+        //for othere examples of validations <a href=""https://github.com/amirrajan/Oak/wiki/Adding-validation-using-Oak.DynamicModel"" target=""_blank"">check out the Oak wiki</a>
+        yield return new Uniqueness(""Name"", blogs);
+    }
+}
+</pre>
+
+In the case of the Hello World sample, the code above is how you would get rid of exceptions associated with IsValid();
+";
+        }
+    }
+
+    public class TutorialAddComment : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e.ToString().Contains("Blog' does not contain a definition for 'AddComment'");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Tutorial: Declare the AddComment method on Blog</h2>
+These dynamic classes can be treated as any other class.  You can add methods on them directly.  The cool thing however
+is you can add methods on these classes as implicit methods and they will be accessible publicly. Methods
+that have any of the following signatures are considered public automatically:
+<ul>
+    <li>void SomeMethod()</li>
+    <li>void SomeMethodWithParam(dynamic args)</li>
+    <li>dynamic SomeFunction()</li>
+    <li>dynamic SomeFunctionWithParam(dynamic args)</li>
+</ul>
+<strong>Change Blog to have an AddComment() method</strong>
+<pre>
+public class Blog : DynamicModel
+{
+    Blogs blogs = new Blogs();
+
+    //define comments
+    Comments comments = new Comments();
+
+    public Blog() { }
+
+    public Blog(object dto) : base(dto) { }
+
+    IEnumerable&lt;dynamic&gt; Validates()
+    {
+        //and define the association
+        //for othere examples of validations check out the Oak wiki
+        yield return new Uniqueness(""Name"", blogs);
+    }
+
+    //add an Associates method to add the Comments() method
+    IEnumerable&lt;dynamic&gt; Associates()
+    {
+        //and define the association
+        //for othere examples of associations check out the Oak wiki
+        yield return new HasMany(comments);
+    }
+
+    //notice that the method is defined implicitly
+    void AddComment(dynamic comment)
+    {
+        //ignore addition if the body is empty
+        if(string.IsNullOrEmpty(comment.Body)) return;
+
+        //any dynamic property on this instance can be accessed through the ""_"" property
+        var commentToSave = _.Comments().New(comment);
+
+        comments.Insert(commentToSave);
+    }
+}
+</pre>";
+        }
+    }
+
     public class NoDefinitionOnDerivedGeminiRecommendation : Recommendation
     {
         public override bool CanRecommend(Exception e)
@@ -536,7 +874,7 @@ For more information on dynamic repository methods, take a look at
             var method = tokens.Last();
 
             return @"
-<h2>Declare a method</h2>
+<h2>Declare a method (in general)</h2>
 It looks like you are trying to access a method [{method}] on type [{type}] that doesn't exist.
 Here are a few ways methods are added to a dynamic object.
 <ul>
@@ -664,7 +1002,6 @@ Assert.IsTrue(commentAdded);
 ".Replace("{method}", method)
  .Replace("{type}", type);
         }
-
     }
 
     public class InvalidColumnRecommendation : Recommendation
