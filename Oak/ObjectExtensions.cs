@@ -27,6 +27,19 @@ namespace System
         {
             return dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
         }
+
+        public static string CollectionToString(this object[] args)
+        {
+            if(args == null) return "";
+
+            var s = "";
+            for (int i = 0; i < args.Length; i++)
+            {
+                s += "[" + i + "] " + args[0] + Environment.NewLine;
+            }
+
+            return s;
+        }
     }
 
     [DebuggerNonUserCode]

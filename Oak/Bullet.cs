@@ -39,7 +39,7 @@ comments.All().Include(""Blog"").";
 DynamicRepository, use the Include() method, for example: 
 blogs.All().Include(""Comments"", ""Tags"").";
 
-        static string closeButMayNotBeInefficient = 
+        static string closeButMayNotBeInefficient =
 @"These queries look pretty close, but have different execution paths
 and may not be inefficient, it's worth looking at.";
 
@@ -60,7 +60,8 @@ and may not be inefficient, it's worth looking at.";
                     Id = Guid.NewGuid(),
                     record.Query,
                     record.StackTrace,
-                    record.ThreadId
+                    record.ThreadId,
+                    record.Args
                 }));
             }
 
@@ -92,7 +93,7 @@ and may not be inefficient, it's worth looking at.";
                 {
                     AddQuery(inefficientQueries, first, closeButMayNotBeInefficient, lookup);
 
-                    AddQuery(inefficientQueries, second,  closeButMayNotBeInefficient, lookup);
+                    AddQuery(inefficientQueries, second, closeButMayNotBeInefficient, lookup);
                 }
             }
 
@@ -106,7 +107,7 @@ and may not be inefficient, it's worth looking at.";
                 inefficientQueries.Add(new Gemini(new
                 {
                     Id = queryLog.Id,
-                    Query = queryLog.Query,
+                    Query = queryLog.Query + "\r\n" + (queryLog.Args as object[]).CollectionToString(),
                     Reason = reason,
                     StackTrace = ScrubStackTrace(queryLog.StackTrace),
                     ThreadId = queryLog.ThreadId
@@ -116,7 +117,7 @@ and may not be inefficient, it's worth looking at.";
             }
         }
 
-        public static bool HasSimilarQuery(dynamic first, dynamic second) 
+        public static bool HasSimilarQuery(dynamic first, dynamic second)
         {
             return ExcludingInClause(first.Query) == ExcludingInClause(second.Query) &&
                 first.ThreadId == second.ThreadId;
