@@ -60,7 +60,8 @@ and may not be inefficient, it's worth looking at.";
                     Id = Guid.NewGuid(),
                     record.Query,
                     record.StackTrace,
-                    record.ThreadId
+                    record.ThreadId,
+                    record.Args
                 }));
             }
 
@@ -106,7 +107,7 @@ and may not be inefficient, it's worth looking at.";
                 inefficientQueries.Add(new Gemini(new
                 {
                     Id = queryLog.Id,
-                    Query = queryLog.Query,
+                    Query = queryLog.Query + "\r\n" + (queryLog.Args as object[]).CollectionToString(),
                     Reason = reason,
                     StackTrace = ScrubStackTrace(queryLog.StackTrace),
                     ThreadId = queryLog.ThreadId

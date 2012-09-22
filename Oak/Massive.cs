@@ -250,20 +250,9 @@ namespace Massive
                 System.Console.Out.WriteLine(
                     "\r\n==============\r\n\n" +
                     "[" + sender.GetType().Name + "], Thread [" + Thread.CurrentThread.ManagedThreadId + "]\n\n" +
-                    query + "\r\n" + ParametersToString(args) +
+                    query + "\r\n" + args.CollectionToString() +
                     "\r\n==============\r\n");
             }
-        }
-
-        public static string ParametersToString(object[] args)
-        {
-            var s = "";
-            for (int i = 0; i < args.Length; i++)
-            {
-                s += "@" + i + ": " + args[0] + "\r\n";
-            }
-
-            return s;
         }
 
         private void LogSqlCommand(DbCommand cmd)
