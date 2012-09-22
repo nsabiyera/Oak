@@ -33,7 +33,7 @@ namespace System
             var s = "";
             for (int i = 0; i < args.Length; i++)
             {
-                s += "[" + i + "] " + args[0] + Environment.NewLine;
+                s += "[" + i + "] " + args[i] + Environment.NewLine;
             }
 
             return s;

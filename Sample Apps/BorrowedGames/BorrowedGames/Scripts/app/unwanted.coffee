@@ -80,14 +80,14 @@ unwantedGameView = Backbone.View.extend
 
     $(@el).html(game)
 
-    game.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>remove the game from qurantine</span>" })
+    game.find(".cancel").tooltip({ title: "<span style='font-size: 16px'>remove the game from quarantine</span>" })
 
     return this
 
   gameTemplate:
     '
     <td class="span1">
-     <span class="label label-important">qurantined</span>
+     <span class="label label-important">quarantined</span>
     </td>
     <td>${gameName}</td>
     <td class="span1"><i class="icon-arrow-up cancel" style="cursor: pointer"></i></td>

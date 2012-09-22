@@ -138,7 +138,7 @@ and may not be inefficient, it's worth looking at.";
         public static bool HasSameExecutionPath(dynamic first, dynamic second)
         {
             return first.ThreadId == second.ThreadId &&
-                first.StackTrace == second.StackTrace;
+                ScrubStackTrace(first.StackTrace) == ScrubStackTrace(second.StackTrace);
         }
 
         public static string ExcludingInClause(string sql)
