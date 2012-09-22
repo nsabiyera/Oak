@@ -40,6 +40,20 @@ namespace Oak
 
             mvcApplication.EndRequest += PrintInefficientQueries;
 
+            mvcApplication.BeginRequest += (sender, e) =>
+            {
+                if (mvcApplication.Request.Form != null && mvcApplication.Request.Form.Count > 0)
+                {
+                    lock (Massive.DynamicRepository.ConsoleLogLock)
+                    {
+                        Console.Out.WriteLine("\n\n============ Form that was posted ==========");
+                        Console.Out.WriteLine("For thread: " + Thread.CurrentThread.ManagedThreadId + "\n");
+                        Console.Out.WriteLine(new DynamicParams(mvcApplication.Request.Form, null));
+                        Console.Out.WriteLine("===============================================\n");
+                    }
+                }
+            };
+
             Massive.DynamicRepository.WriteDevLog = true;
 
             Massive.DynamicRepository.LogSql = (sender, query, args) =>
