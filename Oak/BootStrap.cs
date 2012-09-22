@@ -128,7 +128,7 @@ namespace Oak
         {
             return @"
 <div style='margin: 5px; font-weight: bold'>
-    Here is original error was with some noise taken out (you can also see this error in the IISExpress console):
+    Here is original error was thrown with some noise taken out (you can also see this error in the IISExpress console):
     <pre style=""font-size: 18px"">{message}</pre>
     stacktrace:
     <pre>{scrubbedStackTrace}</pre>
@@ -195,95 +195,6 @@ namespace Oak
         public virtual string GetRecommendation(Exception e) { return ""; }
     }
 
-    public class CreateDbRecommendation : Recommendation
-    {
-        public override bool CanRecommend(Exception e)
-        {
-            return e is SqlException && e.ToString().Contains("Cannot open database");
-        }
-
-        public override string GetRecommendation(Exception e)
-        {
-            var text = e.ToString();
-
-            return @"
-<h2>Create a database</h2>
-    You need to create the database that will work with this connection string:
-    <pre>{connectionString}</pre>
-</body>
-</html>
-".Replace("{connectionString}", new ConnectionProfile().ConnectionString)
- .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(text));
-        }
-    }
-
-    public class CreateTableRecommendation : Recommendation
-    {
-        public override bool CanRecommend(Exception e)
-        {
-            return e is SqlException && e.ToString().Contains("Invalid object name");
-        }
-
-        public override string GetRecommendation(Exception e)
-        {
-            return @"
-<h2>Use SeedController to create table</h2>
-It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate your table (keep in mind
-that the default convention for Oak is a pluralized table name).<br/><br/>
-Here is an example of creating this schema (let's say I want to create a table called Blogs):
-<pre>
-    public class Schema //this class exists in SeedController.cs
-    {
-        public IEnumerable&lt;Func&lt;dynamic&gt;&gt; Scripts()
-        {
-            //this is just an example, your table name may be different
-            yield return CreateBlogsTable; //return just the <strong>pointer</strong> to the function
-        }
-
-        public string CreateBlogsTable() //here is the function definition
-        {
-            //this is an example, your table name may be different
-            //for more information on schema generation <a href=""https://github.com/amirrajan/Oak/wiki/Creating-schema-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
-            return Seed.CreateTable(""Blogs"",
-                Seed.Id(),
-                new { Name = ""nvarchar(255)"" },
-                new { Body = ""nvarchar(max)"" }
-            );
-        }
-    }
-
-</pre>
-
-After adding the function to create your table.  Run this command to execute the script:<pre>rake reset</pre>
-
-You can see what the script looks like by running this command: <pre>rake export</pre>
-
-<h2>Use SeedController to create Sample Entries too</h2>
-
-I would also recommend looking at the SampleEntries() method in Schema.  You can use that to generate sample data.  For example:
-<pre>
-public void SampleEntries()
-{
-    //here are a few sample entries
-    //for more information on sample entries <a href=""https://github.com/amirrajan/Oak/wiki/Creating-sample-data-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
-    new
-    {
-        Name = ""Hello World"",
-        Body = ""Lorem Ipsum""
-    }.InsertInto(""Blogs"");
-
-    new
-    {
-        Name = ""Hello World 2"",
-        Body = ""Lorem Ipsum 2""
-    }.InsertInto(""Blogs"");
-}
-</pre>
-
-You can then run this command to <strong>purge</strong> your database and regen it with sample data: <pre>rake sample</pre>";
-        }
-    }
 
     public class FirstTimeRecommendation : Recommendation
     {
@@ -299,16 +210,17 @@ You can then run this command to <strong>purge</strong> your database and regen 
 This is probably the first time you've run Oak for this solution. <strong>Be sure to visit
 the website at some point and take a look at the screencasts and sample apps (STRONGLY recommended): 
 <a href=""http://amirrajan.github.com/Oak"" target=""_blank"">Oak's Github Page</a></strong>.
-Here is something you can put in your Home/Index controller action and view (a simple ""Hello World""):
+Here is something you can put in your HomeController's Index method and View/Index.cshtml (a simple ""Hello World""):
 <pre>
 ========== inside HomeController.cs ===========
 //add the following using statements
 using Massive; 
 using Oak;
 
-//here is the hello world implementation
+//here is how you setup up a dynamic repository
 public class Blogs : DynamicRepository { }
 
+//this is a dynamic entity that represents our blog
 public class Blog : DynamicModel 
 {
     public Blog() { } 
@@ -316,16 +228,20 @@ public class Blog : DynamicModel
     public Blog(object dto) : base(dto) { }
 }
 
+//home controller
 public class HomeController : Controller
 {
+    //initialize the blog
     Blogs blogs = new Blogs();
 
     public ActionResult Index()
     {
+        //return all blogs from the database
         ViewBag.Blogs = blogs.All();
         return View();
     }
 
+    //controller action to save a blog
     [HttpPost]
     public ActionResult Index(dynamic @params)
     {
@@ -341,6 +257,7 @@ public class HomeController : Controller
         return RedirectToAction(""Index"");
     }
 
+    //controller action to add a comment
     [HttpPost]
     public ActionResult Comments(dynamic @params)
     {
@@ -388,6 +305,100 @@ public class HomeController : Controller
         }
     }
 
+
+    public class CreateDbRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is SqlException && e.ToString().Contains("Cannot open database");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            var text = e.ToString();
+
+            return @"
+<h2>Create a database</h2>
+    You need to create the database that will work with this connection string (retrieved from web.config):
+    <pre>{connectionString}</pre>
+</body>
+</html>
+".Replace("{connectionString}", new ConnectionProfile().ConnectionString)
+ .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(text));
+        }
+    }
+
+    public class CreateTableRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is SqlException && e.ToString().Contains("Invalid object name");
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Use SeedController to create table</h2>
+It looks like you are trying to access an object in the database that doesn't exist.  
+Go to Controller\SeedController.cs and add a method to the Schema class to generate your table (keep in mind
+that the default convention for Oak is a pluralized table name).<br/><br/>
+Here is an example of creating this schema (let's say I want to create a table called Blogs):
+<pre>
+    public class Schema //this class already exists in SeedController.cs
+    {
+        //this is the method you'll want to alter
+        public IEnumerable&lt;Func&lt;dynamic&gt;&gt; Scripts()
+        {
+            //this is just an example, your table name may be different
+            yield return CreateBlogsTable; //return just the <strong>pointer</strong> to the function
+        }
+
+        public string CreateBlogsTable() //here is the function definition
+        {
+            //this is an example, your table name may be different
+            //for more information on schema generation <a href=""https://github.com/amirrajan/Oak/wiki/Creating-schema-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
+            return Seed.CreateTable(""Blogs"",
+                Seed.Id(),
+                new { Name = ""nvarchar(255)"" },
+                new { Body = ""nvarchar(max)"" }
+            );
+        }
+    }
+
+</pre>
+
+After adding the function to create your table.  Run this command to execute 
+the script (the console window you use to execute this command must have ruby support):
+<pre>rake reset</pre>
+
+You can see what the script looks like by running this command: <pre>rake export</pre>
+
+<h2>Use SeedController to create Sample Entries</h2>
+
+I would also recommend looking at the SampleEntries() method in Controllers/SeedController.cs.  You can use that to generate sample data.  For example:
+<pre>
+public void SampleEntries()
+{
+    //here are a few sample entries
+    //for more information on sample entries <a href=""https://github.com/amirrajan/Oak/wiki/Creating-sample-data-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
+    new
+    {
+        Name = ""Hello World"",
+        Body = ""Lorem Ipsum""
+    }.InsertInto(""Blogs"");
+
+    new
+    {
+        Name = ""Hello World 2"",
+        Body = ""Lorem Ipsum 2""
+    }.InsertInto(""Blogs"");
+}
+</pre>
+
+You can then run this command to <strong>purge</strong> your database and regen it with sample data: <pre>rake sample</pre>";
+        }
+    }
+
     public class NoDefinitionOnGeminiRecommendation : Recommendation
     {
         public override bool CanRecommend(Exception e)
@@ -400,13 +411,15 @@ public class HomeController : Controller
             return @"
 <h2>Inspect the object or setup a database Projection</h2>
 
-<h3>To inspect the object</h3>
-The gemini object has quite a few <a href=""https://github.com/amirrajan/Oak/wiki/Gemini-First-Look"" target=""_blank"">introspection methods</a> 
-to help determine what's inside a dynamic object.  Calling the ToString() method will give you a 
+<h3>To inspect the object and debug</h3>
+The Gemini object has quite a few <a href=""https://github.com/amirrajan/Oak/wiki/Gemini-First-Look"" target=""_blank"">introspection methods</a> 
+to help determine what's inside of it.  Calling the ToString() method will give you a 
 nicely formatted string.  In the Immediate Window (Ctrl + Alt + i) you can type the follow to get 
-the nicely formatted output (using our Blog example): <pre>ViewBag.Blogs.ToString(),nq</pre> If you are running this 
-through specwatchr/sidekick, you'll need to attach the debugger to use the Immediate Window. 
-You can do so by add the following line in any controller action and refreshing the page:
+the nicely formatted output (using our Blog example): 
+<pre>ViewBag.Blogs.ToString(),nq</pre> 
+If you are running this through specwatchr/sidekick, you'll need to attach 
+the debugger to use the Immediate Window. 
+You can do so by adding the following line in a controller action and refreshing the page:
 <pre>
 public class HomeController : Controller
 {
@@ -417,12 +430,12 @@ public class HomeController : Controller
         ViewBag.Blogs = blogs.All();
 
         //add this line to hook up the debugger
-        //and then you can use type ViewBag.Blogs.ToString(),nq
+        //and then you can type ViewBag.Blogs.ToString(),nq
         //in the Immediate Window (Ctrl + Alt + i)...
         //a Visual Studio dialog will pop up (it may pop up 
         //behind the this window, so keep a look out for it in
         //the task bar).  You can also just manually attach to the 
-        //IISExpress process using the Tools->Attach To Process menu item.
+        //IIS Express process using the Tools->Attach To Process menu item.
         System.Diagnostics.Debugger.Launch(); 
 
         return View();
@@ -430,8 +443,8 @@ public class HomeController : Controller
 }
 </pre>
 
-<h3>Adding a database projection</h3>
-By default dynamic repository returns a ""typeless"" dynamic object (called gemini).  You can return
+<h3>Add a database projection if you're retrieving records from a database</h3>
+By default dynamic repository returns a ""typeless"" dynamic object (called Gemini).  You can return
 a dynamic type by doing the following (again using our Blog example):
 <pre>
 //our Hello World example
@@ -451,8 +464,11 @@ public class Blog : DynamicModel
 }
 </pre>
 
-With the projection in place, you will now get back a typed object (as opposed to just a Gemini). Any query
-that is executed from a projected dynamic repository (in this case Blogs) will go through this mapping.
+With the projection in place, you will now get back a dynamically typed object 
+(as opposed to just a Gemini). Any query that is executed from a ""projected"" 
+dynamic repository (in this case Blogs) will go through this mapping.
+For more information on dynamic repository methods, take a look at 
+<a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Massive.DynamicRepository"" targe=t""_blank"">Oak's wiki on DynamicRepository</a>.
 ";
         }
     }
@@ -522,7 +538,7 @@ public class Blog : DynamicModel
 }
 </pre>
 
-In the case of the Hello World code base, this is how you would access Comments();
+In the case of the Hello World sample, the code above is how you would add and access Comments();
 
 <h3>Declaring a method through Validations</h3>
 If you are performing validations on your objects you can add validation methods through
@@ -547,9 +563,11 @@ public class Blog : DynamicModel
 }
 </pre>
 
+In the case of the Hello World sample, the code above is how you would get rid of exceptions associated with IsValid();
+
 <h3>Declaring a method on class directly</h3>
-These classes can be treated as any other classes.  You can add methods on them directly.  The cool thing however
-is you can add methods on these classes as implicitly private methods and they will be accessible publicly. Methods
+These dynamic classes can be treated as any other class.  You can add methods on them directly.  The cool thing however
+is you can add methods on these classes as implicit methods and they will be accessible publicly. Methods
 that have any of the following signatures are considered public automatically:
 <ul>
     <li>void SomeMethod()</li>
@@ -580,8 +598,12 @@ public class Blog : DynamicModel
     }
 }
 </pre>
-<h4>Side Note: Testing</h4>
-The nifty thing about defining dynamic methods implicitly is that they an be redefined in testing like so:
+
+In the case of the Hello World sample, the code above is how you would get rid of exceptions associated with AddComment();
+
+<h3>Side Note: Testing</h3>
+The nifty thing about defining dynamic methods implicitly is that they an be 
+redefined in testing (and anywhere else for that matter).  Here is an example:
 <pre>
 bool commentAdded = false;
 dynamic blog = new Blog(new { Name = ""Some Name"" });
@@ -613,7 +635,7 @@ Assert.IsTrue(commentAdded);
         {
             return @"
 <h2>Use SeedController to add a column</h2>
-Seed controller can also be used to add columns.  It's important to not change existing SeedController methods.  Just
+Seed controller can be used to add columns.  It's important to not change existing schema/migration methods in SeedController.  Just
 add new ones.  <strong>Here is an example of adding a BlogId column to a Comments table</strong>:
 <pre>
     public class Schema //this class exists in SeedController.cs
@@ -626,7 +648,7 @@ add new ones.  <strong>Here is an example of adding a BlogId column to a Comment
 
         public string AddBlogIdToComments() //here is the function definition
         {
-            //this is an example, your table name may be different
+            //this is an example, your table name and columns may be different
             //for more information on schema generation <a href=""https://github.com/amirrajan/Oak/wiki/Creating-schema-using-Oak.Seed"" target=""_blank"">check out the Oak wiki</a> 
             return Seed.AddColumns(""Comments"",
                 new { BlogId = ""int"", ForeignKey = ""Blogs(Id)"" }
