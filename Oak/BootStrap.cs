@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Threading;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Reflection;
 
 namespace Oak
 {
@@ -246,6 +247,15 @@ namespace Oak
         public virtual bool CanRecommend(Exception e) { return false; }
 
         public virtual string GetRecommendation(Exception e) { return ""; }
+
+        public bool HasEmptyProject()
+        {
+            return Assembly
+                .GetAssembly(typeof(Recommendation))
+                .GetTypes()
+                .Where(s => s.Name.EndsWith("Controller"))
+                .Count() <= 2;
+        }
     }
 
 
@@ -253,7 +263,7 @@ namespace Oak
     {
         public override bool CanRecommend(Exception e)
         {
-            return e.ToString().Contains("Views/Home/Index");
+            return e.ToString().Contains("Views/Home/Index") && HasEmptyProject();
         }
 
         public override string GetRecommendation(Exception e)
@@ -437,7 +447,9 @@ Create an Index.cshtml page for the Index action and add the following code ther
     {
         public override bool CanRecommend(Exception e)
         {
-            return e is SqlException && e.ToString().Contains("Invalid object name 'Blogs'.");
+            return e is SqlException
+                && e.ToString().Contains("Invalid object name 'Blogs'.")
+                && HasEmptyProject();
         }
 
         public override string GetRecommendation(Exception e)
@@ -491,7 +503,7 @@ the script (the console window you use to execute this command must have ruby su
     {
         public override bool CanRecommend(Exception e)
         {
-            return e is SqlException && e.ToString().Contains("Invalid object name 'Comments'");
+            return e is SqlException && e.ToString().Contains("Invalid object name 'Comments'") && HasEmptyProject();
         }
 
         public override string GetRecommendation(Exception e)
@@ -631,7 +643,7 @@ You can then run this command to <strong>purge</strong> your database and regen 
     {
         public override bool CanRecommend(Exception e)
         {
-            return e.ToString().Contains("'Oak.Gemini' does not contain a definition for 'Comments'");
+            return e.ToString().Contains("'Oak.Gemini' does not contain a definition for 'Comments'") && HasEmptyProject();
         }
 
         public override string GetRecommendation(Exception e)
@@ -663,7 +675,10 @@ say ""A blog has many comments""</strong>:
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
 //define the repository to retrieve comments
-public class Comments : DynamicRepository { }
+public class Comments : DynamicRepository 
+{ 
+
+}
 
 public class Blog : DynamicModel 
 {
@@ -682,6 +697,14 @@ public class Blog : DynamicModel
         //and define the association
         //for othere examples of associations <a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""_blank"">check out the Oak wiki</a>
         yield return new HasMany(comments);
+    }
+
+    //add a Validates method to add the IsValid() method
+    IEnumerable&lt;dynamic&gt; Validates()
+    {
+        //and define the association
+        //for othere examples of validations <a href=""https://github.com/amirrajan/Oak/wiki/Adding-validation-using-Oak.DynamicModel"" target=""_blank"">check out the Oak wiki</a>
+        yield return new Uniqueness(""Name"", blogs);
     }
 }</pre>
 ";
@@ -768,7 +791,7 @@ For more information on dynamic repository methods, take a look at
     {
         public override bool CanRecommend(Exception e)
         {
-            return e.ToString().Contains("Blog' does not contain a definition for 'IsValid'");
+            return e.ToString().Contains("Blog' does not contain a definition for 'IsValid'") && HasEmptyProject();
         }
 
         public override string GetRecommendation(Exception e)
@@ -781,21 +804,12 @@ Oak.  Update the Blog class in HomeController.cs. <strong>Blog names must be uni
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
 public class Blog : DynamicModel 
 {
-    Comments comments = new Comments();
-
     //initialize blogs
     Blogs blogs = new Blogs();
 
     public Blog() { }
 
     public Blog(object dto) : base(dto) { }
-
-    IEnumerable&lt;dynamic&gt; Associates()
-    {
-        //and define the association
-        //for othere examples of associations <a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""_blank"">check out the Oak wiki</a>
-        yield return new HasMany(comments);
-    }
 
     //add a Validates method to add the IsValid() method
     IEnumerable&lt;dynamic&gt; Validates()
@@ -816,7 +830,7 @@ In the case of the Hello World sample, the code above is how you would get rid o
     {
         public override bool CanRecommend(Exception e)
         {
-            return e.ToString().Contains("Blog' does not contain a definition for 'AddComment'");
+            return e.ToString().Contains("Blog' does not contain a definition for 'AddComment'") && HasEmptyProject();
         }
 
         public override string GetRecommendation(Exception e)
@@ -832,7 +846,7 @@ that have any of the following signatures are considered public automatically:
     <li>dynamic SomeFunction()</li>
     <li>dynamic SomeFunctionWithParam(dynamic args)</li>
 </ul>
-<h3>In HomeController.cs change Blog to have an AddComment method</h3>
+<h3>Step 1 - In HomeController.cs change Blog to have an AddComment method</h3>
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
 public class Blog : DynamicModel
@@ -872,6 +886,22 @@ public class Blog : DynamicModel
 
         comments.Insert(commentToSave);
     }
+}
+</pre>
+<h3>Step 2 - Eager load Comments in HomeController's Index method</h3>
+Every Blog on the main page will load its comments (hitting the database for each blog).  This is inefficient and
+should be fixed.  <strong>Update HomeController's Index method to eager load Comments:</strong>
+<pre>
+<img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
+public ActionResult Index()
+{
+    //return all blogs from the database
+    ViewBag.Blogs = blogs.All();
+
+    //eager load comments
+    ViewBag.Blogs.Include(""Comments"");
+
+    return View();
 }
 </pre>";
         }
@@ -922,7 +952,10 @@ public class Blogs : DynamicRepository
 }
 
 //declare the comments repository
-public class Comments : DynamicRepository { }
+public class Comments : DynamicRepository 
+{ 
+
+}
 
 public class Blog : DynamicModel 
 {
