@@ -30,6 +30,8 @@ namespace System
 
         public static string CollectionToString(this object[] args)
         {
+            if (args == null) return "";
+
             var s = "";
             for (int i = 0; i < args.Length; i++)
             {
