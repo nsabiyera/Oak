@@ -41,6 +41,7 @@ namespace Oak.Tests
             jsonString = null;
         }
 
+        [Tag("wip")]
         void describe_prototype_to_json()
         {
             before = () =>
@@ -54,12 +55,13 @@ namespace Oak.Tests
                 objectToConvert.Guid = Guid.Empty;
                 objectToConvert.Decimal = (decimal)15;
                 objectToConvert.StringAsNull = null as string;
+                objectToConvert.Long = (long)100;
             };
 
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts prototype"] = () =>
-                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7} }}"
+                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null"));
         }
 
@@ -286,7 +288,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void converting_dynamic_model()
         {
             before = () =>

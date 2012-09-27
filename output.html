@@ -1,0 +1,3959 @@
+<html>
+<head>
+<style type="text/css">
+  span {padding: 0.5em}
+  ul {margin-top: 0px}
+  .results {background-color: #FFFFCC; border-color: #000000; border-style: dashed; border-width: thin; font-weight:bold; white-space: pre-wrap; text-align: center; padding: 0.5em}
+  .context-parent {border-color: #000000; border-style: dashed; border-width: thin; margin-bottom: 1em;}
+  .context-parent-title {background-color: #6699FF; border-color: #000000; border-bottom-style: dashed; border-width: thin; font-weight:bold; padding: 0.5em}
+  .context-parent-body {padding: 1em 2em 1em 0;}
+  .context-parent-name {font-weight:bold;}
+  .spec-passed {font-weight:bold; color:green;}
+  .spec-failed {font-weight:bold; color:#FF0000;}
+  .spec-pending {font-weight:bold; color:#0000FF;}
+  .spec-exception {background-color: #FFD2CF; border-color: #FF828D; border-style: dashed; border-width: thin; padding: 1em; font-size:small; white-space: pre-wrap; padding: 0.5em}
+  .run-date {color:grey; font-size:x-small;}
+</style>
+</head>
+<body>
+
+<div class="results">Specs:<span>539</span>Failed:<span class="spec-failed">0</span>Pending:<span class="spec-pending">0</span><div class="run-date">Run Date: 9/26/2012 1:15:43 PM</div></div>
+<br />
+<div class="context-parent">
+  <div class="context-parent-title">describe DynamicForm</div>
+    <div class="context-parent-body">
+<ul>
+<li>creating element meta data for a regular class
+<ul>
+<li>property being converted is a string
+<ul>
+<li>the Value property is set to the class's property value<span class="spec-passed">&lArr; Passed</span></li>
+<li>the Id property is set to the class's <span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>property being converted is an int
+<ul>
+<li>the Value property is set to the class's property value<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>creating element meta data for a gemini
+<ul>
+<li>property being converted is a string
+<ul>
+<li>the Value property is set to the gemini's property value<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>creating element meta data for a nested gemini
+<ul>
+<li>property being converted is a newly defined property on top level gemini
+<ul>
+<li>the Value property is set to the newly defined property value<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>creating element meta data for a dynamic model
+<ul>
+<li>property is a property that has been added via validation constraint
+<ul>
+<li>the Value property is set to the property defined by the validation constraint<span class="spec-passed">&lArr; Passed</span></li>
+<li>value is not considered as part of the element meta data hash (used by OakForm.cshtml)<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>property is a property that has been added as a virtual property
+<ul>
+<li>the Value property is set to the virtual property defined by the validation constraint<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>creating element data out of hash
+<ul>
+<li>creates element metadata<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>creating element meta data out of constructor initializer
+<ul>
+<li>name is specified
+<ul>
+<li>creates element metadata<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>name and value are specified
+<ul>
+<li>creates element metadata<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>accessing a property that doesnt exist on a regular class
+<ul>
+<li>throws a friendly exception<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>accessing a property that doesnt exist on a Gemini
+<ul>
+<li>throws a friendly exception<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>concatenating html attributes
+<ul>
+<li>retains value of dynamic model<span class="spec-passed">&lArr; Passed</span></li>
+<li>throws a friendly exception when constructing element meta data for a property that doesn't exist<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>adding id override
+<ul>
+<li>the id is overridden with the one specified<span class="spec-passed">&lArr; Passed</span></li>
+<li>id property should not be contained in hash (used by OakForm.cshtml)<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>added value attribute
+<ul>
+<li>Title property has value
+<ul>
+<li>the title is set to the entity's title<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>Title property doesn't have a value
+<ul>
+<li>the title is set to the value from the hash<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">eager loading for belongs to</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">eager loading for belongs to with overridden primary key</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">eager loading for has many</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title"> dynamic models</div>
+    <div class="context-parent-body">
+<ul>
+<li>eager loading for has many and belongs to
+<ul>
+<li>it loads and caches each child collection specified<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many for belongs to relation
+<ul>
+<li>select many off of collection
+<ul>
+<li>returns associated entities as collection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many for has many through relation
+<ul>
+<li>selecting many off of collection
+<ul>
+<li>returns all games for all players<span class="spec-passed">&lArr; Passed</span></li>
+<li>links back to the specific player the query originated from<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>selecting many from nested relation
+<ul>
+<li>returns all players through games<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>cacheing for select many
+<ul>
+<li>maintains cache of select many<span class="spec-passed">&lArr; Passed</span></li>
+<li>cache is also applied for parent entries<span class="spec-passed">&lArr; Passed</span></li>
+<li>allows the discarding of cache<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>prototype dynamic models
+<ul>
+<li>describe Any
+<ul>
+<li>matching single property
+<ul>
+<li>no items in list
+<ul>
+<li>any returns false<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>any returns true<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>item exists in list that match multiple properties
+<ul>
+<li>entry exists where all properties match
+<ul>
+<li>any returns true<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>entry exists where all properties do not match
+<ul>
+<li>any returns false<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe Where
+<ul>
+<li>matching single property
+<ul>
+<li>no items in list
+<ul>
+<li>result list is empty<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>item exists in list that match multiple properties
+<ul>
+<li>entry exists where all properties match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>entry exists where all properties do not match
+<ul>
+<li>result list is empty<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>chaining wheres
+<ul>
+<li>applies first filter then next filter<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>value being compared is a dynamic function
+<ul>
+<li>applies first filter then next filter<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe ToList
+<ul>
+<li>converts IEnumerable to a list<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe ToModels
+<ul>
+<li>converts enumerable to dynamic models<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe First
+<ul>
+<li>first taking in a 'where clause'
+<ul>
+<li>no items in list
+<ul>
+<li>result is null<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>first doesn't take in a 'where clause'
+<ul>
+<li>returns first record<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe Last
+<ul>
+<li>last taking in a 'where clause'
+<ul>
+<li>no items in list
+<ul>
+<li>result is null<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>last doesn't take in a 'where clause'
+<ul>
+<li>returns first record<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe OrderBy
+<ul>
+<li>order by works for prototype objects
+<ul>
+<li>ordering is applied<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>gemini dynamic models
+<ul>
+<li>describe Any
+<ul>
+<li>matching single property
+<ul>
+<li>no items in list
+<ul>
+<li>any returns false<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>any returns true<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>any with no parameters just checks count (which is currently 0)
+<ul>
+<li>return false<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>item exists in list that match multiple properties
+<ul>
+<li>entry exists where all properties match
+<ul>
+<li>any returns true<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>entry exists where all properties do not match
+<ul>
+<li>any returns false<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe Count
+<ul>
+<li>reports count<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe Where
+<ul>
+<li>matching single property
+<ul>
+<li>no items in list
+<ul>
+<li>result list is empty<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>item exists in list that match multiple properties
+<ul>
+<li>entry exists where all properties match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>entry exists where all properties do not match
+<ul>
+<li>result list is empty<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe First
+<ul>
+<li>no items in list
+<ul>
+<li>result is null<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>items exist in list that match
+<ul>
+<li>returns item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe OrderBy
+<ul>
+<li>orders records ascending<span class="spec-passed">&lArr; Passed</span></li>
+<li>orders records descending<span class="spec-passed">&lArr; Passed</span></li>
+<li>orders records based on multiple ascending specifications<span class="spec-passed">&lArr; Passed</span></li>
+<li>orders records based on multiple descending specifications<span class="spec-passed">&lArr; Passed</span></li>
+<li>order by can be applied to methods<span class="spec-passed">&lArr; Passed</span></li>
+<li>order by can have an additonal project applied to it<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many for has many relation
+<ul>
+<li>selecting many off of collection
+<ul>
+<li>returns all emails for all users<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many for collection with where clause
+<ul>
+<li>where clause returns records
+<ul>
+<li>returns all emails for all users<span class="spec-passed">&lArr; Passed</span></li>
+<li>links back to the specific user the query originated from<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>where clause returns no records
+<ul>
+<li>returns an empty list<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many from nested relations
+<ul>
+<li>returns all records from nested relation<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>cacheing for select many
+<ul>
+<li>maintains cache of select many<span class="spec-passed">&lArr; Passed</span></li>
+<li>the parent collection is also cached<span class="spec-passed">&lArr; Passed</span></li>
+<li>allows the discarding of cache<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many for has one relation
+<ul>
+<li>select many off of collection
+<ul>
+<li>returns associated entities as collection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select many for has one through relation
+<ul>
+<li>describe select many off of collection
+<ul>
+<li>returns associated entries as collection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>select properties from collection
+<ul>
+<li>it creates a projection for empty list<span class="spec-passed">&lArr; Passed</span></li>
+<li>it creates a projection for populated list for single parameter<span class="spec-passed">&lArr; Passed</span></li>
+<li>it creates a projection for populated list for multiple parameters<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">eager loading for has many through</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">eager loading for has one</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">eager loading for has one through</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">select has many and belongs to relation</div>
+    <div class="context-parent-body">
+<ul>
+<li>accessing the relation through an enumerable
+<ul>
+<li>performs a select many for all entries in the collection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">core behavior for dynamic model</div>
+    <div class="context-parent-body">
+<ul>
+<li>root properties
+<ul>
+<li>adding properties to dynamic model
+<ul>
+<li>the property is defined on dynamic model<span class="spec-passed">&lArr; Passed</span></li>
+<li>property exists as a root property<span class="spec-passed">&lArr; Passed</span></li>
+<li>responds to newly defined property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>root methods
+<ul>
+<li>adding methods to dynamic model
+<ul>
+<li>the property is defined on dynamic model<span class="spec-passed">&lArr; Passed</span></li>
+<li>method exists on root<span class="spec-passed">&lArr; Passed</span></li>
+<li>responds to newly defined method<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>redefining methods
+<ul>
+<li>method is redefined
+<ul>
+<li>behaves using redefined behavior<span class="spec-passed">&lArr; Passed</span></li>
+<li>exists replaces virtual method<span class="spec-passed">&lArr; Passed</span></li>
+<li>responds to redefined method<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe method list
+<ul>
+<li>dynamic model has methods and properties defined on root and virtual level
+<ul>
+<li>contains both defined methods<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>deleting members
+<ul>
+<li>dynamic model has methods and properties definded on root and virtual level
+<ul>
+<li>both methods are deleted<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting members
+<ul>
+<li>setting delegate members
+<ul>
+<li>delegate members are not tracked because they cannot be saved<span class="spec-passed">&lArr; Passed</span></li>
+<li>delegate members are not tracked because they cannot be saved<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">belongs to for static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>retrieving a blog associated with a comment
+<ul>
+<li>returns blog associated with comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">belongs to conventional schema</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe retrieval of belongs to
+<ul>
+<li>given blogs that have many comments
+<ul>
+<li>retrieving a blog associated with a comment
+<ul>
+<li>returns blog associated with comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe cacheing
+<ul>
+<li>belongs to props are changed from external source
+<ul>
+<li>belongs to properties in comments remain unchanged<span class="spec-passed">&lArr; Passed</span></li>
+<li>discarded cache updates properties<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>multiple belongs to columns referencing the same table
+<ul>
+<li>both belongs to references are accessible<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">belongs to unconventional schema</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe unconventional schema
+<ul>
+<li>given foreign key does not match convention
+<ul>
+<li>retrieving a blog associated with a comment
+<ul>
+<li>returns blog associated with comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>given primary key does not match convention
+<ul>
+<li>retrieving a blog associated with a comment
+<ul>
+<li>returns blog associated with comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">core behavior for associations</div>
+    <div class="context-parent-body">
+<ul>
+<li>associations can be added directly to gemini
+<ul>
+<li>change tracking methods exist when changes is mixed in<span class="spec-passed">&lArr; Passed</span></li>
+<li>returns blog associated with comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many for static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe has many
+<ul>
+<li>given blogs that have many comments
+<ul>
+<li>retrieving comments for blog
+<ul>
+<li>has two comments<span class="spec-passed">&lArr; Passed</span></li>
+<li>comments are cached for an instance of blog<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retrieving comments for blog by another name
+<ul>
+<li>has two comments<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retriving comment ids for blog
+<ul>
+<li>has ids for comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retriving comment ids for blog by another name
+<ul>
+<li>has ids for comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retrieving comments for other blog
+<ul>
+<li>has one comments<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>newing up has many association for blog
+<ul>
+<li>building a comment for a blog
+<ul>
+<li>sets the blog id for comment<span class="spec-passed">&lArr; Passed</span></li>
+<li>is of type defined in projection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>building a comment for a blog with attributes
+<ul>
+<li>sets additional attributes<span class="spec-passed">&lArr; Passed</span></li>
+<li>is of type defined in projection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>building a comment where the blog id is specified
+<ul>
+<li>overrides the id<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving association that has been newed up through parent entity
+<ul>
+<li>uncached blog should have saved comments<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe has many
+<ul>
+<li>given blogs that have many comments
+<ul>
+<li>retrieving comments for blog
+<ul>
+<li>has two comments<span class="spec-passed">&lArr; Passed</span></li>
+<li>comments are cached for an instance of blog<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retrieving comments for blog by another name
+<ul>
+<li>has two comments<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retriving comment ids for blog
+<ul>
+<li>has ids for comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retriving comment ids for blog by another name
+<ul>
+<li>has ids for comment<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retrieving comments for other blog
+<ul>
+<li>has one comments<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>newing up has many association for blog
+<ul>
+<li>building a comment for a blog
+<ul>
+<li>sets the blog id for comment<span class="spec-passed">&lArr; Passed</span></li>
+<li>is of type defined in projection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>building a comment for a blog with attributes
+<ul>
+<li>sets additional attributes<span class="spec-passed">&lArr; Passed</span></li>
+<li>is of type defined in projection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>building a comment where the blog id is specified
+<ul>
+<li>overrides the id<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving association that has been newed up through parent entity
+<ul>
+<li>uncached blog should have saved comments<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many and belongs to eager loading</div>
+    <div class="context-parent-body">
+<ul>
+<li>retrieval of relationship is performed at the collection level
+<ul>
+<li>has many and belongs to relation has reference back to parent<span class="spec-passed">&lArr; Passed</span></li>
+<li>the associations are cached<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">saving has many belongs to</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many and belongs to static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe cacheing
+<ul>
+<li>collection is cached until discarded<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many and belongs to conventional schema</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe cacheing
+<ul>
+<li>collection is cached until discarded<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many and belongs to unconventional schema</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe overrides
+<ul>
+<li>xref table can be overridden
+<ul>
+<li>works<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many through for static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe has many through
+<ul>
+<li>given users have a library of games (user has games through library)
+<ul>
+<li>cacheing
+<ul>
+<li>games are cached until cache is discarded<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retrieving game ids for user's library
+<ul>
+<li>contains game for user<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>newing up has many association
+<ul>
+<li>building a game for user
+<ul>
+<li>creates a game of type defined in projection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>saving newly created game
+<ul>
+<li>saves game<span class="spec-passed">&lArr; Passed</span></li>
+<li>saving game doesn't automatically associate the has many through<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving association through library and game
+<ul>
+<li>game is associated with user<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>has many naming customization
+<ul>
+<li>given users have users through friends
+<ul>
+<li>user named (@me) has friend (@you)<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retriving games for user library
+<ul>
+<li>contains game for user<span class="spec-passed">&lArr; Passed</span></li>
+<li>has a reference back to the user the game belongs to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has many through for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe has many through
+<ul>
+<li>given users have a library of games (user has games through library)
+<ul>
+<li>cacheing
+<ul>
+<li>games are cached until cache is discarded<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retrieving game ids for user's library
+<ul>
+<li>contains game for user<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>newing up has many association
+<ul>
+<li>building a game for user
+<ul>
+<li>creates a game of type defined in projection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>saving newly created game
+<ul>
+<li>saves game<span class="spec-passed">&lArr; Passed</span></li>
+<li>saving game doesn't automatically associate the has many through<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving association through library and game
+<ul>
+<li>game is associated with user<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>has many naming customization
+<ul>
+<li>given users have users through friends
+<ul>
+<li>user named (@me) has friend (@you)<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>retriving games for user library
+<ul>
+<li>contains game for user<span class="spec-passed">&lArr; Passed</span></li>
+<li>has a reference back to the user the game belongs to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has one</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe has one
+<ul>
+<li>given author with profile
+<ul>
+<li>retrieving author
+<ul>
+<li>author should have profile<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe unconventional schema
+<ul>
+<li>given foreign key does not match convention
+<ul>
+<li>retrieving author
+<ul>
+<li>author should have profile<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe cacheing
+<ul>
+<li>given has one relation, has been accessed already
+<ul>
+<li>has one relation is changed from an external source
+<ul>
+<li>the reference via has one relation remains unchanged<span class="spec-passed">&lArr; Passed</span></li>
+<li>accessing property after discarding cache shows update<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">has one through</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe has one through
+<ul>
+<li>a store has one supplier through distribution channels
+<ul>
+<li>retrieves has one through<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe cacheing
+<ul>
+<li>has one through has been accessed
+<ul>
+<li>relation is altered through an external source
+<ul>
+<li>has one reference is unchanged<span class="spec-passed">&lArr; Passed</span></li>
+<li>discarding cache reflects changes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">changes core behavior for static object</div>
+    <div class="context-parent-body">
+<ul>
+<li>tracking changes after new instantiation of model
+<ul>
+<li>has no changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>property has no changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>methods added are untracked, so that they are ignored by persistance<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>changing dynamic model
+<ul>
+<li>original values are unchanged<span class="spec-passed">&lArr; Passed</span></li>
+<li>has changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>lists changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>gives changes for property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>tracking changes when model is initialized with dto
+<ul>
+<li>has no changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>list of changes is empty<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>changing dynamic model
+<ul>
+<li>has changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>lists changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>gives changes for property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting dynamic model property to what it already is
+<ul>
+<li>isn't considered a change<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">changes core behavior for dyanmic object</div>
+    <div class="context-parent-body">
+<ul>
+<li>tracking changes after new instantiation of model
+<ul>
+<li>has no changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>property has no changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>methods added are untracked, so that they are ignored by persistance<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>changing dynamic model
+<ul>
+<li>original values are unchanged<span class="spec-passed">&lArr; Passed</span></li>
+<li>has changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>lists changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>gives changes for property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>tracking changes when model is initialized with dto
+<ul>
+<li>has no changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>list of changes is empty<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>changing dynamic model
+<ul>
+<li>has changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>lists changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>gives changes for property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting dynamic model property to what it already is
+<ul>
+<li>isn't considered a change<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>change tracking can be added directly to gemini
+<ul>
+<li>change tracking methods exist when changes is mixed in<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>deleting a property
+<ul>
+<li>has changes<span class="spec-passed">&lArr; Passed</span></li>
+<li>lists changes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>different property is added
+<ul>
+<li>has changes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">permit</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">core behavior for validations</div>
+    <div class="context-parent-body">
+<ul>
+<li>validation can be added directly to gemini
+<ul>
+<li>validation methods exist when validation is mixed in<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">length for class with auto properties</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating length of
+<ul>
+<li>title is not long enough
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title is exact length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title is greater than length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>author is greater than length
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>author is exact length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>author is less than length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish not in range
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is minimum in range
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is in range
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is maximum in range
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is above range
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>version is below value
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>version is above value
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>version is equal to value
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>isnull is null
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">length for dynamic class</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating length of
+<ul>
+<li>title is not long enough
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title is exact length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title is greater than length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>author is greater than length
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>author is exact length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>author is less than length
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish not in range
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is minimum in range
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is in range
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is maximum in range
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>publish is above range
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>version is below value
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>version is above value
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>version is equal to value
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>isnull is null
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">numericality for static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating numericality of
+<ul>
+<li>average points is a number
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>age is not an integer
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>age is an integer
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but less than lower threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but equal to lower threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number and is greather than lower threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number but less than threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and is equal to threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and is greater than threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is a number but less than threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is a number but greater than threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is a number and equal to threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but greater than upper threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but equal to upper threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number and less than upper threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number but greater than upper threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and equal to upper threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and less than upper threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky even number is a number but is not even
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky even number is a number and is even
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky odd number is a number but is not odd
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky odd number is a number and is odd
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">numericality for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating numericality of
+<ul>
+<li>average points is a number
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>age is not an integer
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>age is an integer
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but less than lower threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but equal to lower threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number and is greather than lower threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number but less than threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and is equal to threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and is greater than threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is a number but less than threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is a number but greater than threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is a number and equal to threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but greater than upper threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number but equal to upper threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is a number and less than upper threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number but greater than upper threshold
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and equal to upper threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is a number and less than upper threshold
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky even number is a number but is not even
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky even number is a number and is even
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky odd number is a number but is not odd
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky odd number is a number and is odd
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>non numeric behavior
+<ul>
+<li>average points is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>age is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>height in inches is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>weight in pounds is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky odd number is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>number of fingers is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>lucky even number is not a number
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">saving dynamic model for static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>saving model
+<ul>
+<li>new model
+<ul>
+<li>saves item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting a property to null on a model that exists
+<ul>
+<li>retains null value<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">saving dynamic model for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>saving model
+<ul>
+<li>new model
+<ul>
+<li>saves item<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting a property to null on a model that exists
+<ul>
+<li>retains null value<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">saving model that contains an identity column</div>
+    <div class="context-parent-body">
+<ul>
+<li>inserting model with invalid props
+<ul>
+<li>gives friendly exception<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">saving model that contains properties that dont map to column</div>
+    <div class="context-parent-body">
+<ul>
+<li>inserting model with invalid props
+<ul>
+<li>gives friendly exception<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>updating model with invalid props
+<ul>
+<li>gives friendly exception<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">acceptance for class that contains auto props</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating acceptance
+<ul>
+<li>terms of service is set to true
+<ul>
+<li>the specific property is valid<span class="spec-passed">&lArr; Passed</span></li>
+<li>the object is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>terms of service is set to false
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>acceptance criteria is a string match for 'TypedOutAcceptance'
+<ul>
+<li>user types out I Accept
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>error message
+<ul>
+<li>Terms of service has default error message and has not been accepted.
+<ul>
+<li>error message reads 'TermsOfService is invalid.'<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>Typed out acceptances has customized error message and is not valid
+<ul>
+<li>error message reads 'You have not typed out the acceptence. Type I Accept.'<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">acceptance for dynamic class</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating acceptance
+<ul>
+<li>terms of service is set to true
+<ul>
+<li>the specific property is valid<span class="spec-passed">&lArr; Passed</span></li>
+<li>the object is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>terms of service is set to false
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>acceptance criteria is a string match for 'TypedOutAcceptance'
+<ul>
+<li>user types out I Accept
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>error message
+<ul>
+<li>Terms of service has default error message and has not been accepted.
+<ul>
+<li>error message reads 'TermsOfService is invalid.'<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>Typed out acceptances has customized error message and is not valid
+<ul>
+<li>error message reads 'You have not typed out the acceptence. Type I Accept.'<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">core validation</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe first error
+<ul>
+<li>both title and body are not specified in Book
+<ul>
+<li>contains 2 errors<span class="spec-passed">&lArr; Passed</span></li>
+<li>first error should be Title is required<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title is specified but body is not
+<ul>
+<li>contains 1 error<span class="spec-passed">&lArr; Passed</span></li>
+<li>first error should be Body is required<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>case insensitive valdation
+<ul>
+<li>setting the title with a lower case T and body with lower case b
+<ul>
+<li>is still valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe property location
+<ul>
+<li>initialization of entity with properties not defined in validation
+<ul>
+<li>it exists on gemini object as opposed to virtual<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>virtual properties for validation
+<ul>
+<li>when validation is mixed in to a dynamic model
+<ul>
+<li>the properties added for validation are delegates, so that they are not included in persistance by DynamicRepository<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>a dynamic model with no validates method
+<ul>
+<li>does not respond to validation mix in<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>validation provides with if clause
+<ul>
+<li>a order has a payment type that can be card
+<ul>
+<li>payment type is card and cardnumber is not specified
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+<li>is has error message<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>payment type is card and cardnumber is specified
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>payment type is not card and cardnumber is not specified
+<ul>
+<li>is valid because it disregards card number<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>validation provides with unless clause
+<ul>
+<li>a order has an item type that can be a digital item
+<ul>
+<li>the item type is 'physical' and the address is not specified
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+<li>is has error message<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>the item type is 'physical' and the address is specified
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>the item type is 'digital' and the address is not specified
+<ul>
+<li>is valid because it disregards address<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">exclusion for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating exclusions
+<ul>
+<li>UserName matches the user name 'admin'
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>UserName matches the user name 'administrator'
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>UserName does not match an entry in the exclusion list
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">exclusion for type with autoproperties</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating exclusions
+<ul>
+<li>UserName matches the user name 'admin'
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>UserName matches the user name 'administrator'
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>UserName does not match an entry in the exclusion list
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">inclusion for type with auto props</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating inclusion
+<ul>
+<li>coffee size is not a valid size
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>coffee is valid size
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">inclusion for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating inclusion
+<ul>
+<li>coffee size is not a valid size
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>coffee is valid size
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">presence for static type</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating presense of
+<ul>
+<li>title is empty
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>body is populated, but title is empty
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title and body is populated
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>book is initialized with title and body are both set to default(string)
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">presence for dynamic type</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating presense of
+<ul>
+<li>title is empty
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>body is populated, but title is empty
+<ul>
+<li>is not valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>title and body is populated
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>book is initialized with title and body are both set to default(string)
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">confirmation for dynamic object</div>
+    <div class="context-parent-body">
+<ul>
+<li>confirming password is entered
+<ul>
+<li>given emails match
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>given emails do not match
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving something that has confirmation to the database
+<ul>
+<li>requires the exclusion of confirmation properties<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">confirmation for class containing auto properties</div>
+    <div class="context-parent-body">
+<ul>
+<li>confirming password is entered
+<ul>
+<li>given emails match
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>given emails do not match
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving something that has confirmation to the database
+<ul>
+<li>requires the exclusion of confirmation properties<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">format for class with auto props</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating format
+<ul>
+<li>product code does not match format of all characters
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>product code matches format of all characters
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>product id does not match regex
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>product code is null
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">format for dynamic class</div>
+    <div class="context-parent-body">
+<ul>
+<li>validating format
+<ul>
+<li>product code does not match format of all characters
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>product code matches format of all characters
+<ul>
+<li>is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>product id does not match regex
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>product code is null
+<ul>
+<li>is invalid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">uniquness for static class</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe uniqueness
+<ul>
+<li>email associated with users is not taken
+<ul>
+<li>user is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>email associated with users is taken
+<ul>
+<li>user is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>email that is taken belongs to current user
+<ul>
+<li>users is valid because the taken email belongs to current user<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">uniquness for dynamic class</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe uniqueness
+<ul>
+<li>email associated with users is not taken
+<ul>
+<li>user is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>email associated with users is taken
+<ul>
+<li>user is valid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>email that is taken belongs to current user
+<ul>
+<li>users is valid because the taken email belongs to current user<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">detecting inefficient queries</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">inserting and updating</div>
+    <div class="context-parent-body">
+<ul>
+<li>inserting a record that has non value type properties
+<ul>
+<li>the record is inserted (ignoring the reference type)<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>updating every type of sql column
+<ul>
+<li>each column is updated<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">executing procs</div>
+    <div class="context-parent-body">
+<ul>
+<li>executing stored procs
+<ul>
+<li>proc results are converted to type<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">pagination</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">describe DynamicToJson</div>
+    <div class="context-parent-body">
+<ul>
+<li>describe prototype to json
+<ul>
+<li>converts prototype<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe gemini to json
+<ul>
+<li>converts gemini<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe dynamic model to json
+<ul>
+<li>converts dynamic model<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe collection
+<ul>
+<li>converts collection<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe can be converted
+<ul>
+<li>prototype should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+<li>gemini should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+<li>dynamic model should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+<li>anonymous type should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+<li>string should evaluate to: False<span class="spec-passed">&lArr; Passed</span></li>
+<li>list containing convertable types should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+<li>list of string should evaluate to: False<span class="spec-passed">&lArr; Passed</span></li>
+<li>list containing gemini's and anonymous types should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+<li>list containing convertable types and non convertable types should evaluate to: False<span class="spec-passed">&lArr; Passed</span></li>
+<li>empty list should evaluate to: True<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe anonymous type to json
+<ul>
+<li>converts properties of anonymous type<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>converting anonymous types that have defferred execution
+<ul>
+<li>executes deferred statement and serializes result<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>coverting list string
+<ul>
+<li>executes deferred statement and serializes result<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>converting list numeric
+<ul>
+<li>executes deferred statement and serializes result<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>converting list of boolean
+<ul>
+<li>executes deferred statement and serializes result<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>converting nested object
+<ul>
+<li>converts whole object graph<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>converting dynamic model
+<ul>
+<li>includes both properties from hash and properties defined on dynamic model<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>converting named classes
+<ul>
+<li>includes serialization of named classes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>escaping strings
+<ul>
+<li>special characters are escaped<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title"> describe Gemini</div>
+    <div class="context-parent-body">
+<ul>
+<li>accessing property
+<ul>
+<li>when retrieving property from gemini
+<ul>
+<li>calls values for geminied entity<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls value for geminied entity even if property's first letter doesn't match case<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls value for geminied entity even if property's first letter is capilized, but underlying property is lowercase<span class="spec-passed">&lArr; Passed</span></li>
+<li>ignores case for geminied entity<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>properites defined on underlying prototype
+<ul>
+<li>properties are accessible<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>tacking on properties after the fact is allowed
+<ul>
+<li>new prop is accessible<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>tacking on methods after the fact is allowed
+<ul>
+<li>new method is accessible<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>selecting properties
+<ul>
+<li>core behavior
+<ul>
+<li>only responds to properties that were selected<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>casing
+<ul>
+<li>case doesn't matter<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>excluding properties
+<ul>
+<li>core behavior
+<ul>
+<li>only responds to properties that were selected<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>casing
+<ul>
+<li>casing doesn't matter<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>deleting members
+<ul>
+<li>given a member is defined
+<ul>
+<li>no longer responds to member<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>deleting members by case
+<ul>
+<li>member deletion is case insensitive (title)
+<ul>
+<li>no longer responds to member<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>member deletion is case insensitive (TITLE)
+<ul>
+<li>no longer responds to member<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>member is not defined
+<ul>
+<li>ignores deletion<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe constructions
+<ul>
+<li>specify initializing gemini with null does not throw error<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+<ul>
+<li>gemini constructor that takes in dto
+<ul>
+<li>given that the dynamic blogged is wrapped with a gemini
+<ul>
+<li>base properties are still accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>base properties are still settable<span class="spec-passed">&lArr; Passed</span></li>
+<li>new properites provided by BlogEntry gemini are available<span class="spec-passed">&lArr; Passed</span></li>
+<li>properites defined in the gemini override base properties<span class="spec-passed">&lArr; Passed</span></li>
+<li>auto property is assigned as opposed to creating a new prop on the fly<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe get member
+<ul>
+<li>retrieving member
+<ul>
+<li>retrieves value with exact casing<span class="spec-passed">&lArr; Passed</span></li>
+<li>retrieves value with exact case insensitive<span class="spec-passed">&lArr; Passed</span></li>
+<li>throws invalid op if property doesn't exist<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe methods
+<ul>
+<li>it contains a record for each method defined<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe responds to
+<ul>
+<li>it responds to property with exact casing<span class="spec-passed">&lArr; Passed</span></li>
+<li>it responds to property with case insensitive<span class="spec-passed">&lArr; Passed</span></li>
+<li>it doesnt respond to property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>gemini methods
+<ul>
+<li>calling dynamically defined methods
+<ul>
+<li>method is defined as a dynamic function that takes in one dynamic parameter
+<ul>
+<li>calls method with parameter specified<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls method with even if parameter is not specified<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls method with parameters specified as named parameters<span class="spec-passed">&lArr; Passed</span></li>
+<li>ignores unnamed parameters if name parameters have been specified<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>method is defined as a dynamic method that takes in one dynamic parameter
+<ul>
+<li>calls method with parameter specified<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls method with even if parameter is not specified<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>method aliasing
+<ul>
+<li>methods can be aliased<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>method missing
+<ul>
+<li>method missing is called if method doesn't exist but method missing is defined<span class="spec-passed">&lArr; Passed</span></li>
+<li>method missing has accessed to the instance of gemini that it was invoked on<span class="spec-passed">&lArr; Passed</span></li>
+<li>parameter values can be accessed via ParameterMethod of the object passed into method missing<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>inheritance of gemini
+<ul>
+<li>inherited gemini with defined methods
+<ul>
+<li>calls underlying property<span class="spec-passed">&lArr; Passed</span></li>
+<li>sets underlying property<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls defined method<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls defined property<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>double inheritance
+<ul>
+<li>calls methods on root gemini with<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls method on first gemini<span class="spec-passed">&lArr; Passed</span></li>
+<li>calls method on top most gemini<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>private dynamic methods and functions
+<ul>
+<li>private function that take in no parameters and return dynamic are publicly accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>original exception is retained for private functions<span class="spec-passed">&lArr; Passed</span></li>
+<li>private function that take in dynamic and return dynamic are publicly accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>private function that take in dynamic and return dynamic retain exception<span class="spec-passed">&lArr; Passed</span></li>
+<li>private delegate that take in dynamic can interperet generic parameters<span class="spec-passed">&lArr; Passed</span></li>
+<li>private method that takes in no parameters is publically accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>private method that takes in no parameters retains origin exception<span class="spec-passed">&lArr; Passed</span></li>
+<li>private method that takes in dynamic parameter is publically accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>private method that takes in dynamic parameter retains exception<span class="spec-passed">&lArr; Passed</span></li>
+<li>private function that return enumerable of dynamic is publically accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>private function that takes a parameter and returns enumerable of dynamic is publically accessible<span class="spec-passed">&lArr; Passed</span></li>
+<li>private delegate (returning enumerable) that take in dynamic can interperet generic parameters<span class="spec-passed">&lArr; Passed</span></li>
+<li>private members can be redefined<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>inheriting gemini that has private methods
+<ul>
+<li>methods defined on base class are publically defined on inherited class<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>double inherited gemini that has private methods
+<ul>
+<li>methods defined on base class are publically defined on inherited class<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting member
+<ul>
+<li>when setting property of gemini
+<ul>
+<li>sets property on underlying prototype<span class="spec-passed">&lArr; Passed</span></li>
+<li>sets property of underlying prototype even if property's first letter doesn't match case<span class="spec-passed">&lArr; Passed</span></li>
+<li>sets property of underlying prototype even if property's first letter is capitalized, but underlying property is lowercase<span class="spec-passed">&lArr; Passed</span></li>
+<li>ignores case for geminied entity<span class="spec-passed">&lArr; Passed</span></li>
+<li>sets property to a new value if the property doesn't exist<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>calling set members
+<ul>
+<li>setting a single member
+<ul>
+<li>sets member<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>setting multiple members
+<ul>
+<li>sets multiple members<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">describe Info</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">describe types</div>
+    <div class="context-parent-body">
+<ul>
+<li>of kind
+<ul>
+<li>looks at inheritance heirarchy for strongly typed objects<span class="spec-passed">&lArr; Passed</span></li>
+<li>looks at inheritance heirarchy for gemini's<span class="spec-passed">&lArr; Passed</span></li>
+<li>includes modules that are mixed in for a gemini instance<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">extending gemini</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">performance against nunit</div>
+    <div class="context-parent-body">
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title">describe ParamsModelBinder</div>
+    <div class="context-parent-body">
+<ul>
+<li>mvc specific exclusions
+<ul>
+<li>excludes the anti forgery form value (not need past the action filter)<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>describe casting assumptions
+<ul>
+<li>evaluating form collection for potential Int id candidate
+<ul>
+<li>name ends in Id
+<ul>
+<li>comparing key's value with an int passes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>name ends in Id but isn't an int
+<ul>
+<li>keeps original value<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>values with leading zero's is supplied
+<ul>
+<li>converts to int<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>name ends in ID
+<ul>
+<li>comparing key's value with an int passes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>name contains ID
+<ul>
+<li>disregards conversion<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>evaluating form collection for potential Guid id candidate
+<ul>
+<li>name ends in Id
+<ul>
+<li>comparing key's value with a guid passes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>name ends in ID
+<ul>
+<li>comparing key's value with a guid passes<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>saving dynamic params
+<ul>
+<li>persists saveable values to the database<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>mass assignment
+<ul>
+<li>allows the ability to exclude fields<span class="spec-passed">&lArr; Passed</span></li>
+<li>allows the ability to select fields<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+<div class="context-parent">
+  <div class="context-parent-title"> seed</div>
+    <div class="context-parent-body">
+<ul>
+<li>deleting records
+<ul>
+<li>it deletes all records in all tables in the database<span class="spec-passed">&lArr; Passed</span></li>
+<li>it key contraints are reenabled after deletion<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>dropping column
+<ul>
+<li>it works<span class="spec-passed">&lArr; Passed</span></li>
+<li>specify constraints can be dropped too<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>execute non query
+<ul>
+<li>specify a single string query is executed by seed<span class="spec-passed">&lArr; Passed</span></li>
+<li>specify a function that returns a string is executed by seed<span class="spec-passed">&lArr; Passed</span></li>
+<li>specify a function that returns a collection is executed by seed<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>executing scripts
+<ul>
+<li>it executes scripts up to specified script<span class="spec-passed">&lArr; Passed</span></li>
+<li>it executes scripts thru specified script<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>exporting script
+<ul>
+<li>it exports a script that returns a single script<span class="spec-passed">&lArr; Passed</span></li>
+<li>it exports a script that returns multiple scripts<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>renaming column
+<ul>
+<li>it works<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>when adding columns
+<ul>
+<li>add int column
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>the column can be inserted into<span class="spec-passed">&lArr; Passed</span></li>
+<li>nulls are allowed<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>add not null int column
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>nulls are not allowed<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>add two int columns
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>both columns can be inserted into<span class="spec-passed">&lArr; Passed</span></li>
+<li>nulls are allowed<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>column with default value
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>default value is adhered to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>two columns with default values
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>default values are adhered to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>add date column with default value of GETDATE
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>default value is set to todays date<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>add guid column with default value of newid
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>generates a new guid<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>add foreign key column
+<ul>
+<li>creates the alter table statement<span class="spec-passed">&lArr; Passed</span></li>
+<li>foreign key constraint is applied<span class="spec-passed">&lArr; Passed</span></li>
+<li>allows insert if record exists in constraint table<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>when creating table
+<ul>
+<li>table with a string column
+<ul>
+<li>the command contains create table with column and type<span class="spec-passed">&lArr; Passed</span></li>
+<li>table can be queried<span class="spec-passed">&lArr; Passed</span></li>
+<li>nulls can be inserted into table<span class="spec-passed">&lArr; Passed</span></li>
+<li>length specification is adhered to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>column has a null definition
+<ul>
+<li>the command creates column as not null<span class="spec-passed">&lArr; Passed</span></li>
+<li>table can be queried<span class="spec-passed">&lArr; Passed</span></li>
+<li>nulls cannot be inserted into table<span class="spec-passed">&lArr; Passed</span></li>
+<li>length specification is adhered to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>column has default value
+<ul>
+<li>the command creates column with default value<span class="spec-passed">&lArr; Passed</span></li>
+<li>default value is set<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>table with two columns
+<ul>
+<li>contains both columns in create script<span class="spec-passed">&lArr; Passed</span></li>
+<li>both columns are selectable<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>primary key column
+<ul>
+<li>contains primary key definition<span class="spec-passed">&lArr; Passed</span></li>
+<li>it doesn't allow duplicate guid entries<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>identity column
+<ul>
+<li>contains identity definition<span class="spec-passed">&lArr; Passed</span></li>
+<li>inserts auto increment id column<span class="spec-passed">&lArr; Passed</span></li>
+<li>doesn't allow the insert of id collumn<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>foreign key column
+<ul>
+<li>contains identity definition<span class="spec-passed">&lArr; Passed</span></li>
+<li>the foreign key is nullable<span class="spec-passed">&lArr; Passed</span></li>
+<li>the foreign key constraint is adhered to<span class="spec-passed">&lArr; Passed</span></li>
+<li>allows insert if foreign key matches<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>foreign key column not null
+<ul>
+<li>contains identity definition<span class="spec-passed">&lArr; Passed</span></li>
+<li>the foreign key column does not accept nulls<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>generating a table where column is an identity column and primary key
+<ul>
+<li>contains identity definition<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li>generating composite primary keys
+<ul>
+<li>contains primary key constraint for both columns<span class="spec-passed">&lArr; Passed</span></li>
+<li>multi column primary key constraint is adhered to<span class="spec-passed">&lArr; Passed</span></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+  </div>
+</div>
+</html>
+</body>
+

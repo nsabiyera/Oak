@@ -8,7 +8,6 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicRepository
 {
-    [Tag("wip")]
     class detecting_inefficient_queries : nspec
     {
         void specify_exact_matches_on_the_same_thread_and_stack_trace_are_considered_inefficient()
