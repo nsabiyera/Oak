@@ -15,7 +15,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Changes
             return new PersonWithAutoProps(dto).InitializeExtensions();
         }
 
-        [Tag("wip")]
         void specify_gettable_properties_are_not_tracked_for_changes()
         {
             var person = NewPerson(new { });

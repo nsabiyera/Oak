@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>oak-json</id> 
+    <version>1.0.0</version> 
+    <authors>Amir Rajan</authors>
+    <description>Just the JSON capabilities of Oak</description> 
+    <language>en-US</language>
+    <projectUrl>http://amirrajan.github.com/Oak/</projectUrl>
+    <licenseUrl>https://github.com/amirrajan/Oak/blob/master/license.txt</licenseUrl>
+    <tags>dynamic mvc migrations rails aspnetmvc oak</tags>
+  </metadata>
+  <files>
+    <file src="Oak\DynamicToJson.cs" target="content\Oak\DynamicToJson.cs" />
+    <file src="Oak\JsonToDynamic.cs" target="content\Oak\JsonToDynamic.cs" />
+    <file src="Oak\ObjectExtensions.cs" target="content\Oak\ObjectExtensions.cs" />
+    <file src="Oak\Gemini.cs" target="content\Oak\Gemini.cs" />
+    <file src="Oak\GeminiInfo.cs" target="content\Oak\GeminiInfo.cs" />
+    <file src="External Assemblies\Newtonsoft.Json.dll" target = "lib\Newtonsoft.Json.dll" />
+  </files>
+</package>

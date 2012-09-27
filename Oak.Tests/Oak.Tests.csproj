@@ -225,6 +225,7 @@
     <Compile Include="describe_Gemini\performance_against_nunit.cs" />
     <Compile Include="describe_Gemini\setting_member.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
+    <Compile Include="describe_JsonToDynamic.cs" />
     <Compile Include="describe_ParamsModelBinder.cs" />
     <Compile Include="describe_Seed\deleting_records.cs" />
     <Compile Include="describe_Seed\dropping_column.cs" />

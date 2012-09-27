@@ -82,6 +82,7 @@ namespace Oak
         {
             return o.GetType() == typeof(Decimal) || 
                 o.GetType() == typeof(int) || 
+                o.GetType() == typeof(long) || 
                 o.GetType() == typeof(double);
         }
 

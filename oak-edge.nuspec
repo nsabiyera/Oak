@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>1.6.8</version> 
+    <version>1.7.0</version> 
     <authors>Amir Rajan</authors>
     <description>Bring dynamic goodness and frictionless development to ASP .NET MVC</description> 
     <language>en-US</language>
@@ -14,6 +14,7 @@
     <file src="Oak\App_Code\OakForm.cshtml" target="content\App_Code\OakForm.cshtml" />
     <file src="Oak\ConnectionProfile.cs" target="content\Oak\ConnectionProfile.cs" />
     <file src="Oak\DynamicToJson.cs" target="content\Oak\DynamicToJson.cs" />
+    <file src="Oak\JsonToDynamic.cs" target="content\Oak\JsonToDynamic.cs" />
     <file src="Oak\DynamicJsonResult.cs" target="content\Oak\DynamicJsonResult.cs" />
     <file src="Oak\DynamicForm.cs" target="content\Oak\DynamicForm.cs" />
     <file src="Oak\DynamicModel.cs" target="content\Oak\DynamicModel.cs" />
@@ -34,5 +35,6 @@
     <file src="Oak\BootStrap.cs" target="content\Oak\BootStrap.cs" />
     <file src="Oak\ReleaseNotes.txt" target="content\Oak\ReleaseNotes.txt" />
     <file src="Oak\Controllers\SeedController.cs" target="content\Controllers\SeedController.cs" />
+    <file src="External Assemblies\Newtonsoft.Json.dll" target = "lib\Newtonsoft.Json.dll" />
   </files>
 </package>
