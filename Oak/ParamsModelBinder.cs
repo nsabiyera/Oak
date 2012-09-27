@@ -83,7 +83,7 @@ namespace Oak
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            if (bindingContext.ModelName != "params") return base.BindModel(controllerContext, bindingContext);;
+            if (bindingContext.ModelName != "params") return base.BindModel(controllerContext, bindingContext);
 
             if (HasJsonBody(controllerContext)) return new DynamicParams(controllerContext.HttpContext.Request.InputStream, bindingContext.ValueProvider);
 
