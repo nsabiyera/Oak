@@ -41,7 +41,7 @@ let registerUser userName =
     click "#handle"
     "#handleTextBox" << userName
     click "input[value='update handle']"
-    ".growlinfo" == ("Your handle has been updated to @" + userName + ".") //<-- not working
+    ".growlinfo" == ("Your handle has been updated to @" + userName + ".")
     logOff()
 
 let loginAs userName =
