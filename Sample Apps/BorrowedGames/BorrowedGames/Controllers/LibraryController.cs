@@ -32,18 +32,20 @@ namespace BorrowedGames.Controllers
         [HttpPost]
         public dynamic Add(dynamic @params)
         {
+            var game = games.Single(@params.gameId);
+
             if (!UserHasGame(@params.gameId))
             {
                 var user = User();
 
                 library.Insert(user.Library().New(new { GameId = @params.gameId }));
 
-                SendNotificationEmails(user, 
-                    games.Single(@params.gameId), 
+                SendNotificationEmails(user,
+                    game, 
                     user.Followers());
             }
 
-            return Json(games.Single(@params.gameId));
+            return Json(game);
         }
 
         private void SendNotificationEmails(dynamic user, dynamic game, IEnumerable<dynamic> followers)
