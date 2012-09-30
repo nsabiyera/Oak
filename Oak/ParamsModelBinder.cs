@@ -11,12 +11,6 @@ namespace Oak
 {
     public static class StreamHelper
     {
-        public static Stream FromBeginning(this Stream s)
-        {
-            s.Seek(0, SeekOrigin.Begin);
-            return s;
-        }
-
         public static object JsonToGemini(this Stream s)
         {
             return JsonToDynamic.Parse(new StreamReader(s.FromBeginning()).ReadToEnd());
