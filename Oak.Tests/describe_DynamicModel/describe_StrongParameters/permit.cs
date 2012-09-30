@@ -37,7 +37,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_StrongParameters
 
                 throw new Exception("Exception was not thrown");
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 
             }

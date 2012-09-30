@@ -110,7 +110,7 @@
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_through.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_one.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_one_through.cs" />
-    <Compile Include="describe_DynamicModels\eager_loading_has_one_with_duplicates.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_belongs_to_with_duplicates.cs" />
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />

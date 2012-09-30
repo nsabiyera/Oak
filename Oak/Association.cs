@@ -487,6 +487,39 @@ namespace Oak
         }
     }
 
+    public class SingleAssociation : Association
+    {
+
+    }
+
+    public class EagerLoadSingleForAll
+    {
+        public static DynamicModels Execute(IEnumerable<dynamic> models,
+            DynamicRepository repository,
+            string associationName,
+            string sql,
+            Func<dynamic, dynamic, bool> findClause)
+        {
+            var belongsResult = new List<dynamic>(repository.Query(sql));
+
+            foreach (var item in belongsResult)
+            {
+                var relatedModels = models.Where(s => findClause(item, s));
+
+                foreach (var relateModel in relatedModels)
+                {
+                    var association = relateModel.AssociationNamed(associationName);
+
+                    association.Model = item;
+
+                    item.SetMember(relateModel.GetType().Name, relateModel);
+                }
+            }
+
+            return new DynamicModels(belongsResult);
+        }
+    }
+
     public class HasOne : SingleAssociation
     {
         public string ForeignKey { get; set; }
@@ -518,7 +551,7 @@ namespace Oak
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            var foreignKeyName = ForeignKeyName(models.First());
+            var foreignKeyName = ForeignKeyName(models.First()) as string;
 
             var ones = @"
             select * from {fromTable} 
@@ -526,25 +559,13 @@ namespace Oak
             in ({inClause})"
                 .Replace("{fromTable}", Repository.TableName)
                 .Replace("{foreignKey}", foreignKeyName)
-                .Replace("{inClause}", InClause(models,Id()));
+                .Replace("{inClause}", InClause(models, Id()));
 
-            var onesResult = new List<dynamic>(Repository.Query(ones));
-
-            foreach (var item in onesResult)
-            {
-                var model = models.FirstOrDefault(s => s.Id == item.GetMember(foreignKeyName));
-
-                if (model != null) //need to add a test of why this cant be null, this is here if the entity doesn't have an assocation reference
-                {
-                    var association = model.AssociationNamed(Named);
-
-                    association.Model = item;
-
-                    item.SetMember(model.GetType().Name, model);
-                }
-            }
-
-            return new DynamicModels(onesResult);
+            return EagerLoadSingleForAll.Execute(models,
+                       Repository,
+                       Named,
+                       ones,
+                       (result, source) => source.Id == result.GetMember(foreignKeyName));
         }
 
         public dynamic GetModelOrCache(dynamic model, dynamic options)
@@ -626,36 +647,19 @@ namespace Oak
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            var foreignKeyName = ForeignKeyName(models.First());
+            var foreignKeyName = ForeignKeyName(models.First()) as string;
 
             var sql = InnerJoinSelectClause(foreignKeyName,
                 Repository.GetType().Name,
                 through.GetType().Name,
                 ForeignKeyFor(Repository), models.ToList());
 
-            var onesThrough = new List<dynamic>(Repository.Query(sql));
-
-            foreach (var item in onesThrough)
-            {
-                var model = models.FirstOrDefault(s => s.Id == item.GetMember(foreignKeyName));
-
-                if (model != null)  //need to add a test of why this cant be null, this is here if the entity doesn't have an assocation reference
-                {
-                    var association = model.AssociationNamed(Named);
-
-                    association.Model = model;
-
-                    item.SetMember(model.GetType().Name, model);    
-                }
-            }
-
-            return new DynamicModels(onesThrough);
+            return EagerLoadSingleForAll.Execute(models,
+                       Repository,
+                       Named,
+                       sql,
+                       (result, source) => source.Id == result.GetMember(foreignKeyName));
         }
-    }
-
-    public class SingleAssociation : Association
-    {
-
     }
 
     public class BelongsTo : SingleAssociation
@@ -698,23 +702,11 @@ namespace Oak
                 .Replace("{primaryKey}", PrimaryKey)
                 .Replace("{inClause}", InClause(models, ForeignKey));
 
-            var belongsResult = new List<dynamic>(Repository.Query(ones));
-
-            foreach (var item in belongsResult)
-            {
-                var model = models.FirstOrDefault(s => item.GetMember(PrimaryKey) == s.GetMember(ForeignKey));
-                
-                if(model != null) //need to add a test of why this cant be null, this is here if the entity doesn't have an assocation reference
-                {
-                    var association = model.AssociationNamed(Named);
-
-                    association.Model = item;
-
-                    item.SetMember(model.GetType().Name, model);
-                }
-            }
-
-            return new DynamicModels(belongsResult);
+            return EagerLoadSingleForAll.Execute(models, 
+                       Repository, 
+                       Named, 
+                       ones, 
+                       (result, source) => result.GetMember(PrimaryKey) == source.GetMember(ForeignKey));
         }
 
         public dynamic GetModelOrCache(dynamic model, dynamic options)

@@ -17,6 +17,8 @@ namespace Oak.Tests.describe_DynamicModels.Classes
         public IEnumerable<dynamic> Associates()
         {
             yield return new HasManyThrough(games, through: library);
+
+            yield return new HasMany(library);
         }
     }
 }
