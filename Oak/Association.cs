@@ -487,7 +487,7 @@ namespace Oak
         }
     }
 
-    public class HasOne : Association
+    public class HasOne : SingleAssociation
     {
         public string ForeignKey { get; set; }
 
@@ -559,7 +559,7 @@ namespace Oak
         }
     }
 
-    public class HasOneThrough : Association
+    public class HasOneThrough : SingleAssociation
     {
         private DynamicRepository through;
 
@@ -653,7 +653,12 @@ namespace Oak
         }
     }
 
-    public class BelongsTo : Association
+    public class SingleAssociation : Association
+    {
+
+    }
+
+    public class BelongsTo : SingleAssociation
     {
         public string ForeignKey { get; set; }
 

@@ -41,7 +41,6 @@ namespace Oak.Tests
             jsonString = null;
         }
 
-        [Tag("wip")]
         void describe_prototype_to_json()
         {
             before = () =>

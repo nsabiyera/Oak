@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Oak.Tests.describe_DynamicModels.Classes;
+using Massive;
 
 namespace Oak.Tests.describe_DynamicModels
 {
@@ -23,10 +24,10 @@ namespace Oak.Tests.describe_DynamicModels
 
         void before_each()
         {
-            CreateSchema();
+            GameSchema.CreateSchema(seed);
 
             players = new Players();
-            
+
             new { Name = "Fluff To Ensure Different Id's" }.InsertInto("Players");
 
             player1Id = new { Name = "Jane" }.InsertInto("Players");
@@ -42,30 +43,7 @@ namespace Oak.Tests.describe_DynamicModels
             new { PlayerId = player2Id, GameId = game1Id }.InsertInto("Library");
         }
 
-        void CreateSchema()
-        {
-            seed.PurgeDb();
-
-            seed.CreateTable("Players", new dynamic[] 
-            { 
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                new { Name = "nvarchar(255)" }
-            }).ExecuteNonQuery();
-
-            seed.CreateTable("Games", new dynamic[] 
-            {
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                new { Title = "nvarchar(255)" }
-            }).ExecuteNonQuery();
-
-            seed.CreateTable("Library", new dynamic[] 
-            { 
-                new { Id = "int", Identity = true, PrimaryKey = true },
-                new { PlayerId = "int" },
-                new { GameId = "int" },
-            }).ExecuteNonQuery();
-        }
-
+        [Tag("wip")]
         void selecting_many_off_of_collection()
         {
             act = () => selectMany = (players.All() as dynamic).Games();
@@ -105,11 +83,64 @@ namespace Oak.Tests.describe_DynamicModels
             };
         }
 
+        List<string> sqlQueries;
+
+        [Tag("wip")]
+        void cache_access_in_specific_order()
+        {
+            before = () =>
+            {
+                GameSchema.CreateSchema(seed);
+
+                players = new Players();
+
+                player1Id = new { Name = "Jane" }.InsertInto("Players");
+
+                player2Id = new { Name = "John" }.InsertInto("Players");
+
+                game1Id = new { Title = "Mirror's Edge" }.InsertInto("Games");
+
+                game2Id = new { Title = "Gears of War" }.InsertInto("Games");
+
+                new { PlayerId = player1Id, GameId = game2Id }.InsertInto("Library");
+
+                new { PlayerId = player2Id, GameId = game1Id }.InsertInto("Library");
+
+                sqlQueries = new List<string>();
+
+                DynamicRepository.WriteDevLog = true;
+
+                DynamicRepository.LogSql = new Action<object, string, object[]>(
+                    (sender, sql, @params) =>
+                    {
+                        sqlQueries.Add(sql);
+                    });
+            };
+
+            it["in query isn't run if entries are access independently"] = () =>
+            {
+                var allPlayers = players.All() as dynamic;
+
+                (allPlayers as IEnumerable<dynamic>).Count().should_be(2);
+
+                foreach(var p in allPlayers)
+                {
+                    (p.Games() as IEnumerable<dynamic>).Count().should_be(1);
+                }
+
+                (allPlayers.Games() as IEnumerable<dynamic>).Count().should_be(2);
+
+                sqlQueries.Count().should_be(3);
+            };
+
+            after = () => DynamicRepository.WriteDevLog = false;
+        }
+
         void cacheing_for_select_many()
         {
             before = () =>
             {
-                CreateSchema();
+                GameSchema.CreateSchema(seed);
 
                 player1Id = new { Name = "Jane" }.InsertInto("Players");
 
@@ -120,7 +151,7 @@ namespace Oak.Tests.describe_DynamicModels
                 new { PlayerId = player1Id, GameId = game2Id }.InsertInto("Library");
 
             };
-            
+
             it["maintains cache of select many"] = () =>
             {
                 var playerCollection = players.All() as dynamic;
