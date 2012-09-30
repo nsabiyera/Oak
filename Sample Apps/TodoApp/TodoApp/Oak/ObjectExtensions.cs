@@ -29,6 +29,12 @@ namespace System
             return dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
         }
 
+        public static Stream FromBeginning(this Stream s)
+        {
+            s.Seek(0, SeekOrigin.Begin);
+            return s;
+        }
+
         public static string CollectionToString(this object[] args)
         {
             if (args == null) return "";
@@ -40,17 +46,6 @@ namespace System
             }
 
             return s;
-        }
-
-        public static Stream FromBeginning(this Stream s)
-        {
-            s.Seek(0, SeekOrigin.Begin);
-            return s;
-        }
-
-        public static object JsonToGemini(this Stream s)
-        {
-            return JsonToDynamic.Parse(new StreamReader(s.FromBeginning()).ReadToEnd());
         }
     }
 

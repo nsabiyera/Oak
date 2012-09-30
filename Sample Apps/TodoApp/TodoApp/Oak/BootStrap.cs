@@ -291,7 +291,6 @@ namespace Oak
         }
     }
 
-
     public class FirstTimeRecommendation : Recommendation
     {
         public override bool CanRecommend(Exception e)

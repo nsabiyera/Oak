@@ -9,6 +9,14 @@ using System.Linq;
 
 namespace Oak
 {
+    public static class StreamHelper
+    {
+        public static object JsonToGemini(this Stream s)
+        {
+            return JsonToDynamic.Parse(new StreamReader(s.FromBeginning()).ReadToEnd());
+        }
+    }
+
     public class DynamicParams : Gemini
     {
         private IValueProvider valueProvider;

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Reflection;
+using System.IO;
 
 namespace Oak
 {
@@ -15,6 +16,82 @@ namespace Oak
         public static void Init()
         {
             ModelBinders.Binders.Add(new KeyValuePair<Type, IModelBinder>(typeof(object), new ParamsModelBinder()));
+        }
+    }
+
+    public class ConsoleOutExceptionFilterAttribute : FilterAttribute, IExceptionFilter
+    {
+        public void OnException(ExceptionContext filterContext)
+        {
+            lock (Massive.DynamicRepository.ConsoleLogLock)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Out.WriteLine("======== Exception Occurred ==========");
+                Console.Out.WriteLine(Bullet.ScrubStackTrace(filterContext.Exception.ToString()));
+                Console.Out.WriteLine("====================================\n\n");
+                Console.ResetColor();
+            }
+        }
+    }
+
+    public class ConsoleOutPayloadFilterAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            lock (Massive.DynamicRepository.ConsoleLogLock)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+                if (HasPayload(filterContext))
+                {
+                    Console.Out.WriteLine("\n============ Payload ==========");
+                    Console.Out.WriteLine("For thread: " + Thread.CurrentThread.ManagedThreadId + "\n");
+                }
+
+                if (HasQueryString(filterContext))
+                {
+                    Console.Out.WriteLine("Query String:");
+                    var qs = filterContext.HttpContext.Request.QueryString;
+                    string formattedQueryStrings = string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s]));
+                    Console.Out.WriteLine(formattedQueryStrings + "\n");
+                }
+
+                if (HasForm(filterContext))
+                {
+                    Console.Out.WriteLine("Content:");
+                    Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
+                }
+
+                if (HasJson(filterContext))
+                {
+                    Console.Out.WriteLine("Content:");
+                    Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.InputStream, null) + "\n");
+                }
+
+                if (HasPayload(filterContext)) Console.Out.WriteLine("================================");
+
+                Console.ResetColor();
+            }
+        }
+
+        bool HasQueryString(ActionExecutingContext filterContext)
+        {
+            return filterContext.HttpContext.Request.QueryString != null && filterContext.HttpContext.Request.QueryString.Count > 0;
+        }
+
+        bool HasForm(ActionExecutingContext filterContext)
+        {
+            return filterContext.HttpContext.Request.Form != null && filterContext.HttpContext.Request.Form.Count > 0;
+        }
+
+        bool HasJson(ActionExecutingContext filterContext)
+        {
+            return filterContext.HttpContext.Request.ContentType == "application/json";
+        }
+
+        bool HasPayload(ActionExecutingContext filterContext)
+        {
+            return HasForm(filterContext) || HasQueryString(filterContext) || HasJson(filterContext);
         }
     }
 
@@ -28,6 +105,9 @@ namespace Oak
         public static void Init(HttpApplication mvcApplication)
         {
             if (!IsInDebugMode()) return;
+
+            GlobalFilters.Filters.Add(new ConsoleOutExceptionFilterAttribute());
+            GlobalFilters.Filters.Add(new ConsoleOutPayloadFilterAttribute());
 
             Recommendations = new List<Recommendation> 
             {
@@ -47,45 +127,6 @@ namespace Oak
             };
 
             mvcApplication.EndRequest += PrintInefficientQueries;
-
-            mvcApplication.BeginRequest += (sender, e) =>
-            {
-                lock (Massive.DynamicRepository.ConsoleLogLock)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-
-                    var printQueryStrings = mvcApplication.Request.QueryString != null && mvcApplication.Request.QueryString.Count > 0;
-
-                    var printForm = mvcApplication.Request.Form != null && mvcApplication.Request.Form.Count > 0;
-
-                    if (printForm || printQueryStrings)
-                    {
-                        Console.Out.WriteLine("\n============ Payload ==========");
-                        Console.Out.WriteLine("For thread: " + Thread.CurrentThread.ManagedThreadId + "\n");
-                    }
-
-                    if (printQueryStrings)
-                    {
-                        Console.Out.WriteLine("Query String:");
-                        var qs = mvcApplication.Request.QueryString;
-                        Console.Out.WriteLine(string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s])) + "\n");
-
-                    }
-
-                    if (printForm)
-                    {
-                        Console.Out.WriteLine("Content:");
-                        Console.Out.WriteLine(new DynamicParams(mvcApplication.Request.Form, null) + "\n");
-                    }
-
-                    if (printForm || printQueryStrings)
-                    {
-                        Console.Out.WriteLine("================================");
-                    }
-
-                    Console.ResetColor();
-                }
-            };
 
             Massive.DynamicRepository.WriteDevLog = true;
 
@@ -111,23 +152,15 @@ namespace Oak
         {
             return (sender, e) =>
             {
+                if (mvcApplication.Response.ContentType != "text/html") return;
+
                 lock (Massive.DynamicRepository.ConsoleLogLock)
                 {
                     var lastError = mvcApplication.Server.GetLastError();
                     var errorText = lastError.ToString();
-                    WriteToIISExpressConsole(errorText);
                     ReplaceExceptionWithRecommendationIfApplicable(mvcApplication, lastError);
                 }
             };
-        }
-
-        private static void WriteToIISExpressConsole(string errorText)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Out.WriteLine("======== Exception Occurred ==========");
-            Console.Out.WriteLine(Bullet.ScrubStackTrace(errorText));
-            Console.Out.WriteLine("====================================\n\n");
-            Console.ResetColor();
         }
 
         private static void ReplaceExceptionWithRecommendationIfApplicable(HttpApplication mvcApplication, Exception error)
@@ -257,7 +290,6 @@ namespace Oak
                 .Count() <= 2;
         }
     }
-
 
     public class FirstTimeRecommendation : Recommendation
     {

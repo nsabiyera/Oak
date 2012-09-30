@@ -164,7 +164,7 @@ namespace Oak
 
         private bool EagerLoad(string collectionName, object[] args, out object result)
         {
-            result = new List<dynamic>();
+            result = new HashSet<dynamic>();
 
             if (!Models.Any()) return true;
 
@@ -172,9 +172,18 @@ namespace Oak
 
             if (args.Any()) options = args[0];
 
-            var association = Models[0].AssociationNamed(collectionName);
+            foreach(var m in Models)
+            {
+                var association = m.AssociationNamed(collectionName);
+                
+                IEnumerable<dynamic> values = association.EagerLoad(Models, options);
 
-            result = association.EagerLoad(Models, options);
+                foreach(var v in values) (result as HashSet<dynamic>).Add(v);
+
+                if(association is SingleAssociation) break;
+            }
+
+            result = new DynamicModels(result as HashSet<dynamic>);
 
             return true;
         }
