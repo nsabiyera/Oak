@@ -38,6 +38,11 @@ namespace Oak
                 .ToList()
                 .Where(s => s.Key.ToLower().EndsWith("id"))
                 .ForEach(kvp => SetMember(kvp.Key, IntOrOriginal(kvp.Value)));
+
+            Hash()
+                .ToList()
+                .Where(s => s.Value != null && s.Value.Equals("null"))
+                .ForEach(kvp => SetMember(kvp.Key, null));
         }
 
         public DynamicParams(Stream body, IValueProvider valueProvider)

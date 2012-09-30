@@ -106,6 +106,25 @@ namespace Oak.Tests
                         ((Guid)asDynamic.PersonId).should_be(Guid.Empty);
                 };
             };
+
+            context["evaluating form collection for potential null values", "wip"] = () =>
+            {
+                context["form collection contains a string that has the literal value of 'null'"] = () =>
+                {
+                    before = () =>
+                    {
+                        nameValueCollection.Add("FirstName", "null");
+                        nameValueCollection.Add("LastName", null);
+                    };
+
+                    it["is set to null as opposed to the string value"] = () =>
+                    {
+                        ((object)asDynamic.FirstName).should_be(null);
+
+                        ((object)asDynamic.LastName).should_be(null);
+                    };
+                };
+            };
         }
 
         void saving_dynamic_params()
