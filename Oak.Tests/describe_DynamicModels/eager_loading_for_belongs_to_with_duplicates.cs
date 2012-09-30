@@ -53,7 +53,6 @@ namespace Oak.Tests.describe_DynamicModels
                 });
         }
 
-        [Tag("wip")]
         void belongs_where_entity_belongs_more_than_one_relation()
         {
             before = () =>
