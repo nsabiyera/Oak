@@ -43,7 +43,6 @@ namespace Oak.Tests.describe_DynamicModels
             new { PlayerId = player2Id, GameId = game1Id }.InsertInto("Library");
         }
 
-        [Tag("wip")]
         void selecting_many_off_of_collection()
         {
             act = () => selectMany = (players.All() as dynamic).Games();
@@ -85,7 +84,6 @@ namespace Oak.Tests.describe_DynamicModels
 
         List<string> sqlQueries;
 
-        [Tag("wip")]
         void cache_access_in_specific_order()
         {
             before = () =>
