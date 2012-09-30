@@ -1,0 +1,16 @@
+RestFacilitator facilitator = new RestFacilitator("http://search.twitter.com");
+
+dynamic json = facilitator.Get("search.json", new { q = "#haiku" });
+
+Console.WriteLine(JsonString.Parse(json));
+
+Console.WriteLine(json.max_id);
+
+Console.WriteLine(json.refresh_url);
+
+var tweets = (json.results as IEnumerable<dynamic>).Select(s => s.text);
+
+foreach(var tweet in tweets)
+{
+    Console.WriteLine(tweet);
+}

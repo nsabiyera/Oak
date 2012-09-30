@@ -1,0 +1,6 @@
+C:\Development\TodoApp\TodoApp\bin\TodoApp.dll
+C:\Development\TodoApp\TodoApp\bin\TodoApp.pdb
+C:\Development\TodoApp\TodoApp\bin\Newtonsoft.Json.dll
+C:\Development\TodoApp\TodoApp\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\TodoApp\TodoApp\obj\Debug\TodoApp.dll
+C:\Development\TodoApp\TodoApp\obj\Debug\TodoApp.pdb
