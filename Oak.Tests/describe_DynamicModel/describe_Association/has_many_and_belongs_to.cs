@@ -68,10 +68,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
     {
         public object student1Id, student2Id, course1Id, course2Id;
 
-        dynamic studentsResult;
-
-        dynamic coursesResult;
-
         void before_each()
         {
             seed.PurgeDb();
