@@ -50,7 +50,6 @@ namespace Oak.Tests.describe_DynamicModels
             new { Id = bluePrint2Id, CarId = car2Id, Sku = "Sku 2" }.InsertInto("BluePrints");
         }
 
-        [Tag("wip")]
         void it_eager_loads_and_caches()
         {
             List<string> sqlQueries = new List<string>();
