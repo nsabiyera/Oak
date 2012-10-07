@@ -30,7 +30,7 @@ namespace BorrowedGames.Models
         public IEnumerable<dynamic> Associates()
         {
             yield return
-            new HasManyThrough(users, through: friendAssociations, named: "Friends") { ForeignKey = "IsFollowing" };
+            new HasManyThrough(users, through: friendAssociations, methodName: "Friends") { XRefToColumn = "IsFollowing" };
 
             yield return
             new HasManyThrough(games, through: library);
@@ -42,7 +42,7 @@ namespace BorrowedGames.Models
             new HasMany(notInterestedGames);
 
             yield return
-            new HasMany(wantedGames, named: "Wants");
+            new HasMany(wantedGames, methodName: "Wants");
 
             yield return
             new HasMany(friendAssociations);

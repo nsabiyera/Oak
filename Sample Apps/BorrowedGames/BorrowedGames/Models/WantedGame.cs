@@ -24,9 +24,9 @@ namespace BorrowedGames.Models
         {
             yield return new BelongsTo(games);
 
-            yield return new BelongsTo(users) { ForeignKey = "FromUserId" };
+            yield return new BelongsTo(users) { IdColumnOfParentTable = "FromUserId" };
 
-            yield return new BelongsTo(users) { Named = "RequestedBy" };
+            yield return new BelongsTo(users, methodName: "RequestedBy");
         }
 
         dynamic IsBorrowed()

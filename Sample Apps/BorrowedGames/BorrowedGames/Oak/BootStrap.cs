@@ -52,8 +52,8 @@ namespace Oak
                 {
                     Console.Out.WriteLine("Query String:");
                     var qs = filterContext.HttpContext.Request.QueryString;
-                    Console.Out.WriteLine(string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s])) + "\n");
-
+                    string formattedQueryStrings = string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s]));
+                    Console.Out.WriteLine(formattedQueryStrings + "\n");
                 }
 
                 if (HasForm(filterContext))
@@ -65,7 +65,7 @@ namespace Oak
                 if (HasJson(filterContext))
                 {
                     Console.Out.WriteLine("Content:");
-                    Console.Out.WriteLine(new DynamicParams(HttpContext.Current.Request.InputStream, null) + "\n");
+                    Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.InputStream, null) + "\n");
                 }
 
                 if (HasPayload(filterContext)) Console.Out.WriteLine("================================");
@@ -152,6 +152,8 @@ namespace Oak
         {
             return (sender, e) =>
             {
+                if (mvcApplication.Response.ContentType != "text/html") return;
+
                 lock (Massive.DynamicRepository.ConsoleLogLock)
                 {
                     var lastError = mvcApplication.Server.GetLastError();
@@ -288,7 +290,6 @@ namespace Oak
                 .Count() <= 2;
         }
     }
-
 
     public class FirstTimeRecommendation : Recommendation
     {

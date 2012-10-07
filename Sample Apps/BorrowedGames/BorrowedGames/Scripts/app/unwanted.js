@@ -20,7 +20,9 @@
     shortName: function() {
       var name;
       name = this.name();
-      if (name.length > 21) name = name.substring(0, 20) + "... ";
+      if (name.length > 21) {
+        name = name.substring(0, 20) + "... ";
+      }
       return name += " (" + this.console() + ")";
     },
     console: function() {

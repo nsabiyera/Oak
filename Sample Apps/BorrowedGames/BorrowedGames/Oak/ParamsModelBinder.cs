@@ -11,12 +11,6 @@ namespace Oak
 {
     public static class StreamHelper
     {
-        public static Stream FromBeginning(this Stream s)
-        {
-            s.Seek(0, SeekOrigin.Begin);
-            return s;
-        }
-
         public static object JsonToGemini(this Stream s)
         {
             return JsonToDynamic.Parse(new StreamReader(s.FromBeginning()).ReadToEnd());
@@ -38,6 +32,11 @@ namespace Oak
                 .ToList()
                 .Where(s => s.Key.ToLower().EndsWith("id"))
                 .ForEach(kvp => SetMember(kvp.Key, IntOrOriginal(kvp.Value)));
+
+            Hash()
+                .ToList()
+                .Where(s => s.Value != null && s.Value.Equals("null"))
+                .ForEach(kvp => SetMember(kvp.Key, null));
         }
 
         public DynamicParams(Stream body, IValueProvider valueProvider)
