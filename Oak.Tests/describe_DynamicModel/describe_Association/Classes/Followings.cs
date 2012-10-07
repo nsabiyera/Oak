@@ -18,7 +18,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             yield return new BelongsTo(familys);
 
-            yield return new BelongsTo(familys, "Following") { ForeignKey = "FollowingId" };
+            yield return new BelongsTo(familys, "Following") { PropertyContainingIdValue = "FollowingId" };
         }
     }
 

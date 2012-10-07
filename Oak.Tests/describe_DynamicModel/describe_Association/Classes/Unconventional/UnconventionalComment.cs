@@ -17,7 +17,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return new BelongsTo(blogs) { ForeignKey = "fkBlogId" };
+            yield return new BelongsTo(blogs) { PropertyContainingIdValue = "fkBlogId" };
         }
     }
 }

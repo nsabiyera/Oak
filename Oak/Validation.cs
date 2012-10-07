@@ -82,11 +82,15 @@ namespace Oak
 
         public bool Validate(dynamic rule)
         {
+            if (rule.Before != null) rule.Before();
+
             if (rule.If != null && !rule.If()) return true;
 
             if (rule.Unless != null && rule.Unless()) return true;
 
             bool isValid = rule.Validate(@this);
+
+            if (rule.After != null) rule.After();
 
             if (!isValid) AddError(rule.Property, rule.Message());
 
@@ -147,6 +151,10 @@ namespace Oak
         public Func<bool> If { get; set; }
 
         public Func<bool> Unless { get; set; }
+
+        public Action Before { get; set; }
+
+        public Action After { get; set; }
     }
 
     public class Acceptance : Validation
@@ -259,7 +267,7 @@ namespace Oak
         public Uniqueness(string property, DynamicRepository usingRepository)
             : base(property)
         {
-            Using = usingRepository;
+            Repository = usingRepository;
         }
 
         public override void Init(dynamic entity)
@@ -269,7 +277,7 @@ namespace Oak
             if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is taken.";
         }
 
-        public DynamicRepository Using { get; set; }
+        public DynamicRepository Repository { get; set; }
 
         public bool Validate(dynamic entity)
         {
@@ -279,14 +287,14 @@ namespace Oak
 
             var values = new List<object> { value };
 
-            if (entity.RespondsTo("Id"))
+            if (entity.RespondsTo(Repository.PrimaryKeyField))
             {
-                whereClause += " and Id != @1";
+                whereClause += " and [" + Repository.PrimaryKeyField + "] != @1";
 
                 values.Add(entity.Id);
             }
 
-            if (Using.SingleWhere(whereClause, values.ToArray()) != null) return false;
+            if (Repository.SingleWhere(whereClause, values.ToArray()) != null) return false;
 
             return true;
         }

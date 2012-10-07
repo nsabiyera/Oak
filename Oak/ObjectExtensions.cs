@@ -26,7 +26,9 @@ namespace System
 
         public static IDictionary<string, object> Exclude(this IDictionary<string, object> dictionary, params string[] keys)
         {
-            return dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
+            var result = dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
+
+            return new Dictionary<string, object>(result, StringComparer.OrdinalIgnoreCase);
         }
 
         public static Stream FromBeginning(this Stream s)

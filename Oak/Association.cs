@@ -34,7 +34,7 @@ namespace Oak
 
         public dynamic AssociationNamed(dynamic collectionName)
         {
-            var association = referencedAssociations.FirstOrDefault(s => s.Named == collectionName || s.Named == Singularize(collectionName));
+            var association = referencedAssociations.FirstOrDefault(s => s.MethodName == collectionName || s.MethodName == Singularize(collectionName));
 
             if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
 
@@ -49,7 +49,7 @@ namespace Oak
 
     public class Association : Gemini
     {
-        public string Named { get; set; }
+        public string MethodName { get; set; }
 
         public DynamicRepository Repository { get; set; }
 
@@ -71,14 +71,14 @@ namespace Oak
             return name.Substring(0, name.Length - 1);
         }
 
-        public string ForeignKeyFor(object o)
+        public string SigularId(object o)
         {
             return Singular(o) + Id();
         }
 
         public string Id()
         {
-            return "Id";
+            return Repository.PrimaryKeyField;
         }
 
         public bool DiscardCache(dynamic options)
@@ -90,19 +90,26 @@ namespace Oak
             return options.discardCache;
         }
 
-        public string InnerJoinSelectClause(string fromColumn, string toTable, string throughTable, string foreignKey, params dynamic[] models)
+        public string InnerJoinSelectClause(string xRefFromColumn, 
+            string toTable, 
+            string xRefTable, 
+            string xRefToColumn, 
+            string toTableColumn,
+            string idProperty,
+            params dynamic[] models)
         {
             return @"
-            select {toTable}.*, {throughTable}.{fromColumn}
-            from {throughTable}
+            select {toTable}.*, {xRefTable}.{xRefFromColumn}
+            from {xRefTable}
             inner join {toTable}
-            on {throughTable}.{using} = {toTable}.Id
-            where {throughTable}.{fromColumn} in ({inClause})"
-                .Replace("{fromColumn}", fromColumn)
+            on {xRefTable}.{xRefToColumn} = {toTable}.{toTableColumn}
+            where {xRefTable}.{xRefFromColumn} in ({inClause})"
+                .Replace("{xRefFromColumn}", xRefFromColumn)
+                .Replace("{toTableColumn}", toTableColumn)
                 .Replace("{toTable}", toTable)
-                .Replace("{throughTable}", throughTable)
-                .Replace("{using}", foreignKey)
-                .Replace("{inClause}", InClause(models, Id()));
+                .Replace("{xRefTable}", xRefTable)
+                .Replace("{xRefToColumn}", xRefToColumn)
+                .Replace("{inClause}", InClause(models, idProperty));
         }
 
         public void AddReferenceBackToModel(dynamic association, dynamic model)
@@ -190,6 +197,8 @@ namespace Oak
     {
         public string ForeignKey { get; set; }
 
+        public string PropertyContainingIdValue { get; set; }
+
         public EagerLoadMany EagerLoadMany { get; set; }
 
         public HasMany(DynamicRepository repository)
@@ -198,29 +207,31 @@ namespace Oak
 
         }
 
-        public HasMany(DynamicRepository repository, string named)
+        public HasMany(DynamicRepository repository, string methodName)
         {
             this.Repository = repository;
 
-            this.Named = named ?? repository.GetType().Name;
+            this.MethodName = methodName ?? repository.TableName;
         }
 
         public void Init(dynamic model)
         {
             EagerLoadMany = new EagerLoadMany();
 
-            ForeignKey = ForeignKey ?? ForeignKeyFor(model);
+            ForeignKey = ForeignKey ?? SigularId(model);
 
-            var toTable = Repository.GetType().Name;
+            PropertyContainingIdValue = PropertyContainingIdValue ?? Id();
 
-            AddAssociationMethods(model, ForeignKey, toTable);
+            var toTable = Repository.TableName;
+
+            AddAssociationMethods(model, ForeignKey);
         }
 
-        private void AddAssociationMethods(dynamic model, string fromColumn, string toTable)
+        private void AddAssociationMethods(dynamic model, string fromColumn)
         {
-            model.SetMember(Named, Query(fromColumn, model));
+            model.SetMember(MethodName, Query(fromColumn, model));
 
-            model.SetMember(Singular(Named) + "Ids", QueryIds(fromColumn, model));
+            model.SetMember(Singular(MethodName) + "Ids", QueryIds(fromColumn, model));
         }
 
         public override void AddNewAssociationMethod(DynamicModels collection, dynamic model)
@@ -237,7 +248,7 @@ namespace Oak
         {
             var entity = new Gemini(attributes);
 
-            entity.SetMember(ForeignKey, model.GetMember(Id()));
+            entity.SetMember(ForeignKey, model.GetMember(PropertyContainingIdValue));
 
             return Repository.Projection(entity);
         }
@@ -272,7 +283,7 @@ namespace Oak
         {
             var query = SelectClause(models.ToArray());
 
-            return EagerLoadMany.Execute(options, Repository, Named, query, models, ForeignKey);
+            return EagerLoadMany.Execute(options, Repository, MethodName, query, models, ForeignKey);
         }
 
         private string SelectClause(params dynamic[] models)
@@ -283,7 +294,7 @@ namespace Oak
                 where {foreignKey} in ({inClause})"
                 .Replace("{childTable}", TableName)
                 .Replace("{foreignKey}", ForeignKey)
-                .Replace("{inClause}", InClause(models, Id()));
+                .Replace("{inClause}", InClause(models, PropertyContainingIdValue));
         }
     }
 
@@ -293,15 +304,17 @@ namespace Oak
 
         string throughTable;
 
-        string resolvedForeignKey;
-
         DynamicRepository through;
 
         public EagerLoadMany EagerLoadMany { get; set; }
 
-        public string ForeignKey { get; set; }
+        public string XRefToColumn { get; set; }
 
-        public string FromColumn { get; set; }
+        public string XRefFromColumn { get; set; }
+
+        public string ToTableColumn { get; set; }
+
+        public string PropertyContainingIdValue { get; set; }
 
         public HasManyThrough(DynamicRepository repository, DynamicRepository through)
             : this(repository, through, null)
@@ -309,26 +322,30 @@ namespace Oak
 
         }
 
-        public HasManyThrough(DynamicRepository repository, DynamicRepository through, string named)
+        public HasManyThrough(DynamicRepository repository, DynamicRepository through, string methodName)
         {
             this.Repository = repository;
 
             this.through = through;
 
-            this.throughTable = through.GetType().Name;
+            this.throughTable = through.TableName;
 
-            this.Named = named ?? repository.GetType().Name;
+            this.MethodName = methodName ?? repository.TableName;
         }
 
         public void Init(dynamic model)
         {
             EagerLoadMany = new EagerLoadMany();
 
-            FromColumn = FromColumn ?? ForeignKeyFor(model);
+            toTable = Repository.TableName;
 
-            toTable = Repository.GetType().Name;
+            XRefFromColumn = XRefFromColumn ?? SigularId(model);
 
-            resolvedForeignKey = ForeignKey ?? ForeignKeyFor(Repository);
+            XRefToColumn = XRefToColumn ?? SigularId(Repository);
+
+            ToTableColumn = ToTableColumn ?? Id();
+
+            PropertyContainingIdValue = PropertyContainingIdValue ?? Id();
 
             AddAssociationMethod(model);
 
@@ -338,11 +355,11 @@ namespace Oak
         private void AddAssociationMethod(dynamic model)
         {
             model.SetMember(
-                Named,
+                MethodName,
                 InnerJoinFor(model));
 
             model.SetMember(
-                Singular(Named) + "Ids",
+                Singular(MethodName) + "Ids",
                 QueryIds(model));
         }
 
@@ -354,7 +371,7 @@ namespace Oak
 
                 if (EagerLoadMany.Cache != null) return EagerLoadMany.Cache;
 
-                var models = (Repository.Query(InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, model)) as IEnumerable<dynamic>).ToList();
+                var models = (Repository.Query(InnerJoinSelectClause(XRefFromColumn, toTable, throughTable, XRefToColumn, ToTableColumn, PropertyContainingIdValue, model)) as IEnumerable<dynamic>).ToList();
 
                 foreach (var m in models) AddReferenceBackToModel(m, model);
 
@@ -368,9 +385,9 @@ namespace Oak
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            string sql = InnerJoinSelectClause(FromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray());
+            string sql = InnerJoinSelectClause(XRefFromColumn, toTable, throughTable, XRefToColumn, ToTableColumn, PropertyContainingIdValue, models.ToArray());
 
-            return EagerLoadMany.Execute(options, Repository, Named, sql, models, FromColumn);
+            return EagerLoadMany.Execute(options, Repository, MethodName, sql, models, XRefFromColumn);
         }
 
         private DynamicFunction QueryIds(dynamic model)
@@ -390,19 +407,19 @@ namespace Oak
 
         string throughTable;
 
-        string fromColumn;
-
         DynamicRepository reference;
-
-        string resolvedForeignKey;
 
         string toTable;
 
-        public string CrossRefenceTable { get; set; }
+        public string XRefTable { get; set; }
 
-        public string ForeignKey { get; set; }
+        public string XRefToColumn { get; set; }
 
-        public string FromColumn { get; set; }
+        public string XRefFromColumn { get; set; }
+
+        public string ToTableColumn { get; set; }
+
+        public string PropertyContainingIdValue { get; set; }
 
         public HasManyAndBelongsTo(DynamicRepository repository, DynamicRepository reference)
         {
@@ -414,20 +431,24 @@ namespace Oak
 
             throughTable = sorted.First() + sorted.Last();
 
-            Named = repository.GetType().Name;
+            MethodName = repository.TableName;
         }
 
         public void Init(dynamic model)
         {
             EagerLoadMany = new EagerLoadMany();
 
-            throughTable = CrossRefenceTable ?? throughTable;
-
-            fromColumn = FromColumn ?? ForeignKeyFor(model);
+            throughTable = XRefTable ?? throughTable;
 
             toTable = Repository.TableName;
 
-            resolvedForeignKey = ForeignKey ?? ForeignKeyFor(Repository);
+            XRefFromColumn = XRefFromColumn ?? SigularId(model);
+
+            XRefToColumn = XRefToColumn ?? SigularId(Repository);
+
+            ToTableColumn = ToTableColumn ?? Id();
+
+            PropertyContainingIdValue = PropertyContainingIdValue ?? Id();
 
             AddAssociationMethods(model);
 
@@ -437,11 +458,11 @@ namespace Oak
         public void AddAssociationMethods(dynamic model)
         {
             model.SetMember(
-                Named,
+                MethodName,
                 InnerJoinFor(model));
 
             model.SetMember(
-                Singular(Named) + "Ids",
+                Singular(MethodName) + "Ids",
                 QueryIds(model));
         }
 
@@ -463,7 +484,7 @@ namespace Oak
 
                 if (EagerLoadMany.Cache != null) return EagerLoadMany.Cache;
 
-                string innerJoinSelectClause = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, model);
+                string innerJoinSelectClause = InnerJoinSelectClause(XRefFromColumn, toTable, throughTable, XRefToColumn, ToTableColumn, PropertyContainingIdValue, model);
 
                 var models = (Repository.Query(innerJoinSelectClause) as IEnumerable<dynamic>).ToList();
 
@@ -481,9 +502,9 @@ namespace Oak
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            var sql = InnerJoinSelectClause(fromColumn, toTable, throughTable, resolvedForeignKey, models.ToArray());
+            var sql = InnerJoinSelectClause(XRefFromColumn, toTable, throughTable, XRefToColumn, ToTableColumn, PropertyContainingIdValue, models.ToArray());
 
-            return EagerLoadMany.Execute(options, Repository, Named, sql, models, fromColumn);
+            return EagerLoadMany.Execute(options, Repository, MethodName, sql, models, XRefFromColumn);
         }
     }
 
@@ -530,23 +551,23 @@ namespace Oak
 
         }
 
-        public HasOne(DynamicRepository repository, string named)
+        public HasOne(DynamicRepository repository, string methodName)
         {
             this.Repository = repository;
 
-            Named = named ?? Singular(Repository);
+            MethodName = methodName ?? Singular(Repository);
         }
 
         public void Init(dynamic model)
         {
             model.SetMember(
-                Named,
+                MethodName,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
         public string ForeignKeyName(dynamic model)
         {
-            return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
+            return string.IsNullOrEmpty(ForeignKey) ? SigularId(model) : ForeignKey;
         }
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
@@ -563,7 +584,7 @@ namespace Oak
 
             return EagerLoadSingleForAll.Execute(models,
                        Repository,
-                       Named,
+                       MethodName,
                        ones,
                        (result, source) => source.Id == result.GetMember(foreignKeyName));
         }
@@ -584,30 +605,39 @@ namespace Oak
     {
         private DynamicRepository through;
 
-        public string ForeignKey { get; set; }
+        public string XRefToColumn { get; set; }
+
+        public string XRefFromColumn { get; set; }
+
+        public string ToTableColumn { get; set; }
+
+        public string PropertyContainingIdValue { get; set; }
 
         public HasOneThrough(DynamicRepository repository, DynamicRepository through)
             : this(repository, through, null)
         {
         }
 
-        public HasOneThrough(DynamicRepository repository, DynamicRepository through, string named)
+        public HasOneThrough(DynamicRepository repository, DynamicRepository through, string methodName)
         {
             this.Repository = repository;
             this.through = through;
-            Named = named ?? Singular(Repository);
+            MethodName = methodName ?? Singular(Repository);
         }
 
         public void Init(dynamic model)
         {
+            XRefFromColumn = XRefFromColumn ?? SigularId(model);
+
+            XRefToColumn = XRefToColumn ?? SigularId(Repository);
+
+            ToTableColumn = ToTableColumn ?? Id();
+
+            PropertyContainingIdValue = PropertyContainingIdValue ?? Id();
+
             model.SetMember(
                 Singular(Repository),
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
-        }
-
-        public string ForeignKeyName(dynamic model)
-        {
-            return string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(model) : ForeignKey;
         }
 
         public dynamic GetModelOrCache(dynamic model, dynamic options)
@@ -616,57 +646,58 @@ namespace Oak
 
             if (Model != null) return Model;
 
-            Model = Query(ForeignKeyName(model),
-                Repository.GetType().Name,
-                through.GetType().Name,
-                ForeignKeyFor(Repository),
+            Model = Query(XRefFromColumn,
+                Repository.TableName,
+                through.TableName,
+                XRefToColumn,
+                ToTableColumn,
+                PropertyContainingIdValue,
                 new List<dynamic>() { model })();
 
             return Model;
         }
 
-        public string InnerJoinSelectClause(string fromColumn, string toTable, string throughTable, string @using, List<dynamic> models)
+        private DynamicFunction Query(string xRefFromColumn, 
+            string toTable, 
+            string xRefTable, 
+            string xRefToColumn, 
+            string toTableColumn, 
+            string propertyContainingIdValue, 
+            List<dynamic> models)
         {
-            return @"
-                select {toTable}.*, {throughTable}.{fromColumn}
-                from {throughTable}
-                inner join {toTable}
-                on {throughTable}.{using} = {toTable}.Id
-                where {fromColumn} in ({in})"
-                    .Replace("{toTable}", toTable)
-                    .Replace("{throughTable}", throughTable)
-                    .Replace("{using}", @using)
-                    .Replace("{fromColumn}", fromColumn)
-                    .Replace("{in}", InClause(models, Id()));
-        }
-
-        private DynamicFunction Query(string fromColumn, string toTable, string throughTable, string @using, List<dynamic> models)
-        {
-            return () => Repository.Query(InnerJoinSelectClause(fromColumn, toTable, throughTable, @using, models)).FirstOrDefault();
+            return () => Repository.Query(InnerJoinSelectClause(xRefFromColumn, 
+                                              toTable, 
+                                              xRefTable, 
+                                              xRefToColumn, 
+                                              toTableColumn, 
+                                              propertyContainingIdValue, 
+                                              models.ToArray())).FirstOrDefault();
         }
 
         public IEnumerable<dynamic> EagerLoad(IEnumerable<dynamic> models, dynamic options)
         {
-            var foreignKeyName = ForeignKeyName(models.First()) as string;
+            var xRefFromColumn = XRefFromColumn;
 
-            var sql = InnerJoinSelectClause(foreignKeyName,
-                Repository.GetType().Name,
-                through.GetType().Name,
-                ForeignKeyFor(Repository), models.ToList());
+            var sql = InnerJoinSelectClause(xRefFromColumn,
+                Repository.TableName,
+                through.TableName,
+                XRefToColumn,
+                ToTableColumn,
+                PropertyContainingIdValue, models.ToArray());
 
             return EagerLoadSingleForAll.Execute(models,
                        Repository,
-                       Named,
+                       MethodName,
                        sql,
-                       (result, source) => source.Id == result.GetMember(foreignKeyName));
+                       (result, source) => source.Id == result.GetMember(xRefFromColumn));
         }
     }
 
     public class BelongsTo : SingleAssociation
     {
-        public string ForeignKey { get; set; }
+        public string PropertyContainingIdValue { get; set; }
 
-        public string PrimaryKey { get; set; }
+        public string IdColumnOfParentTable { get; set; }
 
         public BelongsTo(DynamicRepository repository)
             : this(repository, null)
@@ -674,21 +705,21 @@ namespace Oak
 
         }
 
-        public BelongsTo(DynamicRepository repository, string named)
+        public BelongsTo(DynamicRepository repository, string methodName)
         {
             this.Repository = repository;
 
-            Named = named ?? Singular(repository);
+            MethodName = methodName ?? Singular(repository);
         }
 
         public void Init(dynamic model)
         {
-            ForeignKey = string.IsNullOrEmpty(ForeignKey) ? ForeignKeyFor(Repository) : ForeignKey;
+            PropertyContainingIdValue = string.IsNullOrEmpty(PropertyContainingIdValue) ? SigularId(Repository) : PropertyContainingIdValue;
 
-            PrimaryKey = string.IsNullOrEmpty(PrimaryKey) ? "Id" : PrimaryKey;
+            IdColumnOfParentTable = string.IsNullOrEmpty(IdColumnOfParentTable) ? "Id" : IdColumnOfParentTable;
 
             model.SetMember(
-                Named,
+                MethodName,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
@@ -699,14 +730,14 @@ namespace Oak
             where {primaryKey}
             in ({inClause})"
                 .Replace("{fromTable}", Repository.TableName)
-                .Replace("{primaryKey}", PrimaryKey)
-                .Replace("{inClause}", InClause(models, ForeignKey));
+                .Replace("{primaryKey}", IdColumnOfParentTable)
+                .Replace("{inClause}", InClause(models, PropertyContainingIdValue));
 
             return EagerLoadSingleForAll.Execute(models, 
                        Repository, 
-                       Named, 
+                       MethodName, 
                        ones, 
-                       (result, source) => result.GetMember(PrimaryKey) == source.GetMember(ForeignKey));
+                       (result, source) => result.GetMember(IdColumnOfParentTable) == source.GetMember(PropertyContainingIdValue));
         }
 
         public dynamic GetModelOrCache(dynamic model, dynamic options)
@@ -715,9 +746,9 @@ namespace Oak
 
             if (Model != null) return Model;
 
-            string whereClause = string.Format("{0} = @0", PrimaryKey);
+            string whereClause = string.Format("{0} = @0", IdColumnOfParentTable);
 
-            Model = Repository.SingleWhere(whereClause, model.GetMember(ForeignKey));
+            Model = Repository.SingleWhere(whereClause, model.GetMember(PropertyContainingIdValue));
 
             return Model;
         }

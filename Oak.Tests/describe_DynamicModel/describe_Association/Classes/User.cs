@@ -8,12 +8,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         public GameWithAutoProps(object dto)
             : base(dto)
         {
-            
+
         }
 
         public GameWithAutoProps()
         {
-            
+
         }
 
         public int Id { get; set; }
@@ -25,12 +25,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         public LibraryWithAutoProps(object dto)
             : base(dto)
         {
-            
+
         }
 
         public LibraryWithAutoProps()
         {
-            
+
         }
 
         public int Id { get; set; }
@@ -43,12 +43,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         public FriendsWithAutoProps(object dto)
             : base(dto)
         {
-            
+
         }
 
         public FriendsWithAutoProps()
         {
-            
+
         }
 
         public int Id { get; set; }
@@ -82,15 +82,21 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
 
         public IEnumerable<dynamic> Associates()
         {
-            yield return new HasManyThrough(games, library) { FromColumn = "UserId" };
-
-            yield return new HasManyThrough(users, friends, named: "Friends")
+            yield return new HasManyThrough(games, library)
             {
-                ForeignKey = "IsFollowing",
-                FromColumn = "UserId"
+                XRefFromColumn = "UserId"
             };
 
-            yield return new HasMany(library) { ForeignKey = "UserId" };
+            yield return new HasManyThrough(users, friends, methodName: "Friends")
+            {
+                XRefToColumn = "IsFollowing",
+                XRefFromColumn = "UserId"
+            };
+
+            yield return new HasMany(library)
+            {
+                ForeignKey = "UserId"
+            };
         }
 
         public int Id { get; set; }
@@ -119,9 +125,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             yield return new HasManyThrough(games, library);
 
-            yield return new HasManyThrough(users, friends, named: "Friends")
+            yield return new HasManyThrough(users, friends, methodName: "Friends")
             {
-                ForeignKey = "IsFollowing"
+                XRefToColumn = "IsFollowing"
             };
 
             yield return new HasMany(library);

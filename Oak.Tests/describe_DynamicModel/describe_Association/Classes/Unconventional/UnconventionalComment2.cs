@@ -18,7 +18,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         public IEnumerable<dynamic> Associates()
         {
             yield return
-                new BelongsTo(blogs) { PrimaryKey = "BlogId" };
+                new BelongsTo(blogs) { IdColumnOfParentTable = "BlogId" };
         }
     }
 }
