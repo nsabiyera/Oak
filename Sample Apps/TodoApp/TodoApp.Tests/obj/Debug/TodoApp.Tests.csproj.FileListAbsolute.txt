@@ -1,0 +1,10 @@
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\TodoApp.Tests.dll.config
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\TodoApp.Tests.dll
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\TodoApp.Tests.pdb
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\Newtonsoft.Json.dll
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\NSpec.dll
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\TodoApp.dll
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\bin\Debug\TodoApp.pdb
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\obj\Debug\TodoApp.Tests.dll
+C:\Development\Oak\Sample Apps\TodoApp\TodoApp.Tests\obj\Debug\TodoApp.Tests.pdb

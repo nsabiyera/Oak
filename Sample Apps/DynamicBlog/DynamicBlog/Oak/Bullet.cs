@@ -39,6 +39,10 @@ comments.All().Include(""Blog"").";
 DynamicRepository, use the Include() method, for example: 
 blogs.All().Include(""Comments"", ""Tags"").";
 
+        static string closeButMayNotBeInefficient =
+@"These queries look pretty close, but have different execution paths
+and may not be inefficient, it's worth looking at.";
+
         public static IEnumerable<dynamic> InefficientQueries(List<SqlQueryLog> log)
         {
             var inefficientQueries = new List<dynamic>();
@@ -56,7 +60,8 @@ blogs.All().Include(""Comments"", ""Tags"").";
                     Id = Guid.NewGuid(),
                     record.Query,
                     record.StackTrace,
-                    record.ThreadId
+                    record.ThreadId,
+                    record.Args
                 }));
             }
 
@@ -72,17 +77,23 @@ blogs.All().Include(""Comments"", ""Tags"").";
 
                 if (first.Id == second.Id) continue;
 
-                if (IsExactStringMatch(first.Query, second.Query))
+                if (IsExactMatch(first, second))
                 {
                     AddQuery(inefficientQueries, first, redundantQueryErrorMessage, lookup);
 
                     AddQuery(inefficientQueries, second, redundantQueryErrorMessage, lookup);
                 }
-                else if (IsSqlSimilar(first.Query, second.Query))
+                else if (HasSimilarExecutionPath(first, second))
                 {
                     AddQuery(inefficientQueries, first, nPlusOneQueryErrorMessage, lookup);
 
                     AddQuery(inefficientQueries, second, nPlusOneQueryErrorMessage, lookup);
+                }
+                else if (HasSimilarQuery(first, second))
+                {
+                    AddQuery(inefficientQueries, first, closeButMayNotBeInefficient, lookup);
+
+                    AddQuery(inefficientQueries, second, closeButMayNotBeInefficient, lookup);
                 }
             }
 
@@ -96,7 +107,7 @@ blogs.All().Include(""Comments"", ""Tags"").";
                 inefficientQueries.Add(new Gemini(new
                 {
                     Id = queryLog.Id,
-                    Query = queryLog.Query,
+                    Query = queryLog.Query + "\r\n" + (queryLog.Args as object[]).CollectionToString(),
                     Reason = reason,
                     StackTrace = ScrubStackTrace(queryLog.StackTrace),
                     ThreadId = queryLog.ThreadId
@@ -106,17 +117,31 @@ blogs.All().Include(""Comments"", ""Tags"").";
             }
         }
 
-        public static bool IsSqlSimilar(string first, string second)
+        public static bool HasSimilarQuery(dynamic first, dynamic second)
         {
-            return SqlExcludingInStatement(first) == SqlExcludingInStatement(second);
+            return ExcludingInClause(first.Query) == ExcludingInClause(second.Query) &&
+                first.ThreadId == second.ThreadId;
         }
 
-        private static bool IsExactStringMatch(string first, string second)
+        public static bool HasSimilarExecutionPath(dynamic first, dynamic second)
         {
-            return first == second;
+            return ExcludingInClause(first.Query) == ExcludingInClause(second.Query) &&
+                HasSameExecutionPath(first, second);
         }
 
-        public static string SqlExcludingInStatement(string sql)
+        private static bool IsExactMatch(dynamic first, dynamic second)
+        {
+            return first.Query == second.Query &&
+                HasSameExecutionPath(first, second);
+        }
+
+        public static bool HasSameExecutionPath(dynamic first, dynamic second)
+        {
+            return first.ThreadId == second.ThreadId &&
+                ScrubStackTrace(first.StackTrace) == ScrubStackTrace(second.StackTrace);
+        }
+
+        public static string ExcludingInClause(string sql)
         {
             return Regex.Replace(sql, @" in \([^)]*\)", "");
         }

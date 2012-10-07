@@ -250,7 +250,7 @@ namespace Massive
                 System.Console.Out.WriteLine(
                     "\r\n==============\r\n\n" +
                     "[" + sender.GetType().Name + "], Thread [" + Thread.CurrentThread.ManagedThreadId + "]\n\n" +
-                    query + "\r\n" + string.Join(",", args) +
+                    query + "\r\n" + args.CollectionToString() +
                     "\r\n==============\r\n");
             }
         }

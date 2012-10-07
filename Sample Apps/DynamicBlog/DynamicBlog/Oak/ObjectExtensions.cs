@@ -6,6 +6,7 @@ using Oak;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reflection;
+using System.IO;
 
 namespace System
 {
@@ -25,7 +26,28 @@ namespace System
 
         public static IDictionary<string, object> Exclude(this IDictionary<string, object> dictionary, params string[] keys)
         {
-            return dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
+            var result = dictionary.Where(s => !keys.Contains(s.Key)).ToDictionary(s => s.Key, s => s.Value);
+
+            return new Dictionary<string, object>(result, StringComparer.OrdinalIgnoreCase);
+        }
+
+        public static Stream FromBeginning(this Stream s)
+        {
+            s.Seek(0, SeekOrigin.Begin);
+            return s;
+        }
+
+        public static string CollectionToString(this object[] args)
+        {
+            if (args == null) return "";
+
+            var s = "";
+            for (int i = 0; i < args.Length; i++)
+            {
+                s += "[" + i + "] " + args[i] + Environment.NewLine;
+            }
+
+            return s;
         }
     }
 
