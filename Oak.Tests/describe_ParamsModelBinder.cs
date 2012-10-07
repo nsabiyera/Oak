@@ -107,7 +107,7 @@ namespace Oak.Tests
                 };
             };
 
-            context["evaluating form collection for potential null values", "wip"] = () =>
+            context["evaluating form collection for potential null values"] = () =>
             {
                 context["form collection contains a string that has the literal value of 'null'"] = () =>
                 {

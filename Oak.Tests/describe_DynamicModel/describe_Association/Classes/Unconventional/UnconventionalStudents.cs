@@ -40,10 +40,10 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes.Unconvent
         {
             yield return new HasManyAndBelongsTo(courses, students)
             {
-                Named = "Courses",
-                CrossRefenceTable = "StudentsCourses",
-                FromColumn = "StudentId",
-                ForeignKey = "CourseId"
+                MethodName = "Courses",
+                XRefTable = "StudentsCourses",
+                XRefFromColumn = "StudentId",
+                XRefToColumn = "CourseId"
             };
         }
     }

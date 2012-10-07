@@ -21,9 +21,9 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.Classes
         {
             yield return new HasManyAndBelongsTo(courses, students)
             {
-                Named = "Courses",
-                ForeignKey = "CourseId",
-                FromColumn = "StudentId"
+                MethodName = "Courses",
+                XRefToColumn = "CourseId",
+                XRefFromColumn = "StudentId"
             };
         }
 
