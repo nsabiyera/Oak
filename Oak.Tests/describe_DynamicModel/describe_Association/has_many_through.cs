@@ -170,6 +170,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 user = new User(new { Id = 100 });
             };
 
+            context["building a game for a user off of the user object"] = () =>
+            {
+                act = () => game = user.NewGame(new { Title = "Final Fantasy VII" });
+
+                it["creates a game with specified attributes"] = () =>
+                    (game.Title as string).should_be("Final Fantasy VII");
+            };
+
+
             context["building a game for user"] = () =>
             {
                 act = () => game = user.Games().New(new { Title = "Final Fantasy VII" });

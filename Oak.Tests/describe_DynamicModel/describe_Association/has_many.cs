@@ -194,6 +194,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
                 it["is of type defined in projection"] = () => (comment as object).should_cast_to<Comment>();
             };
 
+            context["building a comment off of blog with attributes"] = () =>
+            {
+                act = () => comment = blog.NewComment(new { Text = "Hi" });
+
+                it["sets additional attributes"] = () => ((string)comment.Text).should_be("Hi");
+
+                it["is of type defined in projection"] = () => (comment as object).should_cast_to<Comment>();
+            };
+
             context["building a comment where the blog id is specified"] = () =>
             {
                 act = () => comment = blog.Comments().New(new { BlogId = 20 });
