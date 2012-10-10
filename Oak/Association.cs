@@ -478,6 +478,8 @@ namespace Oak
             model.SetMember(
                 Singular(MethodName) + "Ids",
                 QueryIds(model));
+
+            model.SetMember("New" + Singular(MethodName), NewItemDelegate());
         }
 
         private DynamicFunction QueryIds(dynamic model)
