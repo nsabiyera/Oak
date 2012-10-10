@@ -186,7 +186,7 @@ namespace Oak
 
                 assocation.EagerLoadMany.Cache = new DynamicModels(relatedTo);
 
-                assocation.AddNewAssociationMethod(assocation.EagerLoadMany.Cache);
+                assocation.AddNewAssociationMethod(assocation.EagerLoadMany.Cache, model);
             }
 
             return new DynamicModels(many);
