@@ -1,6 +1,0 @@
-C:\Development\Oak\Sample Apps\TodoApp\TodoApp\bin\TodoApp.dll
-C:\Development\Oak\Sample Apps\TodoApp\TodoApp\bin\TodoApp.pdb
-C:\Development\Oak\Sample Apps\TodoApp\TodoApp\bin\Newtonsoft.Json.dll
-C:\Development\Oak\Sample Apps\TodoApp\TodoApp\obj\Debug\ResolveAssemblyReference.cache
-C:\Development\Oak\Sample Apps\TodoApp\TodoApp\obj\Debug\TodoApp.dll
-C:\Development\Oak\Sample Apps\TodoApp\TodoApp\obj\Debug\TodoApp.pdb
