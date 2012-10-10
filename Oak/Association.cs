@@ -127,6 +127,11 @@ namespace Oak
             collection.SetMember("Repository", repository);
         }
 
+        public virtual void AddNewAssociationMethod(DynamicModels collection, dynamic model)
+        {
+            collection.SetMember("New", NewItemDelegate());
+        }
+
         public DynamicFunctionWithParam NewItemDelegate()
         {
             var newItemDelegate = new DynamicFunctionWithParam(attributes =>
@@ -246,7 +251,7 @@ namespace Oak
             return newItemDelegate;
         }
 
-        public void AddNewAssociationMethod(DynamicModels collection, dynamic model)
+        public override void AddNewAssociationMethod(DynamicModels collection, dynamic model)
         {
             collection.SetMember("New", NewItemDelegate(model));
         }
