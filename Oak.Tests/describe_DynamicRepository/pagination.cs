@@ -13,8 +13,6 @@ namespace Oak.Tests.describe_DynamicRepository
 
         Records records;
 
-        object recordToInsert;
-
         void before_each()
         {
             seed = new Seed();
