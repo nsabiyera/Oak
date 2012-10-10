@@ -83,11 +83,8 @@ namespace Oak.Tests.describe_DynamicModels
             sqlQueries.Count.should_be(2);
         }
 
-        [Tag("wip")]
         void specify_eager_loaded_collections_retain_creation_methods()
         {
-            System.Diagnostics.Debugger.Launch();
-
             var firstBook = books.All().Include("Chapters").First();
 
             var chapter = firstBook.Chapters().New(new { Name = "Chapter 3" });
