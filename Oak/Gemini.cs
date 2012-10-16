@@ -4,6 +4,10 @@ using System.Linq;
 using System.Dynamic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text;
+using System.IO;
+using System.Threading;
 
 
 namespace Oak
@@ -313,8 +317,13 @@ namespace Oak
         private object Invoke(MethodInfo method, object[] parameters)
         {
             try { return method.Invoke(this, parameters); }
-
-            catch (Exception ex) { throw ex.InnerException; }
+            catch (Exception ex) 
+            {
+                Exception innerException = ex.InnerException;
+                ThreadStart savestack = Delegate.CreateDelegate(typeof(ThreadStart), innerException, "InternalPreserveStackTrace", false, false) as ThreadStart;
+                if (savestack != null) savestack();
+                throw ex.InnerException; 
+            }
         }
 
         public BindingFlags PrivateFlags()

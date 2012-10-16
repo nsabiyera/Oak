@@ -77,7 +77,7 @@ namespace Oak.Tests.describe_Gemini
     }
 
     [Tag("performance")]
-    class performance_against_nunit : performance
+    class performance_against_nhibernate : performance
     {
         void specify_it_runs_fast_enough()
         {
