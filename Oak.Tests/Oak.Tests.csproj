@@ -220,10 +220,11 @@
     <Compile Include="describe_Gemini\describe_methods.cs" />
     <Compile Include="describe_Gemini\describe_responds_to.cs" />
     <Compile Include="describe_Gemini\describe_types.cs" />
+    <Compile Include="describe_Gemini\dynamic_methods_and_functions.cs" />
     <Compile Include="describe_Gemini\extending_gemini.cs" />
     <Compile Include="describe_Gemini\gemini_methods.cs" />
     <Compile Include="describe_Gemini\inheritance_of_gemini.cs" />
-    <Compile Include="describe_Gemini\performance_against_nunit.cs" />
+    <Compile Include="describe_Gemini\performance_against_nhibernate.cs" />
     <Compile Include="describe_Gemini\setting_member.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_JsonToDynamic.cs" />

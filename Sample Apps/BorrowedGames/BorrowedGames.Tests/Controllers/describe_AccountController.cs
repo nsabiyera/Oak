@@ -117,10 +117,5 @@ namespace BorrowedGames.Tests.Controllers
                     (result.ViewBag.Flash as string).should_be("Email is required.");
             };
         }
-
-        void after_each()
-        {
-            //smtpServer.Stop();
-        }
     }
 }

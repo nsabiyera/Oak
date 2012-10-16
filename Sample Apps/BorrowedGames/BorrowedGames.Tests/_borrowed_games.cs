@@ -149,5 +149,10 @@ namespace BorrowedGames.Tests
         {
             return DateTime.Today.AddMonths(1);
         }
+
+        public override string OnError(string flattendStackTrace)
+        {
+            return Bullet.ScrubStackTrace(flattendStackTrace);
+        }
     }
 }

@@ -135,7 +135,6 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association
             (newCourse.Name as string).should_be("Science");
         }
 
-        [Tag("wip")]
         void specify_new_reference_can_be_created_from_root()
         {
             var newCourse = Student().NewCourse(new { name = "Science" });

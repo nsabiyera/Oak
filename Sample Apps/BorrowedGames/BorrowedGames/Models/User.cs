@@ -124,7 +124,7 @@ namespace BorrowedGames.Models
 
         public dynamic GameInWantedList(dynamic gameId, dynamic fromUserId)
         {
-            return _.Wants().First(new { GameId = gameId, FromUserId = fromUserId });
+            return _.Wats().First(new { GameId = gameId, FromUserId = fromUserId });
         }
 
         public bool HasGame(dynamic game)
