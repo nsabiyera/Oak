@@ -157,7 +157,6 @@ namespace Oak
                 lock (Massive.DynamicRepository.ConsoleLogLock)
                 {
                     var lastError = mvcApplication.Server.GetLastError();
-                    var errorText = lastError.ToString();
                     ReplaceExceptionWithRecommendationIfApplicable(mvcApplication, lastError);
                 }
             };
@@ -219,7 +218,7 @@ namespace Oak
             Note: This error can also be seen in the IISExpress console.  Running <pre style=""display: inline; padding: 0px"">rake server</pre> starts up a IIS Express minimized with the following icon:
         </div>
     </div>
-</div>".Replace("{message}", error.Message)
+</div>".Replace("{message}", System.Web.HttpUtility.HtmlEncode(error.Message))
        .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(error.ToString()));
         }
 
