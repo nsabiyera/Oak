@@ -11,7 +11,20 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Exclusion("UserName") { In = new[] { "admin", "administrator" } };
+            yield return new Exclusion("UserName") { In = new[] { "admin", "administrator" }, ErrorMessage = "Invalid user name." };
+        }
+    }
+
+    public class RegistrationWithDeferredErrorMessage : DynamicModel
+    {
+        public RegistrationWithDeferredErrorMessage()
+            : base(new { })
+        {
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Exclusion("UserName") { In = new[] { "admin", "administrator" }, ErrorMessage = new DynamicFunction(() => "Invalid user name.") };
         }
     }
 
@@ -26,7 +39,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Exclusion("UserName") { In = new[] { "admin", "administrator" } };
+            yield return new Exclusion("UserName") { In = new[] { "admin", "administrator" }, ErrorMessage = "Invalid user name." };
         }
     }
 }

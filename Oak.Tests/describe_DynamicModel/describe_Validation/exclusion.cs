@@ -23,6 +23,16 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
         }
     }
 
+    class exclusion_for_dynamic_type_with_deferred_error_message : exclusion
+    {
+        void before_each()
+        {
+            registration = new RegistrationWithDeferredErrorMessage();
+
+            registration.UserName = "user";
+        }
+    }
+
     abstract class exclusion : nspec
     {
         public dynamic registration;
@@ -45,6 +55,13 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 before = () => registration.UserName = "administrator";
 
                 it["is not valid"] = () => isValid.should_be_false();
+
+                it["error message states that it's invalid"] = () =>
+                {
+                    registration.IsValid();
+
+                    (registration.FirstError() as string).should_be("Invalid user name.");
+                };
             };
 
             context["UserName does not match an entry in the exclusion list"] = () =>

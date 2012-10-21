@@ -30,6 +30,18 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
         }
     }
 
+    class confirmation_for_dynamic_object_with_defferred_error_message : confirmation
+    {
+        private void before_each()
+        {
+            person = new PersonWithDeferredErrorMessage();
+
+            person.Email = "user@example.com";
+
+            person.EmailConfirmation = "user@example.com";
+        }
+    }
+
     abstract class confirmation : nspec
     {
         public Seed seed;
@@ -73,6 +85,12 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 };
 
                 it["is invalid"] = () => isValid.should_be_false();
+
+                it["error message states that it's invalid"] = () => 
+                {  
+                    person.IsValid();
+                    (person.FirstError() as string).should_be("Email requires confirmation.");
+                };
             };
         }
 
