@@ -28,6 +28,19 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             return new User();
         }
     }
+
+    class uniquness_for_dynamic_class_with_deferred_error_message : uniqueness
+    {
+        void before_each()
+        {
+            users.Projection = d => new UserWithDeferredError(d);
+        }
+
+        public override dynamic NewUser()
+        {
+            return new UserWithDeferredError();
+        }
+    }
     
     abstract class uniqueness : nspec
     {
@@ -81,7 +94,14 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                     user.Email = "user@example.com";
                 };
 
-                it["user is valid"] = () => ((bool)user.IsValid()).should_be_false();
+                it["user is invalid"] = () => ((bool)user.IsValid()).should_be_false();
+
+                it["error message states the user is taken"] = () =>
+                {
+                    user.IsValid();
+
+                    (user.FirstError() as string).should_be("User user@example.com is taken.");
+                };
             };
 
             context["email that is taken belongs to current user"] = () =>
