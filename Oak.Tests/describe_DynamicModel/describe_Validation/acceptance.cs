@@ -79,7 +79,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
             {
                 before = () => legalDocument.TermsOfService = false;
 
-                it["error message reads 'TermsOfService is invalid.'"] = () => error.should_be("TermsOfService is invalid.");
+                it["error message reads 'TermsOfService is invalid.'"] = () => error.should_be("Terms of service requires acceptance");
             };
 
             context["Typed out acceptances has customized error message and is not valid"] = () =>

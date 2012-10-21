@@ -19,10 +19,31 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Uniqueness("Email", users);
+            yield return new Uniqueness("Email", users) { ErrorMessage = "User " + _.Email + " is taken." };
         }
 
         public string Email { get; set; }
+    }
+
+    public class UserWithDeferredError : DynamicModel
+    {
+        Users users;
+
+        public UserWithDeferredError()
+            : this(new { })
+        {
+        }
+
+        public UserWithDeferredError(object dto)
+            : base(dto)
+        {
+            users = new Users();
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Uniqueness("Email", users) { ErrorMessage = new DynamicFunction(() => "User " + _.Email + " is taken.") };
+        }
     }
     
     public class User : DynamicModel
@@ -42,7 +63,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Uniqueness("Email", users);
+            yield return new Uniqueness("Email", users) { ErrorMessage = new DynamicFunction(() => "User " + _.Email + " is taken.") };
         }
     }
 }

@@ -1,4 +1,13 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.3.9+
+oak-edge 1.7.6+
+gemini 1.1.9+
+cambium 1.3.6+
+=============== CHANGES ==================
+- added overloads on all associations for legacy databases
+
+
+============== FOR VERSIONS ==============
 oak 2.3.1+
 oak-edge 1.5.7+
 gemini 1.1.7+

@@ -36,7 +36,7 @@ namespace BorrowedGames.Models
             new Uniqueness("Email", users) { ErrorMessage = "Email is unavailable." };
 
             yield return
-            new Presence("Password");
+            new Presence("Password") { ErrorMessage = _.IDoNotExist };
 
             yield return
             new Confirmation("Password") { ErrorMessage = "Passwords do not match." };

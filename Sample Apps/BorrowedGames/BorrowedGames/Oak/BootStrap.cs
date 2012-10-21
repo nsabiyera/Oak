@@ -122,6 +122,7 @@ namespace Oak
                 new TutorialAddComment(),
                 new CreateTableRecommendation(),
                 new InvalidColumnRecommendation(),
+                new ValidationsFailedRecommendation(),
                 new NoDefinitionOnDerivedGeminiRecommendation(),
                 new NoDefinitionOnGeminiRecommendation()
             };
@@ -157,7 +158,6 @@ namespace Oak
                 lock (Massive.DynamicRepository.ConsoleLogLock)
                 {
                     var lastError = mvcApplication.Server.GetLastError();
-                    var errorText = lastError.ToString();
                     ReplaceExceptionWithRecommendationIfApplicable(mvcApplication, lastError);
                 }
             };
@@ -219,7 +219,7 @@ namespace Oak
             Note: This error can also be seen in the IISExpress console.  Running <pre style=""display: inline; padding: 0px"">rake server</pre> starts up a IIS Express minimized with the following icon:
         </div>
     </div>
-</div>".Replace("{message}", error.Message)
+</div>".Replace("{message}", System.Web.HttpUtility.HtmlEncode(error.Message))
        .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(error.ToString()));
         }
 
@@ -936,6 +936,21 @@ public ActionResult Index()
     return View();
 }
 </pre>";
+        }
+    }
+
+    public class ValidationsFailedRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            if (e.Message.Contains("Validation initialization failed for class ")) return true;
+
+            return false;
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"<h2>Review the Validates method.  The collection of validation rules is throwing an exception.</h2>";
         }
     }
 

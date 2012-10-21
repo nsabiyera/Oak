@@ -11,7 +11,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Acceptance("TermsOfService");
+            yield return new Acceptance("TermsOfService") { ErrorMessage = new DynamicFunction(() => "Terms of service requires acceptance") };
 
             yield return new Acceptance("TypedOutAcceptance")
             {
@@ -34,7 +34,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Acceptance("TermsOfService");
+            yield return new Acceptance("TermsOfService") { ErrorMessage = new DynamicFunction(() => "Terms of service requires acceptance") };
 
             yield return new Acceptance("TypedOutAcceptance")
             {

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Dynamic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text;
+using System.IO;
+using System.Threading;
 
 
 namespace Oak
@@ -225,9 +229,11 @@ namespace Oak
             }
         }
 
-        public void AddRedefinableDelegates()
+        public dynamic AddRedefinableDelegates()
         {
             foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
+
+            return this;
         }
 
         private void ApplyExtensions()
@@ -311,8 +317,7 @@ namespace Oak
         private object Invoke(MethodInfo method, object[] parameters)
         {
             try { return method.Invoke(this, parameters); }
-
-            catch (Exception ex) { throw ex.InnerException; }
+            catch (Exception ex) { throw InvocationException(ex); }
         }
 
         public BindingFlags PrivateFlags()
@@ -334,13 +339,24 @@ namespace Oak
             return true;
         }
 
-        public void Extend<T>() where T : class
+        public dynamic Extend<T>() where T : class
         {
             var constructor = typeof(T).GetConstructor(new Type[] { typeof(object) });
 
-            constructor.Invoke(new object[] { this });
+            try { constructor.Invoke(new object[] { this }); }
+            catch (Exception ex) { throw InvocationException(ex); }
 
             extendedWith.Add(typeof(T));
+
+            return this;
+        }
+
+        Exception InvocationException(Exception ex)
+        {
+            Exception innerException = ex.InnerException;
+            ThreadStart savestack = Delegate.CreateDelegate(typeof(ThreadStart), innerException, "InternalPreserveStackTrace", false, false) as ThreadStart;
+            if (savestack != null) savestack();
+            throw ex.InnerException;
         }
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)
@@ -478,14 +494,18 @@ namespace Oak
             return GeminiInfo.Parse(this);
         }
 
-        public virtual void SetMember(string property, object value, bool suppress)
+        public virtual dynamic SetMember(string property, object value, bool suppress)
         {
             TrySetMember(property, value, suppress);
+
+            return this;
         }
 
-        public virtual void SetMember(string property, object value)
+        public virtual dynamic SetMember(string property, object value)
         {
             TrySetMember(property, value, suppress: false);
+
+            return this;
         }
 
         void SetMembers(dynamic o)
@@ -605,9 +625,11 @@ namespace Oak
             return Hash().Where(s => s.Value is Delegate).ToList();
         }
 
-        public virtual void DeleteMember(string member)
+        public virtual dynamic DeleteMember(string member)
         {
             Hash().Remove(Fuzzy(Hash(), member));
+
+            return this;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)

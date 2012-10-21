@@ -31,13 +31,22 @@ namespace Oak
 
                 mixWith.SetMember("FirstError", new DynamicFunction(FirstError));
 
-                IEnumerable<dynamic> validationRules = @this.Validates();
-
-                foreach (var validationRule in validationRules)
+                try
                 {
-                    validationRule.Init(mixWith);
-
-                    AddRule(validationRule);
+                    IEnumerable<dynamic> validationRules = @this.Validates();
+                    foreach (var validationRule in validationRules)
+                    {
+                        validationRule.Init(mixWith);
+                        AddRule(validationRule);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        String.Format("Validation initialization failed for class {0}.  Check the Validates method on {0} for a validation declaration related to this exception: {1}", 
+                            @this.GetType().Name, 
+                            ex.Message), 
+                        ex);
                 }
             }
         }

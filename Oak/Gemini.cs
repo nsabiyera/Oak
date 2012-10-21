@@ -118,7 +118,8 @@ namespace Oak
     public delegate void DynamicMethodWithParam(dynamic parameter);
 
     public delegate dynamic DynamicMethod();
-
+    
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         static Gemini()
@@ -317,13 +318,7 @@ namespace Oak
         private object Invoke(MethodInfo method, object[] parameters)
         {
             try { return method.Invoke(this, parameters); }
-            catch (Exception ex) 
-            {
-                Exception innerException = ex.InnerException;
-                ThreadStart savestack = Delegate.CreateDelegate(typeof(ThreadStart), innerException, "InternalPreserveStackTrace", false, false) as ThreadStart;
-                if (savestack != null) savestack();
-                throw ex.InnerException; 
-            }
+            catch (Exception ex) { throw InvocationException(ex); }
         }
 
         public BindingFlags PrivateFlags()
@@ -349,11 +344,20 @@ namespace Oak
         {
             var constructor = typeof(T).GetConstructor(new Type[] { typeof(object) });
 
-            constructor.Invoke(new object[] { this });
+            try { constructor.Invoke(new object[] { this }); }
+            catch (Exception ex) { throw InvocationException(ex); }
 
             extendedWith.Add(typeof(T));
 
             return this;
+        }
+
+        Exception InvocationException(Exception ex)
+        {
+            Exception innerException = ex.InnerException;
+            ThreadStart savestack = Delegate.CreateDelegate(typeof(ThreadStart), innerException, "InternalPreserveStackTrace", false, false) as ThreadStart;
+            if (savestack != null) savestack();
+            throw ex.InnerException;
         }
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)
