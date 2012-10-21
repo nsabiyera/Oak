@@ -18,7 +18,26 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Confirmation("Email");
+            yield return new Confirmation("Email") { ErrorMessage = "Email requires confirmation." };
+        }
+    }
+    
+    public class PersonWithDeferredErrorMessage : DynamicModel
+    {
+        public PersonWithDeferredErrorMessage()
+            : this(new { })
+        {
+        }
+
+        public PersonWithDeferredErrorMessage(object dto)
+            : base(dto)
+        {
+
+        }
+
+        public IEnumerable<dynamic> Validates()
+        {
+            yield return new Confirmation("Email") { ErrorMessage = new DynamicFunction(() => "Email requires confirmation.") };
         }
     }
 
@@ -41,7 +60,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation.Classes
 
         public IEnumerable<dynamic> Validates()
         {
-            yield return new Confirmation("Email");
+            yield return new Confirmation("Email") { ErrorMessage = "Email requires confirmation." };
         }
     }
 }
