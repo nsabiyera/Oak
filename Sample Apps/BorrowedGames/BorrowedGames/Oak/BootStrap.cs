@@ -962,7 +962,15 @@ There are two ways you can define error messages, the first option is evaluated 
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
 //example of a ErrorMessage defined inside of the validates method
-yield return new Length(""Title"") { Minimum = 1, ErrorMessage = _ };
+yield return new Length(""Title"") { Minimum = 1, ErrorMessage = _.Title + "" is too short."" };
+</pre>
+<p>
+The second approach defers the retrieval of the error message that will allow for lazy evaluation:
+</p>
+<pre>
+<img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
+//example of a ErrorMessage defined inside of the validates method
+yield return new Length(""Title"") { Minimum = 1, ErrorMessage = new DynamicFunction(() => _.Title + "" is too short."") };
 </pre>
 ";
         }
