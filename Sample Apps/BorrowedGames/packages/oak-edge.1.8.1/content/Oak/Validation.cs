@@ -116,7 +116,7 @@ namespace Oak
     {
         public string Property { get; set; }
 
-        public string ErrorMessage { get; set; }
+        public dynamic ErrorMessage { get; set; }
 
         public Validation(string property)
         {
@@ -135,6 +135,8 @@ namespace Oak
 
         public virtual string Message()
         {
+            if (ErrorMessage is Delegate) return ErrorMessage();
+
             if (!string.IsNullOrEmpty(ErrorMessage)) return ErrorMessage;
 
             return Property + " is invalid.";
@@ -262,6 +264,8 @@ namespace Oak
         {
             base.Init(entity as object);
 
+            if (ErrorMessage != null) return;
+
             if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is required.";
         }
 
@@ -282,6 +286,8 @@ namespace Oak
         public override void Init(dynamic entity)
         {
             base.Init(entity as object);
+
+            if (ErrorMessage != null) return;
 
             if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is taken.";
         }
