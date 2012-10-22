@@ -10,7 +10,7 @@ start "firefox"
 
 before(fun _ -> logOff())
 
-xtest(fun _ ->
+test(fun _ ->
     describe "borrower returns game"
     requestGame()
     logOff()
@@ -19,16 +19,16 @@ xtest(fun _ ->
     click deleteBorrowedGameLink
     wantedGamesList *!= "currently borrowing")
 
-wip(fun _ -> 
+test(fun _ -> 
     describe "registering a user"
     reset()
     registerUser "user1")
 
-xtest(fun _ ->
+test(fun _ ->
     describe "request games"
     requestGame())
 
-xtest(fun _ ->
+test(fun _ ->
     describe "lender marks game as returned"
     requestGame()
     loginAs "user1"
