@@ -1,4 +1,39 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.4.3+
+oak-edge 1.8.3+
+gemini 1.2.2+
+cambium 1.4.0+
+=============== CHANGES ==================
+- added the Memoize module, the memoize module will cache values of your
+  methods
+
+public class SlowPerson : Gemini
+{
+    static SlowPerson()
+    {
+        Gemini.Extend<SlowPerson, Memoize>();
+    }
+
+    IEnumerable<dynamic> Memoize()
+    {
+        //define a method called Memoize
+        //and state that you want to memoize the SayHello
+        //method
+        yield return (DynamicFunctionWithParam)SayHello;
+    }
+
+    //this function will be called the first time and 
+    //any subsequent call with the same parameters
+    //will return a cached value
+    dynamic SayHello(dynamic otherPerson)
+    {
+        System.Threading.Thread.Sleep(10000);
+
+        return "Hello " + otherPerson.Name;
+    }
+}
+
+============== FOR VERSIONS ==============
 oak 2.3.9+
 oak-edge 1.7.6+
 gemini 1.1.9+

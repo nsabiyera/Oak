@@ -52,8 +52,8 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\oak-edge.1.8.1\lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\oak-edge.1.8.3\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
@@ -106,6 +106,7 @@
     <Compile Include="Oak\GeminiInfo.cs" />
     <Compile Include="Oak\JsonToDynamic.cs" />
     <Compile Include="Oak\Massive.cs" />
+    <Compile Include="Oak\Memoize.cs" />
     <Compile Include="Oak\ObjectExtensions.cs" />
     <Compile Include="Oak\ParamsModelBinder.cs" />
     <Compile Include="Oak\Query.cs" />
