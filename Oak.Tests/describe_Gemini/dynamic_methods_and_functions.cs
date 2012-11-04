@@ -59,7 +59,7 @@ namespace Oak.Tests.describe_Gemini
                 (gemini.Hello("Jane") as string).should_be("hello Jane");
 
             it["private function that take in dynamic and return dynamic retain exception"] =
-                expect<InvalidOperationException>(() => gemini.HelloException("Jane"));
+                expect<InvalidOperationException>(() => gemini.HelloExceptionWithParam("Jane"));
 
             it["private delegate that take in dynamic can interperet generic parameters"] = () =>
                 (gemini.HelloFullName(firstName: "Jane", lastName: "Doe") as string).should_be("hello Jane Doe");

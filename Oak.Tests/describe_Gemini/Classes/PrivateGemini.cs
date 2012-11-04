@@ -37,7 +37,7 @@ namespace Oak.Tests.describe_Gemini.Classes
             return "hello " + name;
         }
 
-        dynamic HelloException(dynamic name)
+        dynamic HelloExceptionWithParam(dynamic name)
         {
             throw new InvalidOperationException();
         }
