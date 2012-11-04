@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using NSpec;
 
-namespace Oak.Tests.describe_DynamicModel.describe_StrongParameters
+namespace Oak.Tests.describe_DynamicModel
 {
-    class permit : nspec
+    class describe_StrongParamerters : nspec
     {
         void specify_permitted_parameters_are_allowed_to_be_set_view_mass_assignment()
         {

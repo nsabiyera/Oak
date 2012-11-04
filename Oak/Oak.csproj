@@ -78,6 +78,7 @@
     <Compile Include="DynamicToJson.cs" />
     <Compile Include="GeminiInfo.cs" />
     <Compile Include="JsonToDynamic.cs" />
+    <Compile Include="Memoize.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="StrongParameters.cs" />
     <Compile Include="Validation.cs" />

@@ -232,7 +232,10 @@ namespace Oak
 
         public dynamic AddRedefinableDelegates()
         {
-            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
+            foreach (var method in DynamicDelegates(this.GetType()))
+            {
+                if(!RespondsTo(method.Name)) AddDynamicMember(method);
+            }
 
             return this;
         }
