@@ -6,7 +6,8 @@
     <authors>Amir Rajan</authors>
     <description>Dsl for generating sql that creates schema and inserts records.</description> 
     <language>en-US</language>
-    <licenseUrl>http://www.github.com/amirrajan/Oak</licenseUrl>
+    <projectUrl>http://amirrajan.github.com/Oak/</projectUrl>
+    <licenseUrl>https://github.com/amirrajan/Oak/blob/master/license.txt</licenseUrl>
     <tags>migrations schema oak</tags>
   </metadata>
   <files>

@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak</id> 
-    <version>2.4.2</version> 
+    <version>2.4.3</version> 
     <authors>Amir Rajan</authors>
     <description>Bring dynamic goodness and frictionless development to ASP .NET MVC</description> 
     <language>en-US</language>
@@ -29,6 +29,7 @@
     <file src="Oak\Seed.cs" target="content\Oak\Seed.cs" />
     <file src="Oak\Validation.cs" target="content\Oak\Validation.cs" />
     <file src="Oak\Association.cs" target="content\Oak\Association.cs" />
+    <file src="Oak\Memoize.cs" target="content\Oak\Memoize.cs" />
     <file src="Oak\Changes.cs" target="content\Oak\Changes.cs" />
     <file src="Oak\StrongParameters.cs" target="content\Oak\StrongParameters.cs" />
     <file src="Oak\Bullet.cs" target="content\Oak\Bullet.cs" />
