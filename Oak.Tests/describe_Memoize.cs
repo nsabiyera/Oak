@@ -48,7 +48,6 @@ namespace Oak.Tests
         }
     }
 
-    [Tag("wip")]
     class describe_Memoize : nspec
     {
         dynamic slowClass;

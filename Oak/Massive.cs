@@ -331,6 +331,11 @@ namespace Massive
             Execute(commands);
         }
 
+        public virtual void Save(IEnumerable<dynamic> things)
+        {
+            Save(things.ToArray());
+        }
+
         public virtual int Execute(DbCommand command)
         {
             return Execute(new DbCommand[] { command });

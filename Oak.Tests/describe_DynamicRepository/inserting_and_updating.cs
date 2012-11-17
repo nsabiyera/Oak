@@ -48,6 +48,34 @@ namespace Oak.Tests.describe_DynamicRepository
             };
         }
 
+        void inserting_many_records()
+        {
+            before = () =>
+            {
+                seed.CreateTable("Records", new dynamic[] 
+                { 
+                   seed.Id(),
+                   new { Name = "nvarchar(255)" }
+                }).ExecuteNonQuery();
+            };
+
+            it["enumerables are treated as many items to insert"] = () =>
+            {
+                List<dynamic> values = new List<dynamic>();
+                values.Add(new { Name = "foo" });
+                values.Add(new { Name = "bar" });
+                records.Save(values);
+
+                var record = records.All().First();
+
+                ((string)record.Name).should_be("foo");
+
+                record = records.All().Last();
+
+                ((string)record.Name).should_be("bar");
+            };
+        }
+
         void updating_every_type_of_sql_column()
         {
             before = () =>
