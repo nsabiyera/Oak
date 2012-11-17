@@ -24,6 +24,11 @@ Sample Apps/BattleShip/BattleShip.Tests/obj/*
 Sample Apps/BattleShip/BattleShip/bin/*
 Sample Apps/BattleShip/BattleShip/obj/*
 Sample Apps/BattleShip/BattleShip.suo
+Sample Apps/Peeps/Peeps.Tests/bin/*
+Sample Apps/Peeps/Peeps.Tests/obj/*
+Sample Apps/Peeps/Peeps/bin/*
+Sample Apps/Peeps/Peeps/obj/*
+Sample Apps/Peeps/Peeps.suo
 _Resharper.canopy
 *.ReSharper.user
 *.sql
