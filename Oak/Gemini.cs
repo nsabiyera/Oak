@@ -8,6 +8,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Collections;
+using System.Collections.Specialized;
 
 
 namespace Oak
@@ -119,7 +121,6 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
     
-    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         static Gemini()
@@ -212,6 +213,10 @@ namespace Oak
         private void AttachDtoValues(object dto)
         {
             if (dto == null) dto = new Prototype();
+
+            else if (dto is string || dto.GetType().IsValueType) dto = new { Value = dto };
+
+            else if (dto is IEnumerable && !dto.CanConvertToPrototype()) dto = new { Items = dto };
 
             if (dto is Prototype) Prototype = dto;
 
@@ -485,11 +490,16 @@ namespace Oak
 
             if (TryGetMember(property, out result)) return result;
 
-            throw new InvalidOperationException(
+            throw MemberDoesntExistException(property);
+        }
+
+        public InvalidOperationException MemberDoesntExistException(string name)
+        {
+            return new InvalidOperationException(
                 "This instance of type " +
                 this.GetType().Name +
-                " does not respond to the property " +
-                property +
+                " does not respond to the member " +
+                name +
                 ".  These are the members that exist on this instance: " + __Info__());
         }
 

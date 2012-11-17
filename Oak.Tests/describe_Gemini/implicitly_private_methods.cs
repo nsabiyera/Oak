@@ -29,6 +29,19 @@ namespace Oak.Tests.describe_Gemini
             }
         }
 
+        public class GeminiWithChainedCalls : Gemini
+        {
+            dynamic SayMorning()
+            {
+                return "Morning";
+            }
+
+            dynamic SayGoodMorning()
+            {
+                return "Good " + _.SayMorning();
+            }
+        }
+
         void specify_retaining_stack_trace_through_mulitple_private_calls()
         {
             dynamic toplevel = new TopLevelGemini();
@@ -121,6 +134,21 @@ namespace Oak.Tests.describe_Gemini
 
             it["methods defined on base class are publically defined on inherited class"] = () =>
                 (gemini.HelloString() as string).should_be("hello");
+        }
+
+        void redefining_methods_called_privately()
+        {
+            act = () =>
+            {
+                gemini = new GeminiWithChainedCalls();
+
+                gemini.SayMorning = new DynamicFunction(() => "MORNING");
+            };
+
+            xit["private executed method called redefined method"] = () =>
+            {
+                (gemini.SayGoodMorning() as string).should_be("Good MORNING");
+            };
         }
     }
 }

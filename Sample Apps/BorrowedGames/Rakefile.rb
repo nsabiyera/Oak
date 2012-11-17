@@ -15,6 +15,10 @@ task :rake_dot_net_initialize do
   yml = YAML::load File.open("dev.yml")
   @website_port = yml["website_port"]
   @website_deploy_directory = yml["website_deploy_directory"]
+  @website_port_load_balanced_1 = yml["website_port_load_balanced_1"]
+  @website_deploy_directory_load_balanced_1 = yml["website_deploy_directory_load_balanced_1"]
+  @website_port_load_balanced_2 = yml["website_port_load_balanced_2"]
+  @website_deploy_directory_load_balanced_2 = yml["website_deploy_directory_load_balanced_2"]
   @solution_name = yml["solution_name"]
   @mvc_project_directory = yml["mvc_project_directory"]
   @test_dll = yml["test_dll"]
@@ -154,7 +158,6 @@ task :export => :rake_dot_net_initialize do
   puts Net::HTTP.post_form(URI.parse("http://localhost:#{@website_port.to_s}/seed/Export"), { })
 end
 
-
 def regen_db_command connection_string
   exe_location = "BorrowedGames.SchemaGen\\bin\\debug\\BorrowedGames.SchemaGen.exe"
 
@@ -164,4 +167,26 @@ end
 desc "create ctags file"
 task :tags do
   sh "ctags --recurse"
+end
+
+desc "simulate the web application as if it were load balanced, no iisexpress instances or smtp server instances should be running when this task is executed"
+task :simulate_load_balance => :rake_dot_net_initialize do
+  @sln.build @solution_name 
+  @web_deploy.deploy @mvc_project_directory, @website_deploy_directory_load_balanced_1
+  @web_deploy.deploy @mvc_project_directory, @website_deploy_directory_load_balanced_2
+  sh @iis_express.command @website_deploy_directory_load_balanced_1, @website_port_load_balanced_1
+  sh @iis_express.command @website_deploy_directory_load_balanced_2, @website_port_load_balanced_2
+  cd "nginx"
+  puts "starting nginx (pronouced engine-x) for round robin load balancing"
+  sh "start nginx.exe"
+  puts "started!"
+  cd ".."
+  puts "type rake stop_nginx to stop the load balance"
+end
+
+desc "stops nginx"
+task :stop_nginx do
+  cd "nginx"
+  sh "nginx.exe -s quit"
+  cd ".."
 end

@@ -1,5 +1,9 @@
 website_port: 3000
 website_deploy_directory: c:\iisexpress\website
+website_port_load_balanced_1: 4000
+website_deploy_directory_load_balanced_1: c:\iisexpress\website_4000
+website_port_load_balanced_2: 5000
+website_deploy_directory_load_balanced_2: c:\iisexpress\website_5000
 solution_name: BorrowedGames.sln
 mvc_project_directory: BorrowedGames 
 test_dll: ./BorrowedGames.Tests/bin/debug/BorrowedGames.Tests.dll

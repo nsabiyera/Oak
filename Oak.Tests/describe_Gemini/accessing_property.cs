@@ -65,6 +65,73 @@ namespace Oak.Tests.describe_Gemini
                 };
             };
 
+            context["collections"] = () =>
+            {
+                before = () => gemini = new Gemini(new List<string> { "First", "Second" });
+
+                it["initializes a property called items and sets it to the collection"] = () =>
+                {
+                    (gemini.Items as List<string>).Count().should_be(2);
+
+                    (gemini.Items[0] as string).should_be("First");
+
+                    (gemini.Items[1] as string).should_be("Second");
+                };
+            };
+
+            context["strings"] = () =>
+            {
+                before = () => gemini = new Gemini("hello");
+
+                it["initializes a property called value"] = () =>
+                    (gemini.Value as object).should_be("hello");
+            };
+
+            context["value types"] = () =>
+            {
+                before = () => gemini = new Gemini(15);
+
+                it["initializes a property called value"] = () =>
+                    (gemini.Value as object).should_be(15);
+            };
+
+            context["expando object"] = () =>
+            {
+                before = () =>
+                {
+                    dynamic expando = new ExpandoObject();
+                    expando.FirstName = "First";
+                    expando.LastName = "Last";
+                    gemini = new Gemini(expando);
+                };
+
+                it["doesn't consider an expando object as enumerable"] = () =>
+                {
+                    (gemini.FirstName as object).should_be("First");
+
+                    (gemini.LastName as object).should_be("Last");
+                };
+            };
+
+            context["string dictionaries", "wip"] = () =>
+            {
+                before = () =>
+                {
+                    gemini = new Gemini(new Dictionary<string, object> 
+                    { 
+                        { "FirstName", "First" },
+                        { "LastName", "Last" }
+                    });
+                };
+
+                it["doesn't consider a IDictionary<string, object> as enumerable"] = () =>
+                {
+                    (gemini.FirstName as object).should_be("First");
+
+                    (gemini.LastName as object).should_be("Last");
+                };
+            };
+
             context["casing"] = () =>
             {
                 before = () => gemini = new Gemini(new { Term = 10, Amount = 100000, Interest = .30, DueDate = DateTime.Today });
