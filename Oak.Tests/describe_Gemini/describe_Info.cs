@@ -55,6 +55,18 @@ namespace Oak.Tests.describe_Gemini
 ");
         }
 
+        [Tag("wip")]
+        void specify_prototype_acts_like_gemini()
+        {
+            var info = gemini.Prototype.ToString() as string;
+
+            info.should_be(@"this (Prototype)
+  SetMembers (DynamicFunctionWithParam)
+  FirstName (String): Jane
+  LastName (String): Doe
+");
+        }
+
         void specify_to_string_is_the_same_as_info()
         {
             (gemini.ToString() as string).should_be(gemini.__Info__() as string);

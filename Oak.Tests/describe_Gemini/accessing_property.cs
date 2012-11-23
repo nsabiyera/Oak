@@ -113,7 +113,7 @@ namespace Oak.Tests.describe_Gemini
                 };
             };
 
-            context["string dictionaries", "wip"] = () =>
+            context["string dictionaries"] = () =>
             {
                 before = () =>
                 {
