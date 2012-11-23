@@ -125,7 +125,8 @@ namespace Oak
     public delegate void DynamicMethodWithParam(dynamic parameter);
 
     public delegate dynamic DynamicMethod();
-    
+
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         static Gemini()
