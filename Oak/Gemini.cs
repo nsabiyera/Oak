@@ -84,6 +84,11 @@ namespace Oak
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator() { return Enumerable().GetEnumerator(); }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return (Enumerable() as System.Collections.IEnumerable).GetEnumerator(); }
+
+        public override string ToString()
+        {
+            return GeminiInfo.Parse(this);
+        }
     }
 
     [DebuggerNonUserCode]

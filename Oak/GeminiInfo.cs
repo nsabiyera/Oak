@@ -19,12 +19,7 @@ namespace Oak
             {
                 WriteName(stringBuilder, tab, name, o.GetType().Name, null);
 
-                var dictionary = (o as Gemini).Hash();
-
-                foreach (KeyValuePair<string, object> kvp in dictionary)
-                {
-                    Parse(stringBuilder, kvp.Key, kvp.Value, tab + 1);
-                }
+                WriteDictionary(stringBuilder, o.Hash(), tab);
             }
             else if (o is IEnumerable<dynamic>)
             {
@@ -36,17 +31,23 @@ namespace Oak
                     index++;
                 }
             }
+            else if (o is Prototype)
+            {
+                WriteName(stringBuilder, tab, name, o.GetType().Name, null);
+
+                WriteDictionary(stringBuilder, o, tab);
+            }
             else
             {
-                if (o != null)
-                {
-                    WriteName(stringBuilder, tab, name, o.GetType().Name, o);
-                }
-                else
-                {
-                    WriteName(stringBuilder, tab, name, "null", null);
-                }
+                if (o != null) WriteName(stringBuilder, tab, name, o.GetType().Name, o);
+
+                else WriteName(stringBuilder, tab, name, "null", null);
             }
+        }
+
+        public static void WriteDictionary(StringBuilder stringBuilder, IDictionary<string, object> o, int tab)
+        {
+            foreach (var kvp in o) Parse(stringBuilder, kvp.Key, kvp.Value, tab + 1);
         }
 
         public static void WriteName(StringBuilder stringBuilder, int tabIndent, string name, string meta, dynamic value)
