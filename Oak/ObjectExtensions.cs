@@ -51,6 +51,7 @@ namespace System
         }
     }
 
+    [DebuggerNonUserCode]
     public static class DynamicExtensions
     {
         public static bool CanConvertToPrototype(this object o)
