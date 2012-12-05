@@ -118,6 +118,7 @@ def generate_nginx_config
   File.open("nginx/conf/nginx.conf.template", 'w') { |f| f.write(newcontent) }
 end
 
+desc "start up http server under SSL"
 task :https_server do
   start_iis_express_with_config "applicationHost.config"
 end

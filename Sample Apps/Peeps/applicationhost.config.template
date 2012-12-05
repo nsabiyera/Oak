@@ -102,6 +102,7 @@
                 </application>
                 <bindings>
                     <binding protocol="https" bindingInformation="*:443:COMPUTER_NAME" />
+                    <binding protocol="http" bindingInformation="*:80:localhost" />
                 </bindings>
             </site>
             <siteDefaults>
