@@ -91,7 +91,7 @@ namespace Oak
 
         public bool HasJsonBody(ControllerContext controllerContext)
         {
-            return controllerContext.HttpContext.Request.ContentType == "application/json";
+            return controllerContext.HttpContext.Request.ContentType.Contains("application/json");
         }
     }
 }
