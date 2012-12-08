@@ -106,7 +106,7 @@ namespace Massive
     /// <summary>
     /// A class that wraps your database table in Dynamic Funtime
     /// </summary>
-    public class DynamicRepository : DynamicObject
+    public class DynamicRepository : Gemini
     {
         DbProviderFactory _factory;
         ConnectionProfile ConnectionProfile { get; set; }
@@ -161,24 +161,7 @@ namespace Massive
             }
             return result;
         }
-        /// <summary>
-        /// Creates an empty Expando set with defaults from the DB
-        /// </summary>
-        public dynamic Prototype
-        {
-            get
-            {
-                dynamic result = new Prototype();
-                var schema = Schema;
-                foreach (dynamic column in schema)
-                {
-                    var dc = (IDictionary<string, object>)result;
-                    dc.Add(column.COLUMN_NAME, DefaultValue(column));
-                }
-                result._Table = this;
-                return result;
-            }
-        }
+
         /// <summary>
         /// List out all the schema bits for use with ... whatever
         /// </summary>
@@ -734,85 +717,6 @@ Sql Exception:
         {
             var sql = string.Format("SELECT {0} FROM {1} WHERE {2} = @0", columns, TableName, PrimaryKeyField);
             return Query(sql, key).FirstOrDefault();
-        }
-        /// <summary>
-        /// A helpful query tool
-        /// </summary>
-        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
-        {
-            //parse the method
-            var constraints = new List<string>();
-            var counter = 0;
-            var info = binder.CallInfo;
-            // accepting named args only... SKEET!
-            if (info.ArgumentNames.Count != args.Length)
-            {
-                throw new InvalidOperationException("Please use named arguments for this type of query - the column name, orderby, columns, etc");
-            }
-
-
-            //first should be "FindBy, Last, Single, First"
-            var op = binder.Name;
-            var columns = " * ";
-            string orderBy = string.Format(" ORDER BY {0}", PrimaryKeyField);
-            string where = "";
-            var whereArgs = new List<object>();
-
-            //loop the named args - see if we have order, columns and constraints
-            if (info.ArgumentNames.Count > 0)
-            {
-
-                for (int i = 0; i < args.Length; i++)
-                {
-                    var name = info.ArgumentNames[i].ToLower();
-                    switch (name)
-                    {
-                        case "orderby":
-                            orderBy = " ORDER BY " + args[i];
-                            break;
-                        case "columns":
-                            columns = args[i].ToString();
-                            break;
-                        default:
-                            constraints.Add(string.Format(" {0} = @{1}", name, counter));
-                            whereArgs.Add(args[i]);
-                            counter++;
-                            break;
-                    }
-                }
-            }
-            //Build the WHERE bits
-            if (constraints.Count > 0)
-            {
-                where = " WHERE " + string.Join(" AND ", constraints.ToArray());
-            }
-            //build the SQL
-            string sql = "SELECT TOP 1 " + columns + " FROM " + TableName + where;
-            var justOne = op.StartsWith("First") || op.StartsWith("Last") || op.StartsWith("Get");
-
-            //Be sure to sort by DESC on the PK (PK Sort is the default)
-            if (op.StartsWith("Last"))
-            {
-                orderBy = orderBy + " DESC ";
-            }
-            else
-            {
-                //default to multiple
-                sql = "SELECT " + columns + " FROM " + TableName + where;
-            }
-
-            if (justOne)
-            {
-                //return a single record
-                result = Query(sql + orderBy, whereArgs.ToArray()).FirstOrDefault();
-            }
-            else
-            {
-                //return lots
-                result = Query(sql + orderBy, whereArgs.ToArray());
-            }
-
-            return true;
         }
     }
 }
