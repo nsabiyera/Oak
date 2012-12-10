@@ -70,7 +70,7 @@ gem install warmup (used for solution generation)
   <li>Start Growl and set it to the Translucent Dark Theme: <a href="http://i.imgur.com/buWyf.png">Here are the settings that I like</a></li>
 </ul>
 
-<div style="height: 60px" id="bootstrapoak"></div>
+<div id="bootstrapoak"></div>
 <h2>Bootstrap Your Own App With Oak, Interactive Tutorial</h2>
 <ul>
 <li>Run the following commands:
@@ -88,7 +88,6 @@ start Blog.sln (opens the solution)
 </li>
 <li><strong>Oak comes with an interactive tutorial:  Once you have taken the steps above, go to http://localhost:3000 and try out Oak interactively!</strong>
 </ul>
-<div style="height: 65px"></div>
 <h2 style="border: solid 1px #f5f5f5; padding: 20px">
   <a href="#sampleapps" style="width: 100%; display: block; text-decoration: underline">Jump to the Sample Apps</a></h2>
 <br />
@@ -279,18 +278,49 @@ seed.CreateTable("Comments",
  </object>
 </div>
 
+<a id="canopy"></a>
 <h2>Frictionless UI Automation - Canopy</h2>
-<p>Oak is bootstrapped with a UI automation framework called <a href="http://lefthandedgoat.github.com/canopy/" target="_blank">canopy</a>.  With the increased use of client side javascript, UI automation tools are absolutely necessary.  Canopy gives you a terse dsl written in F#.  Very easy to pick up!</p>
+<p>Oak is bootstrapped with a UI automation framework called <a href="http://lefthandedgoat.github.com/canopy/" target="_blank">canopy</a>.  With the increased use of client side javascript, UI automation tools are absolutely necessary.  Canopy gives you a terse DSL written in F#.  Very easy to pick up!</p>
 
-<h2>Frictionless Build Automation and Continuous Integration - RakeDotNet</h2>
+<pre>
+open canopy
+start "firefox"
+url "http://google.com"
+"input[type='text']" << "hello world"
+click "input[type='button']"
+</pre>
+<a id="rakedotnet"></a>
+<h2>Frictionless Dev Environment Setup - RakeDotNet</h2>
 <p>
-  Oak comes installed with a suite of rake scripts that will build your solution, deploy your web app, run NSpec tests and run UI automation tests.  These scripts can be leveraged directly by your build servers.
+  Oak comes installed with a suite of rake scripts that will build your solution, deploy your web app, run NSpec tests and run UI automation tests.  These scripts can be leveraged directly by your build servers. Using a command prompt that supports ruby, you can type any of the following commands:
 </p>
+<pre>
+rake
+  builds and deploys your application
+
+rake server
+  starts up iis express pointing to your deploy directory
+
+rake simulate_load_balance
+  sets up iis express in a round robin load balanced configuration
+
+rake reset
+  regenerates your schema
+
+rake sample
+  inserts sample data into your db to help with development
+
+rake export
+  exports your schema to a set of sql scripts
+
+rake tests
+  runs all tests
+
+rake ui
+  runs ui automation
+</pre>
+
 <div id="sampleapps"></div>
-<br/>
-<br/>
-<br/>
-<br/>
 <h1>THE Reference App - <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h1>
 <hr/>
 <p>
