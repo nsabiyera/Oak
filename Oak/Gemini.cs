@@ -535,6 +535,18 @@ namespace Oak
             foreach (var item in dictionary) SetMember(item.Key, item.Value);
         }
 
+        public virtual void UpdateMembers(dynamic o)
+        {
+            var dictionary = (o as object).ToDictionary();
+
+            foreach (var item in dictionary) UpdateMember(item.Key, item.Value);
+        }
+
+        public virtual void UpdateMember(string property, object value)
+        {
+            if (RespondsTo(property)) SetMember(property, value);
+        }
+
         string Capitalized(string s)
         {
             return s[0].ToString().ToUpper() + s.Substring(1);

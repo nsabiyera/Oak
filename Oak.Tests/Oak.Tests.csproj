@@ -167,6 +167,7 @@
     <Compile Include="describe_DynamicModel\describe_Changes\Classes\Person.cs" />
     <Compile Include="describe_DynamicModel\describe_Changes\core_behavior_for_tracking_changes.cs" />
     <Compile Include="describe_DynamicRepository\memoization_application.cs" />
+    <Compile Include="describe_Gemini\updating_members.cs" />
     <Compile Include="describe_Memoize.cs" />
     <Compile Include="describe_StrongParameterss.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Essay.cs" />

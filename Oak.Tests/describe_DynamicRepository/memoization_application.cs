@@ -23,7 +23,6 @@ namespace Oak.Tests.describe_DynamicRepository
             seed.PurgeDb();
         }
 
-        [Tag("wip")]
         void specify_memoization_can_be_applied_to_dynamic_repository()
         {
             var executedSql = new List<string>();
