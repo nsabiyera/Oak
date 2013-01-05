@@ -37,7 +37,7 @@
       <section>
         <div id="title">
           <h1>Oak</h1>
-          <p>Bring dynamic goodness and frictionless development to ASP .NET MVC</p>
+          <p>Frictionless development for ASP.NET MVC single page web apps. Prototypical and dynamic capabilities brought to C#.</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/amirrajan">amirrajan</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span><br/>
@@ -46,7 +46,15 @@
         </div>
 
         <h2>What is Oak?</h2>
-        <p style="font-size: 20px">Oak is a suite of constructs that brings the <b>power of dynamic typing and frictionless development</b> to ASP.NET MVC (it can be used outside of MVC too).</p>
+        <p style="font-size: 20px">Single page web apps are becoming the norm as opposed to the exception. And with that comes a large part of your code base existing on the client side with a lot of JavaScript, JSON and async HTTP.
+        Oak gives you a way to quickly build these kind of apps by:
+        <ul>
+          <li>Bridging language barriers between JavaScript (a prototypical language) and C# (a statically compiled languge).</li>
+          <li>Leveraging C#'s 4.0 DLR to give your classes extremely powerful dynamic and prototypical capabilites.</li>
+          <li>Augmenting ASP.NET MVC to better support consuming and returning JSON payloads.</li>
+          <li>Providing a lean, fast, dynamic ORM to seamlessly save dynamic/prototypical classes.</li>
+          <li>Providing a holistic approach to develop, build, and test single page web apps.</li>
+        </ul>
         
 <h2>First Time (Prerequisites)</h2>
 <ul>
@@ -71,23 +79,23 @@ gem install warmup (used for solution generation)
 </ul>
 
 <div id="bootstrapoak"></div>
-<h2>Bootstrap Your Own App With Oak, Interactive Tutorial</h2>
-<ul>
-<li>Run the following commands:
+<h2>Bootstrap Your Own App With Oak</h2>
+Run the following commands to quickly create a fully loaded .Net solution bootstrapped with Oak:
 <pre>
 warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/loam</a> Blog (creates a .Net solution)
 === OR if you want a solution that includes UI Automation ===
 warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/walkingskeleton</a> Blog
 cd Blog
-bundle install (installs any ruby gems needed)
 rake (builds the .net app)
 rake server (starts iis express)
 start Blog.sln (opens the solution)
 <del>watchr dotnet.watchr.rb</del> sidekick.bat (starts your feedback loop)
 </pre>
-</li>
-<li><strong>Oak comes with an interactive tutorial:  Once you have taken the steps above, go to http://localhost:3000 and try out Oak interactively!</strong>
-</ul>
+<h2>Interactive Tutorial</h2>
+<p>
+Oak comes with an interactive tutorial. Once you have taken the steps above, go to http://localhost:3000 and try out Oak interactively.
+</p>
+
 <h2 style="border: solid 1px #f5f5f5; padding: 20px">
   <a href="#sampleapps" style="width: 100%; display: block; text-decoration: underline">Jump to the Sample Apps</a></h2>
 <br />
@@ -124,7 +132,7 @@ start Blog.sln (opens the solution)
  <br/>
 
  <h2>Frictionless Data Access, Change Tracking and Validation - Oak's dynamic Entity Model: Cambium</h2>
- <p>Oak has a dynamic entity model called Cambium. Cambium makes validating, detecting changes, saving, retrieving, and defining associations ridiculously easy. Check out the <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/">Sample Apps</a> and the <a href="https://github.com/amirrajan/oak/wiki">Wiki</a> for more info.  Here is a sneak peek at what Cambium can do:</p>
+ <p>Oak has a dynamic entity model called Cambium which is amicable to dynamic strcuctures (ie JavaScript classes). Cambium makes validating, detecting changes, saving, retrieving, and defining associations ridiculously easy. Check out the <a href="#sampleapps">Sample Apps</a> and the <a href="https://github.com/amirrajan/oak/wiki">Wiki</a> for more info.  Here is a sneak peek at what Cambium can do:</p>
  <h3>Validations</h3>
  <pre>dynamic blog = new Blog(); //new up a blog, validate
 blog.Name = "";
@@ -324,7 +332,7 @@ rake ui
 <h1>THE Reference App - <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h1>
 <hr/>
 <p>
-This is a full blown reference implementation that uses all aspects of Oak.  Borrowed Games is a website that allows a circle of friends to borrow games from each other.  This site is deployed and in production at <a href="http://borrowedgames.com" target="_blank">http://borrowedgames.com</a>.
+This is a full blown reference implementation that uses all aspects of Oak.  Borrowed Games is a single page web app that allows a circle of friends to borrow games from each other.  This site is deployed and in production at <a href="http://borrowedgames.com" target="_blank">http://borrowedgames.com</a>.
 </p>
 <ul>
 <li>Run the following commands
