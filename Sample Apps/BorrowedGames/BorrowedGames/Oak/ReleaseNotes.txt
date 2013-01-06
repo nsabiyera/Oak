@@ -1,25 +1,4 @@
 ﻿============== FOR VERSIONS ==============
-oak 2.4.8+
-oak-edge 1.8.8+
-=============== CHANGES ==================
-Seed controller will not evaluate for inefficient queries.  This exclusion was
-added to ensure speedy inserts for a large amount of data.  The default
-template now has the following line (you'll have to manually update this in
-your seed controller for existing oak apps):
-
-public ActionResult SampleEntries()
-{
-    //this line will need to be added if you want to skip inefficient
-    //query detection
-    DebugBootStrap.SkipInefficientQueryDetectionForThisRequest();
-
-    Schema.SampleEntries();
-
-    return new EmptyResult();
-}
-
-
-============== FOR VERSIONS ==============
 oak 2.4.3+
 oak-edge 1.8.3+
 gemini 1.2.2+

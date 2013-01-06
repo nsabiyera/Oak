@@ -495,6 +495,8 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult SampleEntries()
         {
+            DebugBootStrap.SkipInefficientQueryDetectionForThisRequest();
+
             Schema.SampleEntries();
 
             return new EmptyResult();
