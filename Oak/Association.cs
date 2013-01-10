@@ -119,7 +119,7 @@ namespace Oak
 
         public string InClause(IEnumerable<dynamic> models, string member)
         {
-            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))));
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))).Distinct());
         }
 
         public virtual void AddRepository(DynamicModels collection, DynamicRepository repository)
