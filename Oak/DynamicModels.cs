@@ -71,6 +71,13 @@ namespace Oak
             return Models.FirstOrDefault();
         }
 
+        public dynamic Second()
+        {
+            if (Models.Count >= 2)  return Models[1];
+
+            return null;
+        }
+
         public dynamic Last()
         {
             return Models.LastOrDefault();

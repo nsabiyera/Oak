@@ -8,9 +8,10 @@ using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests.describe_DynamicModels
 {
+    [Tag("wip")]
     class eager_loading_for_belongs_to : nspec
     {
-        object car1Id, car2Id, bluePrint1Id, bluePrint2Id;
+        object car1Id, car2Id, bluePrint1Id, bluePrint2Id, bluePrint3Id;
 
         dynamic bluePrints;
 
@@ -48,6 +49,10 @@ namespace Oak.Tests.describe_DynamicModels
             bluePrint2Id = 400;
 
             new { Id = bluePrint2Id, CarId = car2Id, Sku = "Sku 2" }.InsertInto("BluePrints");
+
+            bluePrint3Id = 500;
+
+            new { Id = bluePrint3Id, CarId = car2Id, Sku = "Sku 3" }.InsertInto("BluePrints");
         }
 
         void it_eager_loads_and_caches()
@@ -70,7 +75,11 @@ namespace Oak.Tests.describe_DynamicModels
 
             ((string)allBluePrints.First().Car().Model).should_be("car 1");
 
-            ((string)allBluePrints.Last().Sku).should_be("Sku 2");
+            ((string)allBluePrints.Second().Sku).should_be("Sku 2");
+
+            ((string)allBluePrints.Second().Car().Model).should_be("car 2");
+
+            ((string)allBluePrints.Last().Sku).should_be("Sku 3");
 
             ((string)allBluePrints.Last().Car().Model).should_be("car 2");
 
