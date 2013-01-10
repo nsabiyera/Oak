@@ -5,31 +5,10 @@ using System.Text;
 using NSpec;
 using System.Dynamic;
 using Newtonsoft.Json;
+using Massive;
 
 namespace Oak.Tests
 {
-    public class SomeDynamicModel : DynamicModel
-    {
-        string voodoo;
-        public SomeDynamicModel(object dto)
-            : base(dto)
-        {
-        }
-
-        public string Name
-        {
-            get { return "SomeName"; }
-        }
-
-        public string Voodoo
-        {
-            set
-            {
-                voodoo = value;
-            }
-        }
-    }
-
     class describe_DynamicToJson : nspec
     {
         dynamic objectToConvert;
@@ -39,6 +18,46 @@ namespace Oak.Tests
         void before_each()
         {
             jsonString = null;
+
+            tasks = new Tasks();
+        }
+
+        dynamic tasks;
+
+        void describe_db_rows_to_json()
+        {
+            before = () =>
+            {
+                Seed seed = new Seed();
+
+                seed.PurgeDb();
+
+                seed.CreateTable("Rabbits", seed.Id(), new { Name = "nvarchar(255)" }).ExecuteNonQuery();
+
+                seed.CreateTable("Tasks", seed.Id(), new { Description = "nvarchar(255)" }, new { RabbitId = "int" }).ExecuteNonQuery();
+
+                var rabbitId = new { Name = "YT" }.InsertInto("Rabbits");
+
+                var taskId = new { Description = "bolt onto vans", rabbitId }.InsertInto("Tasks");
+            };
+
+            it["works"] = () =>
+            {
+                var results = tasks.All().Include("Rabbits").ToList();
+
+                ((int)results.Count).should_be(1);
+
+                (results as IEnumerable<dynamic>).ForEach(s =>
+                {
+                    s.Rabbit = s.Rabbit();
+                });
+
+                dynamic newGemini = new Gemini(new { Tasks = results });
+
+                string jsonString = DynamicToJson.Convert(newGemini);
+
+                jsonString.should_be(@"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } } ] }");
+            };
         }
 
         void describe_prototype_to_json()
@@ -348,6 +367,66 @@ namespace Oak.Tests
             {
                 jsonString.should_be(@"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }");
             };
+        }
+    }
+
+    public class SomeDynamicModel : DynamicModel
+    {
+        string voodoo;
+        public SomeDynamicModel(object dto)
+            : base(dto)
+        {
+        }
+
+        public string Name
+        {
+            get { return "SomeName"; }
+        }
+
+        public string Voodoo
+        {
+            set { voodoo = value; }
+        }
+    }
+
+    public class Tasks : DynamicRepository
+    {
+        public Tasks()
+        {
+            Projection = d => new Task(d);
+        }
+    }
+
+    public class Rabbits : DynamicRepository
+    {
+        public Rabbits()
+        {
+            Projection = d => new Rabbit(d);
+        }
+    }
+
+    public class Task : DynamicModel
+    {
+        Rabbits rabbits = new Rabbits();
+
+        public Task(object dto)
+            : base(dto)
+        {
+
+        }
+
+        IEnumerable<dynamic> Associates()
+        {
+            yield return new BelongsTo(rabbits);
+        }
+    }
+
+    public class Rabbit : DynamicModel
+    {
+        public Rabbit(object dto)
+            : base(dto)
+        {
+
         }
     }
 

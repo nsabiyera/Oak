@@ -12,35 +12,52 @@ namespace Oak
     {
         public static string Convert(dynamic o)
         {
-            if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>);
-
-            if (o is Prototype) return Convert(o as IDictionary<string, object>);
-
-            if (o is Gemini) return Convert(o.HashOfProperties());
-
-            if (IsJsonString(o) || IsJsonNumeric(o) || IsBool(o)) return Stringify(o);
-
-            return Convert((o as object).ToPrototype());
+            return Convert(o, new List<object>());
         }
 
-        public static string Convert(IEnumerable<dynamic> o)
+        public static string Convert(dynamic o, List<object> visitedReferences)
         {
-            return "[ " + string.Join(", ", o.Select(s => Convert(s as object))) + " ]";
+            if (visitedReferences.Contains(o)) return "";
+             
+            if (!IsValueType(o)) visitedReferences.Add(o);
+
+            if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>, visitedReferences);
+
+            if (o is Prototype) return Convert(o as IDictionary<string, object>, visitedReferences);
+
+            if (o is Gemini) return Convert(o.HashOfProperties(), visitedReferences);
+
+            if (IsValueType(o)) return Stringify(o, visitedReferences);
+
+            return Convert((o as object).ToPrototype(), visitedReferences);
         }
 
-        public static string Convert(IDictionary<string, object> attributes)
+        private static bool IsValueType(dynamic o)
         {
-            return "{ " + StringifyAttributes(attributes) + " }";
+            return IsJsonString(o) || IsJsonNumeric(o) || IsBool(o);
         }
 
-        private static string StringifyAttributes(IDictionary<string, object> attributes)
+        public static string Convert(IEnumerable<dynamic> o, List<object> visitedReferences)
         {
-            return string.Join(", ", attributes.Where(CanConvertValue).Select(StringifyAttribute));
+            return "[ " + string.Join(", ", o.Select(s => Convert(s as object, visitedReferences))) + " ]";
         }
 
-        private static string StringifyAttribute(KeyValuePair<string, object> kvp)
+        public static string Convert(IDictionary<string, object> attributes, List<object> visitedReferences)
         {
-            return Stringify(kvp.Key) + ": " + Stringify(kvp.Value);
+            return "{ " + StringifyAttributes(attributes, visitedReferences) + " }";
+        }
+
+        private static string StringifyAttributes(IDictionary<string, object> attributes, List<object> visitedReferences)
+        {
+            return string.Join(", ", 
+                attributes.Where(CanConvertValue)
+                    .Where(kvp => visitedReferences.Contains(kvp.Value) == false)
+                    .Select(kvp => StringifyAttribute(kvp, visitedReferences)));
+        }
+
+        private static string StringifyAttribute(KeyValuePair<string, object> kvp, List<object> visitedReferences)
+        {
+            return Stringify(kvp.Key, visitedReferences) + ": " + Stringify(kvp.Value, visitedReferences);
         }
 
         private static List<dynamic> ToList(dynamic enumerable)
@@ -48,7 +65,7 @@ namespace Oak
             return (enumerable as IEnumerable<dynamic>).ToList();
         }
 
-        public static string Stringify(dynamic o)
+        public static string Stringify(dynamic o, List<object> visitedReferences)
         {
             if (IsNull(o)) return "null";
 
@@ -58,11 +75,11 @@ namespace Oak
 
             if (IsJsonNumeric(o)) return o.ToString();
 
-            if (IsList(o)) return Convert(o as IEnumerable<dynamic>);
+            if (IsList(o)) return Convert(o as IEnumerable<dynamic>, visitedReferences);
 
             if (IsBool(o)) return o.ToString().ToLower();
 
-            return Convert(o as object);
+            return Convert(o as object, visitedReferences);
         }
 
         private static string Escape(string o)

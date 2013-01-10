@@ -103,13 +103,13 @@ namespace Oak.Tests.describe_Gemini
                 (methodMissingGemini.Parameters[1] as string).should_be("Test2");
             };
 
-            it["method missing has accessed to the instance of gemini that it was invoked on"] = () =>
+            it["method missing has accessed to the instance of gemini that it was invoked on", "wip"] = () =>
             {
                 dynamic methodMissingGemini = new MethodMissingGemini();
 
                 methodMissingGemini.ThisIsAMissingMethod(parameter1: "Test", parameter2: "Test2");
 
-                (methodMissingGemini.Instance as object).should_be(methodMissingGemini as object);
+                (methodMissingGemini.Instance() as object).should_be(methodMissingGemini as object);
             };
 
             it["parameter values can be accessed via ParameterMethod of the object passed into method missing"] = () =>

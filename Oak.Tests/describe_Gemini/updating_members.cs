@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_Gemini
 {
-    [Tag("wip")]
     class updating_members : nspec
     {
         dynamic gemini;
