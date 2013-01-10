@@ -1,0 +1,119 @@
+﻿============== FOR VERSIONS ==============
+oak 2.4.3+
+oak-edge 1.8.3+
+gemini 1.2.2+
+cambium 1.4.0+
+=============== CHANGES ==================
+- added the Memoize module, the memoize module will cache values of your
+  methods
+
+public class SlowPerson : Gemini
+{
+    static SlowPerson()
+    {
+        Gemini.Extend<SlowPerson, Memoize>();
+    }
+
+    IEnumerable<dynamic> Memoize()
+    {
+        //define a method called Memoize
+        //and state that you want to memoize the SayHello
+        //method
+        yield return (DynamicFunctionWithParam)SayHello;
+    }
+
+    //this function will be called the first time and 
+    //any subsequent call with the same parameters
+    //will return a cached value
+    dynamic SayHello(dynamic otherPerson)
+    {
+        System.Threading.Thread.Sleep(10000);
+
+        return "Hello " + otherPerson.Name;
+    }
+}
+
+============== FOR VERSIONS ==============
+oak 2.3.9+
+oak-edge 1.7.6+
+gemini 1.1.9+
+cambium 1.3.6+
+=============== CHANGES ==================
+- added overloads on all associations for legacy databases
+
+
+============== FOR VERSIONS ==============
+oak 2.3.1+
+oak-edge 1.5.7+
+gemini 1.1.7+
+cambium 1.3.0+
+=============== CHANGES ==================
+- oak, oak-edge, cambium:
+    - Bug fix on changes module to only look at writable properties as opposed to all properties
+    - Added Bullet.cs which can be used to find N+1 query and redundant Query issues
+
+If you are upgrading your version of oak, you'll have to add the following line to Global.asax to incorporate Bullet:
+Inside global.asax.cs:
+public class MvcApplication : System.Web.HttpApplication
+{
+    public MvcApplication()
+    {
+        DebugBootStrap.Init(this); /* <--- this line will incoporate N+1, redudant query, and exception notification in iisexpress */
+    }
+}
+
+- gemini: added and introspection method called HashOfWritableProperties()
+
+
+============== FOR VERSIONS ==============
+oak 2.2.9+
+oak-edge 1.4.7+
+gemini 1.1.4+
+cambium 1.2.9+
+=============== CHANGES ==================
+- Added StrongParameters module to protect against mass assignment via SetMembers, here is an example usage:
+    dynamic securedObject = new Gemini(new { FirstName = "Jane", LastName = "Doe" });
+
+    securedObject.Extend<StrongParameters>();
+
+    securedObject.Permit("FirstName", "LastName");
+
+    //this line would throw an error if set members are attempted on properties
+    //that weren't premitted
+    securedObject.SetMembers(new { FirstName = "First", LastName = "Last" });
+
+    (securedObject.FirstName as string).should_be("First");
+
+    (securedObject.LastName as string).should_be("Last");
+    
+
+
+
+============== FOR VERSIONS ==============
+oak 2.2.9+
+oak-edge 1.4.7+
+gemini 1.1.4+
+cambium 1.2.9+
+=============== CHANGES ==================
+- Eager loading for collections added.  Example is here: https://github.com/amirrajan/Oak/blob/master/Oak.Tests/describe_DynamicModels/eager_loading_for_has_many_and_belongs_to.cs#L95
+
+
+============== FOR VERSIONS ==============
+
+oak 2.2.5+
+oak-edge 1.3.3+
+gemini 1.1.4+
+cambium 1.2.3+
+=============== CHANGES ==================
+- Camibum and company now plays nice with auto properties.
+  If you get the Invalid column name Exception when saving a Gemini, 
+  you can remove properties from Gemini's using the Exclude() method.  
+  Override your repository's GetAttributesToSave()
+  these columns from being persisted.
+  Example: https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames/Repositories/WantedGames.cs
+- Added InitializeExtensions method. If you want to leverage mix-ins, 
+  this method need to be explicitly called in the constructor of classes
+  that use *static* auto properties. Invocation is automatically done
+  if you use dynamic properties.
+- The Expando property in Gemini is now named Prototype.
+- Case invariant dictionary is used now to store dynamic properties (ie Prototype).

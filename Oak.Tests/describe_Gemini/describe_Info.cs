@@ -66,6 +66,28 @@ namespace Oak.Tests.describe_Gemini
 ");
         }
 
+        void specify_circular_references()
+        {
+            dynamic otherFriend = new Gemini(new { FirstName = "Jane", LastName = "Doe" });
+
+            dynamic friend = new Gemini(new { FirstName = "John", LastName = "Doe", Friend = otherFriend });
+
+            otherFriend.Friend = friend;
+
+            var info = friend.__Info__() as string;
+
+            info.should_be(@"this (Gemini)
+  FirstName (String): John
+  LastName (String): Doe
+  Friend (Gemini)
+    FirstName (String): Jane
+    LastName (String): Doe
+    SetMembers (DynamicFunctionWithParam)
+    Friend (circular)
+  SetMembers (DynamicFunctionWithParam)
+");
+        }
+
         void specify_to_string_is_the_same_as_info()
         {
             (gemini.ToString() as string).should_be(gemini.__Info__() as string);

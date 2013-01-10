@@ -582,16 +582,29 @@ namespace Oak
                 return true;
             }
 
-            dictionary.Add(property, value);
-
-            if (!suppress)
+            if (IsSame(value))
             {
-                var hooks = MethodHooks.Where(s => s.Key == this.GetType());
-
-                foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
+                TrySetMember(property, new DynamicFunction(() => value), suppress);
             }
+            else
+            {
+                dictionary.Add(property, value);
 
+                if (!suppress)
+                {
+                    var hooks = MethodHooks.Where(s => s.Key == this.GetType());
+
+                    foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
+                }    
+            }
             return true;
+        }
+
+        public bool IsSame(dynamic o)
+        {
+            if (o is Gemini && this.Prototype == (o as Gemini).Prototype) return true;
+
+            return false;
         }
 
         public virtual IEnumerable<string> Members()

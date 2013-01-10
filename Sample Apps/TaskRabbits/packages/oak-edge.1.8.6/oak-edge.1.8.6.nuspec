@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>oak-edge</id>
+    <version>1.8.6</version>
+    <authors>Amir Rajan</authors>
+    <owners>Amir Rajan</owners>
+    <licenseUrl>https://github.com/amirrajan/Oak/blob/master/license.txt</licenseUrl>
+    <projectUrl>http://amirrajan.github.com/Oak/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Bring dynamic goodness and frictionless development to ASP .NET MVC</description>
+    <language>en-US</language>
+    <tags>dynamic mvc migrations rails aspnetmvc oak</tags>
+  </metadata>
+</package>

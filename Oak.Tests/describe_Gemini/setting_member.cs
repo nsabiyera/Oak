@@ -43,6 +43,26 @@ namespace Oak.Tests.describe_Gemini
 
                 (blog.FooBar as string).should_be("Foobar");
             };
+
+            it["reference to self are added as methods"] = () =>
+            {
+                dynamic self = new Gemini(new { FirstName = "Amir", LastName = "Rajan" });
+
+                self.Self = self;
+
+                (self.Self() as object).should_be(self as object);
+            };
+
+            it["references to self where prototypes match are added as methods"] = () =>
+            {
+                dynamic self = new Gemini(new { FirstName = "Amir", LastName = "Rajan" });
+
+                dynamic samePrototype = new Gemini(self);
+
+                self.Self = samePrototype;
+
+                (self.Self() as object).should_be(samePrototype as object);
+            };
         }
 
         void calling_set_members()

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>nspec</id>
+    <version>0.9.64</version>
+    <authors>Matt Florence,  Amir Rajan</authors>
+    <owners>Matt Florence,  Amir Rajan</owners>
+    <licenseUrl>https://github.com/mattflo/NSpec/blob/master/license.txt</licenseUrl>
+    <projectUrl>http://www.nspec.org/</projectUrl>
+    <iconUrl>http://nspec.org/images/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NSpec is a BDD (Behavior Driven Development) framework for .NET of the xSpec (Context/Specification) flavor. NSpec is intended to drive development by specifying behavior within a declared context. NSpec is heavily inspired by RSpec and build upon the NUnit assertion library.</description>
+    <language>en-US</language>
+    <tags>testing bdd tdd</tags>
+  </metadata>
+</package>

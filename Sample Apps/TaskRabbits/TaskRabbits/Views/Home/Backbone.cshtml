@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Backbone";
+}
+
+<script src="@Url.Content("~/Scripts/backbone.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/backbone-app/app.js")" type="text/javascript"></script>
+
+<h2>Dashboard</h2>
+<div id="dashboard">
+    <div class="row" style="margin-bottom: 10px">
+        <select class="span4" id="rabbitsDropDown" data-placeholder="select a rabbit...">
+        </select>
+        <i class="icon-plus" style="cursor: pointer">&nbsp;</i>
+    </div>
+    <div class="row">
+      <input id="addTask" type="button" class="btn hide" value="add task" />
+      <div>&nbsp;</div>
+    </div>
+    <div class="row">
+        <table id="tasks" class="table table-stripped">
+        </table>
+    </div>
+    <div class="modal hide" id="newRabbitModal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Create Rabbit</h3>
+      </div>
+      <div class="modal-body">
+        <div id="newRabbitErrors">
+
+        </div>
+        <p>
+            <label>Name</label>
+            <input type="text" id="newRabbitName" />
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn" data-dismiss="modal">Close</a>
+        <a href="javascript:;" id="createRabbit" class="btn btn-primary">Save</a>
+      </div>
+    </div>
+    <div class="modal hide" id="loadingModal">
+      <div class="modal-body">
+        <div class="row span16">
+          loading...
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<script type="underscore/template" id="TaskViewTemplate">
+    <td class='span4'>
+      <input class='description' type='input' value='<%= get('Description') %>' />
+    </td>
+    <td class='span4'>
+      <input class='date' type='input' value='<%= get('DueDate') %>' />
+      <span class='label label-inverse'><%= parsedDate() %></span>
+    </td>
+    <td class='span3'>
+        <span class='label label-important hide'></span>
+        <input type='button' class='btn btn-primary hide' value='save' style='padding-top: 1px; padding-bottom: 1px' />
+    </td>
+    <td class='span1'>
+      <i class="icon-remove" style="cursor: pointer">&nbsp;</i>
+    </td>
+</script>
+
+<script type="underscore/template" id="RabbitDropDownTemplate">
+    <option></option>
+    <% _.each(rabbits, function(rabbit) { %>
+      <option class='rabbit' value="<%= rabbit.get('Id') %>" data-id="<%= rabbit.get('Id') %>"><%= rabbit.get('Name') %></option>
+    <% }); %>
+</script>
+
