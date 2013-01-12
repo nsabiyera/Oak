@@ -18,21 +18,7 @@
     </div>
     <div class="row">
         <table id="tasks" class="table table-stripped">
-          <tbody data-bind='foreach: tasks'>
-            <td class='span4'>
-              <input class='description' type='input' data-bind="value: Description, valueUpdate: 'keyup', event: { keyup: determineSave }" />
-            </td>
-            <td class='span4'>
-              <input class='date' type='input' data-bind="value: DueDate, valueUpdate: 'keyup', event: { keyup: determineSave }" />
-              <span data-bind="text: ParsedDate" class='label label-inverse'></span>
-            </td>
-            <td class='span3'>
-                <span data-bind="visible: IsInvalid, text: ErrorsString" class='label label-important'></span>
-                <input data-bind="visible: CanSave, click: save" type='button' class='btn btn-primary' value='save' style='padding-top: 1px; padding-bottom: 1px' />
-            </td>
-            <td class='span1'>
-              <i class="icon-remove" style="cursor: pointer">&nbsp;</i>
-            </td>
+          <tbody data-bind='template: { name: "taskTemplate", foreach: tasks, afterRender: taskRenderComplete }'>
           </tbody>
         </table>
     </div>
@@ -60,3 +46,22 @@
       </div>
     </div>
 </div>
+
+<script type="text/html" id="taskTemplate">
+<tr>
+  <td class='span4'>
+    <input class='description' type='input' data-bind="value: Description, valueUpdate: 'keyup', event: { keyup: determineSave }" />
+  </td>
+  <td class='span4'>
+    <input class='date' type='input' data-bind="value: DueDate, valueUpdate: 'keyup', event: { keyup: determineSave }" />
+    <span data-bind="text: ParsedDate" class='label label-inverse'></span>
+  </td>
+  <td class='span3'>
+      <span data-bind="visible: IsInvalid, text: ErrorsString" class='label label-important'></span>
+      <input data-bind="visible: CanSave, click: save" type='button' class='btn btn-primary' value='save' style='padding-top: 1px; padding-bottom: 1px' />
+  </td>
+  <td class='span1'>
+    <i class="icon-remove" style="cursor: pointer">&nbsp;</i>
+  </td>
+</tr>
+</script>

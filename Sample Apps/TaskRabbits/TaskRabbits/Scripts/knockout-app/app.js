@@ -4,8 +4,17 @@
   App.tasks = ko.observableArray();
   App.canAddTask = ko.observable(false);
   App.selectedRabbit.subscribe(loadTasks);
+  App.loading = ko.observable(false);
+  App.loading.subscribe(updateLoading);
+  App.taskRenderComplete = finishedLoadingIfLast;
   ko.applyBindings(App, $("#dashboard").element);
   getRabbits();
+}
+
+function finishedLoadingIfLast(element, task) {
+  if(task == App.tasks()[App.tasks().length-1]) {
+    App.loading(false);
+  }
 }
 
 function getRabbits() {
@@ -15,9 +24,19 @@ function getRabbits() {
   });
 }
 
+function updateLoading() {
+  if(App.loading()) {
+    $("#loadingModal").modal({ show: true, backdrop: false });
+  } else {
+    $("#loadingModal").modal('hide');
+  }
+}
+
 function loadTasks(rabbit) {
+  App.loading(true);
   $.getJSON(rabbit.TasksUrl, function(data) {
     App.tasks(ToTaskViewModels(data.Tasks));
+    console.log(App.lastTask);
     App.tasks.CreateTaskUrl = data.CreateTaskUrl;
   });
 }
