@@ -47,16 +47,13 @@ function loadTasks(rabbit) {
 function TaskViewModel(task) {
   if(!task) {
     task = {};
-    task.Id = 0;
     task.RabbitId = App.selectedRabbit.Id;
     task.Description = "";
     task.DueDate = "";
-    task.SaveUrl = App.selectedRabbit.CreateTaskUrl;
-    task.IsNew = true;
+    task.SaveUrl = App.tasks.CreateTaskUrl;
   }
 
   var vm = {
-    Id: ko.observable(task.Id),
     RabbitId: ko.observable(task.RabbitId),
     Description: ko.observable(task.Description),
     DueDate: ko.observable(task.DueDate),
@@ -112,6 +109,9 @@ function TaskViewModel(task) {
       if(e.keyCode == 13) {
         vm.save();
       }
+    },
+    isNew: function() {
+      return !task.Id;
     }
   };
 
@@ -119,7 +119,9 @@ function TaskViewModel(task) {
   vm.DueDate.subscribe(vm.validate);
   vm.DueDate.subscribe(vm.parseDate);
   vm.parseDate();
-  if(task.IsNew) vm.validate();
+
+  if(vm.isNew()) vm.validate();
+  else vm.Id = ko.observable(task.Id);
 
   return vm;
 }
