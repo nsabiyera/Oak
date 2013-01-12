@@ -203,7 +203,7 @@ window.Dashboard = Backbone.View.extend({
 
     //WAT
     //this line has to be before the call to $("#rabbitsDropDown").change();
-    //otherwise it causes and infinite loop...yay javascript....
+    //otherwise it causes and infinite loop...
     $("#newRabbitModal").modal('hide');
     //END WAT
     

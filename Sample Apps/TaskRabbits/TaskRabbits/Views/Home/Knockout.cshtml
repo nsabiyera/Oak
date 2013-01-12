@@ -8,9 +8,9 @@
 <h2>Dashboard</h2>
 <div id="dashboard">
     <div class="row" style="margin-bottom: 10px">
-        <select data-bind="options: rabbits, value: selectedRabbit, optionsCaption: 'select a rabbit...', optionsText: 'Name'" class="span4" id="rabbitsDropDown">
+      <select data-bind="chosen: { options: rabbits, default: 'select a rabbit...', value: selectedRabbit, value: 'Id', text: 'Name', selected: selectedRabbit }" class="span4" id="rabbitsDropDown">
         </select>
-        <i class="icon-plus" style="cursor: pointer">&nbsp;</i>
+        <i class="icon-plus" id="showAddRabbit" style="cursor: pointer">&nbsp;</i>
     </div>
     <div class="row">
       <input id="addTask" data-bind="visible: canAddTask, click: addTask" type="button" class="btn" value="add task" />
@@ -29,13 +29,15 @@
       </div>
       <div class="modal-body">
         <p>
+            <div data-bind='template: { name: "createRabbitErrors", foreach: newRabbit.Errors }'>
+            </div>
             <label>Name</label>
-            <input type="text" id="newRabbitName" />
+            <input type="text" data-bind="value: newRabbit.Name" id="newRabbitName" />
         </p>
       </div>
       <div class="modal-footer">
         <a href="javascript:;" class="btn" data-dismiss="modal">Close</a>
-        <a href="javascript:;" id="createRabbit" class="btn btn-primary">Save</a>
+        <a data-bind="click: newRabbit.Save" id="createRabbit" class="btn btn-primary">Save</a>
       </div>
     </div>
     <div class="modal hide" id="loadingModal">
@@ -46,6 +48,10 @@
       </div>
     </div>
 </div>
+
+<script type="text/html" id="createRabbitErrors">
+  <div data-bind="text: Value" class="alert alert-error"></div>
+</script>
 
 <script type="text/html" id="taskTemplate">
 <tr>
