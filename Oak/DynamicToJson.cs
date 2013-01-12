@@ -6,22 +6,45 @@ using System.Reflection;
 
 namespace Oak
 {
+    public class DeserializationSession
+    {
+        public List<object> Visited;
+        public bool ProcessingList;
+
+        public DeserializationSession()
+        {
+            Visited = new List<object>();
+        }
+    }
+
     public class Result
     {
-        public bool IsCollection;
+        public bool ShouldStringify;
         public dynamic Value;
     }
 
     public class Item
     {
-        public List<object> Visited;
-        public bool IsCollection;
+        private const string AlreadyFoundGuid = "808FA4B8-889E-4BBC-9970-DA3B633A6C44";
+        public DeserializationSession Session;
+        public bool ShouldStringify;
         public dynamic Self;
         public Dictionary<string, Func<dynamic>> Todo;
+        public bool Enumerated;
+        public bool AlreadyFound;
         private string _value;
-        public string V { 
+        public string V
+        {
             get
             {
+                if (Enumerated == false)
+                {
+                    EnumerateProperties();
+                }
+
+                if (AlreadyFound == true)
+                    return AlreadyFoundGuid;
+
                 if (_value == null && Todo == null)
                     return "";
 
@@ -31,107 +54,136 @@ namespace Oak
                 var values = new List<string>();
                 foreach (var kvp in Todo)
                 {
-                    values.Add(Stringify(kvp.Key) + ": " + Stringify(kvp.Value.Invoke()));
+                    var temp = kvp.Value.Invoke();
+                    if (temp is Result && temp.Value is String && temp.Value == AlreadyFoundGuid)
+                    {
+                        continue;
+                    }
+
+                    values.Add(Stringify(kvp.Key) + ": " + Stringify(temp));
                 }
 
-                _value = "{ " + string.Join(", ", values)  + " }";
+                if (values.Count != 0)
+                {
+                    _value = "{ " + string.Join(", ", values) + " }";
+                }
 
                 return _value;
             }
-            set { _value = value; } 
+            set { _value = value; }
         }
 
-        public Item(dynamic o, List<object> visitedReferences)
+        public Item(dynamic o, DeserializationSession session)
         {
             Self = o;
-            Visited = visitedReferences;
+            Session = session;
             EnumerateProperties();
         }
 
-        private void EnumerateProperties()
+        public void EnumerateProperties()
         {
-            if (Visited.Contains(Self)) return;
+            if (Session.Visited.Contains(Self))
+            {
+                AlreadyFound = true;
+                return;
+            }
             if (IsValueType(Self))
             {
                 V = Stringify(Self);
                 Todo = null;
+                Enumerated = true;
                 return;
             }
 
             Todo = new Dictionary<string, Func<dynamic>>();
-            
+
             if (Self is Prototype)
             {
                 Self = DynamicExtensions.ToPrototype(Self);
+                Session.Visited.Add(Self);
                 foreach (var kvp in (Self as IDictionary<string, object>))
                 {
                     if (IsValueType(kvp.Value))
                     {
-                        Todo.Add(kvp.Key, () => new Result { IsCollection = false, Value = kvp.Value });
+                        Todo.Add(kvp.Key, () => new Result { ShouldStringify = true, Value = kvp.Value });
                         continue;
                     }
-
-                    IsCollection = false;
-                    var todo = new Item(kvp.Value, Visited);
+                    
+                    ShouldStringify = true;
+                    var todo = new Item(kvp.Value, Session);
                     var v = todo.V;
-                    Todo.Add(kvp.Key, () => new Result { Value = v, IsCollection = todo.IsCollection });
+                    if (v != null)
+                    {
+                        Todo.Add(kvp.Key, () => new Result {Value = v, ShouldStringify = todo.ShouldStringify});
+                    }
                 }
-                //iterate over properties resolving valuetypes, todos for others
-                //return Convert(o as IDictionary<string, object>, visitedReferences);
             }
             else if (Self is IEnumerable<dynamic>)
             {
-                IsCollection = true;
+                if (Session.ProcessingList == true)
+                {
+                    Enumerated = false;
+                    return;
+                }
+
+                Session.ProcessingList = true;
+                Session.Visited.Add(Self);
+                ShouldStringify = false;
                 var todos = new List<Item>();
 
                 foreach (var item in (Self as IEnumerable<dynamic>))
                 {
-                    todos.Add(new Item(item, Visited));
+                    todos.Add(new Item(item, Session));
                 }
 
+                Session.ProcessingList = false;
                 _value = "[ " + string.Join(", ", todos.Select(x => x.V)) + " ]";
                 Todo = null;
-                //open close brackets and a list of todos?
-                //return Convert(o as IEnumerable<dynamic>, visitedReferences);
             }
             else if (Self is Gemini)
             {
-                IsCollection = false;
+                Session.Visited.Add(Self);
+                ShouldStringify = false;
 
                 foreach (var kvp in Self.HashOfProperties())
                 {
                     if (IsValueType(kvp.Value))
                     {
-                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, IsCollection = false}));
+                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, ShouldStringify = true }));
                         continue;
                     }
 
-                    var todo = new Item(kvp.Value, Visited);
+                    var todo = new Item(kvp.Value, Session);
                     var v = todo.V;
-                    Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, IsCollection = todo.IsCollection }));
+                    if (v != null)
+                    {
+                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, ShouldStringify = todo.ShouldStringify }));
+                    }
                 }
-                //iterate over properties resolving valuetypes, todos for others
-                //return Convert(o.HashOfProperties(), visitedReferences);
             }
             else
             {
-                IsCollection = false;
+                Session.Visited.Add(Self);
+                ShouldStringify = false;
 
                 foreach (var kvp in (Self as object).ToPrototype())
                 {
                     if (IsValueType(kvp.Value))
                     {
-                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, IsCollection = false }));
+                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, ShouldStringify = true }));
                         continue;
                     }
-
-                    var todo = new Item(kvp.Value, Visited);
+                    
+                    var todo = new Item(kvp.Value, Session);
                     var v = todo.V;
-                    Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, IsCollection = todo.IsCollection }));
+                    if (v != null)
+                    {
+                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result {Value = v, ShouldStringify = todo.ShouldStringify}));
+                    }
                 }
-                //iterate over properties resolving valuetypes, todos for others
-                //return Convert((o as object).ToPrototype(), visitedReferences);
             }
+
+            Enumerated = true;
         }
 
         private static bool IsValueType(dynamic o)
@@ -163,8 +215,17 @@ namespace Oak
 
         public static string Stringify(dynamic o)
         {
+            if (o is Result)
+            {
+                if (o.ShouldStringify == false) return o.Value;
+
+                if (o.Value is string) return "\"" + Escape(o.Value) + "\"";
+
+                return Stringify(o.Value);
+            }
+
             if (IsNull(o)) return "null";
-            
+
             if (IsJsonString(o)) return "\"" + o + "\"";
 
             if (IsJsonNumeric(o)) return o.ToString();
@@ -172,13 +233,6 @@ namespace Oak
             if (IsBool(o)) return o.ToString().ToLower();
 
             if (o is string) return "\"" + Escape(o) + "\"";
-
-            if (o is Result)
-            {
-                if (o.IsCollection == true) return o.Value;
-
-                return Stringify(o.Value);
-            }
 
             throw new Exception("ughhhhhhhhhhhhhhh");
         }
@@ -209,7 +263,7 @@ namespace Oak
         public static string Convert(dynamic o, List<object> visitedReferences)
         {
             if (visitedReferences.Contains(o)) return "";
-             
+
             if (!IsValueType(o)) visitedReferences.Add(o);
 
             if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>, visitedReferences);
@@ -230,7 +284,7 @@ namespace Oak
 
         public static string Convert(IEnumerable<dynamic> o, List<object> visitedReferences)
         {
-            return "[ " + string.Join(", ", 
+            return "[ " + string.Join(", ",
                 o.Where(s => visitedReferences.Contains(s) == false)
                 .Select(s => Convert(s as object, visitedReferences))) + " ]";
         }
@@ -242,7 +296,7 @@ namespace Oak
 
         private static string StringifyAttributes(IDictionary<string, object> attributes, List<object> visitedReferences)
         {
-            return string.Join(", ", 
+            return string.Join(", ",
                 attributes.Where(CanConvertValue)
                     .Where(kvp => visitedReferences.Contains(kvp.Value) == false)
                     .Select(kvp => StringifyAttribute(kvp, visitedReferences)));
@@ -282,17 +336,17 @@ namespace Oak
 
         public static bool IsJsonString(dynamic o)
         {
-            return o is string || 
-                o.GetType() == typeof(DateTime) || 
-                o.GetType() == typeof(Char) || 
+            return o is string ||
+                o.GetType() == typeof(DateTime) ||
+                o.GetType() == typeof(Char) ||
                 o.GetType() == typeof(Guid);
         }
 
         public static bool IsJsonNumeric(dynamic o)
         {
-            return o.GetType() == typeof(Decimal) || 
-                o.GetType() == typeof(int) || 
-                o.GetType() == typeof(long) || 
+            return o.GetType() == typeof(Decimal) ||
+                o.GetType() == typeof(int) ||
+                o.GetType() == typeof(long) ||
                 o.GetType() == typeof(double);
         }
 
@@ -309,9 +363,9 @@ namespace Oak
         public static bool CanConvertValue(KeyValuePair<string, object> kvp)
         {
             return IsNull(kvp.Value) ||
-                   IsJsonString(kvp.Value) || 
-                   IsJsonNumeric(kvp.Value) || 
-                   IsList(kvp.Value) || 
+                   IsJsonString(kvp.Value) ||
+                   IsJsonNumeric(kvp.Value) ||
+                   IsList(kvp.Value) ||
                    IsBool(kvp.Value) ||
                    CanConvertObject(kvp.Value);
         }
