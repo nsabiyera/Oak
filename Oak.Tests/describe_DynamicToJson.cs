@@ -6,6 +6,7 @@ using NSpec;
 using System.Dynamic;
 using Newtonsoft.Json;
 using Massive;
+using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests
 {
@@ -13,11 +14,13 @@ namespace Oak.Tests
     {
         dynamic objectToConvert;
 
-        string jsonString;
+        string jsonString, bfirstJsonString;
 
         void before_each()
         {
             jsonString = null;
+
+            bfirstJsonString = null;
 
             tasks = new Tasks();
         }
@@ -39,13 +42,13 @@ namespace Oak.Tests
                 var rabbitId = new { Name = "YT" }.InsertInto("Rabbits");
 
                 var taskId = new { Description = "bolt onto vans", rabbitId }.InsertInto("Tasks");
+
+                new { Description = "save the world", rabbitId }.InsertInto("Tasks");
             };
 
-            it["works"] = () =>
+            it["disregards self referencing objects"] = () =>
             {
                 var results = tasks.All().Include("Rabbits").ToList();
-
-                ((int)results.Count).should_be(1);
 
                 (results as IEnumerable<dynamic>).ForEach(s =>
                 {
@@ -56,10 +59,11 @@ namespace Oak.Tests
 
                 string jsonString = DynamicToJson.Convert(newGemini);
 
-                jsonString.should_be(@"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } } ] }");
+                jsonString.should_be(@"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"", ""Task"": [ { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1 } ] } } ] }");
             };
         }
 
+        [Tag("wip")]
         void describe_prototype_to_json()
         {
             before = () =>
@@ -76,11 +80,20 @@ namespace Oak.Tests
                 objectToConvert.Long = (long)100;
             };
 
-            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+            act = () =>
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
 
             it["converts prototype"] = () =>
-                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
-                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null"));
+            {
+                var expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
+                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
+
+                jsonString.should_be(expected);
+
+                bfirstJsonString.should_be(expected);
+            };
         }
 
         void describe_gemini_to_json()
@@ -99,13 +112,18 @@ namespace Oak.Tests
                 });
             };
 
-            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+            act = () =>
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
 
             it["converts gemini"] = () =>
             {
-                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
-                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15));
+                string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
+                                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
 
+                jsonString.should_be(expected);
+                bfirstJsonString.should_be(expected);
             };
         }
 
@@ -386,47 +404,6 @@ namespace Oak.Tests
         public string Voodoo
         {
             set { voodoo = value; }
-        }
-    }
-
-    public class Tasks : DynamicRepository
-    {
-        public Tasks()
-        {
-            Projection = d => new Task(d);
-        }
-    }
-
-    public class Rabbits : DynamicRepository
-    {
-        public Rabbits()
-        {
-            Projection = d => new Rabbit(d);
-        }
-    }
-
-    public class Task : DynamicModel
-    {
-        Rabbits rabbits = new Rabbits();
-
-        public Task(object dto)
-            : base(dto)
-        {
-
-        }
-
-        IEnumerable<dynamic> Associates()
-        {
-            yield return new BelongsTo(rabbits);
-        }
-    }
-
-    public class Rabbit : DynamicModel
-    {
-        public Rabbit(object dto)
-            : base(dto)
-        {
-
         }
     }
 
