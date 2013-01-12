@@ -6,19 +6,19 @@
   App.selectedRabbit.subscribe(loadTasks);
   App.loading = ko.observable(false);
   App.loading.subscribe(updateLoading);
-  App.taskRenderComplete = finishedLoadingIfLast;
+  App.taskRenderComplete = function(element, task) {
+    if(task == App.tasks()[App.tasks().length-1]) {
+      App.loading(false);
+    }
+  };
   App.addTask = function() {
     App.tasks.unshift(TaskViewModel());
-  },
+  };
+
   ko.applyBindings(App, $("#dashboard").element);
   getRabbits();
 }
 
-function finishedLoadingIfLast(element, task) {
-  if(task == App.tasks()[App.tasks().length-1]) {
-    App.loading(false);
-  }
-}
 
 function getRabbits() {
   $.getJSON(App.routes.GetRabbitsUrl, function(data) {
@@ -51,6 +51,7 @@ function TaskViewModel(task) {
     task.Description = "";
     task.DueDate = "";
     task.SaveUrl = App.tasks.CreateTaskUrl;
+    task.DeleteUrl = null;
   }
 
   var vm = {
@@ -58,6 +59,7 @@ function TaskViewModel(task) {
     Description: ko.observable(task.Description),
     DueDate: ko.observable(task.DueDate),
     SaveUrl: ko.observable(task.SaveUrl),
+    DeleteUrl: ko.observable(task.DeleteUrl),
     CanSave: ko.observable(false),
     ErrorsString: ko.observable(""),
     IsInvalid: ko.observable(false),
@@ -112,6 +114,15 @@ function TaskViewModel(task) {
     },
     isNew: function() {
       return !task.Id;
+    },
+    destroy: function() {
+      if(vm.DeleteUrl) {
+        $.post(vm.DeleteUrl(), function() {
+          App.tasks.remove(vm);
+        });
+      } else {
+        App.tasks.remove(vm);
+      }
     }
   };
 
