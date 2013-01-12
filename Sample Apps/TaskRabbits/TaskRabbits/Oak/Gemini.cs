@@ -79,7 +79,7 @@ namespace Oak
 
         public bool Remove(KeyValuePair<string, object> item) { return Collection().Remove(item); }
 
-        IEnumerable<KeyValuePair<string, object>> Enumerable() { return members; }
+        IEnumerable<KeyValuePair<string,object>> Enumerable() { return members; }
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator() { return Enumerable().GetEnumerator(); }
 
@@ -245,7 +245,7 @@ namespace Oak
         {
             foreach (var method in DynamicDelegates(this.GetType()))
             {
-                if (!RespondsTo(method.Name)) AddDynamicMember(method);
+                if(!RespondsTo(method.Name)) AddDynamicMember(method);
             }
 
             return this;
@@ -582,16 +582,29 @@ namespace Oak
                 return true;
             }
 
-            dictionary.Add(property, value);
-
-            if (!suppress)
+            if (IsSame(value))
             {
-                var hooks = MethodHooks.Where(s => s.Key == this.GetType());
-
-                foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
+                TrySetMember(property, new DynamicFunction(() => value), suppress);
             }
+            else
+            {
+                dictionary.Add(property, value);
 
+                if (!suppress)
+                {
+                    var hooks = MethodHooks.Where(s => s.Key == this.GetType());
+
+                    foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
+                }    
+            }
             return true;
+        }
+
+        public bool IsSame(dynamic o)
+        {
+            if (o is Gemini && this.Prototype == (o as Gemini).Prototype) return true;
+
+            return false;
         }
 
         public virtual IEnumerable<string> Members()
@@ -632,7 +645,7 @@ namespace Oak
             {
                 if (!props[key].CanWrite) continue;
 
-                if (props[key].CanRead) dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
+                if(props[key].CanRead) dynamicProps.Add(props[key].Name, props[key].GetValue(this, null));
             }
 
             return dynamicProps;

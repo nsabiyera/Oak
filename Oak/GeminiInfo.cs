@@ -39,11 +39,11 @@ namespace Oak
             }
             else if (o is IEnumerable<dynamic>)
             {
-                WriteName(stringBuilder, tab + 1, name, "IEnumerable<dynamic>", null);
+                WriteName(stringBuilder, tab, name, "IEnumerable<dynamic>", null);
                 int index = 0;
                 foreach (var r in o as IEnumerable<dynamic>)
                 {
-                    Parse(stringBuilder, string.Format("[{0}]", index), r, tab + 2, encounteredObjects);
+                    Parse(stringBuilder, string.Format("[{0}]", index), r, tab + 1, encounteredObjects);
                     index++;
                 }
             }

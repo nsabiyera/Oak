@@ -10,7 +10,6 @@ using System.IO;
 
 namespace System
 {
-    //object extensions not part of massive
     [DebuggerNonUserCode]
     public static class TypeExtensions
     {

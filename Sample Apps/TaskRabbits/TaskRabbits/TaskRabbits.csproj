@@ -70,6 +70,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Rabbit.cs" />
+    <Compile Include="Models\Task.cs" />
     <Compile Include="Oak\Association.cs" />
     <Compile Include="Oak\BootStrap.cs" />
     <Compile Include="Oak\Bullet.cs" />

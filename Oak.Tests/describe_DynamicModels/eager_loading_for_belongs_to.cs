@@ -8,7 +8,6 @@ using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests.describe_DynamicModels
 {
-    [Tag("wip")]
     class eager_loading_for_belongs_to : nspec
     {
         object car1Id, car2Id, bluePrint1Id, bluePrint2Id, bluePrint3Id;

@@ -39,7 +39,9 @@ namespace Oak
 
         public static string Convert(IEnumerable<dynamic> o, List<object> visitedReferences)
         {
-            return "[ " + string.Join(", ", o.Select(s => Convert(s as object, visitedReferences))) + " ]";
+            return "[ " + string.Join(", ", 
+                o.Where(s => visitedReferences.Contains(s) == false)
+                .Select(s => Convert(s as object, visitedReferences))) + " ]";
         }
 
         public static string Convert(IDictionary<string, object> attributes, List<object> visitedReferences)

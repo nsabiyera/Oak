@@ -97,7 +97,6 @@ namespace Oak
 
     public static class DebugBootStrap
     {
-        private static bool disableInefficientQueryDetection;
         [ThreadStatic]
         public static List<SqlQueryLog> SqlQueries = new List<SqlQueryLog>();
 
@@ -223,6 +222,8 @@ namespace Oak
 </div>".Replace("{message}", System.Web.HttpUtility.HtmlEncode(error.Message))
        .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(error.ToString()));
         }
+
+        static bool disableInefficientQueryDetection = false;
 
         public static void SkipInefficientQueryDetectionForThisRequest()
         {

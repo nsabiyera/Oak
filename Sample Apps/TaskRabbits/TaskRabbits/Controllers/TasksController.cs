@@ -59,6 +59,18 @@ namespace TaskRabbits.Controllers
             return new EmptyResult();
         }
 
+        [HttpGet]
+        public ActionResult All()
+        {
+            var result = tasks.All().Include("Rabbits") as IEnumerable<dynamic>;
+            result.ForEach(s => 
+            {
+                s.Rabbit = s.Rabbit();
+            });
+
+            return new DynamicJsonResult(new { Tasks = result });
+        }
+
         void ApplyLinksAndFormatting(dynamic task)
         {
             task.SaveUrl = Link("Tasks", "Update", new { task.Id });
