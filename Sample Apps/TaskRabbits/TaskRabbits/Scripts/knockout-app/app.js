@@ -7,6 +7,9 @@
   App.loading = ko.observable(false);
   App.loading.subscribe(updateLoading);
   App.taskRenderComplete = finishedLoadingIfLast;
+  App.addTask = function() {
+    App.tasks.unshift(TaskViewModel());
+  },
   ko.applyBindings(App, $("#dashboard").element);
   getRabbits();
 }
@@ -36,12 +39,22 @@ function loadTasks(rabbit) {
   App.loading(true);
   $.getJSON(rabbit.TasksUrl, function(data) {
     App.tasks(ToTaskViewModels(data.Tasks));
-    console.log(App.lastTask);
+    App.canAddTask(true);
     App.tasks.CreateTaskUrl = data.CreateTaskUrl;
   });
 }
 
 function TaskViewModel(task) {
+  if(!task) {
+    task = {};
+    task.Id = 0;
+    task.RabbitId = App.selectedRabbit.Id;
+    task.Description = "";
+    task.DueDate = "";
+    task.SaveUrl = App.selectedRabbit.CreateTaskUrl;
+    task.IsNew = true;
+  }
+
   var vm = {
     Id: ko.observable(task.Id),
     RabbitId: ko.observable(task.RabbitId),
@@ -106,6 +119,7 @@ function TaskViewModel(task) {
   vm.DueDate.subscribe(vm.validate);
   vm.DueDate.subscribe(vm.parseDate);
   vm.parseDate();
+  if(task.IsNew) vm.validate();
 
   return vm;
 }

@@ -13,7 +13,7 @@
         <i class="icon-plus" style="cursor: pointer">&nbsp;</i>
     </div>
     <div class="row">
-      <input id="addTask" type="button" class="btn hide" value="add task" />
+      <input id="addTask" data-bind="visible: canAddTask, click: addTask" type="button" class="btn" value="add task" />
       <div>&nbsp;</div>
     </div>
     <div class="row">
