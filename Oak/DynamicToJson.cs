@@ -1,13 +1,204 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Dynamic;
 using System.Runtime.CompilerServices;
 using System.Reflection;
 
 namespace Oak
 {
+    public class Result
+    {
+        public bool IsCollection;
+        public dynamic Value;
+    }
+
+    public class Item
+    {
+        public List<object> Visited;
+        public bool IsCollection;
+        public dynamic Self;
+        public Dictionary<string, Func<dynamic>> Todo;
+        private string _value;
+        public string V { 
+            get
+            {
+                if (_value == null && Todo == null)
+                    return "";
+
+                if (Todo == null)
+                    return _value;
+
+                var values = new List<string>();
+                foreach (var kvp in Todo)
+                {
+                    values.Add(Stringify(kvp.Key) + ": " + Stringify(kvp.Value.Invoke()));
+                }
+
+                _value = "{ " + string.Join(", ", values)  + " }";
+
+                return _value;
+            }
+            set { _value = value; } 
+        }
+
+        public Item(dynamic o, List<object> visitedReferences)
+        {
+            Self = o;
+            Visited = visitedReferences;
+            EnumerateProperties();
+        }
+
+        private void EnumerateProperties()
+        {
+            if (Visited.Contains(Self)) return;
+            if (IsValueType(Self))
+            {
+                V = Stringify(Self);
+                Todo = null;
+                return;
+            }
+
+            Todo = new Dictionary<string, Func<dynamic>>();
+            
+            if (Self is Prototype)
+            {
+                Self = DynamicExtensions.ToPrototype(Self);
+                foreach (var kvp in (Self as IDictionary<string, object>))
+                {
+                    if (IsValueType(kvp.Value))
+                    {
+                        Todo.Add(kvp.Key, () => new Result { IsCollection = false, Value = kvp.Value });
+                        continue;
+                    }
+
+                    IsCollection = false;
+                    var todo = new Item(kvp.Value, Visited);
+                    var v = todo.V;
+                    Todo.Add(kvp.Key, () => new Result { Value = v, IsCollection = todo.IsCollection });
+                }
+                //iterate over properties resolving valuetypes, todos for others
+                //return Convert(o as IDictionary<string, object>, visitedReferences);
+            }
+            else if (Self is IEnumerable<dynamic>)
+            {
+                IsCollection = true;
+                var todos = new List<Item>();
+
+                foreach (var item in (Self as IEnumerable<dynamic>))
+                {
+                    todos.Add(new Item(item, Visited));
+                }
+
+                _value = "[ " + string.Join(", ", todos.Select(x => x.V)) + " ]";
+                Todo = null;
+                //open close brackets and a list of todos?
+                //return Convert(o as IEnumerable<dynamic>, visitedReferences);
+            }
+            else if (Self is Gemini)
+            {
+                IsCollection = false;
+
+                foreach (var kvp in Self.HashOfProperties())
+                {
+                    if (IsValueType(kvp.Value))
+                    {
+                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, IsCollection = false}));
+                        continue;
+                    }
+
+                    var todo = new Item(kvp.Value, Visited);
+                    var v = todo.V;
+                    Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, IsCollection = todo.IsCollection }));
+                }
+                //iterate over properties resolving valuetypes, todos for others
+                //return Convert(o.HashOfProperties(), visitedReferences);
+            }
+            else
+            {
+                IsCollection = false;
+
+                foreach (var kvp in (Self as object).ToPrototype())
+                {
+                    if (IsValueType(kvp.Value))
+                    {
+                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, IsCollection = false }));
+                        continue;
+                    }
+
+                    var todo = new Item(kvp.Value, Visited);
+                    var v = todo.V;
+                    Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, IsCollection = todo.IsCollection }));
+                }
+                //iterate over properties resolving valuetypes, todos for others
+                //return Convert((o as object).ToPrototype(), visitedReferences);
+            }
+        }
+
+        private static bool IsValueType(dynamic o)
+        {
+            return IsJsonString(o) || IsJsonNumeric(o) || IsBool(o);
+        }
+
+        public static bool IsJsonString(dynamic o)
+        {
+            return o == null ||
+                o is string ||
+                o.GetType() == typeof(DateTime) ||
+                o.GetType() == typeof(Char) ||
+                o.GetType() == typeof(Guid);
+        }
+
+        public static bool IsJsonNumeric(dynamic o)
+        {
+            return o.GetType() == typeof(Decimal) ||
+                o.GetType() == typeof(int) ||
+                o.GetType() == typeof(long) ||
+                o.GetType() == typeof(double);
+        }
+
+        public static bool IsBool(dynamic o)
+        {
+            return o.GetType() == typeof(bool);
+        }
+
+        public static string Stringify(dynamic o)
+        {
+            if (IsNull(o)) return "null";
+            
+            if (IsJsonString(o)) return "\"" + o + "\"";
+
+            if (IsJsonNumeric(o)) return o.ToString();
+
+            if (IsBool(o)) return o.ToString().ToLower();
+
+            if (o is string) return "\"" + Escape(o) + "\"";
+
+            if (o is Result)
+            {
+                if (o.IsCollection == true) return o.Value;
+
+                return Stringify(o.Value);
+            }
+
+            throw new Exception("ughhhhhhhhhhhhhhh");
+        }
+
+        private static bool IsNull(object value)
+        {
+            return value == null;
+        }
+
+        private static string Escape(string o)
+        {
+            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
+        }
+
+        public static bool IsList(dynamic o)
+        {
+            return o is IEnumerable<dynamic>;
+        }
+    }
+
     public class DynamicToJson
     {
         public static string Convert(dynamic o)
