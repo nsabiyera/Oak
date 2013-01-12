@@ -55,11 +55,15 @@ namespace Oak.Tests
 
                 dynamic newGemini = new Gemini(new { Tasks = results });
 
+                //System.Diagnostics.Debugger.Launch();
+
                 string jsonString = DynamicToJson.Convert(newGemini);
 
                 jsonString.should_be(@"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"", ""Task"": [ { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1 } ] } } ] }");
             };
         }
+
+        private string r;
 
         [Tag("wip")]
         void describe_prototype_to_json()
@@ -81,17 +85,21 @@ namespace Oak.Tests
             act = () =>
             {
                 jsonString = DynamicToJson.Convert(objectToConvert);
+
             };
 
             it["converts prototype"] = () =>
             {
                 var expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
-
+                //System.Diagnostics.Debugger.Launch();
+                r = new Item(objectToConvert, new List<object>()).V;
                 jsonString.should_be(expected);
+                r.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void describe_gemini_to_json()
         {
             before = () =>
@@ -118,10 +126,14 @@ namespace Oak.Tests
                 string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
                                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
 
+                //System.Diagnostics.Debugger.Launch();
+                r = new Item(objectToConvert, new List<object>()).V;
                 jsonString.should_be(expected);
+                r.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void describe_dynamic_model_to_json()
         {
             before = () =>
@@ -141,10 +153,18 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts dynamic model"] = () =>
-                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
-                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15));
+                {
+                    string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
+                        .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
+
+                    //System.Diagnostics.Debugger.Launch();
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void describe_collection()
         {
             before = () =>
@@ -162,7 +182,15 @@ namespace Oak.Tests
 
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
-            it["converts collection"] = () => jsonString.should_be(@"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]");
+            it["converts collection"] = () =>
+                {
+                    string expected = @"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]";
+
+                    //System.Diagnostics.Debugger.Launch();
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
         void describe_can_be_converted()
@@ -180,12 +208,15 @@ namespace Oak.Tests
                 { new List<object> { new { Name = "Jane Doe" }, "Foobar" }, false, "list containing convertable types and non convertable types" },
                 { new List<string>(), true, "empty list" }
             }.Do((entity, expectedResult, type) =>
-            {
-                it["{0} should evaluate to: {1}".With(type, expectedResult)] = () =>
-                    DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
-            });
+                {
+                    it["{0} should evaluate to: {1}".With(type, expectedResult)] = () =>
+                        {
+                            DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
+                        };
+                });
         }
 
+        [Tag("wip")]
         void describe_anonymous_type_to_json()
         {
             before = () => objectToConvert = new { FirstName = "Jane", LastName = "Doe" };
@@ -193,9 +224,17 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts properties of anonymous type"] = () =>
-                jsonString.should_be(@"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe"));
+                {
+                    string expected = @"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe");
+
+                    //System.Diagnostics.Debugger.Launch();
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_anonymous_types_that_have_defferred_execution()
         {
             before = () =>
@@ -213,14 +252,24 @@ namespace Oak.Tests
                 };
             };
 
-            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+            act = () =>
+                {
+                    //System.Diagnostics.Debugger.Launch();
+                    jsonString = DynamicToJson.Convert(objectToConvert);
+                };
 
             it["executes deferred statement and serializes result"] = () =>
-            {
-                jsonString.should_be(@"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }");
-            };
+                {
+                    string expected = @"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }";
+
+
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void coverting_list_string()
         {
             before = () =>
@@ -240,11 +289,16 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["executes deferred statement and serializes result"] = () =>
-            {
-                jsonString.should_be(@"{ ""Users"": [ ""Jane"", ""Doe"" ] }");
-            };
+                {
+                    string expected = @"{ ""Users"": [ ""Jane"", ""Doe"" ] }";
+
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_list_numeric()
         {
             before = () =>
@@ -264,11 +318,16 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["executes deferred statement and serializes result"] = () =>
-            {
-                jsonString.should_be(@"{ ""Users"": [ 10, 20 ] }");
-            };
+                {
+                    string expected = @"{ ""Users"": [ 10, 20 ] }";
+
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_list_of_boolean()
         {
             before = () =>
@@ -290,10 +349,15 @@ namespace Oak.Tests
 
             it["executes deferred statement and serializes result"] = () =>
             {
-                jsonString.should_be(@"{ ""IsAdded"": true, ""Users"": [ true, false ] }");
+                string expected = @"{ ""IsAdded"": true, ""Users"": [ true, false ] }";
+
+                r = new Item(objectToConvert, new List<object>()).V;
+                jsonString.should_be(expected);
+                r.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void converting_nested_object()
         {
             before = () =>
@@ -314,9 +378,13 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts whole object graph"] = () =>
-            {
-                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
-            };
+                {
+                    string expected = @"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }";
+
+                    r = new Item(objectToConvert, new List<object>()).V;
+                    jsonString.should_be(expected);
+                    r.should_be(expected);
+                };
         }
 
         void converting_dynamic_model()
@@ -338,7 +406,7 @@ namespace Oak.Tests
         {
             before = () =>
             {
-                objectToConvert = new 
+                objectToConvert = new
                 {
                     Goal = new Goal
                     {
