@@ -14,13 +14,11 @@ namespace Oak.Tests
     {
         dynamic objectToConvert;
 
-        string jsonString, bfirstJsonString;
+        string jsonString;
 
         void before_each()
         {
             jsonString = null;
-
-            bfirstJsonString = null;
 
             tasks = new Tasks();
         }
@@ -91,8 +89,6 @@ namespace Oak.Tests
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
 
                 jsonString.should_be(expected);
-
-                bfirstJsonString.should_be(expected);
             };
         }
 
@@ -123,7 +119,6 @@ namespace Oak.Tests
                                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
 
                 jsonString.should_be(expected);
-                bfirstJsonString.should_be(expected);
             };
         }
 
