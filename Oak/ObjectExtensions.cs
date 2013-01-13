@@ -10,7 +10,7 @@ using System.IO;
 
 namespace System
 {
-    //[DebuggerNonUserCode]
+    [DebuggerNonUserCode]
     public static class TypeExtensions
     {
         public static bool IsOfType<T>(this object o)
@@ -50,7 +50,7 @@ namespace System
         }
     }
 
-    //[DebuggerNonUserCode]
+    [DebuggerNonUserCode]
     public static class DynamicExtensions
     {
         public static bool CanConvertToPrototype(this object o)
