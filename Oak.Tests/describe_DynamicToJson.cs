@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NSpec;
-using System.Dynamic;
-using Newtonsoft.Json;
-using Massive;
 using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests
@@ -25,6 +21,7 @@ namespace Oak.Tests
 
         dynamic tasks;
 
+        [Tag("wip")]
         void describe_db_rows_to_json()
         {
             before = () =>
@@ -39,9 +36,11 @@ namespace Oak.Tests
 
                 var rabbitId = new { Name = "YT" }.InsertInto("Rabbits");
 
-                var taskId = new { Description = "bolt onto vans", rabbitId }.InsertInto("Tasks");
+                new { Description = "bolt onto vans", rabbitId }.InsertInto("Tasks");
 
                 new { Description = "save the world", rabbitId }.InsertInto("Tasks");
+
+                //Enumerable.Range(0, 10000).ForEach(x => new {Description = "save the world", rabbitId}.InsertInto("Tasks"));
             };
 
             it["disregards self referencing objects"] = () =>
@@ -53,13 +52,16 @@ namespace Oak.Tests
                     s.Rabbit = s.Rabbit();
                 });
 
-                dynamic newGemini = new Gemini(new { Tasks = results });
-
-                string jsonString = DynamicToJson.Convert(newGemini);
-
-                jsonString.should_be(@"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"", ""Task"": [ { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1 } ] } } ] }");
+                objectToConvert = new Gemini(new { Tasks = results });
+                
+                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } } ] }";
+                jsonString = DynamicToJson.Convert(objectToConvert);
+                jsonString.should_be(expected);
+                
             };
         }
+
+        private string r;
 
         [Tag("wip")]
         void describe_prototype_to_json()
@@ -87,11 +89,12 @@ namespace Oak.Tests
             {
                 var expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
-
+                
                 jsonString.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void describe_gemini_to_json()
         {
             before = () =>
@@ -122,6 +125,7 @@ namespace Oak.Tests
             };
         }
 
+        [Tag("wip")]
         void describe_dynamic_model_to_json()
         {
             before = () =>
@@ -141,10 +145,15 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts dynamic model"] = () =>
-                jsonString.should_be(@"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
-                    .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15));
+                {
+                    string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
+                        .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
+                    
+                    jsonString.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void describe_collection()
         {
             before = () =>
@@ -162,7 +171,12 @@ namespace Oak.Tests
 
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
-            it["converts collection"] = () => jsonString.should_be(@"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]");
+            it["converts collection"] = () =>
+                {
+                    string expected = @"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]";
+                    
+                    jsonString.should_be(expected);
+                };
         }
 
         void describe_can_be_converted()
@@ -180,12 +194,15 @@ namespace Oak.Tests
                 { new List<object> { new { Name = "Jane Doe" }, "Foobar" }, false, "list containing convertable types and non convertable types" },
                 { new List<string>(), true, "empty list" }
             }.Do((entity, expectedResult, type) =>
-            {
-                it["{0} should evaluate to: {1}".With(type, expectedResult)] = () =>
-                    DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
-            });
+                {
+                    it["{0} should evaluate to: {1}".With(type, expectedResult)] = () =>
+                        {
+                            DynamicToJson.CanConvertObject(entity as object).should_be(expectedResult);
+                        };
+                });
         }
 
+        [Tag("wip")]
         void describe_anonymous_type_to_json()
         {
             before = () => objectToConvert = new { FirstName = "Jane", LastName = "Doe" };
@@ -193,9 +210,14 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts properties of anonymous type"] = () =>
-                jsonString.should_be(@"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe"));
+                {
+                    string expected = @"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe");
+
+                    jsonString.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_anonymous_types_that_have_defferred_execution()
         {
             before = () =>
@@ -213,14 +235,20 @@ namespace Oak.Tests
                 };
             };
 
-            act = () => jsonString = DynamicToJson.Convert(objectToConvert);
+            act = () =>
+                {
+                    jsonString = DynamicToJson.Convert(objectToConvert);
+                };
 
             it["executes deferred statement and serializes result"] = () =>
-            {
-                jsonString.should_be(@"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }");
-            };
+                {
+                    string expected = @"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }";
+                    
+                    jsonString.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void coverting_list_string()
         {
             before = () =>
@@ -240,11 +268,14 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["executes deferred statement and serializes result"] = () =>
-            {
-                jsonString.should_be(@"{ ""Users"": [ ""Jane"", ""Doe"" ] }");
-            };
+                {
+                    string expected = @"{ ""Users"": [ ""Jane"", ""Doe"" ] }";
+
+                    jsonString.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_list_numeric()
         {
             before = () =>
@@ -264,11 +295,14 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["executes deferred statement and serializes result"] = () =>
-            {
-                jsonString.should_be(@"{ ""Users"": [ 10, 20 ] }");
-            };
+                {
+                    string expected = @"{ ""Users"": [ 10, 20 ] }";
+
+                    jsonString.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_list_of_boolean()
         {
             before = () =>
@@ -290,10 +324,13 @@ namespace Oak.Tests
 
             it["executes deferred statement and serializes result"] = () =>
             {
-                jsonString.should_be(@"{ ""IsAdded"": true, ""Users"": [ true, false ] }");
+                string expected = @"{ ""IsAdded"": true, ""Users"": [ true, false ] }";
+
+                jsonString.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void converting_nested_object()
         {
             before = () =>
@@ -314,11 +351,14 @@ namespace Oak.Tests
             act = () => jsonString = DynamicToJson.Convert(objectToConvert);
 
             it["converts whole object graph"] = () =>
-            {
-                jsonString.should_be(@"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }");
-            };
+                {
+                    string expected = @"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }";
+
+                    jsonString.should_be(expected);
+                };
         }
 
+        [Tag("wip")]
         void converting_dynamic_model()
         {
             before = () =>
@@ -330,15 +370,18 @@ namespace Oak.Tests
 
             it["includes both properties from hash and properties defined on dynamic model"] = () =>
             {
-                jsonString.should_be(@"{ ""Id"": 20, ""Title"": ""SomeTitle"", ""Name"": ""SomeName"" }");
+                string expected = @"{ ""Id"": 20, ""Title"": ""SomeTitle"", ""Name"": ""SomeName"" }";
+
+                jsonString.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void converting_named_classes()
         {
             before = () =>
             {
-                objectToConvert = new 
+                objectToConvert = new
                 {
                     Goal = new Goal
                     {
@@ -357,10 +400,13 @@ namespace Oak.Tests
 
             it["includes serialization of named classes"] = () =>
             {
-                jsonString.should_be(@"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Name"": ""Expense"", ""Amount"": 500 } } }");
+                string expected = @"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Name"": ""Expense"", ""Amount"": 500 } } }";
+
+                jsonString.should_be(expected);
             };
         }
 
+        [Tag("wip")]
         void escaping_strings()
         {
             before = () =>
@@ -378,7 +424,9 @@ namespace Oak.Tests
 
             it["special characters are escaped"] = () =>
             {
-                jsonString.should_be(@"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }");
+                string expected = @"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }";
+
+                jsonString.should_be(expected);
             };
         }
     }
