@@ -21,7 +21,7 @@ namespace Oak
 
     public class Item
     {
-        private const string AlreadyFoundMarker = "808FA4B8-889E-4BBC-9970-DA3B633A6C44";
+        private const string AlreadyFoundMarker = "808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44";
         public DeserializationSession Session;
         public dynamic Self;
         public bool MemberOfList;
