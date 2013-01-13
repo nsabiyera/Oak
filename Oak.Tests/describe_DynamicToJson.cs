@@ -56,7 +56,7 @@ namespace Oak.Tests
 
                 dynamic newGemini = new Gemini(new { Tasks = results });
 
-                System.Diagnostics.Debugger.Launch();
+                //System.Diagnostics.Debugger.Launch();
 
                 string jsonString = DynamicToJson.Convert(newGemini);
 
@@ -64,9 +64,9 @@ namespace Oak.Tests
 
                 var session = new DeserializationSession();
 
-                System.Diagnostics.Debugger.Launch();
+                //System.Diagnostics.Debugger.Launch();
                 r = new Item(newGemini, session).V;
-                jsonString.should_be(expected);
+                //jsonString.should_be(expected);
                 r.should_be(expected);
             };
         }
