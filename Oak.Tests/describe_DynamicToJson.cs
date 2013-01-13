@@ -83,7 +83,6 @@ namespace Oak.Tests
             act = () =>
             {
                 jsonString = DynamicToJson.Convert(objectToConvert);
-
             };
 
             it["converts prototype"] = () =>

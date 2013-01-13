@@ -8,15 +8,9 @@ namespace Oak
 {
     public class DeserializationSession
     {
-        public List<object> Visited;
+        public List<object> Visited = new List<object>();
         public bool ProcessingList;
-        public Dictionary<object, string> Relatives;
-
-        public DeserializationSession()
-        {
-            Visited = new List<object>();
-            Relatives = new Dictionary<object, string>();
-        }
+        public Dictionary<object, string> Relatives = new Dictionary<object, string>();
     }
 
     public class Result
@@ -24,7 +18,7 @@ namespace Oak
         public bool ShouldStringify;
         public dynamic Value;
     }
-    
+
     public class Item
     {
         private const string AlreadyFoundGuid = "808FA4B8-889E-4BBC-9970-DA3B633A6C44";
@@ -40,41 +34,31 @@ namespace Oak
         {
             get
             {
-                if (Enumerated == false)
-                {
-                    EnumerateProperties();
-                }
+                EnumerateProperties();
 
-                if (MemberOfList == true && Session.Relatives.ContainsKey(Self) == true)
+                if (MemberOfList && Session.Relatives.ContainsKey(Self))
                 {
                     return Session.Relatives[Self];
                 }
 
-                if (AlreadyFound == true)
-                    return AlreadyFoundGuid;
+                if (AlreadyFound) return AlreadyFoundGuid;
 
-                if (_value == null && Todo == null)
-                    return "";
+                if (_value == null && Todo == null) return "";
 
-                if (Todo == null)
-                    return _value;
+                if (Todo == null) return _value;
 
                 var values = new List<string>();
+
                 foreach (var kvp in Todo)
                 {
                     var temp = kvp.Value.Invoke();
-                    if (temp is Result && temp.Value is String && temp.Value == AlreadyFoundGuid)
-                    {
-                        continue;
-                    }
+
+                    if (temp.Value is String && temp.Value == AlreadyFoundGuid) continue;
 
                     values.Add(Stringify(kvp.Key) + ": " + Stringify(temp));
                 }
 
-                if (values.Count != 0)
-                {
-                    _value = "{ " + string.Join(", ", values) + " }";
-                }
+                if (values.Any()) _value = "{ " + string.Join(", ", values) + " }";
 
                 return _value;
             }
@@ -96,13 +80,52 @@ namespace Oak
             EnumerateProperties();
         }
 
+        void ResultsFor(IDictionary<string, object> attributes)
+        {
+            foreach (var kvp in attributes)
+            {
+                var result = ResultFor(kvp);
+
+                if (result != null) Todo.Add(kvp.Key, result);
+            }
+        }
+
+        Func<dynamic> ResultFor(KeyValuePair<string, object> attribute)
+        {
+            if (IsValueType(attribute.Value))
+            {
+                var result = new Result { ShouldStringify = true, Value = attribute.Value };
+
+                return () => result;
+            }
+
+            var todo = new Item(attribute.Value, Session, MemberOfList);
+            var v = todo.Value;
+            if (v != null)
+            {
+                if (MemberOfList && !Session.Relatives.ContainsKey(attribute.Value))
+                {
+                    Session.Relatives.Add(attribute.Value, v);
+                }
+
+                var result = new Result { Value = v, ShouldStringify = todo.ShouldStringify };
+
+                return () => result;
+            }
+
+            return null;
+        }
+
         public void EnumerateProperties()
         {
+            if (Enumerated) return;
+
             if (Session.Visited.Contains(Self))
             {
                 AlreadyFound = true;
                 return;
             }
+
             if (IsValueType(Self))
             {
                 Value = Stringify(Self);
@@ -113,32 +136,9 @@ namespace Oak
 
             Todo = new Dictionary<string, Func<dynamic>>();
 
-            if (Self is Prototype)
-            {
-                Self = DynamicExtensions.ToPrototype(Self);
-                Session.Visited.Add(Self);
-                foreach (var kvp in (Self as IDictionary<string, object>))
-                {
-                    if (IsValueType(kvp.Value))
-                    {
-                        Todo.Add(kvp.Key, () => new Result { ShouldStringify = true, Value = kvp.Value });
-                        continue;
-                    }
-                    
-                    ShouldStringify = true;
-                    var todo = new Item(kvp.Value, Session, MemberOfList);
-                    var v = todo.Value;
-                    if (v != null)
-                    {
-                        if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
-                        {
-                            Session.Relatives.Add(kvp.Value, v);
-                        }
-                        Todo.Add(kvp.Key, () => new Result {Value = v, ShouldStringify = todo.ShouldStringify});
-                    }
-                }
-            }
-            else if (Self is IEnumerable<dynamic>)
+            Session.Visited.Add(Self);
+
+            if (Self is IEnumerable<dynamic>)
             {
                 if (Session.ProcessingList == true)
                 {
@@ -147,8 +147,6 @@ namespace Oak
                 }
 
                 Session.ProcessingList = true;
-                Session.Visited.Add(Self);
-                ShouldStringify = false;
                 var todos = new List<Item>();
 
                 foreach (var item in (Self as IEnumerable<dynamic>))
@@ -160,56 +158,11 @@ namespace Oak
                 _value = "[ " + string.Join(", ", todos.Select(x => x.Value)) + " ]";
                 Todo = null;
             }
-            else if (Self is Gemini)
-            {
-                Session.Visited.Add(Self);
-                ShouldStringify = false;
+            else if (Self is Prototype) ResultsFor(Self);
 
-                foreach (var kvp in Self.HashOfProperties())
-                {
-                    if (IsValueType(kvp.Value))
-                    {
-                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, ShouldStringify = true }));
-                        continue;
-                    }
+            else if (Self is Gemini) ResultsFor(Self.HashOfProperties());
 
-                    var todo = new Item(kvp.Value, Session, MemberOfList);
-                    var v = todo.Value;
-                    if (v != null)
-                    {
-                        if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
-                        {
-                            Session.Relatives.Add(kvp.Value, v);
-                        }
-                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, ShouldStringify = todo.ShouldStringify }));
-                    }
-                }
-            }
-            else
-            {
-                Session.Visited.Add(Self);
-                ShouldStringify = false;
-
-                foreach (var kvp in (Self as object).ToPrototype())
-                {
-                    if (IsValueType(kvp.Value))
-                    {
-                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, ShouldStringify = true }));
-                        continue;
-                    }
-
-                    var todo = new Item(kvp.Value, Session, MemberOfList);
-                    var v = todo.Value;
-                    if (v != null)
-                    {
-                        if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
-                        {
-                            Session.Relatives.Add(kvp.Value, v);
-                        }
-                        Todo.Add(kvp.Key, new Func<dynamic>(() => new Result {Value = v, ShouldStringify = todo.ShouldStringify}));
-                    }
-                }
-            }
+            else ResultsFor((Self as object).ToPrototype());
 
             Enumerated = true;
         }
