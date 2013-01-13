@@ -33,7 +33,7 @@ namespace Oak
         {
             EnumerateProperties();
 
-            if (MemberOfList && Session.Relatives.ContainsKey(Self))
+            if (Session.Relatives.ContainsKey(Self))
             {
                 return Session.Relatives[Self];
             }
