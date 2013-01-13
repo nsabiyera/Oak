@@ -175,6 +175,7 @@ window.TaskView = Backbone.View.extend({
     this.$el.remove();
   }
 });
+
 window.Dashboard = Backbone.View.extend({
   el: "#dashboard",
   events: {

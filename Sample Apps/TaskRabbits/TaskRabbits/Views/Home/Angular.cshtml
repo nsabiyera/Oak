@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Anglar";
+}
+
+<link href="@Url.Content("~/Scripts/angular/angular-ui.css")" rel="stylesheet" type="text/css" />
+
+<script src="@Url.Content("~/Scripts/angular/angular.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/angular-app/app.js")" type="text/javascript"></script>
+    
+<h2>Dashboard</h2>
+<div id="dashboard" ng-app="App" ng-controller="AppCtrl">
+  <select ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
+    <option value="">select a rabbit...</option>
+  </select>
+  <table id="tasks" class="table table-stripped">
+    <tr ng-repeat="task in tasks">
+      <td class='span4'>
+        <input class='description' type='input' ng-model="task.Description" />
+      </td>
+      <td class='span4'>
+        <input class='date' type='input' ng-model="task.DueDate" on-keyup-fn="task.parseDate" />
+        <span class='label label-inverse'>{{ task.ParsedDate }}</span>
+      </td>
+      <td class='span3'>
+          <span class='label label-important'></span>
+          <input type='button' class='btn btn-primary' value='save' style='padding-top: 1px; padding-bottom: 1px' />
+      </td>
+      <td class='span1'>
+        <i class="icon-remove" data-bind="click: destroy" style="cursor: pointer">&nbsp;</i>
+      </td>
+    </tr>
+  </table>
+</div>

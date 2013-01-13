@@ -107,7 +107,11 @@
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Oak\ReleaseNotes.txt" />
-    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular-app\app.js" />
+    <Content Include="Scripts\angular\angular-ui-ieshiv.js" />
+    <Content Include="Scripts\angular\angular-ui.css" />
+    <Content Include="Scripts\angular\angular-ui.js" />
+    <Content Include="Scripts\angular\angular.js" />
     <Content Include="Scripts\appcontroller.js" />
     <Content Include="Scripts\backbone-app\app.js" />
     <Content Include="Scripts\backbone.js" />
@@ -151,7 +155,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Home\Angular.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
