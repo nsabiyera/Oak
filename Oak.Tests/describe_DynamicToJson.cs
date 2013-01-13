@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NSpec;
-using System.Dynamic;
-using Newtonsoft.Json;
-using Massive;
 using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests
@@ -43,6 +39,8 @@ namespace Oak.Tests
                 new { Description = "bolt onto vans", rabbitId }.InsertInto("Tasks");
 
                 new { Description = "save the world", rabbitId }.InsertInto("Tasks");
+
+                //Enumerable.Range(0, 10000).ForEach(x => new {Description = "save the world", rabbitId}.InsertInto("Tasks"));
             };
 
             it["disregards self referencing objects"] = () =>
@@ -54,20 +52,12 @@ namespace Oak.Tests
                     s.Rabbit = s.Rabbit();
                 });
 
-                dynamic newGemini = new Gemini(new { Tasks = results });
-
-                //System.Diagnostics.Debugger.Launch();
-
-                string jsonString = DynamicToJson.Convert(newGemini);
-
+                objectToConvert = new Gemini(new { Tasks = results });
+                
                 string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } } ] }";
-
-                var session = new DeserializationSession();
-
-                //System.Diagnostics.Debugger.Launch();
-                r = new Item(newGemini, session).V;
-                //jsonString.should_be(expected);
-                r.should_be(expected);
+                jsonString = DynamicToJson.Convert(objectToConvert);
+                jsonString.should_be(expected);
+                
             };
         }
 
@@ -100,11 +90,8 @@ namespace Oak.Tests
             {
                 var expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
-                //System.Diagnostics.Debugger.Launch();
-                var session = new DeserializationSession();
-                r = new Item(objectToConvert, session).V;
+                
                 jsonString.should_be(expected);
-                r.should_be(expected);
             };
         }
 
@@ -135,11 +122,7 @@ namespace Oak.Tests
                 string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
                                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
 
-                //System.Diagnostics.Debugger.Launch();
-                var session = new DeserializationSession();
-                r = new Item(objectToConvert, session).V;
                 jsonString.should_be(expected);
-                r.should_be(expected);
             };
         }
 
@@ -166,12 +149,8 @@ namespace Oak.Tests
                 {
                     string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
                         .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
-
-                    //System.Diagnostics.Debugger.Launch();
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
+                    
                     jsonString.should_be(expected);
-                    r.should_be(expected);
                 };
         }
 
@@ -196,12 +175,8 @@ namespace Oak.Tests
             it["converts collection"] = () =>
                 {
                     string expected = @"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]";
-
-                    //System.Diagnostics.Debugger.Launch();
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
+                    
                     jsonString.should_be(expected);
-                    r.should_be(expected);
                 };
         }
 
@@ -239,11 +214,7 @@ namespace Oak.Tests
                 {
                     string expected = @"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe");
 
-                    //System.Diagnostics.Debugger.Launch();
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
                     jsonString.should_be(expected);
-                    r.should_be(expected);
                 };
         }
 
@@ -267,18 +238,14 @@ namespace Oak.Tests
 
             act = () =>
                 {
-                    //System.Diagnostics.Debugger.Launch();
                     jsonString = DynamicToJson.Convert(objectToConvert);
                 };
 
             it["executes deferred statement and serializes result"] = () =>
                 {
                     string expected = @"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }";
-
-
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
-                    r.should_be(expected);
+                    
+                    jsonString.should_be(expected);
                 };
         }
 
@@ -305,11 +272,7 @@ namespace Oak.Tests
                 {
                     string expected = @"{ ""Users"": [ ""Jane"", ""Doe"" ] }";
 
-                    //System.Diagnostics.Debugger.Launch();
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
                     jsonString.should_be(expected);
-                    r.should_be(expected);
                 };
         }
 
@@ -336,10 +299,7 @@ namespace Oak.Tests
                 {
                     string expected = @"{ ""Users"": [ 10, 20 ] }";
 
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
                     jsonString.should_be(expected);
-                    r.should_be(expected);
                 };
         }
 
@@ -367,10 +327,7 @@ namespace Oak.Tests
             {
                 string expected = @"{ ""IsAdded"": true, ""Users"": [ true, false ] }";
 
-                var session = new DeserializationSession();
-                r = new Item(objectToConvert, session).V;
                 jsonString.should_be(expected);
-                r.should_be(expected);
             };
         }
 
@@ -398,10 +355,7 @@ namespace Oak.Tests
                 {
                     string expected = @"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }";
 
-                    var session = new DeserializationSession();
-                    r = new Item(objectToConvert, session).V;
                     jsonString.should_be(expected);
-                    r.should_be(expected);
                 };
         }
 
@@ -419,10 +373,7 @@ namespace Oak.Tests
             {
                 string expected = @"{ ""Id"": 20, ""Title"": ""SomeTitle"", ""Name"": ""SomeName"" }";
 
-                var session = new DeserializationSession();
-                r = new Item(objectToConvert, session).V;
                 jsonString.should_be(expected);
-                r.should_be(expected);
             };
         }
 
@@ -452,10 +403,7 @@ namespace Oak.Tests
             {
                 string expected = @"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Name"": ""Expense"", ""Amount"": 500 } } }";
 
-                var session = new DeserializationSession();
-                r = new Item(objectToConvert, session).V;
                 jsonString.should_be(expected);
-                r.should_be(expected);
             };
         }
 
@@ -477,14 +425,9 @@ namespace Oak.Tests
 
             it["special characters are escaped"] = () =>
             {
-                //System.Diagnostics.Debugger.Launch();
-
                 string expected = @"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }";
 
-                var session = new DeserializationSession();
-                r = new Item(objectToConvert, session).V;
                 jsonString.should_be(expected);
-                r.should_be(expected);
             };
         }
     }

@@ -24,7 +24,7 @@ namespace Oak
         public bool ShouldStringify;
         public dynamic Value;
     }
-
+    
     public class Item
     {
         private const string AlreadyFoundGuid = "808FA4B8-889E-4BBC-9970-DA3B633A6C44";
@@ -36,7 +36,7 @@ namespace Oak
         public bool Enumerated;
         public bool AlreadyFound;
         private string _value;
-        public string V
+        public string Value
         {
             get
             {
@@ -105,7 +105,7 @@ namespace Oak
             }
             if (IsValueType(Self))
             {
-                V = Stringify(Self);
+                Value = Stringify(Self);
                 Todo = null;
                 Enumerated = true;
                 return;
@@ -127,7 +127,7 @@ namespace Oak
                     
                     ShouldStringify = true;
                     var todo = new Item(kvp.Value, Session, MemberOfList);
-                    var v = todo.V;
+                    var v = todo.Value;
                     if (v != null)
                     {
                         if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
@@ -157,7 +157,7 @@ namespace Oak
                 }
 
                 Session.ProcessingList = false;
-                _value = "[ " + string.Join(", ", todos.Select(x => x.V)) + " ]";
+                _value = "[ " + string.Join(", ", todos.Select(x => x.Value)) + " ]";
                 Todo = null;
             }
             else if (Self is Gemini)
@@ -174,7 +174,7 @@ namespace Oak
                     }
 
                     var todo = new Item(kvp.Value, Session, MemberOfList);
-                    var v = todo.V;
+                    var v = todo.Value;
                     if (v != null)
                     {
                         if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
@@ -199,7 +199,7 @@ namespace Oak
                     }
 
                     var todo = new Item(kvp.Value, Session, MemberOfList);
-                    var v = todo.V;
+                    var v = todo.Value;
                     if (v != null)
                     {
                         if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
@@ -260,9 +260,7 @@ namespace Oak
 
             if (IsBool(o)) return o.ToString().ToLower();
 
-            if (o is string) return "\"" + Escape(o) + "\"";
-
-            throw new Exception("ughhhhhhhhhhhhhhh");
+            return "\"" + Escape(o) + "\"";
         }
 
         private static bool IsNull(object value)
@@ -285,122 +283,9 @@ namespace Oak
     {
         public static string Convert(dynamic o)
         {
-            return Convert(o, new List<object>());
-        }
-
-        public static string Convert(dynamic o, List<object> visitedReferences)
-        {
-            if (visitedReferences.Contains(o)) return "";
-
-            if (!IsValueType(o)) visitedReferences.Add(o);
-
-            if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>, visitedReferences);
-
-            if (o is Prototype) return Convert(o as IDictionary<string, object>, visitedReferences);
-
-            if (o is Gemini) return Convert(o.HashOfProperties(), visitedReferences);
-
-            if (IsValueType(o)) return Stringify(o, visitedReferences);
-
-            return Convert((o as object).ToPrototype(), visitedReferences);
-        }
-
-        private static bool IsValueType(dynamic o)
-        {
-            return IsJsonString(o) || IsJsonNumeric(o) || IsBool(o);
-        }
-
-        public static string Convert(IEnumerable<dynamic> o, List<object> visitedReferences)
-        {
-            return "[ " + string.Join(", ",
-                o.Where(s => visitedReferences.Contains(s) == false)
-                .Select(s => Convert(s as object, visitedReferences))) + " ]";
-        }
-
-        public static string Convert(IDictionary<string, object> attributes, List<object> visitedReferences)
-        {
-            return "{ " + StringifyAttributes(attributes, visitedReferences) + " }";
-        }
-
-        private static string StringifyAttributes(IDictionary<string, object> attributes, List<object> visitedReferences)
-        {
-            return string.Join(", ",
-                attributes.Where(CanConvertValue)
-                    .Where(kvp => visitedReferences.Contains(kvp.Value) == false)
-                    .Select(kvp => StringifyAttribute(kvp, visitedReferences)));
-        }
-
-        private static string StringifyAttribute(KeyValuePair<string, object> kvp, List<object> visitedReferences)
-        {
-            return Stringify(kvp.Key, visitedReferences) + ": " + Stringify(kvp.Value, visitedReferences);
-        }
-
-        private static List<dynamic> ToList(dynamic enumerable)
-        {
-            return (enumerable as IEnumerable<dynamic>).ToList();
-        }
-
-        public static string Stringify(dynamic o, List<object> visitedReferences)
-        {
-            if (IsNull(o)) return "null";
-
-            if (o is string) return "\"" + Escape(o) + "\"";
-
-            if (IsJsonString(o)) return "\"" + o + "\"";
-
-            if (IsJsonNumeric(o)) return o.ToString();
-
-            if (IsList(o)) return Convert(o as IEnumerable<dynamic>, visitedReferences);
-
-            if (IsBool(o)) return o.ToString().ToLower();
-
-            return Convert(o as object, visitedReferences);
-        }
-
-        private static string Escape(string o)
-        {
-            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
-        }
-
-        public static bool IsJsonString(dynamic o)
-        {
-            return o is string ||
-                o.GetType() == typeof(DateTime) ||
-                o.GetType() == typeof(Char) ||
-                o.GetType() == typeof(Guid);
-        }
-
-        public static bool IsJsonNumeric(dynamic o)
-        {
-            return o.GetType() == typeof(Decimal) ||
-                o.GetType() == typeof(int) ||
-                o.GetType() == typeof(long) ||
-                o.GetType() == typeof(double);
-        }
-
-        public static bool IsList(dynamic o)
-        {
-            return o is IEnumerable<dynamic>;
-        }
-
-        public static bool IsBool(dynamic o)
-        {
-            return o.GetType() == typeof(bool);
-        }
-
-        public static bool CanConvertValue(KeyValuePair<string, object> kvp)
-        {
-            return IsNull(kvp.Value) ||
-                   IsJsonString(kvp.Value) ||
-                   IsJsonNumeric(kvp.Value) ||
-                   IsList(kvp.Value) ||
-                   IsBool(kvp.Value) ||
-                   CanConvertObject(kvp.Value);
-        }
-
-        private static bool IsNull(object value)
-        {
-            return value == null;
+            var session = new DeserializationSession();
+            var item = new Item(o, session);
+            return item.Value;
         }
 
         public static bool CanConvertObject(dynamic o)
