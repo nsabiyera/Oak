@@ -56,15 +56,15 @@ namespace Oak.Tests
 
                 dynamic newGemini = new Gemini(new { Tasks = results });
 
-                //System.Diagnostics.Debugger.Launch();
+                System.Diagnostics.Debugger.Launch();
 
                 string jsonString = DynamicToJson.Convert(newGemini);
 
-                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"", ""Task"": [ { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1 } ] } } ] }";
+                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } } ] }";
 
                 var session = new DeserializationSession();
 
-                //System.Diagnostics.Debugger.Launch();
+                System.Diagnostics.Debugger.Launch();
                 r = new Item(newGemini, session).V;
                 jsonString.should_be(expected);
                 r.should_be(expected);

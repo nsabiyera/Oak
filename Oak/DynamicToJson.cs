@@ -10,10 +10,12 @@ namespace Oak
     {
         public List<object> Visited;
         public bool ProcessingList;
+        public Dictionary<object, string> Relatives;
 
         public DeserializationSession()
         {
             Visited = new List<object>();
+            Relatives = new Dictionary<object, string>();
         }
     }
 
@@ -29,6 +31,7 @@ namespace Oak
         public DeserializationSession Session;
         public bool ShouldStringify;
         public dynamic Self;
+        public bool MemberOfList;
         public Dictionary<string, Func<dynamic>> Todo;
         public bool Enumerated;
         public bool AlreadyFound;
@@ -40,6 +43,11 @@ namespace Oak
                 if (Enumerated == false)
                 {
                     EnumerateProperties();
+                }
+
+                if (MemberOfList == true && Session.Relatives.ContainsKey(Self) == true)
+                {
+                    return Session.Relatives[Self];
                 }
 
                 if (AlreadyFound == true)
@@ -80,6 +88,14 @@ namespace Oak
             EnumerateProperties();
         }
 
+        public Item(dynamic o, DeserializationSession session, bool memberOfList)
+        {
+            Self = o;
+            Session = session;
+            MemberOfList = memberOfList;
+            EnumerateProperties();
+        }
+
         public void EnumerateProperties()
         {
             if (Session.Visited.Contains(Self))
@@ -110,10 +126,14 @@ namespace Oak
                     }
                     
                     ShouldStringify = true;
-                    var todo = new Item(kvp.Value, Session);
+                    var todo = new Item(kvp.Value, Session, MemberOfList);
                     var v = todo.V;
                     if (v != null)
                     {
+                        if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
+                        {
+                            Session.Relatives.Add(kvp.Value, v);
+                        }
                         Todo.Add(kvp.Key, () => new Result {Value = v, ShouldStringify = todo.ShouldStringify});
                     }
                 }
@@ -133,7 +153,7 @@ namespace Oak
 
                 foreach (var item in (Self as IEnumerable<dynamic>))
                 {
-                    todos.Add(new Item(item, Session));
+                    todos.Add(new Item(item, Session, true));
                 }
 
                 Session.ProcessingList = false;
@@ -153,10 +173,14 @@ namespace Oak
                         continue;
                     }
 
-                    var todo = new Item(kvp.Value, Session);
+                    var todo = new Item(kvp.Value, Session, MemberOfList);
                     var v = todo.V;
                     if (v != null)
                     {
+                        if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
+                        {
+                            Session.Relatives.Add(kvp.Value, v);
+                        }
                         Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = v, ShouldStringify = todo.ShouldStringify }));
                     }
                 }
@@ -173,11 +197,15 @@ namespace Oak
                         Todo.Add(kvp.Key, new Func<dynamic>(() => new Result { Value = kvp.Value, ShouldStringify = true }));
                         continue;
                     }
-                    
-                    var todo = new Item(kvp.Value, Session);
+
+                    var todo = new Item(kvp.Value, Session, MemberOfList);
                     var v = todo.V;
                     if (v != null)
                     {
+                        if (MemberOfList == true && Session.Relatives.ContainsKey(kvp.Value) == false)
+                        {
+                            Session.Relatives.Add(kvp.Value, v);
+                        }
                         Todo.Add(kvp.Key, new Func<dynamic>(() => new Result {Value = v, ShouldStringify = todo.ShouldStringify}));
                     }
                 }
