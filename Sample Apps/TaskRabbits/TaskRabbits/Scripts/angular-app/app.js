@@ -4,9 +4,24 @@ app.directive('onKeyupFn', function() {
     return function(scope, elm, attrs) {
         var keyupFn = scope.$eval(attrs.onKeyupFn);
         elm.bind('keyup', function(evt) {
-            scope.$apply(function() {
-                keyupFn.call(scope, evt.which);
-            });
+            if(evt.which != 13) {
+              scope.$apply(function() {
+                  keyupFn.call(scope, evt.which);
+              });
+            }
+        });
+    };
+});
+
+app.directive('onEnter', function() {
+    return function(scope, elm, attrs) {
+        var keyupFn = scope.$eval(attrs.onKeyupFn);
+        elm.bind('keyup', function(evt) {
+            if(evt.which == 13) {
+              scope.$apply(function() {
+                  keyupFn.call(scope, evt.which);
+              });
+            }
         });
     };
 });
@@ -40,6 +55,25 @@ function ToTaskVm(task) {
       task.ParsedDate = "?";
     }
   };
+
+  task.descriptionChanged = function() {
+    task.markChanged();
+  };
+
+  task.dateChanged = function() {
+    task.markChanged();
+    task.parseDate();
+  };
+
+  task.markChanged = function() {
+    task.HasChanged = true;
+  };
+
+  task.hasErrors = function() {
+
+  };
+
+  task.HasChanged = false;
 
   task.ParsedDate = task.DueDate;
 }
