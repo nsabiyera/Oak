@@ -89,7 +89,7 @@ namespace Oak
 
             var v = todo.Value();
 
-            if (v == null) return null;
+            if (v == null || v == AlreadyFoundMarker) return null;
 
             Cache(attribute, v);
 
@@ -121,8 +121,6 @@ namespace Oak
 
             Todo = new Dictionary<string, Func<dynamic>>();
 
-            Session.Visited.Add(Self);
-
             if (Self is IEnumerable<dynamic>)
             {
                 if (Session.ProcessingList == true)
@@ -143,11 +141,21 @@ namespace Oak
                 value = "[ " + string.Join(", ", todos.Select(x => x.Value())) + " ]";
                 Todo = null;
             }
-            else if (Self is Prototype) ResultsFor(Self);
-
-            else if (Self is Gemini) ResultsFor(Self.HashOfProperties());
-
-            else ResultsFor((Self as object).ToPrototype());
+            else if (Self is Prototype)
+            {
+                Session.Visited.Add(Self);
+                ResultsFor(Self);
+            }
+            else if (Self is Gemini)
+            {
+                Session.Visited.Add(Self);
+                ResultsFor(Self.HashOfProperties());
+            }
+            else
+            {
+                Session.Visited.Add(Self);
+                ResultsFor((Self as object).ToPrototype());
+            }
 
             Enumerated = true;
         }

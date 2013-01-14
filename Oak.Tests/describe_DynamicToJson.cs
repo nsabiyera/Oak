@@ -32,15 +32,33 @@ namespace Oak.Tests
 
                 seed.CreateTable("Rabbits", seed.Id(), new { Name = "nvarchar(255)" }).ExecuteNonQuery();
 
-                seed.CreateTable("Tasks", seed.Id(), new { Description = "nvarchar(255)" }, new { RabbitId = "int" }).ExecuteNonQuery();
+                seed.CreateTable("Tasks",
+                    seed.Id(),
+                    new { Description = "nvarchar(255)" },
+                    new { RabbitId = "int" },
+                    new { DueDate = "datetime" }).ExecuteNonQuery();
 
-                var rabbitId = new { Name = "YT" }.InsertInto("Rabbits");
+                var rabbitId = new { Name = "Yours Truly" }.InsertInto("Rabbits");
 
-                new { Description = "bolt onto vans", rabbitId }.InsertInto("Tasks");
+                new { rabbitId, Description = "bolt onto vans", DueDate = DateTime.Today }.InsertInto("Tasks");
 
-                new { Description = "save the world", rabbitId }.InsertInto("Tasks");
+                rabbitId = new { Name = "Hiro Protaganist" }.InsertInto("Rabbits");
 
-                //Enumerable.Range(0, 10000).ForEach(x => new {Description = "save the world", rabbitId}.InsertInto("Tasks"));
+                new { rabbitId, Description = "save the world", DueDate = DateTime.Today }.InsertInto("Tasks");
+
+                new { rabbitId, Description = "deliver pizza", DueDate = DateTime.Today }.InsertInto("Tasks");
+
+                rabbitId = new { Name = "Lots" }.InsertInto("Rabbits");
+
+                for (int i = 0; i < 10; i++)
+                {
+                    new
+                    {
+                        rabbitId,
+                        Description = "Task: " + i.ToString(),
+                        DueDate = DateTime.Today
+                    }.InsertInto("Tasks");
+                }
             };
 
             it["disregards self referencing objects"] = () =>
@@ -53,17 +71,16 @@ namespace Oak.Tests
                 });
 
                 objectToConvert = new Gemini(new { Tasks = results });
-                
-                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 1, ""Rabbit"": { ""Id"": 1, ""Name"": ""YT"" } } ] }";
+
+                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 1, ""Name"": ""Yours Truly"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 2, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 3, ""Description"": ""deliver pizza"", ""RabbitId"": 2, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 4, ""Description"": ""Task: 0"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 5, ""Description"": ""Task: 1"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 6, ""Description"": ""Task: 2"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 7, ""Description"": ""Task: 3"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 8, ""Description"": ""Task: 4"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 9, ""Description"": ""Task: 5"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 10, ""Description"": ""Task: 6"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 11, ""Description"": ""Task: 7"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 12, ""Description"": ""Task: 8"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 13, ""Description"": ""Task: 9"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } } ] }";
                 jsonString = DynamicToJson.Convert(objectToConvert);
                 jsonString.should_be(expected);
-                
+
             };
         }
 
         private string r;
 
-        [Tag("wip")]
         void describe_prototype_to_json()
         {
             before = () =>
@@ -89,12 +106,11 @@ namespace Oak.Tests
             {
                 var expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
-                
+
                 jsonString.should_be(expected);
             };
         }
 
-        [Tag("wip")]
         void describe_gemini_to_json()
         {
             before = () =>
@@ -125,7 +141,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void describe_dynamic_model_to_json()
         {
             before = () =>
@@ -148,12 +163,11 @@ namespace Oak.Tests
                 {
                     string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
                         .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
-                    
+
                     jsonString.should_be(expected);
                 };
         }
 
-        [Tag("wip")]
         void describe_collection()
         {
             before = () =>
@@ -174,7 +188,7 @@ namespace Oak.Tests
             it["converts collection"] = () =>
                 {
                     string expected = @"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]";
-                    
+
                     jsonString.should_be(expected);
                 };
         }
@@ -202,7 +216,6 @@ namespace Oak.Tests
                 });
         }
 
-        [Tag("wip")]
         void describe_anonymous_type_to_json()
         {
             before = () => objectToConvert = new { FirstName = "Jane", LastName = "Doe" };
@@ -217,7 +230,6 @@ namespace Oak.Tests
                 };
         }
 
-        [Tag("wip")]
         void converting_anonymous_types_that_have_defferred_execution()
         {
             before = () =>
@@ -243,12 +255,11 @@ namespace Oak.Tests
             it["executes deferred statement and serializes result"] = () =>
                 {
                     string expected = @"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }";
-                    
+
                     jsonString.should_be(expected);
                 };
         }
 
-        [Tag("wip")]
         void coverting_list_string()
         {
             before = () =>
@@ -275,7 +286,6 @@ namespace Oak.Tests
                 };
         }
 
-        [Tag("wip")]
         void converting_list_numeric()
         {
             before = () =>
@@ -302,7 +312,6 @@ namespace Oak.Tests
                 };
         }
 
-        [Tag("wip")]
         void converting_list_of_boolean()
         {
             before = () =>
@@ -330,7 +339,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void converting_nested_object()
         {
             before = () =>
@@ -358,7 +366,6 @@ namespace Oak.Tests
                 };
         }
 
-        [Tag("wip")]
         void converting_dynamic_model()
         {
             before = () =>
@@ -376,7 +383,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void converting_named_classes()
         {
             before = () =>
@@ -406,7 +412,6 @@ namespace Oak.Tests
             };
         }
 
-        [Tag("wip")]
         void escaping_strings()
         {
             before = () =>
