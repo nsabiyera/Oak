@@ -19,45 +19,47 @@ namespace Oak
         public dynamic Value;
     }
 
+    public class CicularReference { }
+
     public class Item
     {
-        private const string AlreadyFoundMarker = "808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44";
+        public bool IsCircular()
+        {
+            return Value is CicularReference;
+        }
+
         public DeserializationSession Session;
         public dynamic Self;
         public bool MemberOfList;
         public Dictionary<string, Func<dynamic>> Todo;
         public bool Enumerated;
         public bool AlreadyFound;
-        private string value;
-        public string Value()
+        public dynamic Value { get; set; }
+        public void Resolve()
         {
             EnumerateProperties();
 
-            if (Session.Relatives.ContainsKey(Self))
+            if (Session.Relatives.ContainsKey(Self)) Value = Session.Relatives[Self];
+
+            else if (AlreadyFound) Value = new CicularReference();
+
+            else if (Value == null && Todo == null) Value = "";
+
+            else if (Todo != null)
             {
-                return Session.Relatives[Self];
+                var values = new List<string>();
+
+                foreach (var kvp in Todo)
+                {
+                    var temp = kvp.Value.Invoke();
+
+                    if (temp is CicularReference || temp.Value is CicularReference) continue;
+
+                    values.Add(Stringify(kvp.Key) + ": " + Stringify(temp));
+                }
+
+                if (values.Any()) Value = "{ " + string.Join(", ", values) + " }";
             }
-
-            if (AlreadyFound) return AlreadyFoundMarker;
-
-            if (value == null && Todo == null) return "";
-
-            if (Todo == null) return value;
-
-            var values = new List<string>();
-
-            foreach (var kvp in Todo)
-            {
-                var temp = kvp.Value.Invoke();
-
-                if (temp.Value is String && temp.Value == AlreadyFoundMarker) continue;
-
-                values.Add(Stringify(kvp.Key) + ": " + Stringify(temp));
-            }
-
-            if (values.Any()) value = "{ " + string.Join(", ", values) + " }";
-
-            return value;
         }
 
         public Item(dynamic o, DeserializationSession session, bool memberOfList = false)
@@ -65,7 +67,6 @@ namespace Oak
             Self = o;
             Session = session;
             MemberOfList = memberOfList;
-            EnumerateProperties();
         }
 
         void ResultsFor(IDictionary<string, object> attributes)
@@ -85,15 +86,22 @@ namespace Oak
                 return () => new Result { ShouldStringify = true, Value = attribute.Value };
             }
 
-            var todo = new Item(attribute.Value, Session, MemberOfList);
+            return () =>
+            {
+                var todo = new Item(attribute.Value, Session, MemberOfList);
 
-            var v = todo.Value();
+                todo.EnumerateProperties();
 
-            if (v == null || v == AlreadyFoundMarker) return null;
+                todo.Resolve();
 
-            Cache(attribute, v);
+                var v = todo.Value;
 
-            return () => new Result { ShouldStringify = false, Value = v };
+                if (v == null || v is CicularReference) return new CicularReference();
+
+                Cache(attribute, v);
+
+                return new Result { ShouldStringify = false, Value = v };
+            };
         }
 
         private void Cache(KeyValuePair<string, object> attribute, string v)
@@ -113,7 +121,7 @@ namespace Oak
 
             if (IsValueType(Self))
             {
-                value = Stringify(Self);
+                Value = Stringify(Self);
                 Todo = null;
                 Enumerated = true;
                 return;
@@ -134,11 +142,19 @@ namespace Oak
 
                 foreach (var item in (Self as IEnumerable<dynamic>))
                 {
-                    todos.Add(new Item(item, Session, true));
+                    Item newItem = new Item(item, Session, true);
+                    newItem.EnumerateProperties();
+                    todos.Add(newItem);
                 }
 
                 Session.ProcessingList = false;
-                value = "[ " + string.Join(", ", todos.Select(x => x.Value())) + " ]";
+
+                todos.ForEach(s => s.Resolve());
+
+                if (todos.All(s => s.IsCircular())) Value = new CicularReference();
+
+                else Value = "[ " + string.Join(", ", todos.Where(s => !s.IsCircular()).Select(x => x.Value)) + " ]";
+
                 Todo = null;
             }
             else if (Self is Prototype)
@@ -231,7 +247,9 @@ namespace Oak
         {
             var session = new DeserializationSession();
             var item = new Item(o, session);
-            return item.Value();
+            item.EnumerateProperties();
+            item.Resolve();
+            return item.Value;
         }
 
         public static bool CanConvertObject(dynamic o)
