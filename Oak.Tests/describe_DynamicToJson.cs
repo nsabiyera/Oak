@@ -6,6 +6,7 @@ using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests
 {
+    [Tag("wip")]
     class describe_DynamicToJson : nspec
     {
         dynamic objectToConvert;
@@ -18,68 +19,6 @@ namespace Oak.Tests
 
             tasks = new Tasks();
         }
-
-        dynamic tasks;
-
-        [Tag("wip")]
-        void describe_db_rows_to_json()
-        {
-            before = () =>
-            {
-                Seed seed = new Seed();
-
-                seed.PurgeDb();
-
-                seed.CreateTable("Rabbits", seed.Id(), new { Name = "nvarchar(255)" }).ExecuteNonQuery();
-
-                seed.CreateTable("Tasks",
-                    seed.Id(),
-                    new { Description = "nvarchar(255)" },
-                    new { RabbitId = "int" },
-                    new { DueDate = "datetime" }).ExecuteNonQuery();
-
-                var rabbitId = new { Name = "Yours Truly" }.InsertInto("Rabbits");
-
-                new { rabbitId, Description = "bolt onto vans", DueDate = DateTime.Today }.InsertInto("Tasks");
-
-                rabbitId = new { Name = "Hiro Protaganist" }.InsertInto("Rabbits");
-
-                new { rabbitId, Description = "save the world", DueDate = DateTime.Today }.InsertInto("Tasks");
-
-                new { rabbitId, Description = "deliver pizza", DueDate = DateTime.Today }.InsertInto("Tasks");
-
-                rabbitId = new { Name = "Lots" }.InsertInto("Rabbits");
-
-                for (int i = 0; i < 10; i++)
-                {
-                    new
-                    {
-                        rabbitId,
-                        Description = "Task: " + i.ToString(),
-                        DueDate = DateTime.Today
-                    }.InsertInto("Tasks");
-                }
-            };
-
-            it["disregards self referencing objects"] = () =>
-            {
-                var results = tasks.All().Include("Rabbits").ToList();
-
-                (results as IEnumerable<dynamic>).ForEach(s =>
-                {
-                    s.Rabbit = s.Rabbit();
-                });
-
-                objectToConvert = new Gemini(new { Tasks = results });
-
-                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 1, ""Name"": ""Yours Truly"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 2, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 3, ""Description"": ""deliver pizza"", ""RabbitId"": 2, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 4, ""Description"": ""Task: 0"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 5, ""Description"": ""Task: 1"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 6, ""Description"": ""Task: 2"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 7, ""Description"": ""Task: 3"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 8, ""Description"": ""Task: 4"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 9, ""Description"": ""Task: 5"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 10, ""Description"": ""Task: 6"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 11, ""Description"": ""Task: 7"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 12, ""Description"": ""Task: 8"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 13, ""Description"": ""Task: 9"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } } ] }";
-                jsonString = DynamicToJson.Convert(objectToConvert);
-                jsonString.should_be(expected);
-
-            };
-        }
-
-        private string r;
 
         void describe_prototype_to_json()
         {
@@ -430,6 +369,129 @@ namespace Oak.Tests
             it["special characters are escaped"] = () =>
             {
                 string expected = @"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }";
+
+                jsonString.should_be(expected);
+            };
+        }
+
+        dynamic tasks;
+
+        void describe_db_rows_to_json()
+        {
+            before = () =>
+            {
+                Seed seed = new Seed();
+
+                seed.PurgeDb();
+
+                seed.CreateTable("Rabbits", seed.Id(), new { Name = "nvarchar(255)" }).ExecuteNonQuery();
+
+                seed.CreateTable("Tasks",
+                    seed.Id(),
+                    new { Description = "nvarchar(255)" },
+                    new { RabbitId = "int" },
+                    new { DueDate = "datetime" }).ExecuteNonQuery();
+
+                var rabbitId = new { Name = "Yours Truly" }.InsertInto("Rabbits");
+
+                new { rabbitId, Description = "bolt onto vans", DueDate = DateTime.Today }.InsertInto("Tasks");
+
+                rabbitId = new { Name = "Hiro Protaganist" }.InsertInto("Rabbits");
+
+                new { rabbitId, Description = "save the world", DueDate = DateTime.Today }.InsertInto("Tasks");
+
+                new { rabbitId, Description = "deliver pizza", DueDate = DateTime.Today }.InsertInto("Tasks");
+
+                rabbitId = new { Name = "Lots" }.InsertInto("Rabbits");
+
+                for (int i = 0; i < 10; i++)
+                {
+                    new
+                    {
+                        rabbitId,
+                        Description = "Task: " + i.ToString(),
+                        DueDate = DateTime.Today
+                    }.InsertInto("Tasks");
+                }
+            };
+
+            it["disregards self referencing objects"] = () =>
+            {
+                var results = tasks.All().Include("Rabbits").ToList();
+
+                (results as IEnumerable<dynamic>).ForEach(s =>
+                {
+                    s.Rabbit = s.Rabbit();
+                });
+
+                objectToConvert = new Gemini(new { Tasks = results });
+                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 1, ""Name"": ""Yours Truly"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 2, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 3, ""Description"": ""deliver pizza"", ""RabbitId"": 2, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 4, ""Description"": ""Task: 0"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 5, ""Description"": ""Task: 1"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 6, ""Description"": ""Task: 2"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 7, ""Description"": ""Task: 3"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 8, ""Description"": ""Task: 4"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 9, ""Description"": ""Task: 5"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 10, ""Description"": ""Task: 6"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 11, ""Description"": ""Task: 7"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 12, ""Description"": ""Task: 8"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 13, ""Description"": ""Task: 9"", ""RabbitId"": 3, ""DueDate"": ""1/13/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } } ] }";
+                jsonString = DynamicToJson.Convert(objectToConvert);
+                jsonString.should_be(expected);
+
+            };
+        }
+
+        void describe_collections_that_have_collections()
+        {
+            before = () =>
+            {
+                dynamic person1 = new Gemini(new { Name = "Jane Doe", Friends = new List<string> { "A", "B", "C" } });
+
+                objectToConvert = new List<dynamic> { person1 };
+            };
+
+            act = () =>
+            {
+                
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
+
+            it["serializes the list for both"] = () =>
+            {
+                var expected = @"[ { ""Name"": ""Jane Doe"", ""Friends"": [ ""A"", ""B"", ""C"" ] } ]";
+
+                jsonString.should_be(expected);
+            };
+        }
+
+        void describe_two_objects_referencing_the_same_list()
+        {
+            before = () =>
+            {
+                dynamic person1 = new Gemini(new { Name = "Jane Doe" });
+
+                dynamic person2 = new Gemini(new { Name = "John Doe" });
+
+                dynamic person3 = new Gemini(new { Name = "Jane Smith" });
+
+                var friends = new List<dynamic>
+                {
+                    new Gemini(new { Name = "John Smith", Friends = new List<dynamic> { person1, person2, person3 } })
+                };
+
+                person1.Friends = friends;
+
+                person2.Friends = friends;
+
+                objectToConvert = new Gemini(new
+                {
+                    People = new List<dynamic>() 
+                    {
+                        person1,
+                        person2
+                    }
+                });
+            };
+
+            act = () =>
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
+
+            it["serializes the list for both"] = () =>
+            {
+                var expected = @"{ ""People"": [ { ""Name"": ""Jane Doe"", ""Friends"": [ { ""Name"": ""John Smith"", ""Friends"": [ { ""Name"": ""Jane Smith"" } ] } ] }, { ""Name"": ""John Doe"", ""Friends"": [ { ""Name"": ""John Smith"", ""Friends"": [ { ""Name"": ""Jane Smith"" } ] } ] } ] }";
 
                 jsonString.should_be(expected);
             };
