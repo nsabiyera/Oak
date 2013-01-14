@@ -1,94 +1,185 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Dynamic;
 using System.Runtime.CompilerServices;
 using System.Reflection;
 
 namespace Oak
 {
-    public class DynamicToJson
+    public class DeserializationSession
     {
-        public static string Convert(dynamic o)
+        public List<object> Visited = new List<object>();
+        public bool ProcessingList;
+        public Dictionary<object, string> Relatives = new Dictionary<object, string>();
+    }
+
+    public class Result
+    {
+        public bool ShouldStringify;
+        public dynamic Value;
+    }
+
+    public class Item
+    {
+        private const string AlreadyFoundMarker = "808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44808FA4B8-889E-4BBC-9970-DA3B633A6C44";
+        public DeserializationSession Session;
+        public dynamic Self;
+        public bool MemberOfList;
+        public Dictionary<string, Func<dynamic>> Todo;
+        public bool Enumerated;
+        public bool AlreadyFound;
+        private string value;
+        public string Value()
         {
-            if (o is IEnumerable<dynamic>) return Convert(o as IEnumerable<dynamic>);
+            EnumerateProperties();
 
-            if (o is Prototype) return Convert(o as IDictionary<string, object>);
+            if (Session.Relatives.ContainsKey(Self))
+            {
+                return Session.Relatives[Self];
+            }
 
-            if (o is Gemini) return Convert(o.HashOfProperties());
+            if (AlreadyFound) return AlreadyFoundMarker;
 
-            if (IsJsonString(o) || IsJsonNumeric(o) || IsBool(o)) return Stringify(o);
+            if (value == null && Todo == null) return "";
 
-            return Convert((o as object).ToPrototype());
+            if (Todo == null) return value;
+
+            var values = new List<string>();
+
+            foreach (var kvp in Todo)
+            {
+                var temp = kvp.Value.Invoke();
+
+                if (temp.Value is String && temp.Value == AlreadyFoundMarker) continue;
+
+                values.Add(Stringify(kvp.Key) + ": " + Stringify(temp));
+            }
+
+            if (values.Any()) value = "{ " + string.Join(", ", values) + " }";
+
+            return value;
         }
 
-        public static string Convert(IEnumerable<dynamic> o)
+        public Item(dynamic o, DeserializationSession session, bool memberOfList = false)
         {
-            return "[ " + string.Join(", ", o.Select(s => Convert(s as object))) + " ]";
+            Self = o;
+            Session = session;
+            MemberOfList = memberOfList;
+            EnumerateProperties();
         }
 
-        public static string Convert(IDictionary<string, object> attributes)
+        void ResultsFor(IDictionary<string, object> attributes)
         {
-            return "{ " + StringifyAttributes(attributes) + " }";
+            foreach (var kvp in attributes)
+            {
+                var result = ResultFor(kvp);
+
+                if (result != null) Todo.Add(kvp.Key, result);
+            }
         }
 
-        private static string StringifyAttributes(IDictionary<string, object> attributes)
+        Func<dynamic> ResultFor(KeyValuePair<string, object> attribute)
         {
-            return string.Join(", ", attributes.Where(CanConvertValue).Select(StringifyAttribute));
+            if (IsValueType(attribute.Value))
+            {
+                return () => new Result { ShouldStringify = true, Value = attribute.Value };
+            }
+
+            var todo = new Item(attribute.Value, Session, MemberOfList);
+
+            var v = todo.Value();
+
+            if (v == null || v == AlreadyFoundMarker) return null;
+
+            Cache(attribute, v);
+
+            return () => new Result { ShouldStringify = false, Value = v };
         }
 
-        private static string StringifyAttribute(KeyValuePair<string, object> kvp)
+        private void Cache(KeyValuePair<string, object> attribute, string v)
         {
-            return Stringify(kvp.Key) + ": " + Stringify(kvp.Value);
+            if (MemberOfList && !Session.Relatives.ContainsKey(attribute.Value)) Session.Relatives.Add(attribute.Value, v);
         }
 
-        private static List<dynamic> ToList(dynamic enumerable)
+        public void EnumerateProperties()
         {
-            return (enumerable as IEnumerable<dynamic>).ToList();
+            if (Enumerated) return;
+
+            if (Session.Visited.Contains(Self))
+            {
+                AlreadyFound = true;
+                return;
+            }
+
+            if (IsValueType(Self))
+            {
+                value = Stringify(Self);
+                Todo = null;
+                Enumerated = true;
+                return;
+            }
+
+            Todo = new Dictionary<string, Func<dynamic>>();
+
+            if (Self is IEnumerable<dynamic>)
+            {
+                if (Session.ProcessingList == true)
+                {
+                    Enumerated = false;
+                    return;
+                }
+
+                Session.ProcessingList = true;
+                var todos = new List<Item>();
+
+                foreach (var item in (Self as IEnumerable<dynamic>))
+                {
+                    todos.Add(new Item(item, Session, true));
+                }
+
+                Session.ProcessingList = false;
+                value = "[ " + string.Join(", ", todos.Select(x => x.Value())) + " ]";
+                Todo = null;
+            }
+            else if (Self is Prototype)
+            {
+                Session.Visited.Add(Self);
+                ResultsFor(Self);
+            }
+            else if (Self is Gemini)
+            {
+                Session.Visited.Add(Self);
+                ResultsFor(Self.HashOfProperties());
+            }
+            else
+            {
+                Session.Visited.Add(Self);
+                ResultsFor((Self as object).ToPrototype());
+            }
+
+            Enumerated = true;
         }
 
-        public static string Stringify(dynamic o)
+        private static bool IsValueType(dynamic o)
         {
-            if (IsNull(o)) return "null";
-
-            if (o is string) return "\"" + Escape(o) + "\"";
-
-            if (IsJsonString(o)) return "\"" + o + "\"";
-
-            if (IsJsonNumeric(o)) return o.ToString();
-
-            if (IsList(o)) return Convert(o as IEnumerable<dynamic>);
-
-            if (IsBool(o)) return o.ToString().ToLower();
-
-            return Convert(o as object);
-        }
-
-        private static string Escape(string o)
-        {
-            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
+            return IsJsonString(o) || IsJsonNumeric(o) || IsBool(o);
         }
 
         public static bool IsJsonString(dynamic o)
         {
-            return o is string || 
-                o.GetType() == typeof(DateTime) || 
-                o.GetType() == typeof(Char) || 
+            return o == null ||
+                o is string ||
+                o.GetType() == typeof(DateTime) ||
+                o.GetType() == typeof(Char) ||
                 o.GetType() == typeof(Guid);
         }
 
         public static bool IsJsonNumeric(dynamic o)
         {
-            return o.GetType() == typeof(Decimal) || 
-                o.GetType() == typeof(int) || 
-                o.GetType() == typeof(long) || 
+            return o.GetType() == typeof(Decimal) ||
+                o.GetType() == typeof(int) ||
+                o.GetType() == typeof(long) ||
                 o.GetType() == typeof(double);
-        }
-
-        public static bool IsList(dynamic o)
-        {
-            return o is IEnumerable<dynamic>;
         }
 
         public static bool IsBool(dynamic o)
@@ -96,19 +187,51 @@ namespace Oak
             return o.GetType() == typeof(bool);
         }
 
-        public static bool CanConvertValue(KeyValuePair<string, object> kvp)
+        public static string Stringify(dynamic o)
         {
-            return IsNull(kvp.Value) ||
-                   IsJsonString(kvp.Value) || 
-                   IsJsonNumeric(kvp.Value) || 
-                   IsList(kvp.Value) || 
-                   IsBool(kvp.Value) ||
-                   CanConvertObject(kvp.Value);
+            if (o is Result)
+            {
+                if (o.ShouldStringify == false) return o.Value;
+
+                if (o.Value is string) return "\"" + Escape(o.Value) + "\"";
+
+                return Stringify(o.Value);
+            }
+
+            if (IsNull(o)) return "null";
+
+            if (IsJsonString(o)) return "\"" + o + "\"";
+
+            if (IsJsonNumeric(o)) return o.ToString();
+
+            if (IsBool(o)) return o.ToString().ToLower();
+
+            return "\"" + Escape(o) + "\"";
         }
 
         private static bool IsNull(object value)
         {
             return value == null;
+        }
+
+        private static string Escape(string o)
+        {
+            return o.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
+        }
+
+        public static bool IsList(dynamic o)
+        {
+            return o is IEnumerable<dynamic>;
+        }
+    }
+
+    public class DynamicToJson
+    {
+        public static string Convert(dynamic o)
+        {
+            var session = new DeserializationSession();
+            var item = new Item(o, session);
+            return item.Value();
         }
 
         public static bool CanConvertObject(dynamic o)
