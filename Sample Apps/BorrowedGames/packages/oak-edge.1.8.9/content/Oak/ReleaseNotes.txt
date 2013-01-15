@@ -1,4 +1,25 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.4.9+
+oak-edge 1.8.9+
+oak-json 1.0.8+
+gemini 1.2.6+
+cambium 1.4.5+
+=============== CHANGES ==================
+- Json serialization schemes that allow for self referencing objects
+  https://github.com/amirrajan/Oak/blob/2bc8609e14cbf12d8c8a9765d86dfe81fe63dd27/Oak.Tests/describe_DynamicToJson.cs
+
+- Gemini.ToString/Gemini.__Info__() supports self reference objects
+  https://github.com/amirrajan/Oak/blob/6f102f7d46866fa74fc6371230b0e4ebd14a779b/Oak.Tests/describe_Gemini/describe_Info.cs
+  
+- Link back on BelongsTo relation will now return a collection as opposed
+  to just a reference to the last object (if multiple values are returned)
+  https://github.com/amirrajan/Oak/blob/3e6d2d86eaa3c31095bd1ba38509f0e63391983f/Oak.Tests/describe_DynamicModels/eager_loading_for_belongs_to_with_duplicates.cs
+
+- When seeding sample data, inefficient query detection is ignored:
+  https://github.com/amirrajan/Oak/commit/260737fda67730deb51a34e0eb004204dfa642f8
+
+
+============== FOR VERSIONS ==============
 oak 2.4.3+
 oak-edge 1.8.3+
 gemini 1.2.2+

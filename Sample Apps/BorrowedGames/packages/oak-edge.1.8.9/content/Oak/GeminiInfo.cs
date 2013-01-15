@@ -9,25 +9,41 @@ namespace Oak
         public static string Parse(dynamic o)
         {
             var sb = new StringBuilder();
-            Parse(sb, "this", o, 0);
+            Parse(sb, "this", o, 0, new List<object>());
             return sb.ToString();
         }
 
-        public static void Parse(StringBuilder stringBuilder, string name, dynamic o, int tab)
+        public static bool IsValueType(object o)
         {
+            if (o == null) return false;
+
+            return o is string || o.GetType().IsValueType;
+        }
+
+        public static void Parse(StringBuilder stringBuilder, string name, dynamic o, int tab, List<object> encounteredObjects)
+        {
+            if (encounteredObjects.Contains(o))
+            {
+                WriteName(stringBuilder, tab, name, "circular", null);
+
+                return;
+            }
+
+            if (!IsValueType(o)) encounteredObjects.Add(o);
+
             if (o is Gemini)
             {
                 WriteName(stringBuilder, tab, name, o.GetType().Name, null);
 
-                WriteDictionary(stringBuilder, o.Hash(), tab);
+                WriteDictionary(stringBuilder, o.Hash(), tab, encounteredObjects);
             }
             else if (o is IEnumerable<dynamic>)
             {
-                WriteName(stringBuilder, tab + 1, name, "IEnumerable<dynamic>", null);
+                WriteName(stringBuilder, tab, name, "IEnumerable<dynamic>", null);
                 int index = 0;
                 foreach (var r in o as IEnumerable<dynamic>)
                 {
-                    Parse(stringBuilder, string.Format("[{0}]", index), r, tab + 2);
+                    Parse(stringBuilder, string.Format("[{0}]", index), r, tab + 1, encounteredObjects);
                     index++;
                 }
             }
@@ -35,7 +51,7 @@ namespace Oak
             {
                 WriteName(stringBuilder, tab, name, o.GetType().Name, null);
 
-                WriteDictionary(stringBuilder, o, tab);
+                WriteDictionary(stringBuilder, o, tab, encounteredObjects);
             }
             else
             {
@@ -45,9 +61,9 @@ namespace Oak
             }
         }
 
-        public static void WriteDictionary(StringBuilder stringBuilder, IDictionary<string, object> o, int tab)
+        public static void WriteDictionary(StringBuilder stringBuilder, IDictionary<string, object> o, int tab, List<object> encounteredObjects)
         {
-            foreach (var kvp in o) Parse(stringBuilder, kvp.Key, kvp.Value, tab + 1);
+            foreach (var kvp in o) Parse(stringBuilder, kvp.Key, kvp.Value, tab + 1, encounteredObjects);
         }
 
         public static void WriteName(StringBuilder stringBuilder, int tabIndent, string name, string meta, dynamic value)

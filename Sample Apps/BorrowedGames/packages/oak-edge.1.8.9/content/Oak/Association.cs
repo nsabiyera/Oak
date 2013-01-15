@@ -119,7 +119,7 @@ namespace Oak
 
         public string InClause(IEnumerable<dynamic> models, string member)
         {
-            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))));
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))).Distinct());
         }
 
         public virtual void AddRepository(DynamicModels collection, DynamicRepository repository)
@@ -531,6 +531,15 @@ namespace Oak
 
     public class EagerLoadSingleForAll
     {
+        static void ConvertToList(string property, dynamic inObject)
+        {
+            if (inObject.GetMember(property) is List<dynamic>) return;
+
+            var newPropValue = new List<dynamic>();
+            newPropValue.Add(inObject.GetMember(property));
+            inObject.SetMember(property, newPropValue);
+        }
+
         public static DynamicModels Execute(IEnumerable<dynamic> models,
             DynamicRepository repository,
             string associationName,
@@ -549,7 +558,18 @@ namespace Oak
 
                     association.Model = item;
 
-                    item.SetMember(relateModel.GetType().Name, relateModel);
+                    var propName = relateModel.GetType().Name;
+
+                    if (item.RespondsTo(propName))
+                    {
+                        ConvertToList(propName, item);
+
+                        item.GetMember(propName).Add(relateModel);
+                    }
+                    else
+                    {
+                        item.SetMember(propName, relateModel);
+                    }
                 }
             }
 

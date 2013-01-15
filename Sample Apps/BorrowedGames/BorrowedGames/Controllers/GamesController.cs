@@ -24,7 +24,7 @@ namespace BorrowedGames.Controllers
         }
         
         public dynamic Requested()
-        {
+        {   
             return Json(LinksForRequestedGames(User().RequestedGames()));
         }
 
