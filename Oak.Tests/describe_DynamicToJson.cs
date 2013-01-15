@@ -495,6 +495,26 @@ namespace Oak.Tests
                 jsonString.should_be(expected);
             };
         }
+
+        void describe_empty_collection()
+        {
+            before = () =>
+            {
+                objectToConvert = new List<dynamic>();
+            };
+
+            act = () =>
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
+
+            it["serializes empty list"] = () =>
+            {
+                var expected = @"[  ]";
+
+                jsonString.should_be(expected);
+            };
+        }
     }
 
     public class SomeDynamicModel : DynamicModel
