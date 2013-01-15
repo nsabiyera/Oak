@@ -151,7 +151,7 @@ namespace Oak
 
                 todos.ForEach(s => s.Resolve());
 
-                if (todos.All(s => s.IsCircular())) Value = new CicularReference();
+                if (todos.Any() && todos.All(s => s.IsCircular())) Value = new CicularReference();
 
                 else Value = "[ " + string.Join(", ", todos.Where(s => !s.IsCircular()).Select(x => x.Value)) + " ]";
 
