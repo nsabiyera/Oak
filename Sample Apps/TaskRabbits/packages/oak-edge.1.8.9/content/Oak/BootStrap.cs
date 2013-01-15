@@ -223,9 +223,27 @@ namespace Oak
        .Replace("{scrubbedStackTrace}", Bullet.ScrubStackTrace(error.ToString()));
         }
 
+        static bool disableInefficientQueryDetection = false;
+
+        public static void SkipInefficientQueryDetectionForThisRequest()
+        {
+            disableInefficientQueryDetection = true;
+        }
+
         static void PrintInefficientQueries(object sender, EventArgs e)
         {
             SqlQueries = SqlQueries ?? new List<SqlQueryLog>();
+
+            if (disableInefficientQueryDetection)
+            {
+                SqlQueries.Clear();
+
+                disableInefficientQueryDetection = false;
+
+                Console.Out.WriteLine("======== Inefficient Query Detection Skipped ==========");
+
+                return;
+            }
 
             lock (Massive.DynamicRepository.ConsoleLogLock)
             {
