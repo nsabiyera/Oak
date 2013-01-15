@@ -29,6 +29,11 @@ Sample Apps/Peeps/Peeps.Tests/obj/*
 Sample Apps/Peeps/Peeps/bin/*
 Sample Apps/Peeps/Peeps/obj/*
 Sample Apps/Peeps/Peeps.suo
+Sample Apps/TaskRabbits/TaskRabbits.Tests/bin/*
+Sample Apps/TaskRabbits/TaskRabbits.Tests/obj/*
+Sample Apps/TaskRabbits/TaskRabbits/bin/*
+Sample Apps/TaskRabbits/TaskRabbits/obj/*
+Sample Apps/TaskRabbits/TaskRabbits.suo
 _Resharper.canopy
 *.ReSharper.user
 *.sql
