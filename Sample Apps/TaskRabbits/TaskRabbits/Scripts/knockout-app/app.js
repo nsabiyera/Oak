@@ -1,4 +1,46 @@
-﻿ko.bindingHandlers.chosen = { init: function(element, valueAccessor, allBindingsAccessor, viewModel) { var args = allBindingsAccessor().chosen; var observableArray = args.options; $(element).attr('data-placeholder', args.default).addClass('chzn-select'); $(element).chosen({ allow_single_deselect: true }); var selecting = false; $(element).chosen().change(function(e, opt) { if(opt && opt.selected) { var match = ko.utils.arrayFirst(observableArray(), function(item) { return parseInt(opt.selected) === item[args.value]; }); if(match) { selecting = true; args.selected(match); selecting = false; } } else { if(!selecting && args.selected()) { $(element).find("option").each(function() { if(parseInt($(this).attr('value')) == args.selected()[args.value]) { $(this).attr('selected', 'true'); $(element).trigger("liszt:updated"); } }); } } }); args.options.subscribe(function() { $(element).html(''); $(element).append("<option value=''></option>"); ko.utils.arrayForEach(observableArray(), function(item) { $(element).append("<option value='" + item[args.value] + "'>" + item[args.text] + "</option>"); }); $(element).trigger("liszt:updated"); }); args.selected.subscribe(function() { $(element).change(); }); } }
+﻿ko.bindingHandlers.chosen = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var args = allBindingsAccessor().chosen;
+        var observableArray = args.options;
+        $(element).attr('data-placeholder', args.defaultText).addClass('chzn-select');
+        $(element).chosen({
+            allow_single_deselect: true
+        });
+        var selecting = false;
+        $(element).chosen().change(function (e, opt) {
+            if (opt && opt.selected) {
+                var match = ko.utils.arrayFirst(observableArray(), function (item) {
+                    return parseInt(opt.selected) === item[args.value];
+                });
+                if (match) {
+                    selecting = true;
+                    args.selected(match);
+                    selecting = false;
+                }
+            } else {
+                if (!selecting && args.selected()) {
+                    $(element).find("option").each(function () {
+                        if (parseInt($(this).attr('value')) == args.selected()[args.value]) {
+                            $(this).attr('selected', 'true');
+                            $(element).trigger("liszt:updated");
+                        }
+                    });
+                }
+            }
+        });
+        args.options.subscribe(function () {
+            $(element).html('');
+            $(element).append("<option value=''></option>");
+            ko.utils.arrayForEach(observableArray(), function (item) {
+                $(element).append("<option value='" + item[args.value] + "'>" + item[args.text] + "</option>");
+            });
+            $(element).trigger("liszt:updated");
+        });
+        args.selected.subscribe(function () {
+            $(element).change();
+        });
+    }
+}
 
 function showAddRabbit() {
     $("#newRabbitModal").modal('show');

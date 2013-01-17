@@ -11,5 +11,10 @@ namespace Oak.Tests.describe_DynamicModels.Classes
         {
 
         }
+
+        IEnumerable<dynamic> Validates()
+        {
+            yield return new Presence("Name");
+        }
     }
 }

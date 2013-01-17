@@ -414,7 +414,7 @@ namespace Oak.Tests
                 }
             };
 
-            it["disregards self referencing objects", "wip"] = () =>
+            it["disregards self referencing objects"] = () =>
             {
                 var results = tasks.All().Include("Rabbits").ToList();
 
@@ -510,6 +510,30 @@ namespace Oak.Tests
             it["serializes empty list"] = () =>
             {
                 var expected = @"[  ]";
+
+                jsonString.should_be(expected);
+            };
+        }
+
+        void describe_key_value_pair_serialization()
+        {
+            before = () =>
+            {
+                dynamic rabbit = new Rabbit(new { });
+
+                rabbit.IsValid();
+
+                objectToConvert = new { Errors = rabbit.Errors() };
+            };
+
+            act = () =>
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
+
+            it["serializes key value pairs (structs)"] = () =>
+            {
+                var expected = @"{ ""Errors"": [ { ""Key"": ""Name"", ""Value"": ""Name is required."" } ] }";
 
                 jsonString.should_be(expected);
             };
