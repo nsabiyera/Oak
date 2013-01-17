@@ -1,5 +1,6 @@
 ﻿using System;
 using NSpec;
+using System.Collections.Generic;
 
 namespace Oak.Tests.describe_Gemini
 {
@@ -91,6 +92,19 @@ namespace Oak.Tests.describe_Gemini
         void specify_to_string_is_the_same_as_info()
         {
             (gemini.ToString() as string).should_be(gemini.__Info__() as string);
+        }
+
+        [Tag("wip")]
+        void specify_structs_are_printed()
+        {
+            gemini = new Gemini(new { Struct = new KeyValuePair<string, string>("Name", "Jane Doe") });
+
+            var info = gemini.__Info__() as string;
+
+            info.should_be(@"this (Gemini)
+  Struct (KeyValuePair`2): [Name, Jane Doe]
+  SetMembers (DynamicFunctionWithParam)
+");
         }
     }
 }

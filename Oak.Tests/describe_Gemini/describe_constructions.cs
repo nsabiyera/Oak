@@ -21,7 +21,7 @@ namespace Oak.Tests.describe_Gemini
                 blog.Author = "Amir";
             };
 
-            context["given that the dynamic blogged is wrapped with a gemini"] = () =>
+            context["given that the dynamic blog is wrapped with a gemini"] = () =>
             {
                 before = () =>
                     gemini = new BlogEntry(blog);
