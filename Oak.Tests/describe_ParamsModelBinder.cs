@@ -5,10 +5,37 @@ using System.Text;
 using NSpec;
 using System.Collections.Specialized;
 using Massive;
+using System.IO;
 
 namespace Oak.Tests
 {
-    class describe_ParamsModelBinder : nspec
+    class describe_ParamsModelBnder_for_json_input_stream : nspec
+    {
+        DynamicParams dynamicParams;
+
+        dynamic asDynamic;
+
+        MemoryStream stream;
+
+        void specify_id_conversions_exit_if_the_value_is_already_converted()
+        {
+            stream = new MemoryStream();
+
+            var streamWriter = new StreamWriter(stream);
+
+            streamWriter.Write("{ Id: 1 }");
+
+            streamWriter.Flush();
+
+            dynamicParams = new DynamicParams(stream, null);
+
+            asDynamic = dynamicParams;
+
+            ((long)asDynamic.Id).should_be(1);
+        }
+    }
+
+    class describe_ParamsModelBinder_for_name_value_collection : nspec
     {
         DynamicParams dynamicParams;
 
@@ -71,7 +98,7 @@ namespace Oak.Tests
                         ((int)asDynamic.PersonId).should_be(123);
                 };
 
-                context["name ends in ID"] = () => 
+                context["name ends in ID"] = () =>
                 {
                     before = () => nameValueCollection.Add("PersonID", "123");
 

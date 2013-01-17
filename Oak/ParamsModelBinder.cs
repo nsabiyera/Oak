@@ -47,6 +47,8 @@ namespace Oak
 
         private object IntOrOriginal(dynamic value)
         {
+            if (!(value is string)) return value;
+
             var parsedInt = 0;
 
             var parsedGuid = Guid.Empty;
