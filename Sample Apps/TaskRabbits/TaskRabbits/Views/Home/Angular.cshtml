@@ -16,12 +16,14 @@
         <input class='description'
           type='input'
           ng-model="task.Description"
+          on-enter="task.save"
           on-keyup-fn="task.descriptionChanged" />
       </td>
       <td class='span4'>
         <input class='date'
           type='input'
           ng-model="task.DueDate"
+          on-enter="task.save"
           on-keyup-fn="task.dateChanged" />
         <span class='label label-inverse'>{{ task.ParsedDate }}</span>
       </td>

@@ -15,11 +15,11 @@ app.directive('onKeyupFn', function() {
 
 app.directive('onEnter', function() {
     return function(scope, elm, attrs) {
-        var keyupFn = scope.$eval(attrs.onKeyupFn);
+        var enterFn = scope.$eval(attrs.onEnter);
         elm.bind('keyup', function(evt) {
             if(evt.which == 13) {
               scope.$apply(function() {
-                  keyupFn.call(scope, evt.which);
+                  enterFn.call(scope, evt.which);
               });
             }
         });
@@ -61,7 +61,6 @@ function ToTaskVm(task, $http) {
   };
 
   task.dateChanged = function() {
-    console.log("date changed");
     task.parseDate();
     task.validate();
   };
@@ -81,11 +80,13 @@ function ToTaskVm(task, $http) {
   };
 
   task.save = function() {
-    debugger;
-    $http.post(task.SaveUrl, task)
-      .success(function(data, status, headers, config) {
-        alert("saved");
-      });
+    if(task.CanSave) {
+      task.DueDate = task.ParsedDate;
+      $http.post(task.SaveUrl, task)
+        .success(function(data, status, headers, config) {
+          task.CanSave = false;
+        });
+    }
   };
 
   task.HasErrors = false;
