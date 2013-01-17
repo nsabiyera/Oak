@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-json</id> 
-    <version>1.0.9</version> 
+    <version>1.1.0</version> 
     <authors>Amir Rajan</authors>
     <description>Just the JSON capabilities of Oak</description> 
     <language>en-US</language>
