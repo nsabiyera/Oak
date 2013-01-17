@@ -6,6 +6,8 @@ namespace Oak
 {
     public class GeminiInfo
     {
+        public class NullObject { }
+
         public static string Parse(dynamic o)
         {
             var sb = new StringBuilder();
@@ -55,10 +57,15 @@ namespace Oak
             }
             else
             {
-                if (o != null) WriteName(stringBuilder, tab, name, o.GetType().Name, o);
+                if (!IsNull(o)) WriteName(stringBuilder, tab, name, o.GetType().Name, o);
 
                 else WriteName(stringBuilder, tab, name, "null", null);
             }
+        }
+
+        public static bool IsNull(dynamic o)
+        {
+            return (o ?? new NullObject()).GetType() == typeof(NullObject);
         }
 
         public static void WriteDictionary(StringBuilder stringBuilder, IDictionary<string, object> o, int tab, List<object> encounteredObjects)
@@ -76,7 +83,7 @@ namespace Oak
                 stringBuilder.Append(" (" + meta + ")");
             }
 
-            if (value != null && !(value is Delegate))
+            if (!IsNull(value) && !(value is Delegate))
             {
                 stringBuilder.Append(": ");
 

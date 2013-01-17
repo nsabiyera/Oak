@@ -23,6 +23,8 @@ namespace Oak
 
     public class Item
     {
+        public class NullObject { }
+
         public bool IsCircular()
         {
             return Value is CicularReference;
@@ -183,7 +185,7 @@ namespace Oak
 
         public static bool IsJsonString(dynamic o)
         {
-            return o == null ||
+            return IsNull(o) ||
                 o is string ||
                 o.GetType() == typeof(DateTime) ||
                 o.GetType() == typeof(Char) ||
@@ -225,9 +227,9 @@ namespace Oak
             return "\"" + Escape(o) + "\"";
         }
 
-        private static bool IsNull(object value)
+        private static bool IsNull(dynamic value)
         {
-            return value == null;
+            return (value ?? new NullObject()).GetType() == typeof(NullObject);
         }
 
         private static string Escape(string o)
