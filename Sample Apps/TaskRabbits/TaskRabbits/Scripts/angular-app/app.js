@@ -37,7 +37,7 @@ app.controller('AppCtrl', function($scope, $http) {
   $scope.loadTasks = function() {
     $http({ method: 'GET', url: $scope.selectedRabbit.TasksUrl })
       .success(function(data, status, headers, config) {
-        _.each(data.Tasks, ToTaskVm);
+        _.each(data.Tasks, function(task) { ToTaskVm(task, $http); });
         $scope.tasks = data.Tasks;
       });
   };
@@ -45,7 +45,7 @@ app.controller('AppCtrl', function($scope, $http) {
   $scope.tasks = [];
 });
 
-function ToTaskVm(task) {
+function ToTaskVm(task, $http) {
   task.parseDate = function() {
     var date = Date.parse(task.DueDate);
 
@@ -57,23 +57,42 @@ function ToTaskVm(task) {
   };
 
   task.descriptionChanged = function() {
-    task.markChanged();
+    task.validate();
   };
 
   task.dateChanged = function() {
-    task.markChanged();
+    console.log("date changed");
     task.parseDate();
+    task.validate();
   };
 
-  task.markChanged = function() {
-    task.HasChanged = true;
+  task.validate = function() {
+    var errors = [];
+
+    if(!task.Description) errors.push("description required");
+
+    if(task.ParsedDate == "?") errors.push("invalid date");
+    
+    task.ErrorString = errors.join(", ");
+
+    task.CanSave = errors.length == 0;
+
+    task.HasErrors = !task.CanSave;
   };
 
-  task.hasErrors = function() {
-
+  task.save = function() {
+    debugger;
+    $http.post(task.SaveUrl, task)
+      .success(function(data, status, headers, config) {
+        alert("saved");
+      });
   };
 
-  task.HasChanged = false;
+  task.HasErrors = false;
+
+  task.ErrorString = "";
+
+  task.CanSave = false;
 
   task.ParsedDate = task.DueDate;
 }

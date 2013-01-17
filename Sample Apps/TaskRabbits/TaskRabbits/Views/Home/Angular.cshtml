@@ -13,15 +13,28 @@
   <table id="tasks" class="table table-stripped">
     <tr ng-repeat="task in tasks">
       <td class='span4'>
-        <input class='description' type='input' ng-model="task.Description" on-keyup-fn="task.descriptionChanged" />
+        <input class='description'
+          type='input'
+          ng-model="task.Description"
+          on-keyup-fn="task.descriptionChanged" />
       </td>
       <td class='span4'>
-        <input class='date' type='input' ng-model="task.DueDate" on-keyup-fn="task.dateChanged" />
+        <input class='date'
+          type='input'
+          ng-model="task.DueDate"
+          on-keyup-fn="task.dateChanged" />
         <span class='label label-inverse'>{{ task.ParsedDate }}</span>
       </td>
       <td class='span3'>
-          <span class='label label-important'></span>
-          <input type='button' ng-show="task.HasChanged" class='btn btn-primary' value='save' style='padding-top: 1px; padding-bottom: 1px' />
+        <span class='label label-important'
+            ng-show="task.HasErrors"
+            ng-model="task.ErrorString">{{ task.ErrorString }}</span>
+          <input type='button'
+            ng-show="task.CanSave"
+            ng-click="task.save()"
+            class='btn btn-primary'
+            value='save'
+            style='padding-top: 1px; padding-bottom: 1px' />
       </td>
       <td class='span1'>
         <i class="icon-remove" data-bind="click: destroy" style="cursor: pointer">&nbsp;</i>

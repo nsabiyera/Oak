@@ -6,7 +6,6 @@ using Oak.Tests.describe_DynamicModels.Classes;
 
 namespace Oak.Tests
 {
-    [Tag("wip")]
     class describe_DynamicToJson : nspec
     {
         dynamic objectToConvert;
@@ -394,13 +393,13 @@ namespace Oak.Tests
 
                 var rabbitId = new { Name = "Yours Truly" }.InsertInto("Rabbits");
 
-                new { rabbitId, Description = "bolt onto vans", DueDate = DateTime.Today }.InsertInto("Tasks");
+                new { rabbitId, Description = "bolt onto vans", DueDate = new DateTime(2013, 1, 14) }.InsertInto("Tasks");
 
                 rabbitId = new { Name = "Hiro Protaganist" }.InsertInto("Rabbits");
 
-                new { rabbitId, Description = "save the world", DueDate = DateTime.Today }.InsertInto("Tasks");
+                new { rabbitId, Description = "save the world", DueDate = new DateTime(2013, 1, 14) }.InsertInto("Tasks");
 
-                new { rabbitId, Description = "deliver pizza", DueDate = DateTime.Today }.InsertInto("Tasks");
+                new { rabbitId, Description = "deliver pizza", DueDate = new DateTime(2013, 1, 14) }.InsertInto("Tasks");
 
                 rabbitId = new { Name = "Lots" }.InsertInto("Rabbits");
 
@@ -410,12 +409,12 @@ namespace Oak.Tests
                     {
                         rabbitId,
                         Description = "Task: " + i.ToString(),
-                        DueDate = DateTime.Today
+                        DueDate = new DateTime(2013, 1, 14)
                     }.InsertInto("Tasks");
                 }
             };
 
-            it["disregards self referencing objects"] = () =>
+            it["disregards self referencing objects", "wip"] = () =>
             {
                 var results = tasks.All().Include("Rabbits").ToList();
 
