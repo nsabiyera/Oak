@@ -6,8 +6,6 @@ namespace Oak
 {
     public class GeminiInfo
     {
-        public class NullObject { }
-
         public static string Parse(dynamic o)
         {
             var sb = new StringBuilder();
@@ -65,7 +63,7 @@ namespace Oak
 
         public static bool IsNull(dynamic o)
         {
-            return (o ?? new NullObject()).GetType() == typeof(NullObject);
+            return ReferenceEquals(o, null);
         }
 
         public static void WriteDictionary(StringBuilder stringBuilder, IDictionary<string, object> o, int tab, List<object> encounteredObjects)
