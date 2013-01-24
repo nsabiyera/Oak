@@ -4,7 +4,7 @@ ary.remove('seven');
 
 var app = angular.module("App", []);
 
-app.directive('onKeyupFn', function() {
+app.directive('onKeyup', function() {
     return function(scope, elm, attrs) {
         var keyupFn = scope.$eval(attrs.onKeyupFn);
         elm.bind('keyup', function(evt) {
