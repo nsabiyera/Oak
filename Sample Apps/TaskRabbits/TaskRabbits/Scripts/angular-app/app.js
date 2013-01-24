@@ -1,4 +1,8 @@
-﻿var app = angular.module("App", []);
+﻿var ary = ['three', 'seven', 'eleven'];
+
+ary.remove('seven');
+
+var app = angular.module("App", []);
 
 app.directive('onKeyupFn', function() {
     return function(scope, elm, attrs) {
@@ -37,7 +41,7 @@ app.controller('AppCtrl', function($scope, $http) {
   $scope.loadTasks = function() {
     $http({ method: 'GET', url: $scope.selectedRabbit.TasksUrl })
       .success(function(data, status, headers, config) {
-        _.each(data.Tasks, function(task) { ToTaskVm(task, $http); });
+        _.each(data.Tasks, function(task) { ToTaskVm(task, $http, $scope); });
         $scope.tasks = data.Tasks;
       });
   };
@@ -45,7 +49,7 @@ app.controller('AppCtrl', function($scope, $http) {
   $scope.tasks = [];
 });
 
-function ToTaskVm(task, $http) {
+function ToTaskVm(task, $http, $scope) {
   task.parseDate = function() {
     var date = Date.parse(task.DueDate);
 
@@ -87,6 +91,12 @@ function ToTaskVm(task, $http) {
           task.CanSave = false;
         });
     }
+  };
+
+  task.destroy = function() {
+    $http.post(task.DeleteUrl).success(function() {
+      $scope.tasks.remove(task);
+    });
   };
 
   task.HasErrors = false;

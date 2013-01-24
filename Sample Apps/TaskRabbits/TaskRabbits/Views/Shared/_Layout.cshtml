@@ -17,6 +17,18 @@
         <script src="@Url.Content("~/Scripts/underscore.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/chosen.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/date.js")" type="text/javascript"></script>
+        <script type="text/javascript">
+        Array.prototype.remove = function() {
+            var what, a = arguments, L = a.length, ax;
+            while (L && this.length) {
+                what = a[--L];
+                while ((ax = this.indexOf(what)) !== -1) {
+                    this.splice(ax, 1);
+                }
+            }
+            return this;
+        };
+        </script>
     </head>
 
     <body>

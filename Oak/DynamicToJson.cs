@@ -23,8 +23,6 @@ namespace Oak
 
     public class Item
     {
-        public class NullObject { }
-
         public bool IsCircular()
         {
             return Value is CicularReference;
@@ -229,7 +227,7 @@ namespace Oak
 
         private static bool IsNull(dynamic value)
         {
-            return (value ?? new NullObject()).GetType() == typeof(NullObject);
+            return ReferenceEquals(value, null);
         }
 
         private static string Escape(string o)
