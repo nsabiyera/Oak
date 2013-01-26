@@ -6,7 +6,7 @@ var app = angular.module("App", []);
 
 app.directive('onKeyup', function() {
     return function(scope, elm, attrs) {
-        var keyupFn = scope.$eval(attrs.onKeyupFn);
+        var keyupFn = scope.$eval(attrs.onKeyup);
         elm.bind('keyup', function(evt) {
             if(evt.which != 13) {
               scope.$apply(function() {
@@ -42,11 +42,26 @@ app.controller('AppCtrl', function($scope, $http) {
     $http({ method: 'GET', url: $scope.selectedRabbit.TasksUrl })
       .success(function(data, status, headers, config) {
         _.each(data.Tasks, function(task) { ToTaskVm(task, $http, $scope); });
+        $scope.CreateTaskUrl = data.CreateTaskUrl;
         $scope.tasks = data.Tasks;
+        $scope.canAddTask = true;
       });
   };
 
+  $scope.addTask = function() {
+    var task = {
+      Description: "",
+      DueDate: "",
+      SaveUrl: $scope.CreateTaskUrl
+    };
+    ToTaskVm(task, $http, $scope);
+    task.parseDate();
+    task.validate();
+    $scope.tasks.unshift(task);
+  };
+
   $scope.tasks = [];
+  $scope.canAddTask = false;
 });
 
 function ToTaskVm(task, $http, $scope) {
@@ -94,9 +109,17 @@ function ToTaskVm(task, $http, $scope) {
   };
 
   task.destroy = function() {
-    $http.post(task.DeleteUrl).success(function() {
+    if(!task.isNew()) {
+      $http.post(task.DeleteUrl).success(function() {
+        $scope.tasks.remove(task);
+      });
+    } else {
       $scope.tasks.remove(task);
-    });
+    }
+  };
+
+  task.isNew = function() {
+    return !task.Id;
   };
 
   task.HasErrors = false;
