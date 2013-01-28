@@ -11,6 +11,7 @@
     <select ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
       <option value="">select a rabbit...</option>
     </select>
+    <i class="icon-plus" ng-click="addRabbit()" style="cursor: pointer">&nbsp;</i>
   </div>
   <div class="row">
     <input id="addTask"
@@ -23,7 +24,7 @@
   </div>
   <div class="row">
     <table id="tasks" class="table table-stripped">
-      <tr ng-repeat="task in tasks">
+      <tr ng-repeat="task in tasks" loaded>
         <td class='span4'>
           <input class='description'
             type='input'
@@ -55,5 +56,31 @@
         </td>
       </tr>
     </table>
+  </div>
+  <div class="modal hide" id="newRabbitModal">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Create Rabbit</h3>
+    </div>
+    <div class="modal-body">
+      <p>
+        <div ng-repeat="error in newRabbit.Errors" class="alert alert-error">
+          {{error.Value}}
+        </div>
+        <label>Name</label>
+        <input type="text" ng-model="newRabbit.Name" id="newRabbitName" />
+      </p>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:;" class="btn" data-dismiss="modal">Close</a>
+      <a ng-click="newRabbit.save()" id="createRabbit" class="btn btn-primary">Save</a>
+    </div>
+  </div>
+  <div class="modal hide" id="loadingModal">
+    <div class="modal-body">
+      <div class="row span16">
+        loading...
+      </div>
+    </div>
   </div>
 </div>

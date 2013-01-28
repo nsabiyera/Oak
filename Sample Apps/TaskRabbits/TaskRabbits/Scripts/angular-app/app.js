@@ -1,4 +1,12 @@
-﻿var ary = ['three', 'seven', 'eleven'];
+﻿function loading() {
+  $("#loadingModal").modal({ show: true, backdrop: false });
+}
+
+function loaded() {
+  $("#loadingModal").modal('hide');
+}
+
+var ary = ['three', 'seven', 'eleven'];
 
 ary.remove('seven');
 
@@ -15,6 +23,14 @@ app.directive('onKeyup', function() {
             }
         });
     };
+});
+
+app.directive('loaded', function () {
+  return function (scope, element, attrs) {
+      if (scope.$last === true) {
+        loaded();
+      }
+  };
 });
 
 app.directive('onEnter', function() {
@@ -34,17 +50,20 @@ app.controller('AppCtrl', function($scope, $http) {
   $http({ method: 'GET', url: '/rabbits' })
     .success(function(data, status, headers, config) {
       $scope.rabbits = data.Rabbits;
+      $scope.CreateRabbitUrl = data.CreateRabbitUrl;
     });
 
   $scope.selectedRabbit = null;
 
   $scope.loadTasks = function() {
+    loading();
     $http({ method: 'GET', url: $scope.selectedRabbit.TasksUrl })
       .success(function(data, status, headers, config) {
         _.each(data.Tasks, function(task) { ToTaskVm(task, $http, $scope); });
         $scope.CreateTaskUrl = data.CreateTaskUrl;
         $scope.tasks = data.Tasks;
         $scope.canAddTask = true;
+        if(data.Tasks.length == 0) loaded();
       });
   };
 
@@ -60,9 +79,34 @@ app.controller('AppCtrl', function($scope, $http) {
     $scope.tasks.unshift(task);
   };
 
+  $scope.addRabbit = function() {
+    $("#newRabbitModal").modal('show');
+    $scope.newRabbit = new Rabbit($scope, $http);
+  };
+
   $scope.tasks = [];
   $scope.canAddTask = false;
 });
+
+
+function Rabbit($scope, $http) {
+  var _this = this;
+  this.Name = "";
+  this.Errors = [];
+  this.save = function() {
+    $http.post($scope.CreateRabbitUrl, this)
+      .success(function(data, status, headers, config) {
+        if(data.Errors) {
+          _this.Errors = data.Errors;
+        } else {
+          $scope.rabbits.push(data);
+          $("#newRabbitModal").modal('hide');
+          $scope.selectedRabbit = data;
+          $scope.loadTasks();
+        }
+      });
+  };
+}
 
 function ToTaskVm(task, $http, $scope) {
   task.parseDate = function() {
