@@ -8,10 +8,12 @@
 <h2>Dashboard</h2>
 <div id="dashboard" ng-app="App" ng-controller="AppCtrl">
   <div class="row" style="margin-bottom: 10px">
-    <select ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
+    <span>
+    <select chosen="rabbits" ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
       <option value="">select a rabbit...</option>
     </select>
-    <i class="icon-plus" ng-click="addRabbit()" style="cursor: pointer">&nbsp;</i>
+    </span>
+    <i class="icon-plus" ng-click="addRabbit()" style="cursor: pointer;">&nbsp;</i>
   </div>
   <div class="row">
     <input id="addTask"

@@ -6,10 +6,6 @@ function loaded() {
   $("#loadingModal").modal('hide');
 }
 
-var ary = ['three', 'seven', 'eleven'];
-
-ary.remove('seven');
-
 var app = angular.module("App", []);
 
 app.directive('onKeyup', function() {
@@ -30,6 +26,20 @@ app.directive('loaded', function () {
       if (scope.$last === true) {
         loaded();
       }
+  };
+});
+
+app.directive("chosen", function() {
+  var linker = function(scope, element, attr) {
+    scope.$watch(attr["chosen"], function() {
+      element.trigger("liszt:updated");
+    });
+    element.chosen({ allow_single_deselect: true });
+  };
+
+  return {
+    restrict: "A",
+    link: linker
   };
 });
 
