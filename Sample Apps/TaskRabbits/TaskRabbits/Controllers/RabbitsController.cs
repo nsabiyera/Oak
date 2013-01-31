@@ -7,7 +7,7 @@ using Oak;
 using TaskRabbits.Repositories;
 using TaskRabbits.Models;
 
-namespace Oak.Controllers
+namespace TaskRabbits.Controllers
 {
     public class RabbitsController : Controller
     {

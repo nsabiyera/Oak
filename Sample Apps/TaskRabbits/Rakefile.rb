@@ -117,3 +117,11 @@ def generate_nginx_config
   
   File.open("nginx/conf/nginx.conf.template", 'w') { |f| f.write(newcontent) }
 end
+
+desc "run ui automation tests"
+task :ui => [:build, :ui_tests]
+
+desc "runs ui tests (without building)"
+task :ui_tests do
+  sh "TaskRabbits.UITests\\bin\\Debug\\TaskRabbits.UITests.exe"
+end
