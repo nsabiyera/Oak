@@ -7,7 +7,7 @@ using TaskRabbits.Repositories;
 using Oak;
 using System.Web.Routing;
 
-namespace TaskRabbits.Controllers
+namespace Oak.Controllers
 {
     public class TasksController : Controller
     {
