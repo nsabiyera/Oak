@@ -3,6 +3,8 @@
 open canopy
 open OpenQA.Selenium
 open System
+open common
+open runner
 
 let home = @"http://localhost:3000/Home/Backbone"
 let selectARabbit = "#rabbitsDropDown_chzn a div"
@@ -30,3 +32,49 @@ let clickRabbit name =
     |> List.filter (fun rabbit -> rabbit.Text = name)
     |> List.head
     |> click
+
+//tests
+let tests _ =
+    before(fun _ -> 
+    reset ()
+    url home
+    on home)
+
+    test(fun _ ->
+        describe "fresh database has no rabbits in drop down"
+        click selectARabbit    
+        count rabbits 0    
+    )
+
+    test(fun _ ->
+        describe "adding one rabbit creates one rabbit in drop down"
+        addRabbit "Aldous"
+        click selectARabbit        
+        count rabbits 1
+        rabbits *= "Aldous"
+    )
+
+    test(fun _ ->
+        describe "adding two rabbits creates two rabbits in drop down"
+        addRabbit "Aldous"
+        addRabbit "Holden"
+        click selectARabbit
+        count rabbits 2
+        rabbits *= "Aldous"
+        rabbits *= "Holden"
+    )
+
+    test(fun _ ->
+        describe "adding task for Holden shows for him but not Aldous"
+        addRabbit "Aldous"
+        addRabbit "Holden"    
+        clickRabbit "Holden"
+        click addTask
+        description << "Go for a walk"
+        date << today
+        click saveTask
+        clickRabbit "Aldous"
+        count tasks 0
+        clickRabbit "Holden"
+        count tasks 1
+    )
