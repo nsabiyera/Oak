@@ -5,7 +5,7 @@ open System
 
 start firefox
 
-//backbone.tests()
+backbone.tests()
 knockout.tests()
 
 run()

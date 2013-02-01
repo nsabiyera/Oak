@@ -35,6 +35,8 @@ let clickRabbit name =
 
 //tests
 let tests _ =
+    context "Backbone Suite"
+
     before(fun _ -> 
     reset ()
     url home
