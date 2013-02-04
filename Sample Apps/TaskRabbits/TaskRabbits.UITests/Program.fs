@@ -1,13 +1,10 @@
-﻿
-open runner
+﻿open runner
 open canopy
-open System
 
 start firefox
 
-backbone.tests()
-knockout.tests()
+common.tests backbone.selectors
+common.tests knockout.selectors
 
 run()
-System.Console.ReadKey() |> ignore
 quit()
