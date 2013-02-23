@@ -31,7 +31,7 @@ app.directive('loaded', function () {
 
 app.directive("chosen", function() {
   var linker = function(scope, element, attr) {
-    scope.$watch(attr["chosen"], function() {
+    scope.$watch(attr["chosen"] + ".length", function() {
       element.trigger("liszt:updated");
     });
     element.chosen({ allow_single_deselect: true });
