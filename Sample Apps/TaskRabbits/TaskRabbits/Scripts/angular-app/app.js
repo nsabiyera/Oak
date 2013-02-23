@@ -34,6 +34,7 @@ app.directive("chosen", function() {
     scope.$watch(attr["chosen"] + ".length", function() {
       element.trigger("liszt:updated");
     });
+    element.attr('data-placeholder', attr["chosenLabel"]).addClass('chzn-select');
     element.chosen({ allow_single_deselect: true });
   };
 

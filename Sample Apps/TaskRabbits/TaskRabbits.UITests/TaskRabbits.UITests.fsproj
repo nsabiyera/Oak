@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="common.fs" />
     <Compile Include="backbone.fs" />
+    <Compile Include="angular.fs" />
     <Compile Include="knockout.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config">

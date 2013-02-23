@@ -9,8 +9,7 @@
 <div id="dashboard" ng-app="App" ng-controller="AppCtrl">
   <div class="row" style="margin-bottom: 10px">
     <span>
-    <select chosen="rabbits" ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
-      <option value="">select a rabbit...</option>
+      <select class="span4" id="rabbitsDropDown" chosen="rabbits" chosen-label="select a rabbit..." ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
     </select>
     </span>
     <i class="icon-plus" ng-click="addRabbit()" style="cursor: pointer;">&nbsp;</i>
