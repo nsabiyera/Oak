@@ -1,14 +1,15 @@
-﻿module backbone
+﻿module knockout
 
 open canopy
+open OpenQA.Selenium
 open common
 
-let selectors = 
+let selectors =
     {
-        home = @"http://localhost:3000/Home/Backbone"        
+        home = @"http://localhost:3000/Home/Knockout"
         selectARabbit = "#rabbitsDropDown_chzn a div"
         add = ".icon-plus"
-        rabbits = "li.rabbit"
+        rabbits = ".chzn-results li"
         newRabbitName = "#newRabbitName"
         save = "#createRabbit"
         addTask = "#addTask"
@@ -18,5 +19,5 @@ let selectors =
         saveTask = "input[value='save']"
         tasks = "#tasks tr"
         error = ".alert-error"
-        suiteName = "Backbone"
+        suiteName = "Knockout"
     }
