@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Ember";
+}
+
+<script src="@Url.Content("~/Scripts/handlebars.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ember.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ember-app/app.js")" type="text/javascript"></script>
+
+<h2>Dashboard</h2>
+<div id="dashboard">
+  <script type="text/x-handlebars">
+    {{view Todos.CreateTodoView id="new-todo" placeholder="What needs to be done?"}}
+  </script>
+</div>

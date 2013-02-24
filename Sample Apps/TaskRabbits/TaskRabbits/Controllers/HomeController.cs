@@ -29,5 +29,10 @@ namespace TaskRabbits.Controllers
         {
             return View();
         }
+
+        public ActionResult Ember()
+        {
+            return View();
+        }
     }
 }

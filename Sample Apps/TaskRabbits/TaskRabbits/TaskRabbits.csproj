@@ -117,7 +117,10 @@
     <Content Include="Global.asax" />
     <Content Include="rake-dot-net-usage.txt" />
     <Content Include="Scripts\chosen.js" />
+    <Content Include="Scripts\ember.js" />
     <Content Include="Scripts\date.js" />
+    <Content Include="Scripts\ember-app\app.js" />
+    <Content Include="Scripts\handlebars.js" />
     <Content Include="Scripts\jquery-1.8.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -169,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\OakForm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Ember.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
