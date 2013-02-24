@@ -10,7 +10,6 @@ using System.IO;
 
 namespace System
 {
-    //object extensions not part of massive
     [DebuggerNonUserCode]
     public static class TypeExtensions
     {
@@ -54,6 +53,15 @@ namespace System
     [DebuggerNonUserCode]
     public static class DynamicExtensions
     {
+        public static bool CanConvertToPrototype(this object o)
+        {
+            return (o is Prototype) || 
+                (o is NameValueCollection) || 
+                (o is ExpandoObject) || 
+                (o is Gemini) || 
+                (o is IDictionary<string, object>);
+        }
+
         public static dynamic ToPrototype(this object o)
         {
             var result = new Prototype();
@@ -61,6 +69,7 @@ namespace System
 
             if (o.GetType() == typeof(Prototype)) return o;
             if (o is ExpandoObject) return new Prototype(o as IDictionary<string, object>);
+            if (o is IDictionary<string, object>) return new Prototype(o as IDictionary<string, object>);
             if (o is Gemini) return ((Gemini)o).Prototype;
 
             if (o.GetType() == typeof(NameValueCollection) || o.GetType().IsSubclassOf(typeof(NameValueCollection)))

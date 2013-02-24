@@ -743,11 +743,6 @@ class WatcherDotNet
       @notifier.execute "specwatchr", "The solution structure you have is unsupported by specwatchr.  CS Projects need to be in their own directories (as opposed to .csproj's existing at the same level as the .sln file).  If this is a new project, go back and recreate it...but this time make sure that the \"Create directory for solution\" check box is checked.", "red"
       return
     end
-    
-    if(@first_run)
-      @notifier.execute "specwatchr", "builder: #{@builder.class}\ntest runner: #{@test_runner.class}\nconfig file: dotnet.watchr.rb", "green"
-      @first_run = false
-    end
 
     puts "====================== changed: #{file} ===================="
     puts "====================== excluded ============================" if false == require_build(file)		

@@ -16,11 +16,6 @@ namespace Oak.Controllers
      */
     public class Schema
     {
-        /// <summary>
-        /// Change this method to create your tables.  Take a look 
-        /// at each method, CreateSampleTable(), AlterSampleTable() and AdHocChange()...
-        /// you'll want to replace this with your own set of methods.
-        /// </summary>
         public IEnumerable<Func<dynamic>> Scripts()
         {
             return null;
@@ -89,6 +84,8 @@ namespace Oak.Controllers
         [HttpPost]
         public ActionResult SampleEntries()
         {
+            DebugBootStrap.SkipInefficientQueryDetectionForThisRequest();
+
             Schema.SampleEntries();
 
             return new EmptyResult();

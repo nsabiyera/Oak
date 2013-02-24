@@ -1,4 +1,69 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.4.9+
+oak-edge 1.8.9+
+oak-json 1.0.8+
+gemini 1.2.6+
+cambium 1.4.5+
+=============== CHANGES ==================
+- Json serialization schemes that allow for self referencing objects
+  https://github.com/amirrajan/Oak/blob/2bc8609e14cbf12d8c8a9765d86dfe81fe63dd27/Oak.Tests/describe_DynamicToJson.cs
+
+- Gemini.ToString/Gemini.__Info__() supports self reference objects
+  https://github.com/amirrajan/Oak/blob/6f102f7d46866fa74fc6371230b0e4ebd14a779b/Oak.Tests/describe_Gemini/describe_Info.cs
+  
+- Link back on BelongsTo relation will now return a collection as opposed
+  to just a reference to the last object (if multiple values are returned)
+  https://github.com/amirrajan/Oak/blob/3e6d2d86eaa3c31095bd1ba38509f0e63391983f/Oak.Tests/describe_DynamicModels/eager_loading_for_belongs_to_with_duplicates.cs
+
+- When seeding sample data, inefficient query detection is ignored:
+  https://github.com/amirrajan/Oak/commit/260737fda67730deb51a34e0eb004204dfa642f8
+
+
+============== FOR VERSIONS ==============
+oak 2.4.3+
+oak-edge 1.8.3+
+gemini 1.2.2+
+cambium 1.4.0+
+=============== CHANGES ==================
+- added the Memoize module, the memoize module will cache values of your
+  methods
+
+public class SlowPerson : Gemini
+{
+    static SlowPerson()
+    {
+        Gemini.Extend<SlowPerson, Memoize>();
+    }
+
+    IEnumerable<dynamic> Memoize()
+    {
+        //define a method called Memoize
+        //and state that you want to memoize the SayHello
+        //method
+        yield return (DynamicFunctionWithParam)SayHello;
+    }
+
+    //this function will be called the first time and 
+    //any subsequent call with the same parameters
+    //will return a cached value
+    dynamic SayHello(dynamic otherPerson)
+    {
+        System.Threading.Thread.Sleep(10000);
+
+        return "Hello " + otherPerson.Name;
+    }
+}
+
+============== FOR VERSIONS ==============
+oak 2.3.9+
+oak-edge 1.7.6+
+gemini 1.1.9+
+cambium 1.3.6+
+=============== CHANGES ==================
+- added overloads on all associations for legacy databases
+
+
+============== FOR VERSIONS ==============
 oak 2.3.1+
 oak-edge 1.5.7+
 gemini 1.1.7+

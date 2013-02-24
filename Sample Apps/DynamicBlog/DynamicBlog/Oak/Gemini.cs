@@ -4,6 +4,12 @@ using System.Linq;
 using System.Dynamic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text;
+using System.IO;
+using System.Threading;
+using System.Collections;
+using System.Collections.Specialized;
 
 
 namespace Oak
@@ -78,6 +84,11 @@ namespace Oak
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator() { return Enumerable().GetEnumerator(); }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return (Enumerable() as System.Collections.IEnumerable).GetEnumerator(); }
+
+        public override string ToString()
+        {
+            return GeminiInfo.Parse(this);
+        }
     }
 
     [DebuggerNonUserCode]
@@ -115,6 +126,7 @@ namespace Oak
 
     public delegate dynamic DynamicMethod();
 
+    [DebuggerNonUserCode]
     public class Gemini : DynamicObject
     {
         static Gemini()
@@ -208,6 +220,10 @@ namespace Oak
         {
             if (dto == null) dto = new Prototype();
 
+            else if (dto is string || dto.GetType().IsValueType) dto = new { Value = dto };
+
+            else if (dto is IEnumerable && !dto.CanConvertToPrototype()) dto = new { Items = dto };
+
             if (dto is Prototype) Prototype = dto;
 
             else Prototype = dto.ToPrototype();
@@ -225,9 +241,14 @@ namespace Oak
             }
         }
 
-        public void AddRedefinableDelegates()
+        public dynamic AddRedefinableDelegates()
         {
-            foreach (var method in DynamicDelegates(this.GetType())) AddDynamicMember(method);
+            foreach (var method in DynamicDelegates(this.GetType()))
+            {
+                if(!RespondsTo(method.Name)) AddDynamicMember(method);
+            }
+
+            return this;
         }
 
         private void ApplyExtensions()
@@ -311,8 +332,7 @@ namespace Oak
         private object Invoke(MethodInfo method, object[] parameters)
         {
             try { return method.Invoke(this, parameters); }
-
-            catch (Exception ex) { throw ex.InnerException; }
+            catch (Exception ex) { throw InvocationException(ex); }
         }
 
         public BindingFlags PrivateFlags()
@@ -334,13 +354,24 @@ namespace Oak
             return true;
         }
 
-        public void Extend<T>() where T : class
+        public dynamic Extend<T>() where T : class
         {
             var constructor = typeof(T).GetConstructor(new Type[] { typeof(object) });
 
-            constructor.Invoke(new object[] { this });
+            try { constructor.Invoke(new object[] { this }); }
+            catch (Exception ex) { throw InvocationException(ex); }
 
             extendedWith.Add(typeof(T));
+
+            return this;
+        }
+
+        Exception InvocationException(Exception ex)
+        {
+            Exception innerException = ex.InnerException;
+            ThreadStart savestack = Delegate.CreateDelegate(typeof(ThreadStart), innerException, "InternalPreserveStackTrace", false, false) as ThreadStart;
+            if (savestack != null) savestack();
+            throw ex.InnerException;
         }
 
         public bool IsDynamicFunctionWithParam(MethodInfo method, List<ParameterInfo> parameters)
@@ -465,11 +496,16 @@ namespace Oak
 
             if (TryGetMember(property, out result)) return result;
 
-            throw new InvalidOperationException(
+            throw MemberDoesntExistException(property);
+        }
+
+        public InvalidOperationException MemberDoesntExistException(string name)
+        {
+            return new InvalidOperationException(
                 "This instance of type " +
                 this.GetType().Name +
-                " does not respond to the property " +
-                property +
+                " does not respond to the member " +
+                name +
                 ".  These are the members that exist on this instance: " + __Info__());
         }
 
@@ -478,14 +514,18 @@ namespace Oak
             return GeminiInfo.Parse(this);
         }
 
-        public virtual void SetMember(string property, object value, bool suppress)
+        public virtual dynamic SetMember(string property, object value, bool suppress)
         {
             TrySetMember(property, value, suppress);
+
+            return this;
         }
 
-        public virtual void SetMember(string property, object value)
+        public virtual dynamic SetMember(string property, object value)
         {
             TrySetMember(property, value, suppress: false);
+
+            return this;
         }
 
         void SetMembers(dynamic o)
@@ -493,6 +533,18 @@ namespace Oak
             var dictionary = (o as object).ToDictionary();
 
             foreach (var item in dictionary) SetMember(item.Key, item.Value);
+        }
+
+        public virtual void UpdateMembers(dynamic o)
+        {
+            var dictionary = (o as object).ToDictionary();
+
+            foreach (var item in dictionary) UpdateMember(item.Key, item.Value);
+        }
+
+        public virtual void UpdateMember(string property, object value)
+        {
+            if (RespondsTo(property)) SetMember(property, value);
         }
 
         string Capitalized(string s)
@@ -530,16 +582,29 @@ namespace Oak
                 return true;
             }
 
-            dictionary.Add(property, value);
-
-            if (!suppress)
+            if (IsSame(value))
             {
-                var hooks = MethodHooks.Where(s => s.Key == this.GetType());
-
-                foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
+                TrySetMember(property, new DynamicFunction(() => value), suppress);
             }
+            else
+            {
+                dictionary.Add(property, value);
 
+                if (!suppress)
+                {
+                    var hooks = MethodHooks.Where(s => s.Key == this.GetType());
+
+                    foreach (var hook in hooks) hook.Value(new Gemini(new { Name = property, Instance = this })); //not under test yet...
+                }    
+            }
             return true;
+        }
+
+        public bool IsSame(dynamic o)
+        {
+            if (o is Gemini && this.Prototype == (o as Gemini).Prototype) return true;
+
+            return false;
         }
 
         public virtual IEnumerable<string> Members()
@@ -605,9 +670,11 @@ namespace Oak
             return Hash().Where(s => s.Value is Delegate).ToList();
         }
 
-        public virtual void DeleteMember(string member)
+        public virtual dynamic DeleteMember(string member)
         {
             Hash().Remove(Fuzzy(Hash(), member));
+
+            return this;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)

@@ -161,31 +161,37 @@ if for some reason you deviate from this convention, you can OVERRIDE the dlls s
 if you have the nuget package rake-dot-net installed you can use the following lines to build and deploy mvc applications everytime you save a web specific file
 make sure to set your builder to :RakeBuilder
 =end
-  watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md|
-    if(@dw.config[:builder] == :RakeBuilder && File.exists?("RakeDotNet"))  #make sure that the configuration is set to RakeBuilder and RakeDotNet is installed
-      if(md[0].match /App_Code/) #run the rake command if a web file in App_Code changed
-        @dw.sh.execute RakeBuilder.rake_command
-      else
-        @dw.sh.execute "rake sync file=\"#{ md[0] }\""  #run rake-dot-net's file sync command if any other web file changed
-      end
-
-      @dw.notifier.execute "website deployed", "deployed", "green" #growl
-    else
-      puts "A web file was encountered, but it looks like you don't have rake-dot-net installed.  I would auto deploy if you did."
-    end
-  end
 
 #everything after this is specwatchr specific, feel free to dig into this, the source code for specwatchr is located in watcher_dot_net.rb
 def handle filename
 	@dw.consider filename
 end
 
-def reload file
-  @dw.notifier.execute "reloading", "Reloading SpecWatchr because #{file} changed.", "green"
-  FileUtils.touch "dotnet.watchr.rb"
+def handle_webfile filename
+  if(@dw.config[:builder] == :RakeBuilder && File.exists?("RakeDotNet"))  #make sure that the configuration is set to RakeBuilder and RakeDotNet is installed
+    failed = false #variable to determine if the file sync failed
+
+    if(filename.match /App_Code/) #run the rake command if a web file in App_Code changed
+      @dw.sh.execute RakeBuilder.rake_command
+    else
+      output = @dw.sh.execute "rake sync[\"#{ filename }\"]"  #run rake-dot-net's file sync command if any other web file changed
+      
+      failed = true if output =~ /rake aborted!/ #set failed equal to true if the sync failed
+    end
+
+    @dw.notifier.execute "website deployed", "deployed", "green" unless failed #growl
+
+    #notify the dev that the version of rake they are using may be incorrect
+    @dw.notifier.execute "sync failed", 
+      "it looks like the sync failed, this usually happens if the version of rake you are running is NOT 0.8.7.  Please ensure you are running version 0.8.7 of rake. To see the gem versions that are installed, run the command 'gem list' in a command prompt that supports ruby.",
+      "red" if failed
+  else
+    puts "A web file was encountered, but it looks like you don't have rake-dot-net installed.  I would auto deploy if you did."
+  end
 end
 
 def tutorial
+  @dw.notifier.execute "specwatchr", "feedback loop engaged", "green"
   puts "======================== SpecWatcher has started ==========================\n\n"
   puts "TEST RUNNER: #{@dw.test_runner.class}\n\n"
   puts "(you can change your test runner in dotnet.watchr.rb...)\n\n"
@@ -214,13 +220,47 @@ def tutorial
   puts @dw.test_runner.usage
 end
 
-tutorial
+def file_changed full_path
+  if full_path =~ /.*.\.cs$/
+    handle full_path
+  end
 
-#this is how the watchr gem determines files to run through spec watchr
-watch ('.*.\.cs$') do |md| 
-  handle md[0] 
+  if full_path =~ /(.*.cshtml)|(.*.js)|(.*.css)$/
+    handle_webfile full_path
+  end
 end
 
-watch ('(.*.csproj$)|(.*.sln$)') do |md| 
-  reload md[0]
+def tick i
+  sleep(60)
+  print i.to_s + ".."
+  $stdout.flush
 end
+
+method_to_run = ARGV[0] #get the first argument from the command line and act accordingly
+
+case method_to_run
+when "tutorial" 
+  tutorial
+when "file_changed"
+  file_changed ARGV[1].gsub("\\", "\/")[1..-1] #run the file_changed routine giving it a shell compatible file name
+when "pomo_start"
+  @dw.notifier.execute "pomodoro started", "25 mins left", "green"
+  13.times { |i| tick(25 - (i + 1)) }
+  @dw.notifier.execute "half way..", "12 mins left", "green"
+  print "\a"
+  12.times { |i| tick(25 - (i + 1 + 13)) }
+  @dw.notifier.execute "done", "take a break", "red"
+  print "\a"
+  print "\a"
+  print "\a"
+when "pomo_break"
+  @dw.notifier.execute "break started", "7 min left", "green"
+  7.times { |i| tick (i + 1) }
+  @dw.notifier.execute "back to it", "aww...", "red"
+  print "\a"
+  print "\a"
+  print "\a"
+else
+  puts "I dont know how to run: " + method_to_run
+end
+

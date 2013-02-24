@@ -31,13 +31,22 @@ namespace Oak
 
                 mixWith.SetMember("FirstError", new DynamicFunction(FirstError));
 
-                IEnumerable<dynamic> validationRules = @this.Validates();
-
-                foreach (var validationRule in validationRules)
+                try
                 {
-                    validationRule.Init(mixWith);
-
-                    AddRule(validationRule);
+                    IEnumerable<dynamic> validationRules = @this.Validates();
+                    foreach (var validationRule in validationRules)
+                    {
+                        validationRule.Init(mixWith);
+                        AddRule(validationRule);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        String.Format("Validation initialization failed for class {0}.  Check the Validates method on {0} for a validation declaration related to this exception: {1}", 
+                            @this.GetType().Name, 
+                            ex.Message), 
+                        ex);
                 }
             }
         }
@@ -107,7 +116,7 @@ namespace Oak
     {
         public string Property { get; set; }
 
-        public string ErrorMessage { get; set; }
+        public dynamic ErrorMessage { get; set; }
 
         public Validation(string property)
         {
@@ -126,6 +135,8 @@ namespace Oak
 
         public virtual string Message()
         {
+            if (ErrorMessage is Delegate) return ErrorMessage();
+
             if (!string.IsNullOrEmpty(ErrorMessage)) return ErrorMessage;
 
             return Property + " is invalid.";
@@ -253,6 +264,8 @@ namespace Oak
         {
             base.Init(entity as object);
 
+            if (ErrorMessage != null) return;
+
             if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is required.";
         }
 
@@ -273,6 +286,8 @@ namespace Oak
         public override void Init(dynamic entity)
         {
             base.Init(entity as object);
+
+            if (ErrorMessage != null) return;
 
             if (string.IsNullOrEmpty(ErrorMessage)) ErrorMessage = Property + " is taken.";
         }

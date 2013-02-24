@@ -47,6 +47,8 @@ namespace Oak
 
         private object IntOrOriginal(dynamic value)
         {
+            if (!(value is string)) return value;
+
             var parsedInt = 0;
 
             var parsedGuid = Guid.Empty;
@@ -91,7 +93,7 @@ namespace Oak
 
         public bool HasJsonBody(ControllerContext controllerContext)
         {
-            return controllerContext.HttpContext.Request.ContentType == "application/json";
+            return controllerContext.HttpContext.Request.ContentType.Contains("application/json");
         }
     }
 }

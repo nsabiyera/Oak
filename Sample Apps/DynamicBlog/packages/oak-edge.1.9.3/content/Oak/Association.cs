@@ -90,10 +90,10 @@ namespace Oak
             return options.discardCache;
         }
 
-        public string InnerJoinSelectClause(string xRefFromColumn, 
-            string toTable, 
-            string xRefTable, 
-            string xRefToColumn, 
+        public string InnerJoinSelectClause(string xRefFromColumn,
+            string toTable,
+            string xRefTable,
+            string xRefToColumn,
             string toTableColumn,
             string idProperty,
             params dynamic[] models)
@@ -119,7 +119,7 @@ namespace Oak
 
         public string InClause(IEnumerable<dynamic> models, string member)
         {
-            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))));
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))).Distinct());
         }
 
         public virtual void AddRepository(DynamicModels collection, DynamicRepository repository)
@@ -129,12 +129,17 @@ namespace Oak
 
         public virtual void AddNewAssociationMethod(DynamicModels collection, dynamic model)
         {
-            collection.SetMember(
-                "New",
-                new DynamicFunctionWithParam(attributes =>
-                {
-                    return EntityFor(attributes);
-                }));
+            collection.SetMember("New", NewItemDelegate());
+        }
+
+        public DynamicFunctionWithParam NewItemDelegate()
+        {
+            var newItemDelegate = new DynamicFunctionWithParam(attributes =>
+            {
+                return EntityFor(attributes);
+            });
+
+            return newItemDelegate;
         }
 
         public dynamic EntityFor(dynamic attributes)
@@ -232,16 +237,23 @@ namespace Oak
             model.SetMember(MethodName, Query(fromColumn, model));
 
             model.SetMember(Singular(MethodName) + "Ids", QueryIds(fromColumn, model));
+
+            model.SetMember("New" + Singular(MethodName), NewItemDelegate(model));
+        }
+
+        private DynamicFunctionWithParam NewItemDelegate(dynamic model)
+        {
+            var newItemDelegate = new DynamicFunctionWithParam(attributes =>
+            {
+                return EntityFor(model, attributes);
+            });
+
+            return newItemDelegate;
         }
 
         public override void AddNewAssociationMethod(DynamicModels collection, dynamic model)
         {
-            collection.SetMember(
-                "New",
-                new DynamicFunctionWithParam(attributes =>
-                {
-                    return EntityFor(model, attributes);
-                }));
+            collection.SetMember("New", NewItemDelegate(model));
         }
 
         private dynamic EntityFor(dynamic model, dynamic attributes)
@@ -361,6 +373,8 @@ namespace Oak
             model.SetMember(
                 Singular(MethodName) + "Ids",
                 QueryIds(model));
+
+            model.SetMember("New" + Singular(MethodName), NewItemDelegate());
         }
 
         private DynamicFunctionWithParam InnerJoinFor(dynamic model)
@@ -377,7 +391,7 @@ namespace Oak
 
                 EagerLoadMany.Cache = new DynamicModels(models);
 
-                AddNewAssociationMethod(EagerLoadMany.Cache, model);
+                EagerLoadMany.Cache.SetMember("New", NewItemDelegate());
 
                 return EagerLoadMany.Cache;
             };
@@ -464,6 +478,8 @@ namespace Oak
             model.SetMember(
                 Singular(MethodName) + "Ids",
                 QueryIds(model));
+
+            model.SetMember("New" + Singular(MethodName), NewItemDelegate());
         }
 
         private DynamicFunction QueryIds(dynamic model)
@@ -492,7 +508,7 @@ namespace Oak
 
                 EagerLoadMany.Cache = new DynamicModels(models);
 
-                AddNewAssociationMethod(EagerLoadMany.Cache, model);
+                EagerLoadMany.Cache.SetMember("New", NewItemDelegate());
 
                 AddRepository(EagerLoadMany.Cache, new DynamicRepository(throughTable));
 
@@ -515,6 +531,15 @@ namespace Oak
 
     public class EagerLoadSingleForAll
     {
+        static void ConvertToList(string property, dynamic inObject)
+        {
+            if (inObject.GetMember(property) is List<dynamic>) return;
+
+            var newPropValue = new List<dynamic>();
+            newPropValue.Add(inObject.GetMember(property));
+            inObject.SetMember(property, newPropValue);
+        }
+
         public static DynamicModels Execute(IEnumerable<dynamic> models,
             DynamicRepository repository,
             string associationName,
@@ -533,7 +558,18 @@ namespace Oak
 
                     association.Model = item;
 
-                    item.SetMember(relateModel.GetType().Name, relateModel);
+                    var propName = relateModel.GetType().Name;
+
+                    if (item.RespondsTo(propName))
+                    {
+                        ConvertToList(propName, item);
+
+                        item.GetMember(propName).Add(relateModel);
+                    }
+                    else
+                    {
+                        item.SetMember(propName, relateModel);
+                    }
                 }
             }
 
@@ -657,20 +693,20 @@ namespace Oak
             return Model;
         }
 
-        private DynamicFunction Query(string xRefFromColumn, 
-            string toTable, 
-            string xRefTable, 
-            string xRefToColumn, 
-            string toTableColumn, 
-            string propertyContainingIdValue, 
+        private DynamicFunction Query(string xRefFromColumn,
+            string toTable,
+            string xRefTable,
+            string xRefToColumn,
+            string toTableColumn,
+            string propertyContainingIdValue,
             List<dynamic> models)
         {
-            return () => Repository.Query(InnerJoinSelectClause(xRefFromColumn, 
-                                              toTable, 
-                                              xRefTable, 
-                                              xRefToColumn, 
-                                              toTableColumn, 
-                                              propertyContainingIdValue, 
+            return () => Repository.Query(InnerJoinSelectClause(xRefFromColumn,
+                                              toTable,
+                                              xRefTable,
+                                              xRefToColumn,
+                                              toTableColumn,
+                                              propertyContainingIdValue,
                                               models.ToArray())).FirstOrDefault();
         }
 
@@ -733,10 +769,10 @@ namespace Oak
                 .Replace("{primaryKey}", IdColumnOfParentTable)
                 .Replace("{inClause}", InClause(models, PropertyContainingIdValue));
 
-            return EagerLoadSingleForAll.Execute(models, 
-                       Repository, 
-                       MethodName, 
-                       ones, 
+            return EagerLoadSingleForAll.Execute(models,
+                       Repository,
+                       MethodName,
+                       ones,
                        (result, source) => result.GetMember(IdColumnOfParentTable) == source.GetMember(PropertyContainingIdValue));
         }
 

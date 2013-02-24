@@ -37,7 +37,7 @@ namespace DynamicBlog.Controllers
 
             ViewBag.Blog = blog;
 
-            ViewBag.Comments = blog.Comments() as IEnumerable<dynamic>;
+            ViewBag.Comments = blog.Comments();
 
             return View();
         }
@@ -66,7 +66,7 @@ namespace DynamicBlog.Controllers
 
             blog.AddComment(@params.comment);
 
-            return RedirectToAction("Get", new { id = @params.id });
+            return RedirectToAction("Get", new { @params.id });
         }
 
         public dynamic Edit(dynamic @params)
@@ -87,8 +87,7 @@ namespace DynamicBlog.Controllers
         {
             var blog = Blogs.Single(@params.id);
 
-            blog.Title = @params.title;
-            blog.Body = @params.body;
+            blog.UpdateMembers(@params);
 
             if(!blog.IsValid())
             {
@@ -99,7 +98,7 @@ namespace DynamicBlog.Controllers
 
             Blogs.Save(blog);
 
-            return RedirectToAction("get", new { id = @params.id });
+            return RedirectToAction("get", new { @params.id });
         }
     }
 }
