@@ -2,15 +2,15 @@
     ViewBag.PageTitle = ViewBag.Blog.Title;
 }
 
-<h2>@ViewBag.Blog.Title @Html.ActionLink("edit", "edit", new { id = ViewBag.Blog.Id })</h2>
+<h3>@ViewBag.Blog.Title @Html.ActionLink("edit", "edit", new { id = ViewBag.Blog.Id })</h3>
 @Html.Raw(ViewBag.Blog.Body)
 
 <hr />
 
-<h2>Comments</h2>
+<h4>Comments</h4>
 @foreach (var comment in ViewBag.Comments)
 {
-    @comment.Text<br />
+    @comment.Text<hr />
 }
 
 
@@ -19,5 +19,5 @@
     @Html.Hidden("id", ViewBag.Blog.Id as object)
     @OakForm.TextArea("comment")
     <br />
-    <input type="submit" value="comment" />
+    <input type="submit" value="comment" class="btn" />
 }

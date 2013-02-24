@@ -2,18 +2,18 @@
     ViewBag.PageTitle = "New";
 }
 
-<h2>New Blog</h2>
+<h3>New Blog</h3>
 
 @if (ViewBag.Flash != null)
 {
-    <span>Error: @ViewBag.Flash</span>
+    <div class="alert alert-error">@ViewBag.Flash</div>
 }
 
 @using (Html.BeginForm(new { action = "New" }))
 {
-    @Html.Label("Title")<br />
+    @Html.Label("Title")
     @OakForm.TextBox("Title", Request["Title"])<br />
-    @Html.Label("Body") <br />
+    @Html.Label("Body")
     @OakForm.TextArea("Body", Request["Body"])<br />
-    <input type="submit" value="insert blog" />
+    <input type="submit" value="insert blog" class="btn" />
 }

@@ -43,6 +43,7 @@ namespace DynamicBlog.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public dynamic New(dynamic @params)
         {
             dynamic blog = new Blog(@params);

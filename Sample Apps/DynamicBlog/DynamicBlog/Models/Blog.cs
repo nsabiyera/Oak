@@ -47,7 +47,7 @@ namespace DynamicBlog.Models
 
                 if (_.Body.Length > 50) return _.Body.Substring(0, 50);
 
-                return Prototype.Body;
+                return _.Body;
             }
         }
     }

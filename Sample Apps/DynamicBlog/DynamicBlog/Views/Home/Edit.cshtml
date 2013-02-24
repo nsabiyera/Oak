@@ -2,7 +2,7 @@
     ViewBag.PageTitle = "Edit";
 }
 
-<h2>Edit a Blog</h2>
+<h3>Edit a Blog</h3>
 
 @{
     dynamic form = new Oak.DynamicForm(ViewBag.Blog);
@@ -10,14 +10,14 @@
 
 @if (ViewBag.Flash != null)
 {
-    <span>Error: @ViewBag.Flash</span>
+    <div class="alert alert-error">@ViewBag.Flash</div>
 }
 
 @using (Html.BeginForm(new { action = "Edit", id = ViewBag.Blog.Id } ))
 {
-    @Html.Label("Title")<br />
+    @Html.Label("Title")
     @OakForm.TextBox(form.Title)<br />
-    @Html.Label("Body")<br />
+    @Html.Label("Body")
     @OakForm.TextArea(form.Body)<br />
-    <input type="submit" value="update blog" />
+    <input type="submit" value="update blog" class="btn" />
 }
