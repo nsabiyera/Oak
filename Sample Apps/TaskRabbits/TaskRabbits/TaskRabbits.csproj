@@ -117,6 +117,7 @@
     <Content Include="Global.asax" />
     <Content Include="rake-dot-net-usage.txt" />
     <Content Include="Scripts\chosen.js" />
+    <Content Include="Scripts\ember-data.js" />
     <Content Include="Scripts\ember.js" />
     <Content Include="Scripts\date.js" />
     <Content Include="Scripts\ember-app\app.js" />
@@ -126,6 +127,7 @@
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\knockout-app\app.js" />
     <Content Include="Scripts\knockout.js" />
+    <Content Include="Scripts\local_storage_adapter.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="specwatchr-usage.txt" />
     <Content Include="Web.config" />

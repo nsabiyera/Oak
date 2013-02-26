@@ -4,11 +4,68 @@
 
 <script src="@Url.Content("~/Scripts/handlebars.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/ember.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ember-data.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/local_storage_adapter.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/ember-app/app.js")" type="text/javascript"></script>
 
 <h2>Dashboard</h2>
 <div id="dashboard">
-  <script type="text/x-handlebars">
-    {{view Todos.CreateTodoView id="new-todo" placeholder="What needs to be done?"}}
-  </script>
 </div>
+<div id="todoreference">
+
+</div>
+
+<script type="text/x-handlebars" data-template-name="todos">
+      <header id="header">
+        {{view Ember.TextField id="new-todo" placeholder="What needs to be done?" valueBinding="newTitle" action="createTodo"}}
+      </header>
+
+      {{#if length}}
+        <section id="main">
+            <table class="table table-striped">
+            {{#each filteredTodos itemController="todo"}}
+              <tr {{bindAttr class="isCompleted:completed isEditing:editing well"}}>
+                {{#if isEditing}}
+                  <td>
+                  {{view Todos.EditTodoView todoBinding="this"}}
+                  </td>
+                {{else}}
+                  <td class="span1">
+                    {{view Ember.Checkbox checkedBinding="isCompleted" class="toggle"}}
+                  </td>
+                  <td>
+                    <label {{action "editTodo" on="doubleClick"}}>{{title}}</label>
+                  </td>
+                  <td>
+                    <button {{action "removeTodo"}} class="destroy"></button>
+                  </td>
+                {{/if}}
+                </tr>
+            {{/each}}
+            </table>
+          {{view Ember.Checkbox id="toggle-all" checkedBinding="allAreDone"}}
+          
+        </section>
+
+        <footer id="footer">
+          <span id="todo-count">{{{remainingFormatted}}}</span>
+          <ul id="filters">
+            <li>
+              {{#linkTo todos.index activeClass="selected"}}All{{/linkTo}}
+            </li>
+            <li>
+              {{#linkTo todos.active activeClass="selected"}}Active{{/linkTo}}
+            </li>
+            <li>
+              {{#linkTo todos.completed activeClass="selected"}}Completed{{/linkTo}}
+            </li>
+          </ul>
+
+          {{#if hasCompleted}}
+            <button id="clear-completed" {{action "clearCompleted"}} {{bindAttr class="buttonClass:hidden"}}>
+              Clear completed ({{completed}})
+            </button>
+          {{/if}}
+        </footer>
+      {{/if}}
+  </script>
