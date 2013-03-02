@@ -183,7 +183,7 @@ namespace Oak
 
         public static bool IsJsonString(dynamic o)
         {
-            return o == null ||
+            return IsNull(o) ||
                 o is string ||
                 o.GetType() == typeof(DateTime) ||
                 o.GetType() == typeof(Char) ||
@@ -225,9 +225,9 @@ namespace Oak
             return "\"" + Escape(o) + "\"";
         }
 
-        private static bool IsNull(object value)
+        private static bool IsNull(dynamic value)
         {
-            return value == null;
+            return ReferenceEquals(value, null);
         }
 
         private static string Escape(string o)

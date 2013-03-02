@@ -1,4 +1,13 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.5.4+
+oak-edge 1.9.3+
+cambium 1.4.8+
+=============== CHANGES ==================
+Added FindBy to DynamicRepository
+https://github.com/amirrajan/Oak/blob/3ab0a010f46da59c6e0c779a3de40014f18ed43a/Oak/Massive.cs#L753
+https://github.com/amirrajan/Oak/blob/3ab0a010f46da59c6e0c779a3de40014f18ed43a/Oak.Tests/describe_DynamicRepository/dynamic_query.cs
+
+============== FOR VERSIONS ==============
 oak 2.4.9+
 oak-edge 1.8.9+
 oak-json 1.0.8+

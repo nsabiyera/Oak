@@ -55,10 +55,15 @@ namespace Oak
             }
             else
             {
-                if (o != null) WriteName(stringBuilder, tab, name, o.GetType().Name, o);
+                if (!IsNull(o)) WriteName(stringBuilder, tab, name, o.GetType().Name, o);
 
                 else WriteName(stringBuilder, tab, name, "null", null);
             }
+        }
+
+        public static bool IsNull(dynamic o)
+        {
+            return ReferenceEquals(o, null);
         }
 
         public static void WriteDictionary(StringBuilder stringBuilder, IDictionary<string, object> o, int tab, List<object> encounteredObjects)
@@ -76,7 +81,7 @@ namespace Oak
                 stringBuilder.Append(" (" + meta + ")");
             }
 
-            if (value != null && !(value is Delegate))
+            if (!IsNull(value) && !(value is Delegate))
             {
                 stringBuilder.Append(": ");
 
