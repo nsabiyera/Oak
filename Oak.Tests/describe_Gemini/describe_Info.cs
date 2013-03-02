@@ -94,7 +94,6 @@ namespace Oak.Tests.describe_Gemini
             (gemini.ToString() as string).should_be(gemini.__Info__() as string);
         }
 
-        [Tag("wip")]
         void specify_structs_are_printed()
         {
             gemini = new Gemini(new { Struct = new KeyValuePair<string, string>("Name", "Jane Doe") });

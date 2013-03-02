@@ -8,7 +8,7 @@ using Massive;
 
 namespace Oak.Tests.describe_DynamicRepository
 {
-    class memoization_application : nspec
+    class memoization_usage_with_dynamic_repository : nspec
     {
         Seed seed;
 
