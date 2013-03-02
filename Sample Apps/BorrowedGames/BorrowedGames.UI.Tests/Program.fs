@@ -1,40 +1,44 @@
 ﻿open runner
-
 open canopy
-
 open uimethods
-
 open setupmethods
+open configuration
+open reporters
 
 start "firefox"
 
+let (====) a b = a &&& b
+
+context "borrowedgames.com"
+
 before(fun _ -> logOff())
 
-test(fun _ ->
-    describe "borrower returns game"
+"borrower returns game" 
+==== fun _ ->
     requestGame()
     logOff()
     loginAs "user2"
     wantedGamesList *= "currently borrowing"
     click deleteBorrowedGameLink
-    wantedGamesList *!= "currently borrowing")
+    wantedGamesList *!= "currently borrowing"
 
-test(fun _ -> 
-    describe "registering a user"
+"registering a user" 
+==== fun _ -> 
     reset()
-    registerUser "user1")
+    registerUser "user1"
 
-test(fun _ ->
-    describe "request games"
-    requestGame())
+"request games" 
+==== fun _ -> 
+    requestGame()
 
-test(fun _ ->
-    describe "lender marks game as returned"
+"lender marks game as returned" 
+==== fun _ ->
     requestGame()
     loginAs "user1"
     click gameReturnedLink
-    count "#requestedGames i" 0)
+    count "#requestedGames i" 1
 
 run()
- 
+
 quit()
+

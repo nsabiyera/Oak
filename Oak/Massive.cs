@@ -104,8 +104,11 @@ namespace Massive
     }
 
     /// <summary>
-    /// A class that wraps your database table in Dynamic Funtime
+    /// A class that wrapsll your database table in Dynamic Funtime
     /// </summary>
+
+    //when does a fork of a code base become so different that 
+    //it barely resembles its upstream?
     public class DynamicRepository : Gemini
     {
         DbProviderFactory _factory;
@@ -122,6 +125,7 @@ namespace Massive
         {
             WriteDevLog = false;
             LogSql = LogSqlDelegate;
+            Gemini.Extend<DynamicRepository, DynamicQuery>();
         }
 
         public DynamicRepository(ConnectionProfile connectionProfile, string tableName = "", string primaryKeyField = "")
@@ -189,6 +193,16 @@ namespace Massive
                     yield return rdr.RecordToGemini(Projection);
                 }
             }
+        }
+
+        object[] ToParams(object[] args)
+        {
+            if (args.Length == 1 && args[0] is IEnumerable<object>)
+            {
+                return (args[0] as IEnumerable<object>).ToArray();
+            }
+
+            return args;
         }
 
         /// <summary>
@@ -264,11 +278,12 @@ namespace Massive
         /// </summary>
         DbCommand CreateCommand(string sql, DbConnection conn, params object[] args)
         {
+            var newArgs = ToParams(args);
             var result = _factory.CreateCommand();
             result.Connection = conn;
             result.CommandText = sql;
             if (args.Length > 0)
-                result.AddParams(args);
+                result.AddParams(newArgs);
             return result;
         }
         /// <summary>
@@ -732,6 +747,133 @@ namespace Oak
             DynamicRepository dynamicModel = new DynamicRepository(connectionProfile, table, "Id");
 
             return dynamicModel.Insert(o);
+        }
+    }
+
+    public class DynamicQuery
+    {
+        dynamic o;
+
+        public DynamicQuery(dynamic o)
+        {
+            this.o = o;
+
+            o.FindBy = Method(FindBy);
+
+            o.Last = Method(Last);
+
+            o.First = o.Select = o.Get = Method(First);
+
+            o.Count = Method(args => Aggregate("COUNT", args));
+            o.Sum = Method(args => Aggregate("SUM", args));
+            o.Max = Method(args => Aggregate("MAX", args));
+            o.Min = Method(args => Aggregate("MIN", args));
+            o.Avg = Method(args => Aggregate("AVG", args));
+        }
+
+        public DynamicFunctionWithParam Method(Func<dynamic, dynamic> method)
+        {
+            return new DynamicFunctionWithParam(method);
+        }
+
+        public dynamic Aggregate(string operation, dynamic args)
+        {
+            var constraints = Constraints(args);
+
+            return Scalar(operation + "(" + constraints.Columns + ")", constraints);
+        }
+
+        public dynamic Scalar(string select, dynamic constraints)
+        {
+            return o.Scalar(
+                "SELECT " + select + " FROM " + o.TableName + constraints.Where,
+                constraints.WhereArgs);
+        }
+
+        public dynamic Last(dynamic args)
+        {
+            var constraints = Constraints(args);
+
+            constraints.OrderBy = constraints.OrderBy + " DESC ";
+
+            return Top(constraints);
+        }
+       
+        public dynamic First(dynamic args)
+        {
+            return Top(Constraints(args));
+        }
+
+        public dynamic Top(dynamic constraints)
+        {
+            var sql = "SELECT TOP 1 " + 
+                constraints.Columns + 
+                " FROM " + o.TableName + 
+                constraints.Where + 
+                constraints.OrderBy;
+
+            return (o.Query(sql, constraints.WhereArgs) as IEnumerable<dynamic>).FirstOrDefault();   
+        }
+
+        public dynamic FindBy(dynamic args)
+        {
+            var constraints = Constraints(args);
+
+            var sql = "SELECT " + 
+                constraints.Columns + 
+                " FROM " + o.TableName + 
+                constraints.Where + 
+                constraints.OrderBy;
+
+            return new DynamicModels(o.Query(sql, constraints.WhereArgs));
+        }
+
+        public dynamic Constraints(dynamic args)
+        {
+            var constraints = new List<string>();
+            var counter = 0;
+            var columns = " * ";
+            string orderBy = string.Format(" ORDER BY {0}", o.PrimaryKeyField);
+            string where = "";
+            var whereArgs = new List<object>();
+
+            var props = (args ?? new Gemini()).HashOfProperties() as IDictionary<string, object>;
+
+            if (props.Count > 0)
+            {
+                foreach (var kvp in props)
+                {
+                    var name = kvp.Key.ToLower();
+
+                    switch (name)
+                    {
+                        case "orderby":
+                            orderBy = " ORDER BY " + kvp.Value;
+                            break;
+                        case "columns":
+                            columns = kvp.Value.ToString();
+                            break;
+                        default:
+                            constraints.Add(string.Format(" {0} = @{1}", name, counter));
+                            whereArgs.Add(kvp.Value);
+                            counter++;
+                            break;
+                    }
+                }
+            }
+
+            if (constraints.Any())
+            {
+                where = " WHERE " + string.Join(" AND ", constraints.ToArray());
+            }
+
+            return new Gemini(new
+            {
+                Where = where,
+                WhereArgs = whereArgs,
+                Columns = columns,
+                OrderBy = orderBy
+            });
         }
     }
 }
