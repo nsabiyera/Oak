@@ -36,7 +36,7 @@ before(fun _ -> logOff())
     requestGame()
     loginAs "user1"
     click gameReturnedLink
-    count "#requestedGames i" 1
+    count "#requestedGames i" 0
 
 run()
 
