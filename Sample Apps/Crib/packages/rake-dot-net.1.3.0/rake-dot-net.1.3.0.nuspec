@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>rake-dot-net</id>
+    <version>1.3.0</version>
+    <authors>Amir Rajan</authors>
+    <owners>Amir Rajan</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>RakeDotNet is a set of rake tasks that help wean yourself of the Visual Studio IDE</description>
+    <language>en-US</language>
+    <tags>automation rake build</tags>
+  </metadata>
+</package>
