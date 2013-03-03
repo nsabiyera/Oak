@@ -1,0 +1,5 @@
+2012/10/30 11:49:45 [emerg] 3924#4284: unknown log format "main" in c:\Development\nginx/conf/nginx.conf:44
+2012/11/04 16:14:51 [notice] 3448#3644: signal process started
+2012/11/04 16:14:59 [notice] 804#3672: signal process started
+2012/11/04 16:14:59 [error] 804#3672: CreateFile() "c:\Development\Oak\Sample Apps\BorrowedGames\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2012/11/04 16:17:28 [notice] 4312#3220: signal process started
