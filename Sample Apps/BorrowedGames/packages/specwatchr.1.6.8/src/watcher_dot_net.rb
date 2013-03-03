@@ -12,18 +12,41 @@ class GrowlNotifier
     @@growl_path = value
   end
 
+  def self.growl_path_32
+    @@growl_path_32
+  end
+  
+  def self.growl_path_32= value
+    @@growl_path_32 = value
+  end
+
+  def self.growl_path_64
+    @@growl_path_64
+  end
+  
+  def self.growl_path_64= value
+    @@growl_path_64 = value
+  end
+
   def execute title, text, color
-    return unless GrowlNotifier.growl_path
+    begin
+      text.gsub!('"', "'")
 
-    text.gsub!('"', "'")
+      text = text + "\n\n---"
 
-    text = text + "\n\n---"
+      opts = ["\"#{GrowlNotifier.growl_path }\"", "\"#{text}\"", "/t:\"#{title}\""]
 
-    opts = ["\"#{GrowlNotifier.growl_path}\"", "\"#{text}\"", "/t:\"#{title}\""]
+      opts << "/i:\"#{File.expand_path("#{color}.png")}\"" 
 
-    opts << "/i:\"#{File.expand_path("#{color}.png")}\"" 
+      puts title
+      puts text
 
-    `#{opts.join ' '}`
+      `#{opts.join ' '}`
+    rescue
+      puts "doesn't look like Growl for Windows is installed at:" 
+      puts GrowlNotifier.growl_path_32
+      puts GrowlNotifier.growl_path_64
+    end
   end
 end
 
@@ -183,11 +206,7 @@ class NSpecRunner < TestRunner
     just_file_name = File.basename(file, ".cs")
     
     if(contained_in_test_project(file))
-      return file.gsub("./", "")
-                 .gsub(root_folder(file), "")
-                 .gsub(/^\//, "")
-                 .gsub(".cs", "")
-                 .gsub("/", "\\.")
+      return just_file_name
     else
       return "describe_" + just_file_name
     end
@@ -718,7 +737,7 @@ class CommandShell
 end
 
 class WatcherDotNet
-  attr_accessor :notifier, :test_runner, :builder, :sh, :first_run
+  attr_accessor :notifier, :test_runner, :builder, :sh, :first_run, :config
   require 'find'
 
   EXCLUDES = [/\.dll$/, /debug/i, /TestResult.xml/, /testresults/i, /\.rb$/, /\.suo$/]
@@ -729,6 +748,7 @@ class WatcherDotNet
     @notifier = GrowlNotifier.new
     @builder = Kernel.const_get(config[:builder].to_s).new folder
     @test_runner = Kernel.const_get(config[:test_runner].to_s).new folder
+    @config = config
     @first_run = true
   end
 
@@ -745,11 +765,6 @@ class WatcherDotNet
     if(unsupported_solution_structure?)
       @notifier.execute "specwatchr", "The solution structure you have is unsupported by specwatchr.  CS Projects need to be in their own directories (as opposed to .csproj's existing at the same level as the .sln file).  If this is a new project, go back and recreate it...but this time make sure that the \"Create directory for solution\" check box is checked.", "red"
       return
-    end
-    
-    if(@first_run)
-      @notifier.execute "specwatchr", "builder: #{@builder.class}\ntest runner: #{@test_runner.class}\nconfig file: dotnet.watchr.rb", "green"
-      @first_run = false
     end
 
     puts "====================== changed: #{file} ===================="
@@ -803,5 +818,4 @@ class WatcherDotNet
 
   end
 end
-
 
