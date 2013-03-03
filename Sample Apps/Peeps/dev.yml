@@ -7,5 +7,6 @@ website_deploy_directory_load_balanced_2: c:\iisexpress\website_5000
 solution_name: Peeps #just the name, no .sln extension
 mvc_project: Peeps #just the folder name, no .csproj extension
 test_project: Peeps.Tests #just the folder name, no .csproj extension
-test_runner: ./packages/nspec.0.9.62/tools/NSpecRunner.exe
+test_runner: ./packages/nspec.0.9.64/tools/NSpecRunner.exe
 iis_express: C:\Program Files (x86)\IIS Express
+database_name: Peeps

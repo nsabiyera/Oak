@@ -7,7 +7,7 @@ class SlnBuilder
   end
 
   def command(sln)
-    return "\"#{@msbuild_path}\" \"#{sln}\" /verbosity:quiet /nologo /p:Configuration=Debug /p:Platform=\"Any CPU\""
+    return "\"#{@msbuild_path}\" \"#{sln}\" /verbosity:quiet /nologo"
   end
 
   def build(sln)
