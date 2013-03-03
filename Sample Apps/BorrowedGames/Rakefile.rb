@@ -34,6 +34,8 @@ task :rake_dot_net_initialize do
   @file_sync = FileSync.new
   @file_sync.source = @mvc_project_directory
   @file_sync.destination = @website_deploy_directory
+  @database_name = yml["database_name"]
+  @test_database_name = yml["database_name"] + "Test"
 end
 
 desc "builds and deploys website to directories iis express will use to run app"
@@ -143,9 +145,9 @@ end
 
 desc "purges the database and regenerates schema"
 task :regen_db => :build do
-  sh regen_db_command("Data Source=(local);Initial Catalog=BorrowedGames;Integrated Security=true")
+  sh regen_db_command("Data Source=(local);Initial Catalog=#{ @database_name };Integrated Security=true")
 
-  sh regen_db_command("Data Source=(local);Initial Catalog=BorrowedGames_Test;Integrated Security=true")
+  sh regen_db_command("Data Source=(local);Initial Catalog=#{ @test_database_name };Integrated Security=true")
 end
 
 desc "imports data from gamefaqs.com"
@@ -189,4 +191,15 @@ task :stop_nginx do
   cd "nginx"
   sh "nginx.exe -s quit"
   cd ".."
+end
+
+desc "creates your databases if they don't exist"
+task :create_db => :rake_dot_net_initialize do
+  execute_sql "master", "create database #{ @database_name }"
+  execute_sql "master", "create database #{ @test_database_name }"
+  puts "done."
+end
+
+def execute_sql database, sql
+  puts `sqlcmd -d #{ database } -S (local) -Q \"#{ sql }\"`
 end
