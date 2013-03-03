@@ -3,8 +3,6 @@
 #Copyright (c) 2011 Amir Rajan, Matt Florence
 #Copyright (c) 2011 The NSpec Development Team
 
-require 'find'
-
 class GrowlNotifier
   def self.growl_path
     @@growl_path
@@ -14,18 +12,41 @@ class GrowlNotifier
     @@growl_path = value
   end
 
+  def self.growl_path_32
+    @@growl_path_32
+  end
+  
+  def self.growl_path_32= value
+    @@growl_path_32 = value
+  end
+
+  def self.growl_path_64
+    @@growl_path_64
+  end
+  
+  def self.growl_path_64= value
+    @@growl_path_64 = value
+  end
+
   def execute title, text, color
-    return unless GrowlNotifier.growl_path
+    begin
+      text.gsub!('"', "'")
 
-    text.gsub!('"', "'")
+      text = text + "\n\n---"
 
-    text = text + "\n\n---"
+      opts = ["\"#{GrowlNotifier.growl_path }\"", "\"#{text}\"", "/t:\"#{title}\""]
 
-    opts = ["\"#{GrowlNotifier.growl_path}\"", "\"#{text}\"", "/t:\"#{title}\""]
+      opts << "/i:\"#{File.expand_path("#{color}.png")}\"" 
 
-    opts << "/i:\"#{File.expand_path("#{color}.png")}\"" 
+      puts title
+      puts text
 
-    `#{opts.join ' '}`
+      `#{opts.join ' '}`
+    rescue
+      puts "doesn't look like Growl for Windows is installed at:" 
+      puts GrowlNotifier.growl_path_32
+      puts GrowlNotifier.growl_path_64
+    end
   end
 end
 
@@ -283,7 +304,7 @@ class NSpecRunner < TestRunner
   end
 
   def test_cmd dll, name
-    return "\"#{NSpecRunner.nspec_path}\" \"#{dll}\" \"#{name}\" --failfast"
+    return "\"#{NSpecRunner.nspec_path}\" \"#{dll}\" \"#{name}\""
   end
   
   def inconclusive
@@ -714,3 +735,87 @@ class CommandShell
     str
   end
 end
+
+class WatcherDotNet
+  attr_accessor :notifier, :test_runner, :builder, :sh, :first_run, :config
+  require 'find'
+
+  EXCLUDES = [/\.dll$/, /debug/i, /TestResult.xml/, /testresults/i, /\.rb$/, /\.suo$/]
+	
+  def initialize folder, config 
+    @folder = folder
+    @sh = CommandShell.new
+    @notifier = GrowlNotifier.new
+    @builder = Kernel.const_get(config[:builder].to_s).new folder
+    @test_runner = Kernel.const_get(config[:test_runner].to_s).new folder
+    @config = config
+    @first_run = true
+  end
+
+  def require_build file
+    false == EXCLUDES.any? { |pattern| file.match(pattern) }
+  end
+
+  def unsupported_solution_structure?
+    files = Dir.entries(@folder)
+    return files.any? { |f| /\.sln$/.match(f) } && files.any? { |f| /\.csproj$/.match(f) }  
+  end
+    
+  def consider file
+    if(unsupported_solution_structure?)
+      @notifier.execute "specwatchr", "The solution structure you have is unsupported by specwatchr.  CS Projects need to be in their own directories (as opposed to .csproj's existing at the same level as the .sln file).  If this is a new project, go back and recreate it...but this time make sure that the \"Create directory for solution\" check box is checked.", "red"
+      return
+    end
+
+    puts "====================== changed: #{file} ===================="
+    puts "====================== excluded ============================" if false == require_build(file)		
+
+    if false == require_build(file)
+      puts "===================== done consider ========================"
+      return
+    end
+
+    build_output = @builder.execute
+    puts build_output
+    
+    @notifier.execute "build failed", build_output, 'red' if @builder.failed
+
+    if @builder.failed
+      puts "===================== done consider ========================"
+      return
+    end
+
+    if @test_runner.test_dlls.count == 0
+      @notifier.execute "discovery", "specwatchr didn't find any test dll's. specwatchr looks for a .csproj that ends in Test, Tests, Spec, or Specs.  If you do have that, stop specwatchr, rebuild your solution and start specwatchr back up. If you want to explicitly specify the test dll's, you can do so via dotnet.watchr.rb.", "red"
+
+      puts "===================== done consider ========================"
+      return
+    end
+
+    test_results = ""
+
+    spec = @test_runner.find file
+
+    if(!spec)
+      puts "===================== done consider ========================"
+      return
+    end
+   
+    puts "=========== running spec: #{spec} ====="
+    
+    test_output = @test_runner.execute spec
+
+    if @test_runner.inconclusive
+      @notifier.execute "no spec found", "create spec #{spec}", 'red'
+      puts @test_runner.usage
+    end
+
+    @notifier.execute "tests failed", @test_runner.first_failed_test, 'red' if @test_runner.failed
+    
+    @notifier.execute @test_runner.test_results.split("\n").last, '', 'green' if !@test_runner.failed and !@test_runner.inconclusive
+
+    puts "===================== done consider ========================"
+
+  end
+end
+
