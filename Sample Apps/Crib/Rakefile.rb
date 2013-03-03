@@ -39,7 +39,7 @@ task :rake_dot_net_initialize do
 end
 
 desc "builds and deploys website to directories iis express will use to run app"
-task :default => [:build, :deploy]
+task :default => [:build, :coffee, :deploy]
 
 desc "builds the solution"
 task :build => :rake_dot_net_initialize do
