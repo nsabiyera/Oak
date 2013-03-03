@@ -42,16 +42,15 @@ config[:builder] = :RakeBuilder if File.exists? "Rakefile.rb" #specwatchr will u
 all notifications are faciltated throw Growl for Windows
 =end
 
-@growl64 = 'C:\program files (x86)\Growl for Windows\growlnotify.exe'
+GrowlNotifier.growl_path_64 = 'C:\Program Files (x86)\Growl for Windows\growlnotify.exe'
 
-@growl32 = 'C:\program files\Growl for Windows\growlnotify.exe'
+GrowlNotifier.growl_path_32 = 'C:\Program Files\Growl for Windows\growlnotify.exe'
 
 GrowlNotifier.growl_path = ""
 
-GrowlNotifier.growl_path = @growl32 if File.exists? @growl32
+GrowlNotifier.growl_path = GrowlNotifier.growl_path_32 if File.exists? GrowlNotifier.growl_path_32
 
-GrowlNotifier.growl_path = @growl64 if File.exists? @growl64
-
+GrowlNotifier.growl_path = GrowlNotifier.growl_path_64 if File.exists? GrowlNotifier.growl_path_64
 
 =begin
  _        _______  _______  _______  _______ 
@@ -263,4 +262,3 @@ when "pomo_break"
 else
   puts "I dont know how to run: " + method_to_run
 end
-
