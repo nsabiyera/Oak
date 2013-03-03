@@ -33,6 +33,8 @@ task :rake_dot_net_initialize do
   @file_sync = FileSync.new
   @file_sync.source = @mvc_project_directory
   @file_sync.destination = @website_deploy_directory
+  @database_name = yml["database_name"]
+  @test_database_name = yml["database_name"] + "Test"
 end
 
 desc "builds and deploys website to directories iis express will use to run app"
@@ -116,6 +118,17 @@ def generate_nginx_config
   newcontent = content.gsub /website_port_load_balanced_2/, @website_port_load_balanced_2.to_s
   
   File.open("nginx/conf/nginx.conf.template", 'w') { |f| f.write(newcontent) }
+end
+
+desc "creates your databases if they don't exist"
+task :create_db => :rake_dot_net_initialize do
+  execute_sql "master", "create database #{ @database_name }"
+  execute_sql "master", "create database #{ @test_database_name }"
+  puts "done."
+end
+
+def execute_sql database, sql
+  puts `sqlcmd -d #{ database } -S (local) -Q \"#{ sql }\"`
 end
 
 desc "run ui automation tests"

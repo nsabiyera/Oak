@@ -486,6 +486,9 @@ Create an Index.cshtml page for the Index action and add the following code ther
 <h2>Create a database</h2>
     You need to create the database that will work with this connection string (retrieved from web.config):
     <pre>{connectionString}</pre>
+
+    Run this command to create a database without opening Sql Management Studio (the console window you use to execute this command must have ruby support):
+    <pre>rake create_db <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
 </body>
 </html>
 ".Replace("{connectionString}", new ConnectionProfile().ConnectionString)
@@ -932,7 +935,7 @@ public class Blog : DynamicModel
         if(string.IsNullOrEmpty(comment.Body)) return;
 
         //any dynamic property on this instance can be accessed through the ""_"" property
-        var commentToSave = _.Comments().New(comment);
+        var commentToSave = _.NewComment(comment);
 
         comments.Insert(commentToSave);
     }
@@ -1119,7 +1122,7 @@ public class Blog : DynamicModel
         if(string.IsNullOrEmpty(comment.Body)) return;
 
         //any dynamic property on this instance can be accessed through the ""_"" property
-        var commentToSave = _.Comments().New(comment);
+        var commentToSave = _.NewComment(comment);
 
         comments.Insert(commentToSave);
     }

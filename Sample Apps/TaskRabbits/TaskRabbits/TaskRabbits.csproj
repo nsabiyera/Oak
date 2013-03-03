@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\oak-edge.1.9.2\lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\oak-edge.1.9.5\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
@@ -107,6 +107,7 @@
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Oak\ReleaseNotes.txt" />
+    <Content Include="rake-dot-net-usage.txt" />
     <Content Include="Scripts\angular-app\app.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\appcontroller.js" />
@@ -115,7 +116,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Global.asax" />
-    <Content Include="rake-dot-net-usage.txt" />
     <Content Include="Scripts\chosen.js" />
     <Content Include="Scripts\ember-data.js" />
     <Content Include="Scripts\ember.js" />
@@ -173,10 +173,10 @@
     <Content Include="Views\Home\Knockout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\OakForm.cshtml" />
+    <Content Include="Views\Home\Ember.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Ember.cshtml" />
+    <Content Include="App_Code\OakForm.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
