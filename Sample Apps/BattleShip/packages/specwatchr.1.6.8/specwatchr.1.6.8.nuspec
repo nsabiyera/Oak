@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>specwatchr</id>
-    <version>1.6.6</version>
+    <version>1.6.8</version>
     <authors>Amir Rajan,  Matt Florence</authors>
     <owners>Amir Rajan,  Matt Florence</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>

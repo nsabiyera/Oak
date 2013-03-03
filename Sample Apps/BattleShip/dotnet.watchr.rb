@@ -42,16 +42,15 @@ config[:builder] = :RakeBuilder if File.exists? "Rakefile.rb" #specwatchr will u
 all notifications are faciltated throw Growl for Windows
 =end
 
-@growl64 = 'C:\program files (x86)\Growl for Windows\growlnotify.exe'
+GrowlNotifier.growl_path_64 = 'C:\Program Files (x86)\Growl for Windows\growlnotify.exe'
 
-@growl32 = 'C:\program files\Growl for Windows\growlnotify.exe'
+GrowlNotifier.growl_path_32 = 'C:\Program Files\Growl for Windows\growlnotify.exe'
 
 GrowlNotifier.growl_path = ""
 
-GrowlNotifier.growl_path = @growl32 if File.exists? @growl32
+GrowlNotifier.growl_path = GrowlNotifier.growl_path_32 if File.exists? GrowlNotifier.growl_path_32
 
-GrowlNotifier.growl_path = @growl64 if File.exists? @growl64
-
+GrowlNotifier.growl_path = GrowlNotifier.growl_path_64 if File.exists? GrowlNotifier.growl_path_64
 
 =begin
  _        _______  _______  _______  _______ 
@@ -230,6 +229,12 @@ def file_changed full_path
   end
 end
 
+def tick i
+  sleep(60)
+  print i.to_s + ".."
+  $stdout.flush
+end
+
 method_to_run = ARGV[0] #get the first argument from the command line and act accordingly
 
 case method_to_run
@@ -237,20 +242,23 @@ when "tutorial"
   tutorial
 when "file_changed"
   file_changed ARGV[1].gsub("\\", "\/")[1..-1] #run the file_changed routine giving it a shell compatible file name
+when "pomo_start"
+  @dw.notifier.execute "pomodoro started", "25 mins left", "green"
+  13.times { |i| tick(25 - (i + 1)) }
+  @dw.notifier.execute "half way..", "12 mins left", "green"
+  print "\a"
+  12.times { |i| tick(25 - (i + 1 + 13)) }
+  @dw.notifier.execute "done", "take a break", "red"
+  print "\a"
+  print "\a"
+  print "\a"
+when "pomo_break"
+  @dw.notifier.execute "break started", "7 min left", "green"
+  7.times { |i| tick (i + 1) }
+  @dw.notifier.execute "back to it", "aww...", "red"
+  print "\a"
+  print "\a"
+  print "\a"
 else
   puts "I dont know how to run: " + method_to_run
 end
-
-
-#this is how the watchr gem determines files to run through spec watchr
-#watch ('.*.\.cs$') do |md| 
-#  handle md[0] 
-#end
-
-#watch ('(.*.csproj$)|(.*.sln$)') do |md| 
-#  reload md[0]
-#end
-
-#watch ('(.*.cshtml)|(.*.js)|(.*.css)$') do |md|
-
-#end
