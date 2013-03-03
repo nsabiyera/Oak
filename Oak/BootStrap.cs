@@ -935,7 +935,7 @@ public class Blog : DynamicModel
         if(string.IsNullOrEmpty(comment.Body)) return;
 
         //any dynamic property on this instance can be accessed through the ""_"" property
-        var commentToSave = _.Comments().New(comment);
+        var commentToSave = _.NewComment(comment);
 
         comments.Insert(commentToSave);
     }
@@ -1122,7 +1122,7 @@ public class Blog : DynamicModel
         if(string.IsNullOrEmpty(comment.Body)) return;
 
         //any dynamic property on this instance can be accessed through the ""_"" property
-        var commentToSave = _.Comments().New(comment);
+        var commentToSave = _.NewComment(comment);
 
         comments.Insert(commentToSave);
     }
