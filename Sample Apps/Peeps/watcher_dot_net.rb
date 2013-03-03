@@ -12,18 +12,41 @@ class GrowlNotifier
     @@growl_path = value
   end
 
+  def self.growl_path_32
+    @@growl_path_32
+  end
+  
+  def self.growl_path_32= value
+    @@growl_path_32 = value
+  end
+
+  def self.growl_path_64
+    @@growl_path_64
+  end
+  
+  def self.growl_path_64= value
+    @@growl_path_64 = value
+  end
+
   def execute title, text, color
-    return unless GrowlNotifier.growl_path
+    begin
+      text.gsub!('"', "'")
 
-    text.gsub!('"', "'")
+      text = text + "\n\n---"
 
-    text = text + "\n\n---"
+      opts = ["\"#{GrowlNotifier.growl_path }\"", "\"#{text}\"", "/t:\"#{title}\""]
 
-    opts = ["\"#{GrowlNotifier.growl_path}\"", "\"#{text}\"", "/t:\"#{title}\""]
+      opts << "/i:\"#{File.expand_path("#{color}.png")}\"" 
 
-    opts << "/i:\"#{File.expand_path("#{color}.png")}\"" 
+      puts title
+      puts text
 
-    `#{opts.join ' '}`
+      `#{opts.join ' '}`
+    rescue
+      puts "doesn't look like Growl for Windows is installed at:" 
+      puts GrowlNotifier.growl_path_32
+      puts GrowlNotifier.growl_path_64
+    end
   end
 end
 
@@ -795,5 +818,4 @@ class WatcherDotNet
 
   end
 end
-
 

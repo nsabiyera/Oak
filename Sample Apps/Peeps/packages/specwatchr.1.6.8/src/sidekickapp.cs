@@ -36,15 +36,16 @@ namespace SyncDeploy
             processStartInfo.RedirectStandardInput = true;
             processStartInfo.RedirectStandardOutput = true;
             Process process = new Process();
+            process.EnableRaisingEvents = true;
             process.StartInfo = processStartInfo;
-            bool processStarted = process.Start();
+            process.OutputDataReceived += (sender, args1) => System.Console.WriteLine(args1.Data);
+            process.ErrorDataReceived += (sender, args2) => System.Console.WriteLine(args2.Data);
 
-            StreamWriter inputWriter = process.StandardInput;
-            StreamReader outputReader = process.StandardOutput;
-            StreamReader errorReader = process.StandardError;
+            bool processStarted = process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
             process.WaitForExit();
-            System.Console.Write(outputReader.ReadToEnd());
-            System.Console.Write(errorReader.ReadToEnd());
             System.Console.WriteLine("---");
         }
 
