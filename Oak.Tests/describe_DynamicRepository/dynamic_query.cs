@@ -7,7 +7,6 @@ using Oak.Tests.describe_DynamicRepository.Classes;
 
 namespace Oak.Tests.describe_DynamicRepository
 {
-    [Tag("wip")]
     class dynamic_query : nspec
     {
         dynamic records;
