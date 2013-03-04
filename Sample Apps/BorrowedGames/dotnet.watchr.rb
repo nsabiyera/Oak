@@ -189,6 +189,28 @@ def handle_webfile filename
   end
 end
 
+def handle_coffee filename
+  output = @dw.sh.execute "rake coffee"
+
+  failed = (output =~ /rake aborted!/)
+
+  color = "green"
+  color = "red" if failed
+
+  @dw.notifier.execute "coffee", output, color
+end
+
+def handle_compass filename
+  output = @dw.sh.execute "rake compass"
+
+  failed = (output =~ /rake aborted!/)
+
+  color = "green"
+  color = "red" if failed
+
+  @dw.notifier.execute "compass", output, color
+end
+
 def tutorial
   @dw.notifier.execute "specwatchr", "feedback loop engaged", "green"
   puts "======================== SpecWatcher has started ==========================\n\n"
@@ -226,6 +248,15 @@ def file_changed full_path
 
   if full_path =~ /(.*.cshtml)|(.*.js)|(.*.css)$/
     handle_webfile full_path
+  end
+
+  if full_path =~ /(.*.coffee)$/
+    handle_coffee full_path
+  end
+
+  if full_path =~ /(.*.scss)$/
+    handle_compass full_path
+    handle_webfile full_path.gsub(/scss/, "css").gsub(/sass/, "Content")
   end
 end
 
