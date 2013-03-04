@@ -1,4 +1,14 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.5.6+
+oak-edge 1.9.6+
+seed 1.1.0+
+=============== CHANGES ==================
+Added ability to declare tables with schemas:
+https://github.com/amirrajan/Oak/blob/e2b476be0e253e1715b5093d82f9ead931f47f08/Oak.Tests/describe_Seed/schemas.cs
+https://github.com/amirrajan/Oak/blob/e2b476be0e253e1715b5093d82f9ead931f47f08/Oak/Seed.cs
+https://github.com/amirrajan/Oak/commit/e2b476be0e253e1715b5093d82f9ead931f47f08
+
+============== FOR VERSIONS ==============
 oak 2.5.4+
 oak-edge 1.9.3+
 cambium 1.4.8+
