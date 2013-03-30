@@ -569,6 +569,7 @@ namespace Oak.Tests
 
                 jsonString.should_be(expected);
             };
+
         }
     }
 
