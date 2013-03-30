@@ -13,7 +13,6 @@ namespace Oak
         public DynamicJsonResult()
             : this(null)
         {
-            
         }
         
         public DynamicJsonResult(object data)
