@@ -3,6 +3,9 @@ using System.Reflection;
 using NSpec;
 using NSpec.Domain;
 using NSpec.Domain.Formatters;
+using System.IO;
+using System;
+using System.Diagnostics;
 
 /*
  * Howdy,
@@ -38,5 +41,14 @@ public class DebuggerShim
 
         //assert that there aren't any failures
         results.Failures().Count().should_be(0);
+    }
+
+    public static void AsFile(string s)
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".txt");
+
+        File.WriteAllText(path, s);
+
+        Process.Start(path);
     }
 }
