@@ -1,4 +1,17 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.5.7+
+oak-edge 1.9.7+
+oak-json 1.1.2+
+=============== CHANGES ==================
+Json serialization does camel casing by default, use the NoCasingChange class in conjunction with the DynamicJsonResult to override:
+//example
+return new DynamicJsonResult(someObject)
+{
+	Casing = new NoCasingChange()
+};
+
+
+============== FOR VERSIONS ==============
 oak 2.5.6+
 oak-edge 1.9.6+
 seed 1.1.0+

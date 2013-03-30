@@ -19,6 +19,7 @@ namespace Oak.Tests
             tasks = new Tasks();
         }
 
+        [Tag("wip")]
         void describe_prototype_to_json()
         {
             before = () =>
@@ -33,6 +34,7 @@ namespace Oak.Tests
                 objectToConvert.Decimal = (decimal)15;
                 objectToConvert.StringAsNull = null as string;
                 objectToConvert.Long = (long)100;
+                objectToConvert.S = "property with single character";
             };
 
             act = () =>
@@ -42,7 +44,7 @@ namespace Oak.Tests
 
             it["converts prototype"] = () =>
             {
-                var expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6}, ""StringAsNull"": {7}, ""Long"": 100 }}"
+                var expected = @"{{ ""id"": {0}, ""string"": ""{1}"", ""char"": ""{2}"", ""dateTime"": ""{3}"", ""double"": {4}, ""guid"": ""{5}"", ""decimal"": {6}, ""stringAsNull"": {7}, ""long"": 100, ""s"": ""property with single character"" }}"
                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15, "null");
 
                 jsonString.should_be(expected);
@@ -72,7 +74,7 @@ namespace Oak.Tests
 
             it["converts gemini"] = () =>
             {
-                string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
+                string expected = @"{{ ""id"": {0}, ""string"": ""{1}"", ""char"": ""{2}"", ""dateTime"": ""{3}"", ""double"": {4}, ""guid"": ""{5}"", ""decimal"": {6} }}"
                                     .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
 
                 jsonString.should_be(expected);
@@ -99,7 +101,7 @@ namespace Oak.Tests
 
             it["converts dynamic model"] = () =>
                 {
-                    string expected = @"{{ ""Id"": {0}, ""String"": ""{1}"", ""Char"": ""{2}"", ""DateTime"": ""{3}"", ""Double"": {4}, ""Guid"": ""{5}"", ""Decimal"": {6} }}"
+                    string expected = @"{{ ""id"": {0}, ""string"": ""{1}"", ""char"": ""{2}"", ""dateTime"": ""{3}"", ""double"": {4}, ""guid"": ""{5}"", ""decimal"": {6} }}"
                         .With(15, "hello", 'a', DateTime.Today, (double)100, Guid.Empty, (decimal)15);
 
                     jsonString.should_be(expected);
@@ -125,7 +127,7 @@ namespace Oak.Tests
 
             it["converts collection"] = () =>
                 {
-                    string expected = @"[ { ""Id"": 1 }, { ""Id"": 2 }, { ""Id"": 3 } ]";
+                    string expected = @"[ { ""id"": 1 }, { ""id"": 2 }, { ""id"": 3 } ]";
 
                     jsonString.should_be(expected);
                 };
@@ -162,7 +164,7 @@ namespace Oak.Tests
 
             it["converts properties of anonymous type"] = () =>
                 {
-                    string expected = @"{{ ""FirstName"": ""{0}"", ""LastName"": ""{1}"" }}".With("Jane", "Doe");
+                    string expected = @"{{ ""firstName"": ""{0}"", ""lastName"": ""{1}"" }}".With("Jane", "Doe");
 
                     jsonString.should_be(expected);
                 };
@@ -186,16 +188,16 @@ namespace Oak.Tests
             };
 
             act = () =>
-                {
-                    jsonString = DynamicToJson.Convert(objectToConvert);
-                };
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert);
+            };
 
             it["executes deferred statement and serializes result"] = () =>
-                {
-                    string expected = @"{ ""Users"": [ { ""Name"": ""Jane"" }, { ""Name"": ""Jake"" } ] }";
+            {
+                string expected = @"{ ""users"": [ { ""name"": ""Jane"" }, { ""name"": ""Jake"" } ] }";
 
-                    jsonString.should_be(expected);
-                };
+                jsonString.should_be(expected);
+            };
         }
 
         void coverting_list_string()
@@ -218,7 +220,7 @@ namespace Oak.Tests
 
             it["executes deferred statement and serializes result"] = () =>
                 {
-                    string expected = @"{ ""Users"": [ ""Jane"", ""Doe"" ] }";
+                    string expected = @"{ ""users"": [ ""Jane"", ""Doe"" ] }";
 
                     jsonString.should_be(expected);
                 };
@@ -244,7 +246,7 @@ namespace Oak.Tests
 
             it["executes deferred statement and serializes result"] = () =>
                 {
-                    string expected = @"{ ""Users"": [ 10, 20 ] }";
+                    string expected = @"{ ""users"": [ 10, 20 ] }";
 
                     jsonString.should_be(expected);
                 };
@@ -271,7 +273,7 @@ namespace Oak.Tests
 
             it["executes deferred statement and serializes result"] = () =>
             {
-                string expected = @"{ ""IsAdded"": true, ""Users"": [ true, false ] }";
+                string expected = @"{ ""isAdded"": true, ""users"": [ true, false ] }";
 
                 jsonString.should_be(expected);
             };
@@ -298,7 +300,7 @@ namespace Oak.Tests
 
             it["converts whole object graph"] = () =>
                 {
-                    string expected = @"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }";
+                    string expected = @"{ ""id"": 15, ""name"": ""Mirror's Edge"", ""owner"": { ""id"": 22, ""handle"": ""@amirrajan"" } }";
 
                     jsonString.should_be(expected);
                 };
@@ -315,7 +317,7 @@ namespace Oak.Tests
 
             it["includes both properties from hash and properties defined on dynamic model"] = () =>
             {
-                string expected = @"{ ""Id"": 20, ""Title"": ""SomeTitle"", ""Name"": ""SomeName"" }";
+                string expected = @"{ ""id"": 20, ""title"": ""SomeTitle"", ""name"": ""SomeName"" }";
 
                 jsonString.should_be(expected);
             };
@@ -344,7 +346,7 @@ namespace Oak.Tests
 
             it["includes serialization of named classes"] = () =>
             {
-                string expected = @"{ ""Goal"": { ""Name"": ""Goal"", ""Cost"": 100, ""Expense"": { ""Name"": ""Expense"", ""Amount"": 500 } } }";
+                string expected = @"{ ""goal"": { ""name"": ""Goal"", ""cost"": 100, ""expense"": { ""name"": ""Expense"", ""amount"": 500 } } }";
 
                 jsonString.should_be(expected);
             };
@@ -367,7 +369,7 @@ namespace Oak.Tests
 
             it["special characters are escaped"] = () =>
             {
-                string expected = @"{ ""Quotes"": ""\""Quoted\"""", ""Ticks"": ""'Ticked'"", ""BackSlashes"": ""c:\\Temp"", ""NewLine"": ""New\r\nLine"" }";
+                string expected = @"{ ""quotes"": ""\""Quoted\"""", ""ticks"": ""'Ticked'"", ""backSlashes"": ""c:\\Temp"", ""newLine"": ""New\r\nLine"" }";
 
                 jsonString.should_be(expected);
             };
@@ -424,7 +426,7 @@ namespace Oak.Tests
                 });
 
                 objectToConvert = new Gemini(new { Tasks = results });
-                string expected = @"{ ""Tasks"": [ { ""Id"": 1, ""Description"": ""bolt onto vans"", ""RabbitId"": 1, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 1, ""Name"": ""Yours Truly"" } }, { ""Id"": 2, ""Description"": ""save the world"", ""RabbitId"": 2, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 3, ""Description"": ""deliver pizza"", ""RabbitId"": 2, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 2, ""Name"": ""Hiro Protaganist"" } }, { ""Id"": 4, ""Description"": ""Task: 0"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 5, ""Description"": ""Task: 1"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 6, ""Description"": ""Task: 2"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 7, ""Description"": ""Task: 3"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 8, ""Description"": ""Task: 4"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 9, ""Description"": ""Task: 5"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 10, ""Description"": ""Task: 6"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 11, ""Description"": ""Task: 7"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 12, ""Description"": ""Task: 8"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } }, { ""Id"": 13, ""Description"": ""Task: 9"", ""RabbitId"": 3, ""DueDate"": ""1/14/2013 12:00:00 AM"", ""Rabbit"": { ""Id"": 3, ""Name"": ""Lots"" } } ] }";
+                string expected = @"{ ""tasks"": [ { ""id"": 1, ""description"": ""bolt onto vans"", ""rabbitId"": 1, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 1, ""name"": ""Yours Truly"" } }, { ""id"": 2, ""description"": ""save the world"", ""rabbitId"": 2, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 2, ""name"": ""Hiro Protaganist"" } }, { ""id"": 3, ""description"": ""deliver pizza"", ""rabbitId"": 2, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 2, ""name"": ""Hiro Protaganist"" } }, { ""id"": 4, ""description"": ""Task: 0"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 5, ""description"": ""Task: 1"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 6, ""description"": ""Task: 2"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 7, ""description"": ""Task: 3"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 8, ""description"": ""Task: 4"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 9, ""description"": ""Task: 5"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 10, ""description"": ""Task: 6"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 11, ""description"": ""Task: 7"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 12, ""description"": ""Task: 8"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 13, ""description"": ""Task: 9"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } } ] }";
                 jsonString = DynamicToJson.Convert(objectToConvert);
                 jsonString.should_be(expected);
 
@@ -447,7 +449,7 @@ namespace Oak.Tests
 
             it["serializes the list for both"] = () =>
             {
-                var expected = @"[ { ""Name"": ""Jane Doe"", ""Friends"": [ ""A"", ""B"", ""C"" ] } ]";
+                var expected = @"[ { ""name"": ""Jane Doe"", ""friends"": [ ""A"", ""B"", ""C"" ] } ]";
 
                 jsonString.should_be(expected);
             };
@@ -489,7 +491,7 @@ namespace Oak.Tests
 
             it["serializes the list for both"] = () =>
             {
-                var expected = @"{ ""People"": [ { ""Name"": ""Jane Doe"", ""Friends"": [ { ""Name"": ""John Smith"", ""Friends"": [ { ""Name"": ""Jane Smith"" } ] } ] }, { ""Name"": ""John Doe"", ""Friends"": [ { ""Name"": ""John Smith"", ""Friends"": [ { ""Name"": ""Jane Smith"" } ] } ] } ] }";
+                var expected = @"{ ""people"": [ { ""name"": ""Jane Doe"", ""friends"": [ { ""name"": ""John Smith"", ""friends"": [ { ""name"": ""Jane Smith"" } ] } ] }, { ""name"": ""John Doe"", ""friends"": [ { ""name"": ""John Smith"", ""friends"": [ { ""name"": ""Jane Smith"" } ] } ] } ] }";
 
                 jsonString.should_be(expected);
             };
@@ -533,7 +535,37 @@ namespace Oak.Tests
 
             it["serializes key value pairs (structs)"] = () =>
             {
-                var expected = @"{ ""Errors"": [ { ""Key"": ""Name"", ""Value"": ""Name is required."" } ] }";
+                var expected = @"{ ""errors"": [ { ""key"": ""Name"", ""value"": ""Name is required."" } ] }";
+
+                jsonString.should_be(expected);
+            };
+        }
+
+        void describe_casing()
+        {
+            before = () =>
+            {
+                objectToConvert = new Gemini(
+                new
+                {
+                    Id = 15,
+                    Name = "Mirror's Edge",
+                    Owner = new Gemini(new
+                    {
+                        Id = 22,
+                        Handle = "@amirrajan"
+                    })
+                });
+            };
+
+            act = () =>
+            {
+                jsonString = DynamicToJson.Convert(objectToConvert, new NoCasingChange());
+            };
+
+            it["serializes with altered casing"] = () => 
+            {
+                var expected = @"{ ""Id"": 15, ""Name"": ""Mirror's Edge"", ""Owner"": { ""Id"": 22, ""Handle"": ""@amirrajan"" } }";
 
                 jsonString.should_be(expected);
             };
