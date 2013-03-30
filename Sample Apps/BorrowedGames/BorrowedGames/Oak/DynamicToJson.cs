@@ -23,6 +23,14 @@ namespace Oak
 
     public class Item
     {
+        public Item(dynamic o, DeserializationSession session, Casing casing, bool memberOfList = false)
+        {
+            Self = o;
+            Session = session;
+            MemberOfList = memberOfList;
+            Casing = casing;
+        }
+
         public bool IsCircular()
         {
             return Value is CicularReference;
@@ -35,6 +43,7 @@ namespace Oak
         public bool Enumerated;
         public bool AlreadyFound;
         public dynamic Value { get; set; }
+        public Casing Casing { get; set; }
         public void Resolve()
         {
             EnumerateProperties();
@@ -55,18 +64,11 @@ namespace Oak
 
                     if (temp is CicularReference || temp.Value is CicularReference) continue;
 
-                    values.Add(Stringify(kvp.Key) + ": " + Stringify(temp));
+                    values.Add(Stringify(kvp.Key, Casing) + ": " + Stringify(temp));
                 }
 
                 if (values.Any()) Value = "{ " + string.Join(", ", values) + " }";
             }
-        }
-
-        public Item(dynamic o, DeserializationSession session, bool memberOfList = false)
-        {
-            Self = o;
-            Session = session;
-            MemberOfList = memberOfList;
         }
 
         void ResultsFor(IDictionary<string, object> attributes)
@@ -88,7 +90,7 @@ namespace Oak
 
             return () =>
             {
-                var todo = new Item(attribute.Value, Session, MemberOfList);
+                var todo = new Item(attribute.Value, Session, Casing, MemberOfList);
 
                 todo.EnumerateProperties();
 
@@ -142,7 +144,7 @@ namespace Oak
 
                 foreach (var item in (Self as IEnumerable<dynamic>))
                 {
-                    Item newItem = new Item(item, Session, true);
+                    Item newItem = new Item(item, Session, Casing, true);
                     newItem.EnumerateProperties();
                     todos.Add(newItem);
                 }
@@ -203,8 +205,10 @@ namespace Oak
             return o.GetType() == typeof(bool);
         }
 
-        public static string Stringify(dynamic o)
+        public static string Stringify(dynamic o, Casing casing = null)
         {
+            casing = casing ?? new NoCasingChange();
+
             if (o is Result)
             {
                 if (o.ShouldStringify == false) return o.Value;
@@ -216,7 +220,7 @@ namespace Oak
 
             if (IsNull(o)) return "null";
 
-            if (IsJsonString(o)) return "\"" + o + "\"";
+            if (IsJsonString(o)) return "\"" + casing.Convert(o) + "\"";
 
             if (IsJsonNumeric(o)) return o.ToString();
 
@@ -241,12 +245,32 @@ namespace Oak
         }
     }
 
+    public class Casing
+    {
+        public virtual dynamic Convert(dynamic s) { return s; }
+    }
+
+    public class NoCasingChange : Casing { }
+
+    public class CamelCasing : Casing
+    {
+        public override dynamic Convert(dynamic s)
+        {
+            return s[0].ToString().ToLower() + s.Substring(1);
+        }
+    }
+
     public class DynamicToJson
     {
         public static string Convert(dynamic o)
         {
+            return Convert(o, new CamelCasing());
+        }
+
+        public static string Convert(dynamic o, Casing casing)
+        {
             var session = new DeserializationSession();
-            var item = new Item(o, session);
+            var item = new Item(o, session, casing);
             item.EnumerateProperties();
             item.Resolve();
             return item.Value;

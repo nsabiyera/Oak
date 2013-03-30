@@ -18,10 +18,10 @@
       return "http://www.google.com/search?q=" + encodeURIComponent(this.name() + " ") + "site:gamespot.com&btnI=3564";
     },
     name: function() {
-      return this.get("Name");
+      return this.get("name");
     },
     console: function() {
-      return this.get("Console");
+      return this.get("console");
     },
     shortName: function() {
       var name;
@@ -33,7 +33,7 @@
     },
     notInterested: function(callback) {
       var _this = this;
-      return $.post(this.get("NotInterested"), {}, function() {
+      return $.post(this.get("notInterested"), {}, function() {
         _this.deleted = true;
         unwanted.getUnwantedGames();
         _this.change();
@@ -41,23 +41,23 @@
       });
     },
     isFavorited: function() {
-      return this.get("IsFavorited");
+      return this.get("isFavorited");
     },
     favorite: function() {
       var _this = this;
-      return $.post(this.get("FavoriteGame"), {}, function() {
+      return $.post(this.get("favoriteGame"), {}, function() {
         return preferred.getPreferredGames();
       });
     },
     unfavorite: function() {
       var _this = this;
-      return $.post(this.get("UnfavoriteGame"), {}, function() {
+      return $.post(this.get("unfavoriteGame"), {}, function() {
         return preferred.getPreferredGames();
       });
     },
     wantGame: function(callback) {
       var _this = this;
-      return $.post(this.get("WantGame"), {}, function() {
+      return $.post(this.get("wantGame"), {}, function() {
         _this.wanted = true;
         wanted.getWantedGames();
         _this.change();
@@ -65,7 +65,7 @@
       });
     },
     owner: function() {
-      return this.get("Owner").Handle;
+      return this.get("owner").handle;
     },
     deleted: false,
     wanted: false

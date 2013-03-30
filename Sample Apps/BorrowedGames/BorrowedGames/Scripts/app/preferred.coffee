@@ -11,9 +11,9 @@ this.preferred =
 library = Backbone.Model.extend
   reviewUrl: -> "http://www.google.com/search?q=" + encodeURIComponent(@name() + " ") + "site:gamespot.com&btnI=3564"
 
-  name: -> @get("Name")
+  name: -> @get("name")
 
-  console: -> @get("Console")
+  console: -> @get("console")
 
   shortName: ->
     name = @name()
@@ -23,27 +23,27 @@ library = Backbone.Model.extend
     name += " (" + @console() + ")"
 
   notInterested: (callback) ->
-    $.post(@get("NotInterested"), { }, =>
+    $.post(@get("notInterested"), { }, =>
       @deleted = true
       unwanted.getUnwantedGames()
       @change()
       callback()
     )
 
-  isFavorited: -> @get("IsFavorited")
+  isFavorited: -> @get("isFavorited")
 
   favorite: ->
-    $.post(@get("FavoriteGame"), { }, =>
+    $.post(@get("favoriteGame"), { }, =>
       preferred.getPreferredGames()
     )
 
   unfavorite: ->
-    $.post(@get("UnfavoriteGame"), { }, =>
+    $.post(@get("unfavoriteGame"), { }, =>
       preferred.getPreferredGames()
     )
 
   wantGame: (callback) ->
-    $.post(@get("WantGame"), { }, =>
+    $.post(@get("wantGame"), { }, =>
       @wanted = true
       wanted.getWantedGames()
       @change()
@@ -51,7 +51,7 @@ library = Backbone.Model.extend
     )
 
   owner: ->
-    @get("Owner").Handle
+    @get("owner").handle
 
   deleted: false
 

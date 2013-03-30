@@ -15,7 +15,7 @@
 
   unwantedGame = Backbone.Model.extend({
     name: function() {
-      return this.get("Name");
+      return this.get("name");
     },
     shortName: function() {
       var name;
@@ -26,11 +26,11 @@
       return name += " (" + this.console() + ")";
     },
     console: function() {
-      return this.get("Console");
+      return this.get("console");
     },
     undo: function(callback) {
       var _this = this;
-      return $.post(this.get("UndoNotInterested"), {}, function() {
+      return $.post(this.get("undoNotInterested"), {}, function() {
         preferred.getPreferredGames();
         _this.change();
         return callback();

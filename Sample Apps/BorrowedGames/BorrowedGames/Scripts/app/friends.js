@@ -77,12 +77,12 @@
 
         $.post(addFriendUrl, { handle: handle },
         function (d) {
-            if (d.Added) {
+            if (d.added) {
                 view.friendsContainer.append($friendRecordFor(handle).hide().fadeIn('slow'));
             }
 
             view.handleTextBox.val('');
-            growl.info(d.Message, view.handleTextBox.offset().top - 5);
+            growl.info(d.message, view.handleTextBox.offset().top - 5);
 
             refreshGames();
         });

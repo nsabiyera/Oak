@@ -15,19 +15,19 @@
 
   wantedGame = Backbone.Model.extend({
     name: function() {
-      return this.get("Name");
+      return this.get("name");
     },
     console: function() {
-      return this.get("Console");
+      return this.get("console");
     },
     owner: function() {
-      return this.get("Owner").Handle;
+      return this.get("owner").handle;
     },
     canReturnGame: function() {
-      return this.get("ReturnGame");
+      return this.get("returnGame");
     },
     daysLeft: function() {
-      return this.get("DaysLeft");
+      return this.get("daysLeft");
     },
     shortName: function() {
       var name;
@@ -39,7 +39,7 @@
     },
     undoRequest: function(callback) {
       var _this = this;
-      return $.post(this.get("DeleteWant"), {}, function() {
+      return $.post(this.get("deleteWant"), {}, function() {
         preferred.getPreferredGames();
         _this.change();
         return callback();
@@ -47,7 +47,7 @@
     },
     returnGame: function(callback) {
       var _this = this;
-      return $.post(this.get("ReturnGame"), {}, function() {
+      return $.post(this.get("returnGame"), {}, function() {
         preferred.getPreferredGames();
         _this.change();
         return callback();

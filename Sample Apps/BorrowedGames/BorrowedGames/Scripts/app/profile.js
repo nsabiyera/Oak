@@ -52,9 +52,9 @@
             if(handle.indexOf('@') < 0) handle = '@' + handle;
 
             $.post(updateHandleUrl, { handle: handle }, function (d) {
-                growl.info(d.Message);
+                growl.info(d.message);
 
-                var handle = d.Handle;
+                var handle = d.handle;
 
                 if (!handle) handle = "@nameless";
 

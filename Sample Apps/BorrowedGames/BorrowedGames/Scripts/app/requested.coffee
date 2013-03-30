@@ -9,13 +9,13 @@ this.requested =
   getRequestedGames: -> @view.refresh()
 
 requestedGame = Backbone.Model.extend
-  name: -> @get("Name")
+  name: -> @get("name")
 
-  console: -> @get("Console")
+  console: -> @get("console")
 
-  requestedBy: -> @get("RequestedBy").Handle
+  requestedBy: -> @get("requestedBy").handle
 
-  daysOut: -> @get("DaysOut")
+  daysOut: -> @get("daysOut")
 
   shortName: ->
     name = @name()
@@ -25,19 +25,19 @@ requestedGame = Backbone.Model.extend
     name += " (" + @console() + ")"
 
   giveGame: (callback) ->
-    $.post(@get("GiveGame"), { }, =>
+    $.post(@get("giveGame"), { }, =>
       requested.getRequestedGames()
       callback()
     )
 
   gameReturned: (callback) ->
-    $.post(@get("GameReturned"), { }, =>
+    $.post(@get("gameReturned"), { }, =>
       requested.getRequestedGames()
       callback()
     )
 
   canGiveGame: ->
-    !!@get("GiveGame")
+    !!@get("giveGame")
 
 requestedGames = Backbone.Collection.extend
   model: requestedGame

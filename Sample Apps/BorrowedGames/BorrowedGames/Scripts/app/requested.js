@@ -15,16 +15,16 @@
 
   requestedGame = Backbone.Model.extend({
     name: function() {
-      return this.get("Name");
+      return this.get("name");
     },
     console: function() {
-      return this.get("Console");
+      return this.get("console");
     },
     requestedBy: function() {
-      return this.get("RequestedBy").Handle;
+      return this.get("requestedBy").handle;
     },
     daysOut: function() {
-      return this.get("DaysOut");
+      return this.get("daysOut");
     },
     shortName: function() {
       var name;
@@ -36,20 +36,20 @@
     },
     giveGame: function(callback) {
       var _this = this;
-      return $.post(this.get("GiveGame"), {}, function() {
+      return $.post(this.get("giveGame"), {}, function() {
         requested.getRequestedGames();
         return callback();
       });
     },
     gameReturned: function(callback) {
       var _this = this;
-      return $.post(this.get("GameReturned"), {}, function() {
+      return $.post(this.get("gameReturned"), {}, function() {
         requested.getRequestedGames();
         return callback();
       });
     },
     canGiveGame: function() {
-      return !!this.get("GiveGame");
+      return !!this.get("giveGame");
     }
   });
 

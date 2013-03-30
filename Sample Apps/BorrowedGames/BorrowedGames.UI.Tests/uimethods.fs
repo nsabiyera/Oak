@@ -54,6 +54,7 @@ let loginAs userName =
 let addGame name =
     click "#showLibrary"
     "#gameToAdd" << name
+    "table tbody tr td" *= (name + " (XBOX360)")
     click "table tbody tr td"
     click "#closeLibraryTop"
     ()

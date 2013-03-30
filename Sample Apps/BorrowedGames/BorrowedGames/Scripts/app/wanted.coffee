@@ -8,15 +8,15 @@ this.wanted =
   getWantedGames: -> @view.refresh()
 
 wantedGame = Backbone.Model.extend
-  name: -> @get("Name")
+  name: -> @get("name")
 
-  console: -> @get("Console")
+  console: -> @get("console")
 
-  owner: -> @get("Owner").Handle
+  owner: -> @get("owner").handle
 
-  canReturnGame: -> @get("ReturnGame")
+  canReturnGame: -> @get("returnGame")
 
-  daysLeft: -> @get("DaysLeft")
+  daysLeft: -> @get("daysLeft")
 
   shortName: ->
     name = @name()
@@ -26,14 +26,14 @@ wantedGame = Backbone.Model.extend
     name += " (" + @console() + ")"
 
   undoRequest: (callback) ->
-    $.post(@get("DeleteWant"), { }, =>
+    $.post(@get("deleteWant"), { }, =>
       preferred.getPreferredGames()
       @change()
       callback()
     )
 
   returnGame: (callback) ->
-    $.post(@get("ReturnGame"), { }, =>
+    $.post(@get("returnGame"), { }, =>
       preferred.getPreferredGames()
       @change()
       callback()

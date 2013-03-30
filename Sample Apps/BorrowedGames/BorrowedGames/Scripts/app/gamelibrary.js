@@ -132,7 +132,7 @@
     }
 
     function populateSearchResults(data) {
-        autocomplete.populateSearchResults(data, "Id", function(item) { return item.Name + " (" + item.Console + ")" });
+        autocomplete.populateSearchResults(data, "id", function(item) { return item.name + " (" + item.console + ")" });
     }
 
     function clearGamesList() {

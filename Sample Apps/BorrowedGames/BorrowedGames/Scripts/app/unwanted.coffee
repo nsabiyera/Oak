@@ -9,7 +9,7 @@ this.unwanted =
   getUnwantedGames: -> @view.refresh()
 
 unwantedGame = Backbone.Model.extend
-  name: -> @get("Name")
+  name: -> @get("name")
 
   shortName: ->
     name = @name()
@@ -18,10 +18,10 @@ unwantedGame = Backbone.Model.extend
 
     name += " (" + @console() + ")"
 
-  console: -> @get("Console")
+  console: -> @get("console")
 
   undo: (callback) ->
-    $.post(@get("UndoNotInterested"), { }, =>
+    $.post(@get("undoNotInterested"), { }, =>
       preferred.getPreferredGames()
       @change()
       callback()
