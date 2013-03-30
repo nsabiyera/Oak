@@ -12,7 +12,6 @@ namespace Oak.Tests.describe_Seed
         public Table1() : base(null, "Logging.Table1", "Id") { }
     }
 
-    [Tag("wip")]
     class schemas : _seed
     {
         void specify_create_table()
