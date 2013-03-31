@@ -12,30 +12,30 @@ $(function () {
     window.Todo = Backbone.Model.extend({
         sync: function (method, model, options) {
             if (method == "update" || method == "create") {
-                $.post(model.get("Update"), model.attributes);
+                $.post(model.get("update"), model.attributes);
             }
 
             if (method == "delete") {
-                $.post(model.get("Delete"), model.attributes);
+                $.post(model.get("delete"), model.attributes);
             }
         },
 
         // Default attributes for the todo.
         defaults: {
-            Content: "empty todo...",
-            Done: false
+            content: "empty todo...",
+            done: false
         },
 
         // Ensure that each todo created has `content`.
         initialize: function () {
-            if (!this.get("Content")) {
-                this.set({ "Content": this.defaults.Content });
+            if (!this.get("content")) {
+                this.set({ "content": this.defaults.content });
             }
         },
 
         // Toggle the `done` state of this todo item.
         toggle: function () {
-            this.save({ Done: !this.get("Done") });
+            this.save({ done: !this.get("done") });
         },
 
         url: function () {
@@ -62,7 +62,7 @@ $(function () {
         create: function (todo) {
             var todos = this;
             todo.Order = this.nextOrder();
-            $.post(todo.Create, todo, function () {
+            $.post(todo.create, todo, function () {
                 todos.add(todo);
             });
         },
@@ -72,12 +72,12 @@ $(function () {
         url: 'todos',
 
         parse: function (resp) {
-            return resp.Items;
+            return resp.items;
         },
 
         // Filter down the list of all todo items that are finished.
         done: function () {
-            return this.filter(function (todo) { return todo.get('Done'); });
+            return this.filter(function (todo) { return todo.get('done'); });
         },
 
         // Filter down the list to only todo items that are still not finished.
@@ -89,12 +89,12 @@ $(function () {
         // GUID in the database. This generates the next order number for new items.
         nextOrder: function () {
             if (!this.length) return 1;
-            return this.last().get('Order') + 1;
+            return this.last().get('order') + 1;
         },
 
         // Todos are sorted by their original insertion order.
         comparator: function (todo) {
-            return todo.get('Order');
+            return todo.get('order');
         }
 
     });
@@ -141,7 +141,7 @@ $(function () {
         // To avoid XSS (not that it would be harmful in this particular app),
         // we use `jQuery.text` to set the contents of the todo item.
         setContent: function () {
-            var content = this.model.get('Content');
+            var content = this.model.get('content');
             this.$('.todo-content').text(content);
             this.input = this.$('.todo-input');
             this.input.bind('blur', this.close);
@@ -161,7 +161,7 @@ $(function () {
 
         // Close the `"editing"` mode, saving changes to the todo.
         close: function () {
-            this.model.save({ Content: this.input.val() });
+            this.model.save({ content: this.input.val() });
             $(this.el).removeClass("editing");
         },
 
@@ -252,7 +252,7 @@ $(function () {
         createOnEnter: function (e) {
             if (e.keyCode != 13) return;
 
-            this.newAttributes.Content = this.input.val();
+            this.newAttributes.content = this.input.val();
 
             Todos.create(this.newAttributes);
             this.input.val('');
