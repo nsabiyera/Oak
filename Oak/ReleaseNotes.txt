@@ -3,8 +3,9 @@ oak 2.5.7+
 oak-edge 1.9.7+
 oak-json 1.1.2+
 =============== CHANGES ==================
-Json serialization does camel casing by default, use the NoCasingChange class in conjunction with the DynamicJsonResult to override:
-//example
+Json serialization does camel casing by default, use the NoCasingChange class
+in conjunction with the DynamicJsonResult to override this default behavior:
+
 return new DynamicJsonResult(someObject)
 {
 	Casing = new NoCasingChange()
