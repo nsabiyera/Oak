@@ -32,7 +32,7 @@
         var person = PersonFor($(this).parent());
 
         $.post("home/update", person, function (data) {
-            $(element).parent().attr("data-id", data.Id)
+            $(element).parent().attr("data-id", data.id)
             alert('saved');
         });
     }
@@ -41,8 +41,8 @@
         $.getJSON('home/list', function (data) {
             for (var i = 0; i < data.length; i++) {
                 var control = $(template);
-                control.attr("data-id", data[i].Id);
-                control.find("input.personname").val(data[i].Name);
+                control.attr("data-id", data[i].id);
+                control.find("input.personname").val(data[i].name);
                 control.find("input.save").click(Save);
                 $("#peeps").append(control);
             }
