@@ -54,7 +54,7 @@
             $.post("/games/setupgame", 
                 { gameId: @(ViewBag.GameId), playerId: '@(ViewBag.UserId)', location: square }, 
                 function(d) {
-                    if(d.Success) squareElement.toggleClass("alert-success");
+                    if(d.success) squareElement.toggleClass("alert-success");
                     
                     else alert("you can only select 5 squares, click ready if you're done");
                 });

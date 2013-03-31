@@ -110,47 +110,47 @@
         $.getJSON('/games/get?gameId=' + $("#gameId").val(), function (game) {
             UpdateGame(game);
 
-            if (game.Loser == "") setTimeout(GetGame, 1000);
+            if (game.loser == "") setTimeout(GetGame, 1000);
 
-            else if (game.Loser == playerId) alert("you lost!");
+            else if (game.loser == playerId) alert("you lost!");
 
             else alert("you won!!");
         });
     }
 
     function UpdateGame(game) {
-        if (game.Started == false) {
+        if (game.started == false) {
             $("#status").html("waiting for the other player");
-        } else if (game.CurrentTurn === playerId) {
+        } else if (game.currentTurn === playerId) {
             $("#status").html("it's your turn! fire away!");
         }
         else {
             $("#status").html("it's the opponent's turn, please wait");
         }
 
-        if (playerId == game.Player1Id) {
-            UpdateMySquares(game.Player1Squares);
+        if (playerId == game.player1Id) {
+            UpdateMySquares(game.player1Squares);
 
-            UpdateHitsOnMe(game.Player2HitsOnPlayer1);
-            UpdateMissesOnMe(game.Player2MissesOnPlayer1);
+            UpdateHitsOnMe(game.player2HitsOnPlayer1);
+            UpdateMissesOnMe(game.player2MissesOnPlayer1);
 
-            UpdateHitsOnThem(game.Player1HitsOnPlayer2);
-            UpdateMissesOnThem(game.Player1MissesOnPlayer2);
+            UpdateHitsOnThem(game.player1HitsOnPlayer2);
+            UpdateMissesOnThem(game.player1MissesOnPlayer2);
         }
         else {
-            UpdateMySquares(game.Player2Squares);
+            UpdateMySquares(game.player2Squares);
 
-            UpdateHitsOnMe(game.Player1HitsOnPlayer2);
-            UpdateMissesOnMe(game.Player1MissesOnPlayer2);
+            UpdateHitsOnMe(game.player1HitsOnPlayer2);
+            UpdateMissesOnMe(game.player1MissesOnPlayer2);
 
-            UpdateHitsOnThem(game.Player2HitsOnPlayer1);
-            UpdateMissesOnThem(game.Player2MissesOnPlayer1);
+            UpdateHitsOnThem(game.player2HitsOnPlayer1);
+            UpdateMissesOnThem(game.player2MissesOnPlayer1);
         }
     }
 
     function UpdateMySquares(squares) {
         _.each(squares, function (square) {
-            $("#" + square.Location).addClass("alert-success");
+            $("#" + square.location).addClass("alert-success");
         });
     }
 
