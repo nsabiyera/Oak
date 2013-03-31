@@ -149,22 +149,22 @@ ConsultantView = Backbone.View.extend
 Consultant = Backbone.Model.extend
   monthName: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-  name: -> @get("Name")
+  name: -> @get("name")
 
-  setName: (name) -> @set("Name", name)
+  setName: (name) -> @set("name", name)
 
-  picture: -> @get("Picture")
+  picture: -> @get("picture")
 
-  setPicture: (url) -> @set("Picture", url)
+  setPicture: (url) -> @set("picture", url)
 
   rollOffDate: ->
-    if @get("RollOffDate")
-      return new Date(@get("RollOffDate"))
+    if @get("rollOffDate")
+      return new Date(@get("rollOffDate"))
     else
       return null
 
   setRollOffDate: (date) ->
-    @set("RollOffDate", date)
+    @set("rollOffDate", date)
 
   rollOffMonth: -> @rollOffDate().getMonth()
 
@@ -172,22 +172,22 @@ Consultant = Backbone.Model.extend
 
   rollOffYear: ->  @rollOffDate().getYear()
 
-  onBench: -> @get("OnBench")
+  onBench: -> @get("onBench")
 
   update: ->
-    $.post("/consultants/update", { id: @get("Id"), name: @get("Name"), rollOffDate: @get("RollOffDate"), picture: @get("Picture") }, =>
+    $.post("/consultants/update", { id: @get("id"), name: @get("name"), rollOffDate: @get("rollOffDate"), picture: @get("picture") }, =>
       app.dashboard.rollOffs.refresh() #bad form, consider events
       app.dashboard.bench.refresh() #bad form, consider events
     )
 
   create: ->
-    $.post("/consultants/create", { name: @get("Name"), rollOffDate: @get("RollOffDate") }, =>
+    $.post("/consultants/create", { name: @get("name"), rollOffDate: @get("rollOffDate") }, =>
       app.dashboard.rollOffs.refresh() #bad form, consider events
       app.dashboard.bench.refresh() #bad form, consider events
     )
 
   extendTil: (date) ->
-    $.post("/rolloffs/extensions", { consultantId: @get("Id"), til: date }, =>
+    $.post("/rolloffs/extensions", { consultantId: @get("id"), til: date }, =>
       app.dashboard.rollOffs.refresh() #bad form, consider events
       app.dashboard.bench.refresh() #bad form, consider events
     )

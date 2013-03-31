@@ -161,26 +161,26 @@
   Consultant = Backbone.Model.extend({
     monthName: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     name: function() {
-      return this.get("Name");
+      return this.get("name");
     },
     setName: function(name) {
-      return this.set("Name", name);
+      return this.set("name", name);
     },
     picture: function() {
-      return this.get("Picture");
+      return this.get("picture");
     },
     setPicture: function(url) {
-      return this.set("Picture", url);
+      return this.set("picture", url);
     },
     rollOffDate: function() {
-      if (this.get("RollOffDate")) {
-        return new Date(this.get("RollOffDate"));
+      if (this.get("rollOffDate")) {
+        return new Date(this.get("rollOffDate"));
       } else {
         return null;
       }
     },
     setRollOffDate: function(date) {
-      return this.set("RollOffDate", date);
+      return this.set("rollOffDate", date);
     },
     rollOffMonth: function() {
       return this.rollOffDate().getMonth();
@@ -192,15 +192,15 @@
       return this.rollOffDate().getYear();
     },
     onBench: function() {
-      return this.get("OnBench");
+      return this.get("onBench");
     },
     update: function() {
       var _this = this;
       return $.post("/consultants/update", {
-        id: this.get("Id"),
-        name: this.get("Name"),
-        rollOffDate: this.get("RollOffDate"),
-        picture: this.get("Picture")
+        id: this.get("id"),
+        name: this.get("name"),
+        rollOffDate: this.get("rollOffDate"),
+        picture: this.get("picture")
       }, function() {
         app.dashboard.rollOffs.refresh();
         return app.dashboard.bench.refresh();
@@ -209,8 +209,8 @@
     create: function() {
       var _this = this;
       return $.post("/consultants/create", {
-        name: this.get("Name"),
-        rollOffDate: this.get("RollOffDate")
+        name: this.get("name"),
+        rollOffDate: this.get("rollOffDate")
       }, function() {
         app.dashboard.rollOffs.refresh();
         return app.dashboard.bench.refresh();
@@ -219,7 +219,7 @@
     extendTil: function(date) {
       var _this = this;
       return $.post("/rolloffs/extensions", {
-        consultantId: this.get("Id"),
+        consultantId: this.get("id"),
         til: date
       }, function() {
         app.dashboard.rollOffs.refresh();
