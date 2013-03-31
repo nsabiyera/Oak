@@ -8,7 +8,7 @@
 <h2>Dashboard</h2>
 <div id="dashboard">
     <div class="row" style="margin-bottom: 10px">
-      <select data-bind="chosen: { options: rabbits, defaultText: 'select a rabbit...', value: selectedRabbit, value: 'Id', text: 'Name', selected: selectedRabbit }" class="span4" id="rabbitsDropDown">
+      <select data-bind="chosen: { options: rabbits, defaultText: 'select a rabbit...', value: selectedRabbit, value: 'id', text: 'name', selected: selectedRabbit }" class="span4" id="rabbitsDropDown">
         </select>
         <i class="icon-plus" id="showAddRabbit" style="cursor: pointer">&nbsp;</i>
     </div>
@@ -29,15 +29,15 @@
       </div>
       <div class="modal-body">
         <p>
-            <div data-bind='template: { name: "createRabbitErrors", foreach: newRabbit.Errors }'>
+            <div data-bind='template: { name: "createRabbitErrors", foreach: newRabbit.errors }'>
             </div>
             <label>Name</label>
-            <input type="text" data-bind="value: newRabbit.Name" id="newRabbitName" />
+            <input type="text" data-bind="value: newRabbit.name" id="newRabbitName" />
         </p>
       </div>
       <div class="modal-footer">
         <a href="javascript:;" class="btn" data-dismiss="modal">Close</a>
-        <a data-bind="click: newRabbit.Save" id="createRabbit" class="btn btn-primary">Save</a>
+        <a data-bind="click: newRabbit.save" id="createRabbit" class="btn btn-primary">Save</a>
       </div>
     </div>
     <div class="modal hide" id="loadingModal">
@@ -50,21 +50,21 @@
 </div>
 
 <script type="text/html" id="createRabbitErrors">
-  <div data-bind="text: Value" class="alert alert-error"></div>
+  <div data-bind="text: value" class="alert alert-error"></div>
 </script>
 
 <script type="text/html" id="taskTemplate">
 <tr>
   <td class='span4'>
-    <input class='description' type='input' data-bind="value: Description, valueUpdate: 'keyup', event: { keyup: determineSave }" />
+    <input class='description' type='input' data-bind="value: description, valueUpdate: 'keyup', event: { keyup: determineSave }" />
   </td>
   <td class='span4'>
-    <input class='date' type='input' data-bind="value: DueDate, valueUpdate: 'keyup', event: { keyup: determineSave }" />
-    <span data-bind="text: ParsedDate" class='label label-inverse'></span>
+    <input class='date' type='input' data-bind="value: dueDate, valueUpdate: 'keyup', event: { keyup: determineSave }" />
+    <span data-bind="text: parsedDate" class='label label-inverse'></span>
   </td>
   <td class='span3'>
-      <span data-bind="visible: IsInvalid, text: ErrorsString" class='label label-important'></span>
-      <input data-bind="visible: CanSave, click: save" type='button' class='btn btn-primary' value='save' style='padding-top: 1px; padding-bottom: 1px' />
+      <span data-bind="visible: isInvalid, text: errorsString" class='label label-important'></span>
+      <input data-bind="visible: canSave, click: save" type='button' class='btn btn-primary' value='save' style='padding-top: 1px; padding-bottom: 1px' />
   </td>
   <td class='span1'>
     <i class="icon-remove" data-bind="click: destroy" style="cursor: pointer">&nbsp;</i>

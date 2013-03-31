@@ -9,7 +9,7 @@
 <div id="dashboard" ng-app="App" ng-controller="AppCtrl">
   <div class="row" style="margin-bottom: 10px">
     <span>
-      <select class="span4" id="rabbitsDropDown" chosen="rabbits" chosen-label="select a rabbit..." ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.Name for r in rabbits">
+      <select class="span4" id="rabbitsDropDown" chosen="rabbits" chosen-label="select a rabbit..." ng-change="loadTasks()" ng-model='selectedRabbit' ng-options="r.name for r in rabbits">
     </select>
     </span>
     <i class="icon-plus" ng-click="addRabbit()" style="cursor: pointer;">&nbsp;</i>
@@ -29,24 +29,24 @@
         <td class='span4'>
           <input class='description'
             type='input'
-            ng-model="task.Description"
+            ng-model="task.description"
             on-enter="task.save"
             on-keyup="task.descriptionChanged" />
         </td>
         <td class='span4'>
           <input class='date'
             type='input'
-            ng-model="task.DueDate"
+            ng-model="task.dueDate"
             on-enter="task.save"
             on-keyup="task.dateChanged" />
-          <span class='label label-inverse'>{{ task.ParsedDate }}</span>
+          <span class='label label-inverse'>{{ task.parsedDate }}</span>
         </td>
         <td class='span3'>
           <span class='label label-important'
-              ng-show="task.HasErrors"
-              ng-model="task.ErrorString">{{ task.ErrorString }}</span>
+              ng-show="task.hasErrors"
+              ng-model="task.errorString">{{ task.errorString }}</span>
             <input type='button'
-              ng-show="task.CanSave"
+              ng-show="task.canSave"
               ng-click="task.save()"
               class='btn btn-primary'
               value='save'
@@ -65,11 +65,11 @@
     </div>
     <div class="modal-body">
       <p>
-        <div ng-repeat="error in newRabbit.Errors" class="alert alert-error">
-          {{error.Value}}
+        <div ng-repeat="error in newRabbit.errors" class="alert alert-error">
+          {{error.value}}
         </div>
         <label>Name</label>
-        <input type="text" ng-model="newRabbit.Name" id="newRabbitName" />
+        <input type="text" ng-model="newRabbit.name" id="newRabbitName" />
       </p>
     </div>
     <div class="modal-footer">

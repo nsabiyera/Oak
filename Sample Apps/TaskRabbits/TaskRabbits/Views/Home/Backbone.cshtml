@@ -51,10 +51,10 @@
 
 <script type="underscore/template" id="TaskViewTemplate">
     <td class='span4'>
-      <input class='description' type='input' value='<%= get('Description') %>' />
+      <input class='description' type='input' value='<%= get('description') %>' />
     </td>
     <td class='span4'>
-      <input class='date' type='input' value='<%= get('DueDate') %>' />
+      <input class='date' type='input' value='<%= get('dueDate') %>' />
       <span class='label label-inverse'><%= parsedDate() %></span>
     </td>
     <td class='span3'>
@@ -69,7 +69,7 @@
 <script type="underscore/template" id="RabbitDropDownTemplate">
     <option></option>
     <% _.each(rabbits, function(rabbit) { %>
-      <option class='rabbit' value="<%= rabbit.get('Id') %>" data-id="<%= rabbit.get('Id') %>"><%= rabbit.get('Name') %></option>
+      <option class='rabbit' value="<%= rabbit.get('id') %>" data-id="<%= rabbit.get('id') %>"><%= rabbit.get('name') %></option>
     <% }); %>
 </script>
 

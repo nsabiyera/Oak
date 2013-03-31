@@ -86,15 +86,15 @@ function begin() {
 
 function RabbitViewModel() {
   var vm = {
-    Name: ko.observable(""),
-    Errors: ko.observableArray([]),
-    Save: function() {
-      vm.Errors([]);
-      $.post(App.rabbits.CreateRabbitUrl, JSON.parse(ko.toJSON(vm)), function(result) {
-        if(result.Errors) {
-          vm.Errors(result.Errors);
+    name: ko.observable(""),
+    errors: ko.observableArray([]),
+    save: function() {
+      vm.errors([]);
+      $.post(App.rabbits.createRabbitUrl, JSON.parse(ko.toJSON(vm)), function(result) {
+        if(result.errors) {
+          vm.errors(result.errors);
         } else {
-          vm.Name("");
+          vm.name("");
           App.rabbits.push(result);
           App.selectedRabbit(result);
         }
@@ -106,9 +106,9 @@ function RabbitViewModel() {
 }
 
 function getRabbits() {
-  $.getJSON(App.routes.GetRabbitsUrl, function(data) {
-    App.rabbits(data.Rabbits);
-    App.rabbits.CreateRabbitUrl = data.CreateRabbitUrl;
+  $.getJSON(App.routes.getRabbitsUrl, function(data) {
+    App.rabbits(data.rabbits);
+    App.rabbits.createRabbitUrl = data.createRabbitUrl;
   });
 }
 
@@ -122,11 +122,11 @@ function updateLoading() {
 
 function loadTasks(rabbit) {
   App.loading(true);
-  $.getJSON(rabbit.TasksUrl, function(data) {
-    App.tasks(ToTaskViewModels(data.Tasks));
+  $.getJSON(rabbit.tasksUrl, function(data) {
+    App.tasks(ToTaskViewModels(data.tasks));
     App.canAddTask(true);
-    App.tasks.CreateTaskUrl = data.CreateTaskUrl;
-    if(data.Tasks.length == 0) {
+    App.tasks.createTaskUrl = data.createTaskUrl;
+    if(data.tasks.length == 0) {
       App.loading(false);
     }
   });
@@ -135,59 +135,59 @@ function loadTasks(rabbit) {
 function TaskViewModel(task) {
   if(!task) {
     task = {};
-    task.RabbitId = App.selectedRabbit.Id;
-    task.Description = "";
-    task.DueDate = "";
-    task.SaveUrl = App.tasks.CreateTaskUrl;
-    task.DeleteUrl = null;
+    task.rabbitId = App.selectedRabbit.id;
+    task.description = "";
+    task.dueDate = "";
+    task.saveUrl = App.tasks.createTaskUrl;
+    task.deleteUrl = null;
   }
 
   var vm = {
-    RabbitId: ko.observable(task.RabbitId),
-    Description: ko.observable(task.Description),
-    DueDate: ko.observable(task.DueDate),
-    SaveUrl: ko.observable(task.SaveUrl),
-    DeleteUrl: ko.observable(task.DeleteUrl),
-    CanSave: ko.observable(false),
-    ErrorsString: ko.observable(""),
-    IsInvalid: ko.observable(false),
-    ParsedDate: ko.observable(""),
+    rabbitId: ko.observable(task.rabbitId),
+    description: ko.observable(task.description),
+    dueDate: ko.observable(task.dueDate),
+    saveUrl: ko.observable(task.saveUrl),
+    deleteUrl: ko.observable(task.deleteUrl),
+    canSave: ko.observable(false),
+    errorsString: ko.observable(""),
+    isInvalid: ko.observable(false),
+    parsedDate: ko.observable(""),
     parseDate: function() {
-      var date = Date.parse(vm.DueDate());
+      var date = Date.parse(vm.dueDate());
 
       if(date) {
-        vm.ParsedDate(date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear());
+        vm.parsedDate(date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear());
         return;
       }
 
-      vm.ParsedDate("?");
+      vm.parsedDate("?");
     },
     validate: function() {
       var errors = vm.errors();
       if(errors) {
-        vm.ErrorsString(errors.join(", "));
-        vm.CanSave(false);
-        vm.IsInvalid(true);
+        vm.errorsString(errors.join(", "));
+        vm.canSave(false);
+        vm.isInvalid(true);
       } else {
-        vm.ErrorsString("");
-        vm.CanSave(true);
-        vm.IsInvalid(false);
+        vm.errorsString("");
+        vm.canSave(true);
+        vm.isInvalid(false);
       }
     },
     save: function() {
-      vm.DueDate(vm.ParsedDate());
-      $.post(vm.SaveUrl(), JSON.parse(ko.toJSON(vm)), function() {
-        vm.CanSave(false);
+      vm.dueDate(vm.parsedDate());
+      $.post(vm.saveUrl(), JSON.parse(ko.toJSON(vm)), function() {
+        vm.canSave(false);
       });
     },
     errors: function () {
       var result = [];
 
-      if(!Date.parse(vm.DueDate())) {
+      if(!Date.parse(vm.dueDate())) {
         result.push("invalid date");
       }
 
-      if(!vm.Description()) {
+      if(!vm.description()) {
         result.push("description required");
       }
 
@@ -199,11 +199,11 @@ function TaskViewModel(task) {
       if(e.keyCode == 13) vm.save();
     },
     isNew: function() {
-      return !task.Id;
+      return !task.id;
     },
     destroy: function() {
-      if(vm.DeleteUrl) {
-        $.post(vm.DeleteUrl(), function() {
+      if(vm.deleteUrl) {
+        $.post(vm.deleteUrl(), function() {
           App.tasks.remove(vm);
         });
       } else {
@@ -212,13 +212,13 @@ function TaskViewModel(task) {
     }
   };
 
-  vm.Description.subscribe(vm.validate);
-  vm.DueDate.subscribe(vm.validate);
-  vm.DueDate.subscribe(vm.parseDate);
+  vm.description.subscribe(vm.validate);
+  vm.dueDate.subscribe(vm.validate);
+  vm.dueDate.subscribe(vm.parseDate);
   vm.parseDate();
 
   if(vm.isNew()) vm.validate();
-  else vm.Id = ko.observable(task.Id);
+  else vm.id = ko.observable(task.id);
 
   return vm;
 }

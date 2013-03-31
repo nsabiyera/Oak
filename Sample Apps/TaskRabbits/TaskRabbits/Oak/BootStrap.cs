@@ -324,7 +324,8 @@ This is probably the first time you've run Oak for this solution. <strong>Be sur
 the website at some point and take a look at the screencasts and sample apps (STRONGLY recommended): 
 <a href=""http://amirrajan.github.com/Oak"" target=""_blank"">Oak's Github Page</a></strong>.
 If you want to try Oak out in an interactive way, do the following:<br/>
-Update HomeController.cs and put the follwing <strong>between the namespace block</strong>:
+Update HomeController.cs and put the follwing <strong>between the namespace block (be sure to do both Step 1 and Step 2 - 
+after you've done this, refresh the page)</strong>:
 <h3>Step 1 - Update HomeController.cs</h3>
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
@@ -510,7 +511,7 @@ Create an Index.cshtml page for the Index action and add the following code ther
             return @"
 <h2>Tutorial: Create the Blogs table using SeedController</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate the Blogs table (keep in mind
+Go to <strong>Controller\SeedController.cs</strong> and add a method to the Schema class to generate the Blogs table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
 Here is an example of creating this schema:
 <pre>
@@ -564,7 +565,7 @@ the script (the console window you use to execute this command must have ruby su
             return @"
 <h2>Tutorial: Create the Comments table using SeedController</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate the Comments table (keep in mind
+Go to <strong>Controller\SeedController.cs</strong> and add a method to the Schema class to generate the Comments table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
 Here is an example of creating this schema:
 <pre>
@@ -631,7 +632,7 @@ the script (the console window you use to execute this command must have ruby su
             return @"
 <h2>Using SeedController to create tables (in general)</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate your table (keep in mind
+Go to <strong>Controller\SeedController.cs</strong> and add a method to the Schema class to generate your table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
 Here is an example of creating this schema (let's say I want to create a table called Blogs):
 <pre>
@@ -709,7 +710,6 @@ retrieving, the first thing we need to do is return a Blog from the database.  T
 is by defining a projection:
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
-//our Hello World example
 public class Blogs : DynamicRepository 
 {
     public Blogs()
@@ -814,7 +814,6 @@ By default dynamic repository returns a ""typeless"" dynamic object (called Gemi
 a dynamic type by doing the following (again using our Blog example):
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
-//our Hello World example
 public class Blogs : DynamicRepository 
 {
     public Blogs()
@@ -943,7 +942,7 @@ public class Blog : DynamicModel
 </pre>
 <h3>Step 2 - Eager load Comments in HomeController's Index method</h3>
 Every Blog on the main page will load its comments (hitting the database for each blog).  This is inefficient and
-should be fixed.  <strong>Update HomeController's Index method to eager load Comments:</strong>
+should be fixed (<strong>you can see all inefficient queries in the IIS Express Console Window</strong>).  <strong>Update HomeController's Index method to eager load Comments:</strong>
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
 public ActionResult Index()
@@ -1032,7 +1031,6 @@ define an Association.  Here is an example of an association, <strong>a Blog has
 
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
-//our Hello World example
 public class Blogs : DynamicRepository 
 {
     public Blogs()

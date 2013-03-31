@@ -1,9 +1,8 @@
 ﻿window.Rabbit = Backbone.Model.extend({
-  idAttribute: "Id",
   sync: function(method, model, options) {
-    $.post(App.rabbits.CreateRabbitUrl, model.toJSON(), function(data) {
-      if(data.Errors) {
-        model.Errors = data.Errors;
+    $.post(App.rabbits.createRabbitUrl, model.toJSON(), function(data) {
+      if(data.errors) {
+        model.errors = data.errors;
         options.addFailed(model);
       } else {
         options.success(model, data, options);
@@ -14,35 +13,34 @@
 
 window.Rabbits = Backbone.Collection.extend({
   model: Rabbit,
-  url: function() { return App.routes.GetRabbitsUrl; },
+  url: function() { return App.routes.getRabbitsUrl; },
   forId: function(id) {
     return this.find(function(rabbit) {
-       return rabbit.get("Id") == id;
+       return rabbit.get("id") == id;
      });
   },
   parse: function(request) {
-    this.CreateRabbitUrl = request.CreateRabbitUrl;
-    return request.Rabbits;
+    this.createRabbitUrl = request.createRabbitUrl;
+    return request.rabbits;
   }
 });
 
 window.Task = Backbone.Model.extend({
-  idAttribute: "Id",
   sync: function(method, model) {
     if(method == "delete") {
-      $.post(model.get("DeleteUrl"), function(data) {
+      $.post(model.get("deleteUrl"), function(data) {
         model.trigger('deleteSuccessful');
       });
     } else {
-      model.set("DueDate", model.parsedDate());
-      $.post(model.get("SaveUrl"), model.toJSON(), function(data) {
-        model.set("SaveUrl", data.SaveUrl);
+      model.set("dueDate", model.parsedDate());
+      $.post(model.get("saveUrl"), model.toJSON(), function(data) {
+        model.set("saveUrl", data.saveUrl);
         model.trigger('updateSuccessful');
       });
     }
   },
   parsedDate: function() {
-    var date = Date.parse(this.get("DueDate"));
+    var date = Date.parse(this.get("dueDate"));
 
     if(date) {
       return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
@@ -53,11 +51,11 @@ window.Task = Backbone.Model.extend({
   errors: function() {
     var result = [];
 
-    if(!Date.parse(this.get("DueDate"))) {
+    if(!Date.parse(this.get("dueDate"))) {
       result.push("invalid date");
     }
 
-    if(!this.get("Description")) {
+    if(!this.get("description")) {
       result.push("description required");
     }
 
@@ -73,15 +71,15 @@ window.Tasks = Backbone.Collection.extend({
   },
   rabbit: null,
   url: function() {
-    return this.rabbit.get("TasksUrl");
+    return this.rabbit.get("tasksUrl");
   },
   model: Task,
   parse: function(resp) {
-    this.CreateTaskUrl = resp.CreateTaskUrl;
-    return resp.Tasks;
+    this.createTaskUrl = resp.createTaskUrl;
+    return resp.tasks;
   },
   setSaveUrl: function(model) {
-    model.set("SaveUrl", this.CreateTaskUrl);
+    model.set("saveUrl", this.createTaskUrl);
   }
 });
 
@@ -126,8 +124,8 @@ window.TaskView = Backbone.View.extend({
   },
   update: function (keyArgs) {
     this.model.set({
-      "DueDate": this.$(".date").val(),
-      "Description": this.$(".description").val()
+      "dueDate": this.$(".date").val(),
+      "description": this.$(".description").val()
     });
       
     this.$(".label-inverse").html(this.model.parsedDate());
@@ -155,7 +153,7 @@ window.TaskView = Backbone.View.extend({
     this.model.save();
   },
   saveSuccessful: function() { 
-    this.$(".date").val(this.model.get("DueDate"));
+    this.$(".date").val(this.model.get("dueDate"));
     this.$(".btn").hide();
     this.$(".label-important").hide();
   },
@@ -228,14 +226,14 @@ window.Dashboard = Backbone.View.extend({
   },
   createRabbit: function() {
     App.rabbits.create(
-        { Name: $("#newRabbitName").val() },
+        { name: $("#newRabbitName").val() },
         {
           wait: true,
           addFailed: function(model) {
             $("#newRabbitErrors").html('');
-            _.each(model.Errors, function(error) {
+            _.each(model.errors, function(error) {
               var errorDiv = $("<div class='alert alert-error'></div>")
-                .html(error.Value);
+                .html(error.value);
               $("#newRabbitErrors").append(errorDiv);
             });
           }

@@ -60,29 +60,29 @@ app.directive('onEnter', function() {
 app.controller('AppCtrl', function($scope, $http) {
   $http({ method: 'GET', url: '/rabbits' })
     .success(function(data, status, headers, config) {
-      $scope.rabbits = data.Rabbits;
-      $scope.CreateRabbitUrl = data.CreateRabbitUrl;
+      $scope.rabbits = data.rabbits;
+      $scope.createRabbitUrl = data.createRabbitUrl;
     });
 
   $scope.selectedRabbit = null;
 
   $scope.loadTasks = function() {
     loading();
-    $http({ method: 'GET', url: $scope.selectedRabbit.TasksUrl })
+    $http({ method: 'GET', url: $scope.selectedRabbit.tasksUrl })
       .success(function(data, status, headers, config) {
-        _.each(data.Tasks, function(task) { ToTaskVm(task, $http, $scope); });
-        $scope.CreateTaskUrl = data.CreateTaskUrl;
-        $scope.tasks = data.Tasks;
+        _.each(data.tasks, function(task) { ToTaskVm(task, $http, $scope); });
+        $scope.createTaskUrl = data.createTaskUrl;
+        $scope.tasks = data.tasks;
         $scope.canAddTask = true;
-        if(data.Tasks.length == 0) loaded();
+        if(data.tasks.length == 0) loaded();
       });
   };
 
   $scope.addTask = function() {
     var task = {
-      Description: "",
-      DueDate: "",
-      SaveUrl: $scope.CreateTaskUrl
+      description: "",
+      dueDate: "",
+      saveUrl: $scope.createTaskUrl
     };
     ToTaskVm(task, $http, $scope);
     task.parseDate();
@@ -102,13 +102,13 @@ app.controller('AppCtrl', function($scope, $http) {
 
 function Rabbit($scope, $http) {
   var _this = this;
-  this.Name = "";
-  this.Errors = [];
+  this.name = "";
+  this.errors = [];
   this.save = function() {
-    $http.post($scope.CreateRabbitUrl, this)
+    $http.post($scope.createRabbitUrl, this)
       .success(function(data, status, headers, config) {
-        if(data.Errors) {
-          _this.Errors = data.Errors;
+        if(data.errors) {
+          _this.errors = data.errors;
         } else {
           $scope.rabbits.push(data);
           $("#newRabbitModal").modal('hide');
@@ -121,12 +121,12 @@ function Rabbit($scope, $http) {
 
 function ToTaskVm(task, $http, $scope) {
   task.parseDate = function() {
-    var date = Date.parse(task.DueDate);
+    var date = Date.parse(task.dueDate);
 
     if(date) {
-      task.ParsedDate = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+      task.parsedDate = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
     } else {
-      task.ParsedDate = "?";
+      task.parsedDate = "?";
     }
   };
 
@@ -142,30 +142,30 @@ function ToTaskVm(task, $http, $scope) {
   task.validate = function() {
     var errors = [];
 
-    if(!task.Description) errors.push("description required");
+    if(!task.description) errors.push("description required");
 
-    if(task.ParsedDate == "?") errors.push("invalid date");
+    if(task.parsedDate == "?") errors.push("invalid date");
     
-    task.ErrorString = errors.join(", ");
+    task.errorString = errors.join(", ");
 
-    task.CanSave = errors.length == 0;
+    task.canSave = errors.length == 0;
 
-    task.HasErrors = !task.CanSave;
+    task.hasErrors = !task.canSave;
   };
 
   task.save = function() {
-    if(task.CanSave) {
-      task.DueDate = task.ParsedDate;
-      $http.post(task.SaveUrl, task)
+    if(task.canSave) {
+      task.dueDate = task.parsedDate;
+      $http.post(task.saveUrl, task)
         .success(function(data, status, headers, config) {
-          task.CanSave = false;
+          task.canSave = false;
         });
     }
   };
 
   task.destroy = function() {
     if(!task.isNew()) {
-      $http.post(task.DeleteUrl).success(function() {
+      $http.post(task.deleteUrl).success(function() {
         $scope.tasks.remove(task);
       });
     } else {
@@ -174,14 +174,14 @@ function ToTaskVm(task, $http, $scope) {
   };
 
   task.isNew = function() {
-    return !task.Id;
+    return !task.id;
   };
 
-  task.HasErrors = false;
+  task.hasErrors = false;
 
-  task.ErrorString = "";
+  task.errorString = "";
 
-  task.CanSave = false;
+  task.canSave = false;
 
-  task.ParsedDate = task.DueDate;
+  task.parsedDate = task.dueDate;
 }
