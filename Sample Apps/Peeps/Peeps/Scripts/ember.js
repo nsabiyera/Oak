@@ -1,4 +1,4 @@
-﻿// Version: v1.0.0-rc.2
+// Version: v1.0.0-rc.2
 // Last commit: 656fa6e (2013-03-29 13:40:38 -0700)
 
 

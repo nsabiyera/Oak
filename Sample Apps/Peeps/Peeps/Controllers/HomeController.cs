@@ -23,6 +23,11 @@ namespace Peeps.Controllers
             return View();
         }
 
+        public ActionResult Backbone()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult List()
         {
