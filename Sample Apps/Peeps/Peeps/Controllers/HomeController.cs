@@ -18,6 +18,11 @@ namespace Peeps.Controllers
             return View();
         }
 
+        public ActionResult JQuery()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult List()
         {
