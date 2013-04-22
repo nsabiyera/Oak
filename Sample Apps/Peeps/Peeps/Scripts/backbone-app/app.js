@@ -54,7 +54,6 @@ window.Dashboard = Backbone.View.extend({
     "click #new": function() { App.peeps.add(new Peep()); }
   },
   initialize: function () {
-    _.bindAll(this, "loadPeeps", "hideSaveSuccessful", "saveAll");
     App.peeps.bind("reset", this.loadPeeps);
     App.peeps.bind("add", this.loadPeeps);
     App.peeps.bind("allsaved", this.showSaveSuccessful);

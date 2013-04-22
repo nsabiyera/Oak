@@ -33,6 +33,16 @@ namespace Peeps.Controllers
             return View();
         }
 
+        public ActionResult Knockout()
+        {
+            return View();
+        }
+
+        public ActionResult Angular()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult List()
         {

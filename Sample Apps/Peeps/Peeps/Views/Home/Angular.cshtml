@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Angular";
+}
+
+<script src="@Url.Content("~/Scripts/angular.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/angular-app/app.js")" type="text/javascript"></script>
+
+<div id="dashboard" ng-app="App" ng-controller="AppCtrl">
+  <div class="row">
+    <h2>Angular</h2>
+    <hr />
+  </div>
+
+  <div class="row">
+    <input type="button" id="new" class="btn btn-primary" value="new  person" ng-click="addPeep()" />
+    <hr />
+  </div>
+
+  <div id="peeps" class="row">
+    <form class="form-inline" ng-repeat="peep in peeps">
+      <input type='text' class='personname' ng-model="peep.name" />
+      <input type='button' value='save' class='save btn' ng-click="peep.save()" />
+    </form>
+  </div>
+
+  <div class="row">
+    <input type="button" class="btn btn-primary" id="saveAll" value="save all" ng-click="saveAll()"/>
+    <div id="saveSuccessful" class="span8 alert alert-success pull-right">
+        <button type="button" class="close">&times;</button>
+        Save Successful
+    </div>
+  </div>
+</div>
