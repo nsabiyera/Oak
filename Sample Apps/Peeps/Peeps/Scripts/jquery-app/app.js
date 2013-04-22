@@ -8,13 +8,9 @@ $(function () {
   GetPeople();
 });
 
-function hideSaveSuccessful() {
-  $("#saveSuccessful").hide();
-}
+function hideSaveSuccessful() { $("#saveSuccessful").hide(); }
 
-function showSaveSuccessful() {
-  $("#saveSuccessful").show();
-}
+function showSaveSuccessful() { $("#saveSuccessful").show(); }
 
 function NewPerson() {
   var control = $(template);

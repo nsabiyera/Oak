@@ -28,7 +28,8 @@ window.Peeps = Backbone.Collection.extend({
   }
 });
 
-window.PeepView = Backbone.View.extend({
+window.PeepView = Backbone.Marionette.ItemView.extend({
+  template: "#peepView",
   tagName: "form",
   className: "form-inline",
   events: {
@@ -39,11 +40,12 @@ window.PeepView = Backbone.View.extend({
   },
   initialize: function() {
     this.model.bind("updateSuccessful", App.dashboard.showSaveSuccessful);
-  },
-  render: function () {
-    this.$el.append(_.template($("#peepView").html(), this.model));
-    return this.$el;
   }
+});
+
+window.PeepsView = Backbone.Marionette.CollectionView.extend({
+  el: "#peeps",
+  itemView: PeepView
 });
 
 window.Dashboard = Backbone.View.extend({
@@ -54,25 +56,17 @@ window.Dashboard = Backbone.View.extend({
     "click #new": function() { App.peeps.add(new Peep()); }
   },
   initialize: function () {
-    _.bindAll(this, "loadPeeps", "hideSaveSuccessful", "saveAll");
-    App.peeps.bind("reset", this.loadPeeps);
-    App.peeps.bind("add", this.loadPeeps);
     App.peeps.bind("allsaved", this.showSaveSuccessful);
     this.hideSaveSuccessful();
     App.peeps.fetch();
   },
-  loadPeeps: function() {
-    $("#peeps").html('');
-    _.each(App.peeps.models, function(peep) {
-      $("#peeps").append(new PeepView({ model: peep }).render());
-    });
-  },
-  showSaveSuccessful: function() { $("#saveSuccessful").show(); },
-  hideSaveSuccessful: function() { $("#saveSuccessful").hide(); }
+  hideSaveSuccessful: function() { $("#saveSuccessful").hide(); }, 
+  showSaveSuccessful: function() { $("#saveSuccessful").show(); }
 });
 
 $(function () {
   window.App = { };
   window.App.peeps = new Peeps();
   window.App.dashboard = new Dashboard();
+  window.App.peepsView = new PeepsView({ collection: App.peeps });
 });

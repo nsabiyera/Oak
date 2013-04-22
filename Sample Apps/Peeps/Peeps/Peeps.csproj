@@ -107,6 +107,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\appcontroller.js" />
     <Content Include="Scripts\backbone-app\app.js" />
+    <Content Include="Scripts\backbone-marionette-app\app.js" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -168,6 +169,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Backbone.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\BackboneMarionette.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
