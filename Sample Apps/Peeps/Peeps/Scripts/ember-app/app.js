@@ -21,7 +21,7 @@ App.Peep = DS.Model.extend({
 
 App.PeepsController = Ember.ObjectController.extend({
   save: function() {
-    alert('todo');
+    this.get('store').commit();
   }
 });
 
@@ -29,6 +29,11 @@ App.Peep.sync = {
   query: function (id, process) {
     $.getJSON('/home/list', function(data) {
       process(data).load();
+    });
+  },
+  updateRecord: function(model, process) {
+    $.post('/home/update', { id: model.get("id"), name: model.get("name") }, function(data) {
+      
     });
   }
 };
