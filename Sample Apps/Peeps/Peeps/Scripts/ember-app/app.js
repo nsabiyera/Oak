@@ -19,6 +19,12 @@ App.Peep = DS.Model.extend({
   name: DS.attr('name')
 });
 
+App.PeepsController = Ember.ObjectController.extend({
+  save: function() {
+    alert('todo');
+  }
+});
+
 App.Peep.sync = {
   query: function (id, process) {
     $.getJSON('/home/list', function(data) {

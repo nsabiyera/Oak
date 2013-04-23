@@ -20,7 +20,7 @@
   {{#each model}}
     <form class="form-inline">
       {{ view Ember.TextField valueBinding='name' }}
-      <input type='button' value='save' class='save btn' />
+      <input type='button' value='save' class='save btn' {{ action "save" }} />
     </form>
   {{/each}}
 </script>
