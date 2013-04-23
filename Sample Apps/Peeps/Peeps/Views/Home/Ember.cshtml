@@ -1,0 +1,26 @@
+<script src="@Url.Content("~/Scripts/handlebars.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ember.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ember-data.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ember-app/app.js")" type="text/javascript"></script>
+
+
+<div id="dashboard">
+</div>
+
+<script type="text/x-handlebars">
+  <div class="row">
+    <h2>Ember</h2>
+    <hr />
+  </div>
+
+  {{ outlet }}
+</script>
+
+<script type="text/x-handlebars" id="peeps">
+  {{#each model}}
+    <form class="form-inline">
+      {{ view Ember.TextField valueBinding='name' }}
+      <input type='button' value='save' class='save btn' />
+    </form>
+  {{/each}}
+</script>

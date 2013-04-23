@@ -43,6 +43,11 @@ namespace Peeps.Controllers
             return View();
         }
 
+        public ActionResult Ember()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult List()
         {
