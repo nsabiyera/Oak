@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>1.9.8</version> 
+    <version>1.9.9</version> 
     <authors>Amir Rajan</authors>
     <description>ASP.NET MVC augmentations needed to support single page applications.</description> 
     <language>en-US</language>
