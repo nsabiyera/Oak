@@ -1,4 +1,12 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.5.8+
+oak 1.9.7+
+=============== CHANGES ==================
+Added BaseController that you can inherit from. Redefines the Json
+base method to use Oak's DynamicJsonResult.
+
+
+============== FOR VERSIONS ==============
 oak 2.5.7+
 oak-edge 1.9.7+
 oak-json 1.1.2+
