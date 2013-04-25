@@ -2,9 +2,7 @@
 
 App.Store = DS.Store.extend({
   revision: 12,
-  adapter: 'DS.RESTAdapter'
-  //adapter: 'DS.BasicAdapter'
-  //adapter: 'DS.FixtureAdapter'
+  adapter: 'DS.MvcRestAdapter'
 });
 
 
@@ -36,22 +34,3 @@ App.PeepsController = Ember.ArrayController.extend({
 		});
   }
 });
-
-App.Peep.sync = {
-  query: function (id, process) {
-    $.getJSON('/home/list', function(data) {
-      process(data).load();
-    });
-  },
-  updateRecord: function(model, process) {
-    $.post('/home/update', { id: model.get("id"), name: model.get("name") });
-  },
-  createRecord: function(model, process) {
-    $.post('/home/update', { name: model.get("name") }, function(data) {
-      model.set("id", data.id);
-    });
-  },
-  findAll: function(model, process) {
-
-  }
-};
