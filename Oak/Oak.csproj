@@ -69,6 +69,7 @@
     <Compile Include="BootStrap.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="Changes.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="ConnectionProfile.cs" />
     <Compile Include="DynamicForm.cs" />
