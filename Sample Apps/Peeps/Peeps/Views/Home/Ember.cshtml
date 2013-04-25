@@ -17,10 +17,17 @@
 </script>
 
 <script type="text/x-handlebars" id="peeps">
-  {{#each model}}
+  <div class="row">
+    <input type="button" id="new" {{ action "add" }} class="btn btn-primary" value="new  person" />
+    <hr />
+  </div>
+  {{#each controller}}
     <form class="form-inline">
       {{ view Ember.TextField valueBinding='name' }}
-      <input type='button' value='save' class='save btn' {{ action "save" }} />
     </form>
   {{/each}}
+  <div class="row">
+    <input type="button" {{ action "saveAll" }} class="btn btn-primary" value="save all" />
+    <hr />
+  </div>
 </script>

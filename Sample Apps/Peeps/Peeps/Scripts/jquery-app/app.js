@@ -24,6 +24,7 @@ function Save() {
   var person = PersonFor($(this).parent());
   $.post("/home/update", person, function (data) {
     $(element).parent().attr("data-id", data.id)
+    showSaveSuccessful();
   });
 }
 
@@ -60,7 +61,7 @@ function SaveAll() {
     url: "/home/updateall",
     data: JSON.stringify(people),
     success: function () {
-      hideSaveSuccessful();
+      showSaveSuccessful();
       GetPeople(); 
     },
     contentType: 'application/json'

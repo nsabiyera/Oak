@@ -27,12 +27,21 @@ namespace Peeps
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("Update",
+                "{controller}/{id}",
+                new { controller = "Home", action = "Update" },
+                new { httpMethod = new HttpMethodConstraint("PUT") });
+
+            routes.MapRoute("Create",
+                "{controller}",
+                new { controller = "Home", action = "Create" },
+                new { httpMethod = new HttpMethodConstraint("POST") });
+
             routes.MapRoute(
                 "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
+                "{controller}/{action}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
-
         }
 
         protected void Application_Start()
