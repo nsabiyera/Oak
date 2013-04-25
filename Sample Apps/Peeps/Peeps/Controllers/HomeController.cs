@@ -9,7 +9,7 @@ using Peeps.Repositories;
 
 namespace Peeps.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         People people = new People();
 
@@ -61,7 +61,7 @@ namespace Peeps.Controllers
 
             else @params.Id = people.Insert(@params);
 
-            return new DynamicJsonResult(@params);
+            return Json(@params);
         }
 
         [HttpPost]

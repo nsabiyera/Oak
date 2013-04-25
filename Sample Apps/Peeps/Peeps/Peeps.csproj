@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\oak-edge.1.9.5\lib\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\oak-edge.1.9.9\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
@@ -61,6 +61,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeepsController.cs" />
     <Compile Include="Controllers\SeedController.cs" />
@@ -164,9 +165,6 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\OakForm.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Home\JQuery.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +178,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Angular.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Ember.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\OakForm.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

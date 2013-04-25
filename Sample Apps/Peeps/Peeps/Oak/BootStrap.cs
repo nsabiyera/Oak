@@ -305,7 +305,7 @@ namespace Oak
                 .GetAssembly(typeof(Recommendation))
                 .GetTypes()
                 .Where(s => s.Name.EndsWith("Controller"))
-                .Count() <= 2;
+                .Count() <= 3;
         }
     }
 

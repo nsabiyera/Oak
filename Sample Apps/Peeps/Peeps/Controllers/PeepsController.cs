@@ -8,13 +8,13 @@ using Oak;
 
 namespace Peeps.Controllers
 {
-    public class PeepsController : Controller
+    public class PeepsController : BaseController
     {
         People people = new People();
 
         public ActionResult Index()
         {
-            return new DynamicJsonResult(new { peeps = people.All() });
+            return Json(new { peeps = people.All() });
         }
 
         [HttpPost]
@@ -22,7 +22,7 @@ namespace Peeps.Controllers
         {
             @params.peep.id = people.Insert(@params.peep);
 
-            return new DynamicJsonResult(new { @params.peep });
+            return Json(new { @params.peep });
         }
 
         [HttpPut]
@@ -32,7 +32,7 @@ namespace Peeps.Controllers
 
             people.Save(@params.peep);
 
-            return new DynamicJsonResult(new { @params.peep });
+            return Json(new { @params.peep });
         }
     }
 }
