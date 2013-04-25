@@ -86,7 +86,7 @@ namespace Oak
 
         bool HasJson(ActionExecutingContext filterContext)
         {
-            return filterContext.HttpContext.Request.ContentType == "application/json";
+            return filterContext.HttpContext.Request.ContentType.Contains("application/json");
         }
 
         bool HasPayload(ActionExecutingContext filterContext)
