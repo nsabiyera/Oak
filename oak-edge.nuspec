@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>oak-edge</id> 
-    <version>1.9.7</version> 
+    <version>1.9.8</version> 
     <authors>Amir Rajan</authors>
     <description>ASP.NET MVC augmentations needed to support single page applications.</description> 
     <language>en-US</language>
@@ -36,6 +36,7 @@
     <file src="Oak\BootStrap.cs" target="content\Oak\BootStrap.cs" />
     <file src="Oak\ReleaseNotes.txt" target="content\Oak\ReleaseNotes.txt" />
     <file src="Oak\Controllers\SeedController.cs" target="content\Controllers\SeedController.cs" />
+    <file src="Oak\Controllers\BaseController.cs" target="content\Controllers\BaseController.cs" />
     <file src="External Assemblies\Newtonsoft.Json.dll" target = "lib\Newtonsoft.Json.dll" />
   </files>
 </package>
