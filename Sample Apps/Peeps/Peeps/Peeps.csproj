@@ -128,6 +128,7 @@
     <Content Include="Scripts\knockout-app\app.js" />
     <Content Include="Scripts\knockout.js" />
     <Content Include="Scripts\local_storage_adapter.js" />
+    <Content Include="Scripts\underscore.js" />
     <Content Include="specwatchr-usage.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
