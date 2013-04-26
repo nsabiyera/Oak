@@ -346,34 +346,6 @@ rake ui
 </pre>
 
 <div id="sampleapps"></div>
-<h1>THE Reference App - <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h1>
-<hr/>
-<p>
-This is a full blown reference implementation that uses all aspects of Oak.  Borrowed Games is a single page web app that allows a circle of friends to borrow games from each other.  This site is deployed and in production at <a href="http://borrowedgames.com" target="_blank">http://borrowedgames.com</a>.
-</p>
-<ul>
-<li>Run the following commands
-<pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
-cd "Oak\Sample Apps\BorrowedGames"
-start BorrowedGames.sln
-</pre>
-</li>
-<li>Then run the commands
-<pre>
-bundle install
-rake             (builds and deploys the application)
-rake create_db   (creates your databases)
-rake regen_db    (this generates the schema for the db)
-rake tests       (all tests should pass)
-rake server      (this will start up iis express)
-rake ui          <b>(runs ui tests, it requires FireFox and <a href="http://docs.seleniumhq.org/download/" target="_blank">Selenium IDE</a>)</b>
-rake reset       (deletes all records in the db)
-rake sample      (adds sample data to the database)
-start http://localhost:3000
-</pre>
-</li>
-</ul>
 
 <h1>Smaller Sample Apps</h1>
 <hr/>
@@ -387,7 +359,7 @@ cd "Oak\Sample Apps\DynamicBlog"
 start DynamicBlog.sln
 </pre>
 </li>
-<li>Then run the commands:
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
@@ -411,9 +383,6 @@ start http://localhost:3000
   <li>EmberJS (alpha)</li>
 </ul>
 <ul>
-<p style="font-size: 20px">
-You may want to look at the <a href="#taskrabbits">Task Rabbits</a> sample app for a deeper dive.
-</p>
 <li>Run the following commands:
 <pre>
 git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
@@ -421,7 +390,7 @@ cd "Oak\Sample Apps\Peeps"
 start Peeps.sln
 </pre>
 </li>
-<li>Then run the commands:
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
@@ -431,6 +400,10 @@ start http://localhost:3000
 </pre>
 </li>
 </ul>
+
+<p style="font-size: 20px">
+You may want to look at the <a href="#taskrabbits">Task Rabbits</a> sample app for a deeper dive.
+</p>
 
 <h2>Two Player Game, Complex Object Graph: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BattleShip">BattleShip</a></h2>
 <p>This is a web based version of the game BattleShip.  Open up two browsers and start playing!</p>
@@ -442,7 +415,7 @@ cd "Oak\Sample Apps\BattleShip"
 start BattleShip.sln
 </pre>
 </li>
-<li>Then run the commands:
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
@@ -474,7 +447,7 @@ cd "Oak\Sample Apps\TaskRabbits"
 start TaskRabbits.sln
 </pre>
 </li>
-<li>Then run the commands:
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
@@ -497,7 +470,7 @@ cd "Oak\Sample Apps\Crib"
 start Crib.sln
 </pre>
 </li>
-<li>Then run the commands:
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
 bundle install
 rake             (builds and deploys the application)
@@ -523,7 +496,7 @@ cd "Oak\Sample Apps\TodoApp"
 start TodoApp.sln
 </pre>
 </li>
-<li>Then run the commands:
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
@@ -536,6 +509,34 @@ start http://localhost:3000
 </li>
 </ul>
 
+<h1>THE Reference App - <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h1>
+<hr/>
+<p>
+This is a full blown reference implementation that uses all aspects of Oak.  Borrowed Games is a single page web app that allows a circle of friends to borrow games from each other.  This site is deployed and in production at <a href="http://borrowedgames.com" target="_blank">http://borrowedgames.com</a>.
+</p>
+<ul>
+<li>Run the following commands
+<pre>
+git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+cd "Oak\Sample Apps\BorrowedGames"
+start BorrowedGames.sln
+</pre>
+</li>
+<li>Then run the following commands in a command prompt that supports ruby (as an administrator):
+<pre>
+bundle install
+rake             (builds and deploys the application)
+rake create_db   (creates your databases)
+rake regen_db    (this generates the schema for the db)
+rake tests       (all tests should pass)
+rake server      (this will start up iis express)
+rake ui          <b>(runs ui tests, it requires FireFox and <a href="http://docs.seleniumhq.org/download/" target="_blank">Selenium IDE</a>)</b>
+rake reset       (deletes all records in the db)
+rake sample      (adds sample data to the database)
+start http://localhost:3000
+</pre>
+</li>
+</ul>
 
 <h2>More Stuff</h2>
 
