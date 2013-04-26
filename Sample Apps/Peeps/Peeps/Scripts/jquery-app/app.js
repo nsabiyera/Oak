@@ -1,9 +1,10 @@
-﻿var template = "<form class='person form-inline'><input type='text' class='personname' /> <input type='button' value='save' class='save btn' /></form>";
+﻿var template = "";
 
 $(function () {
   $("#saveAll").click(SaveAll);
   $("#new").click(NewPerson);
   $(".close").click(hideSaveSuccessful);
+  template = $("#peepTemplate").html();
   hideSaveSuccessful();
   GetPeople();
 });
@@ -36,6 +37,10 @@ function GetPeople() {
       control.attr("data-id", data[i].id);
       control.find("input.personname").val(data[i].name);
       control.find("input.save").click(Save);
+      control.find(".preview").html(data[i].name);
+      control.find("input.personname").keyup(function () {
+        $(this).parent().find(".preview").html($(this).val());
+      });
       $("#peeps").append(control);
     }
   });

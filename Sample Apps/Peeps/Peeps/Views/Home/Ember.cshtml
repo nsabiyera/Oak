@@ -24,6 +24,7 @@
   </div>
   {{#each controller}}
     <form class="form-inline">
+      <div>{{name}}</div>
       {{ view Ember.TextField valueBinding='name' }}
     </form>
   {{/each}}

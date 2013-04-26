@@ -36,6 +36,7 @@ window.PeepView = Backbone.Marionette.ItemView.extend({
     "click .save":  function() { this.model.save(); },
     "keyup .personname": function() {
       this.model.set({ "name": this.$(".personname").val() });
+      this.$(".preview").html(this.$(".personname").val());
     }
   },
   initialize: function() {

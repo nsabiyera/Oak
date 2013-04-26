@@ -18,6 +18,7 @@
 
   <div id="peeps" class="row">
     <form class="form-inline" ng-repeat="peep in peeps">
+      <div>{{ peep.name }}</div>
       <input type='text' class='personname' ng-model="peep.name" />
       <input type='button' value='save' class='save btn' ng-click="peep.save()" />
     </form>

@@ -33,7 +33,8 @@
 
 <script type="text/html" id="peepTemplate">
   <form>
-    <input type='text' class='personname' data-bind="value: name" />
+    <div data-bind="html: name"></div>
+    <input type='text' class='personname' data-bind="value: name, valueUpdate: 'keyup'" />
     <input type='button' value='save' class='save btn' data-bind="click: save" />
   </form>
 </script>
