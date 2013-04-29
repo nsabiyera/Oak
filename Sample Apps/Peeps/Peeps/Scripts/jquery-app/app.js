@@ -15,8 +15,16 @@ function showSaveSuccessful() { $("#saveSuccessful").show(); }
 
 function NewPerson() {
   var control = $(template);
-  control.find("input.personname").val("");
+  bindControl(control, { name: "" });
+  control.find("input.personname").keyup(function () {
+    control.find(".preview").html($(this).val());
+  });
+}
+
+function bindControl(control, data) {
+  control.find("input.personname").val(data.name);
   control.find("input.save").click(Save);
+  control.find(".preview").html(data.name);
   $("#peeps").append(control);
 }
 
@@ -35,13 +43,10 @@ function GetPeople() {
     for (var i = 0; i < data.length; i++) {
       var control = $(template);
       control.attr("data-id", data[i].id);
-      control.find("input.personname").val(data[i].name);
-      control.find("input.save").click(Save);
-      control.find(".preview").html(data[i].name);
+      bindControl(control, data[i]);
       control.find("input.personname").keyup(function () {
         $(this).parent().find(".preview").html($(this).val());
       });
-      $("#peeps").append(control);
     }
   });
 }
