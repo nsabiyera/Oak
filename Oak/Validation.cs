@@ -108,7 +108,11 @@ namespace Oak
 
         public dynamic FirstError()
         {
-            return errors.First().Value;
+            var error = errors.FirstOrDefault();
+
+            if (object.ReferenceEquals(error, null)) return null;
+
+            return error.Value;
         }
     }
 

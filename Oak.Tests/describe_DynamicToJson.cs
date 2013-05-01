@@ -19,7 +19,6 @@ namespace Oak.Tests
             tasks = new Tasks();
         }
 
-        [Tag("wip")]
         void describe_prototype_to_json()
         {
             before = () =>
