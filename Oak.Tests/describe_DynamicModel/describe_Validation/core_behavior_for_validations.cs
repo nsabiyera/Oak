@@ -60,5 +60,17 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
 
             (gemini.FirstError() as string).should_be("Hello");
         }
+
+        [Tag("wip")]
+        void specify_first_error_returns_null_if_no_errors()
+        {
+            gemini = new DeferredFailedValidation();
+
+            gemini.FirstName = "Foobar";
+
+            gemini.IsValid();
+
+            ((object)gemini.FirstError()).should_be_null();
+        }
     }
 }
