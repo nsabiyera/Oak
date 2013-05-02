@@ -80,6 +80,48 @@ namespace Oak.Tests.describe_DynamicToJson
             };
         }
 
+        [Tag("wip")]
+        void describe_entities_with_error_collection()
+        {
+            before = () =>
+            {
+                var list = new List<dynamic>();
+
+                list.Add(new Gemini(new { Name = "" }));
+
+                list.Add(new Gemini(new { Name = "" }));
+
+                list.ForEach(s => 
+                {
+                    s.Validates = new DynamicFunction(() =>
+                    {
+                        var rules = new List<dynamic>();
+
+                        rules.Add(new Presence("Name"));
+
+                        return rules;
+                    });
+                });
+
+                list.ForEach(s => s.Extend<Validations>());
+
+                list.ForEach(s => s.IsValid());
+
+                list.ForEach(s => s.Errors = s.Errors());
+
+                objectToConvert = list;
+            };
+
+            it["serializes errors for each record"] = () =>
+            {
+                var expected = @"[ { ""name"": """", ""errors"": [ { ""key"": ""Name"", ""value"": ""Name is required."" } ] }, { ""name"": """", ""errors"": [ { ""key"": ""Name"", ""value"": ""Name is required."" } ] } ]";
+
+                jsonString = DynamicToJson.Convert(objectToConvert);
+
+                jsonString.should_be(expected);
+            };
+        }
+
         void describe_db_rows_to_json()
         {
             before = () =>
