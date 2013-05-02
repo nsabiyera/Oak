@@ -1,6 +1,21 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.6.0+
+oak-edge 2.0.0+
+cambium 1.4.9+
+
+=============== CHANGES ==================
+Validations module's FirstError() method will return null
+if there are no errors.  Errors() collection no longer returns
+List<KeyValuePair<string, string>> and instead returns a List of
+Geminis who's properties are Key, and Value.
+
+Commit info:
+https://github.com/amirrajan/Oak/commit/35454f81f88fbfcb95f610a67aa8b7298c33c504
+
+
+============== FOR VERSIONS ==============
 oak 2.5.8+
-oak 1.9.7+
+oak-edge 1.9.7+
 =============== CHANGES ==================
 Added BaseController that you can inherit from. Redefines the Json
 base method to use Oak's DynamicJsonResult.
