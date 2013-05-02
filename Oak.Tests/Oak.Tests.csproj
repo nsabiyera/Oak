@@ -172,6 +172,9 @@
     <Compile Include="describe_DynamicModel\describe_Changes\core_behavior_for_tracking_changes.cs" />
     <Compile Include="describe_DynamicRepository\dynamic_query.cs" />
     <Compile Include="describe_DynamicRepository\memoization_usage_with_dynamic_repository.cs" />
+    <Compile Include="describe_DynamicToJson\casing.cs" />
+    <Compile Include="describe_DynamicToJson\serialization_of_self_reference_objects.cs" />
+    <Compile Include="describe_DynamicToJson\simple_serializations.cs" />
     <Compile Include="describe_Gemini\updating_members.cs" />
     <Compile Include="describe_Memoize.cs" />
     <Compile Include="describe_Seed\schemas.cs" />
@@ -211,7 +214,7 @@
     <Compile Include="describe_DynamicRepository\inserting_and_updating.cs" />
     <Compile Include="describe_DynamicRepository\executing_procs.cs" />
     <Compile Include="describe_DynamicRepository\pagination.cs" />
-    <Compile Include="describe_DynamicToJson.cs" />
+    <Compile Include="describe_DynamicToJson\_describe_DynamicToJson.cs" />
     <Compile Include="describe_Gemini\accessing_property.cs" />
     <Compile Include="describe_Gemini\Classes\AliasGemini.cs" />
     <Compile Include="describe_Gemini\Classes\BlogEntry.cs" />
