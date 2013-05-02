@@ -58,7 +58,7 @@ namespace Oak
 
         public void AddError(string property, string message)
         {
-            errors.Add(new KeyValuePair<string, string>(property, message));
+            errors.Add(new Gemini(new { Key = property, Value = message }));
         }
 
         public void AddRule(dynamic rule)
