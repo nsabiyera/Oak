@@ -408,7 +408,7 @@ namespace Oak.Extensions
             if (defaultValue != null) defaultAsString = "DEFAULT('{0}')".With(defaultValue.ToString());
             else return "";
 
-            var reservedStrings = new[] { "getdate()", "newid()" };
+            var reservedStrings = new[] { "getdate()", "newid()", "getutcdate()" };
 
             if (reservedStrings.Contains(defaultValue.ToString().ToLower())) defaultAsString = "DEFAULT({0})".With(defaultValue.ToString());
 
