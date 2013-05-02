@@ -2,7 +2,9 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Peeps</h2>
+<div class="row">
+  <h2>Peeps</h2>
+</div>
 
 <div class="row">
     <a href="@Url.RouteUrl(new { controller = "Home", action = "JQuery" })">jQuery Implementation</a><br />
@@ -21,4 +23,47 @@
 </div>
 <div class="row">
     Ember Implementation (TODO)<br />
+</div>
+
+<div class="row">
+<h2>Notes</h2>
+</div>
+<div class="row">
+<pre>
+underscore: just use it, no really, just download it,
+            and use it, it'll make you happy
+
+jquery+$ajax: slow painful death, stop doing this for larger apps
+
+backbone: event driven awesomeness,
+          easy learning curve, but a lot of boiler plate
+backbone+marionette: removes the boiler plate of backbone views
+
+knockout: THE mvvm for html, 
+          bring your own $ajax, 
+          pitfalls of MVVM (side effects), 
+          death by ko.observable,
+durandal: provides more structure to knockout
+
+angular: is a full blown framework, redefine how we use html/markup,
+         no death by ko observable, *very* nice scoping/mvvm, modern browsers
+         only
+
+sizes:
+
+backbone: 1500 loc
+marrionette: 2300 loc
+total: ~4,000 loc
+
+ko: 3590 loc
+durandal: "the PRISM for ko apps", requirejs, sammyjs, 
+requirejs 2000 loc, sammy 2000 loc, durandal core 2400
+total: ~10,000 loc
+
+angular: 14,000 loc
+angular-ui: 1400 loc
+total: ~15,000 loc
+
+oak: ~5,000 loc
+</pre>
 </div>
