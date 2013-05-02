@@ -86,7 +86,7 @@ namespace Oak
 
         bool HasJson(ActionExecutingContext filterContext)
         {
-            return filterContext.HttpContext.Request.ContentType == "application/json";
+            return filterContext.HttpContext.Request.ContentType.Contains("application/json");
         }
 
         bool HasPayload(ActionExecutingContext filterContext)
@@ -305,7 +305,7 @@ namespace Oak
                 .GetAssembly(typeof(Recommendation))
                 .GetTypes()
                 .Where(s => s.Name.EndsWith("Controller"))
-                .Count() <= 2;
+                .Count() <= 3;
         }
     }
 
