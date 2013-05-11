@@ -345,6 +345,33 @@ rake ui
   runs ui automation
 </pre>
 
+<a id="scaffold"></a>
+<h2>Frictionless Scaffolding - scaffold.rb</h2>
+<p>
+Oak comes bootstrapped with a suite of rake scripts that help you scaffold common files in your solution.  These scripts can be leveraged by you to quickly generate classes. Using a command prompt that supports ruby <b>(be sure to run the command prompt as an administrator)</b>, you can type any of the following commands:
+</p>
+<pre>
+all scripts are customizable and are located in scaffold.rb
+
+rake gen:controller[name]
+    adds a controller class to your mvc project
+
+rake gen:model[name]
+    adds a dynamic model class to your mvc project
+
+rake gen:repo[name]
+    adds a dynamic repository class to your mvc project
+
+rake gen:script[name]
+    adds javascript file to your mvc project
+
+rake gen:test[name]
+    adds a test file to your test project
+
+rake gen:view[controller_and_name]
+    adds cshtml to your mvc project
+</pre>
+
 <div id="sampleapps"></div>
 
 <h1>Smaller Sample Apps</h1>
