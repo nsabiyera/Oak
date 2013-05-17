@@ -7,6 +7,7 @@ using Massive;
 
 namespace Oak.Tests
 {
+    [Tag("wip")]
     class core_behavior : nspec
     {
         object blogId, blog2Id, authorId, math, science, history, jane, john;

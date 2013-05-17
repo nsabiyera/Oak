@@ -588,6 +588,15 @@ namespace Oak
         }
     }
 
+    public class AssociationConventionException : Exception
+    {
+        public AssociationConventionException(string message)
+            : base(message)
+        {
+            
+        }
+    }
+
     public class AssociationByConventions
     {
         public static Dictionary<string, bool> TableCache = new Dictionary<string, bool>();
@@ -660,6 +669,8 @@ namespace Oak
         {
             string associationName = callInfo.Name;
 
+            VerifyAssociationMatchesConvention(callInfo);
+
             if (IsHasMany(callInfo)) AddConventionForMany(callInfo);
 
             else if (IsManyToMany(callInfo)) AddConventionForManyToMany(callInfo);
@@ -667,6 +678,62 @@ namespace Oak
             else AddConventionForSingle(callInfo);
 
             return callInfo.Instance.GetMember(associationName)(null);
+        }
+
+        void VerifyAssociationMatchesForHasMany(dynamic callInfo)
+        {
+            var message =
+@"No HasMany or HasManyAndBelongsTo relationships found:
+Table [{0}] with column [{1}] doesn't exist (HasMany).
+Table [{2}] with schema [Id, {3}, {4}] doesn't exist (HasManyAndBelongsTo).";
+
+            var mergedMessage = string.Format(
+                message,
+                callInfo.Name,
+                ParentKey(callInfo),
+                ManyToManyTableName(callInfo),
+                ParentKey(callInfo),
+                ChildKey(callInfo)
+            );
+
+            bool tableExists = TableExists(callInfo.Name);
+
+            bool oneManyColumnExists = ColumnsFor(callInfo.Name).Contains(ParentKey(callInfo));
+
+            bool manyToManyColumn1Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ParentKey(callInfo));
+
+            bool manyToManyColumn2Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ChildKey(callInfo));
+
+            if (!tableExists) throw new AssociationConventionException(mergedMessage);
+
+            if (!oneManyColumnExists && (!manyToManyColumn1Exists || !manyToManyColumn2Exists)) throw new AssociationConventionException(mergedMessage);
+        }
+
+        private void VerifyAssocationMatchesForHasOne(dynamic callInfo)
+        {
+            var message =
+@"No BelongsTo or HasOne relationships found:
+Table [{0}] with column [{1}] doesn't exist (HasOne).
+Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
+
+            var mergedMessage = string.Format(
+                message,
+                callInfo.Name + "s",
+                ParentKey(callInfo),
+                callInfo.Instance.__Table__(),
+                ChildKey(callInfo)
+            );
+
+            bool tableExists = TableExists(callInfo.Name + "s");
+
+            if (!tableExists) throw new AssociationConventionException(mergedMessage);
+        }
+
+        void VerifyAssociationMatchesConvention(dynamic callInfo)
+        {
+            if (callInfo.Name.EndsWith("s")) VerifyAssociationMatchesForHasMany(callInfo);
+
+            else VerifyAssocationMatchesForHasOne(callInfo);
         }
 
         void AddConventionForManyToMany(dynamic callInfo)
@@ -703,13 +770,18 @@ namespace Oak
 
         bool IsManyToMany(dynamic callInfo)
         {
+            return TableExists(ManyToManyTableName(callInfo));
+        }
+
+        string ManyToManyTableName(dynamic callInfo)
+        {
             var names = new string[] 
             {
                 callInfo.Instance.__Table__(), 
                 callInfo.Name
             }.OrderBy(s => s);
 
-            return TableExists(string.Join("", names));
+            return string.Join("", names);
         }
 
         bool IsHasOne(dynamic callInfo)
@@ -732,7 +804,7 @@ namespace Oak
             return ColumnCache[table];
         }
 
-        bool TableExists(string table)
+        public static bool TableExists(string table)
         {
             if (!TableCache.ContainsKey(table))
             {
