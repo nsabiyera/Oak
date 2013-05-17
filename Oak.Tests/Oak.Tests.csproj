@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
+    <Compile Include="describe_DynamicDb\core_behavior.cs" />
     <Compile Include="describe_DynamicForm.cs" />
     <Compile Include="describe_DynamicModels\Classes\Agent.cs" />
     <Compile Include="describe_DynamicModels\Classes\Agents.cs" />
