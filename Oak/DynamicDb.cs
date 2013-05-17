@@ -19,17 +19,22 @@ namespace Oak
 
         dynamic MethodMissing(dynamic callInfo)
         {
-            var repoName = callInfo.Name;
+            var tableName = callInfo.Name;
 
-            var repositoryProperty = repoName + "Repository";
+            if (!AssociationByConventions.TableExists(tableName))
+            {
+                throw new InvalidOperationException("Table [" + tableName + "] does not exist.");
+            }
 
-            callInfo.Instance.SetMember(repositoryProperty, AssociationByConventions.RepositoryFor(repoName));
+            var repositoryProperty = tableName + "Repository";
+
+            callInfo.Instance.SetMember(repositoryProperty, AssociationByConventions.RepositoryFor(tableName));
 
             callInfo.Instance.SetMember(
-                repoName,
+                tableName,
                 new DynamicFunction(() => callInfo.Instance.GetMember(repositoryProperty)));
 
-            return callInfo.Instance.GetMember(repoName)();
+            return callInfo.Instance.GetMember(tableName)();
         }
     }
 }
