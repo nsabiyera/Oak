@@ -7,197 +7,6 @@ using System.Dynamic;
 
 namespace Oak
 {
-    public class Associations
-    {
-        List<dynamic> referencedAssociations = new List<dynamic>();
-
-        public Associations(dynamic mixWith)
-        {
-            if (!SupportsAssociations(mixWith)) return;
-
-            IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
-
-            foreach (dynamic association in associations)
-            {
-                referencedAssociations.Add(association);
-
-                association.Init(mixWith);
-            }
-
-            mixWith.SetMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
-        }
-
-        public bool SupportsAssociations(dynamic mixWith)
-        {
-            return mixWith.GetType().GetMethod("Associates") != null || mixWith.RespondsTo("Associates");
-        }
-
-        public dynamic AssociationNamed(dynamic collectionName)
-        {
-            var association = referencedAssociations.FirstOrDefault(s => s.MethodName == collectionName || s.MethodName == Singularize(collectionName));
-
-            if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
-
-            return association;
-        }
-
-        public string Singularize(string collectionName)
-        {
-            return collectionName.Substring(0, collectionName.Length - 1);
-        }
-    }
-
-    public class Association : Gemini
-    {
-        public string MethodName { get; set; }
-
-        public DynamicRepository Repository { get; set; }
-
-        public dynamic Model { get; set; }
-
-        public string TableName
-        {
-            get { return Repository.TableName; }
-        }
-
-        public string Singular(object o)
-        {
-            var name = o.GetType().Name;
-
-            if (o is string) name = o as string;
-
-            if (!name.EndsWith("s")) return name;
-
-            return name.Substring(0, name.Length - 1);
-        }
-
-        public string SigularId(object o)
-        {
-            return Singular(o) + Id();
-        }
-
-        public string Id()
-        {
-            return Repository.PrimaryKeyField;
-        }
-
-        public bool DiscardCache(dynamic options)
-        {
-            if (options == null) options = new { discardCache = false };
-
-            options = (options as object).ToPrototype();
-
-            return options.discardCache;
-        }
-
-        public string InnerJoinSelectClause(string xRefFromColumn,
-            string toTable,
-            string xRefTable,
-            string xRefToColumn,
-            string toTableColumn,
-            string idProperty,
-            params dynamic[] models)
-        {
-            return @"
-            select {toTable}.*, {xRefTable}.{xRefFromColumn}
-            from {xRefTable}
-            inner join {toTable}
-            on {xRefTable}.{xRefToColumn} = {toTable}.{toTableColumn}
-            where {xRefTable}.{xRefFromColumn} in ({inClause})"
-                .Replace("{xRefFromColumn}", xRefFromColumn)
-                .Replace("{toTableColumn}", toTableColumn)
-                .Replace("{toTable}", toTable)
-                .Replace("{xRefTable}", xRefTable)
-                .Replace("{xRefToColumn}", xRefToColumn)
-                .Replace("{inClause}", InClause(models, idProperty));
-        }
-
-        public void AddReferenceBackToModel(dynamic association, dynamic model)
-        {
-            association.SetMember(model.GetType().Name, Model);
-        }
-
-        public string InClause(IEnumerable<dynamic> models, string member)
-        {
-            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))).Distinct());
-        }
-
-        public virtual void AddRepository(DynamicModels collection, DynamicRepository repository)
-        {
-            collection.SetMember("Repository", repository);
-        }
-
-        public virtual void AddNewAssociationMethod(DynamicModels collection, dynamic model)
-        {
-            collection.SetMember("New", NewItemDelegate());
-        }
-
-        public DynamicFunctionWithParam NewItemDelegate()
-        {
-            var newItemDelegate = new DynamicFunctionWithParam(attributes =>
-            {
-                return EntityFor(attributes);
-            });
-
-            return newItemDelegate;
-        }
-
-        public dynamic EntityFor(dynamic attributes)
-        {
-            var entity = new Gemini(attributes);
-
-            return Repository.Projection(entity);
-        }
-    }
-
-    public class EagerLoadMany
-    {
-        public DynamicModels Cache { get; set; }
-
-        public bool ShouldDiscardCache(dynamic options)
-        {
-            if (options == null) options = new { discardCache = false };
-
-            options = (options as object).ToPrototype();
-
-            return options.discardCache;
-        }
-
-        public DynamicModels Execute(dynamic options,
-            DynamicRepository repository,
-            string associationName,
-            string selectClause,
-            IEnumerable<dynamic> models,
-            string parentMemberName)
-        {
-            if (ShouldDiscardCache(options)) Cache = null;
-
-            if (Cache != null) return Cache;
-
-            var many = repository.Query(selectClause).ToList();
-
-            foreach (var item in many)
-            {
-                var model = models.First(s => s.Id == item.GetMember(parentMemberName));
-
-                item.SetMember(model.GetType().Name, model);
-            }
-
-            foreach (var model in models)
-            {
-                var assocation = model.AssociationNamed(associationName);
-
-                var relatedTo = many.Where(s => s.GetMember(model.GetType().Name).Equals(model)).Select(s => s);
-
-                assocation.EagerLoadMany.Cache = new DynamicModels(relatedTo);
-
-                assocation.AddNewAssociationMethod(assocation.EagerLoadMany.Cache, model);
-            }
-
-            return new DynamicModels(many);
-        }
-    }
-
     public class HasMany : Association
     {
         public string ForeignKey { get; set; }
@@ -524,59 +333,6 @@ namespace Oak
         }
     }
 
-    public class SingleAssociation : Association
-    {
-
-    }
-
-    public class EagerLoadSingleForAll
-    {
-        static void ConvertToList(string property, dynamic inObject)
-        {
-            if (inObject.GetMember(property) is List<dynamic>) return;
-
-            var newPropValue = new List<dynamic>();
-            newPropValue.Add(inObject.GetMember(property));
-            inObject.SetMember(property, newPropValue);
-        }
-
-        public static DynamicModels Execute(IEnumerable<dynamic> models,
-            DynamicRepository repository,
-            string associationName,
-            string sql,
-            Func<dynamic, dynamic, bool> findClause)
-        {
-            var belongsResult = new List<dynamic>(repository.Query(sql));
-
-            foreach (var item in belongsResult)
-            {
-                var relatedModels = models.Where(s => findClause(item, s));
-
-                foreach (var relateModel in relatedModels)
-                {
-                    var association = relateModel.AssociationNamed(associationName);
-
-                    association.Model = item;
-
-                    var propName = relateModel.GetType().Name;
-
-                    if (item.RespondsTo(propName))
-                    {
-                        ConvertToList(propName, item);
-
-                        item.GetMember(propName).Add(relateModel);
-                    }
-                    else
-                    {
-                        item.SetMember(propName, relateModel);
-                    }
-                }
-            }
-
-            return new DynamicModels(belongsResult);
-        }
-    }
-
     public class HasOne : SingleAssociation
     {
         public string ForeignKey { get; set; }
@@ -787,6 +543,408 @@ namespace Oak
             Model = Repository.SingleWhere(whereClause, model.GetMember(PropertyContainingIdValue));
 
             return Model;
+        }
+    }
+
+    public class Associations
+    {
+        List<dynamic> referencedAssociations = new List<dynamic>();
+
+        public Associations(dynamic mixWith)
+        {
+            if (!SupportsAssociations(mixWith)) return;
+
+            IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
+
+            foreach (dynamic association in associations)
+            {
+                referencedAssociations.Add(association);
+
+                association.Init(mixWith);
+            }
+
+            mixWith.SetMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
+        }
+
+        public bool SupportsAssociations(dynamic mixWith)
+        {
+            return mixWith.GetType().GetMethod("Associates") != null || mixWith.RespondsTo("Associates");
+        }
+
+        public dynamic AssociationNamed(dynamic collectionName)
+        {
+            var association = referencedAssociations.FirstOrDefault(s => s.MethodName == collectionName || s.MethodName == Singularize(collectionName));
+
+            if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
+
+            return association;
+        }
+
+        public static string Singularize(string collectionName)
+        {
+            if (!collectionName.EndsWith("s")) return collectionName;
+
+            return collectionName.Substring(0, collectionName.Length - 1);
+        }
+    }
+
+    public class AssociationByConventions
+    {
+        public static Dictionary<string, bool> TableCache = new Dictionary<string, bool>();
+        public static Dictionary<string, List<string>> ColumnCache = new Dictionary<string, List<string>>();
+        public static DynamicRepository SchemaRepository = new DynamicRepository();
+
+        public AssociationByConventions(dynamic o)
+        {
+            o.MethodMissing = new DynamicFunctionWithParam(AddConvention);
+        }
+
+        public static void ApplyProjection(dynamic repository)
+        {
+            repository.Projection = new Func<dynamic, dynamic>(d =>
+            {
+                d.Extend<AssociationByConventions>();
+                d.__Table__ = new DynamicFunction(() => repository.TableName);
+                return d;
+            });
+        }
+
+        public static DynamicRepository RepositoryFor(string tableName)
+        {
+            var repo = new DynamicRepository(tableName);
+
+            AssociationByConventions.ApplyProjection(repo);
+
+            return repo;
+        }
+
+        void AddConventionForMany(dynamic callInfo)
+        {
+            var repoOnTheFly = RepositoryFor(callInfo.Name);
+
+            var hasMany = new HasMany(repoOnTheFly);
+
+            if (callInfo.Instance.RespondsTo("__Table__")) hasMany.ForeignKey = ParentKey(callInfo);
+
+            hasMany.Init(callInfo.Instance);
+        }
+
+        void AddConventionForSingle(dynamic callInfo)
+        {
+            var repoOnTheFly = RepositoryFor(callInfo.Name + "s");
+
+            if (IsHasOne(callInfo)) AddConventionForHasOne(repoOnTheFly, callInfo);
+
+            else AddConventionForBelongsTo(repoOnTheFly, callInfo);
+        }
+
+        void AddConventionForHasOne(DynamicRepository repository, dynamic callInfo)
+        {
+            var hasOne = new HasOne(repository, callInfo.Name);
+
+            hasOne.ForeignKey = "Id";
+
+            hasOne.Init(callInfo.Instance);
+        }
+
+        void AddConventionForBelongsTo(DynamicRepository repository, dynamic callInfo)
+        {
+            var belongsTo = new BelongsTo(repository, callInfo.Name);
+
+            belongsTo.PropertyContainingIdValue = ChildKey(callInfo);
+
+            belongsTo.Init(callInfo.Instance);
+        }
+
+        dynamic AddConvention(dynamic callInfo)
+        {
+            string associationName = callInfo.Name;
+
+            if (IsHasMany(callInfo)) AddConventionForMany(callInfo);
+
+            else if (IsManyToMany(callInfo)) AddConventionForManyToMany(callInfo);
+
+            else AddConventionForSingle(callInfo);
+
+            return callInfo.Instance.GetMember(associationName)(null);
+        }
+
+        void AddConventionForManyToMany(dynamic callInfo)
+        {
+            var repo = RepositoryFor(callInfo.Name);
+
+            var referenceRepo = RepositoryFor(callInfo.Instance.__Table__());
+
+            var manyToMany = new HasManyAndBelongsTo(repo, referenceRepo);
+
+            manyToMany.XRefFromColumn = ParentKey(callInfo);
+
+            manyToMany.XRefToColumn = ChildKey(callInfo);
+
+            manyToMany.Init(callInfo.Instance);
+        }
+
+        string ParentKey(dynamic callInfo)
+        {
+            return Associations.Singularize(callInfo.Instance.__Table__()) + "Id";
+        }
+
+        string ChildKey(dynamic callInfo)
+        {
+            return Associations.Singularize(callInfo.Name) + "Id";
+        }
+
+        bool IsHasMany(dynamic callInfo)
+        {
+            var foreignKey = ParentKey(callInfo);
+
+            return ColumnsFor(callInfo.Name).Contains(foreignKey);
+        }
+
+        bool IsManyToMany(dynamic callInfo)
+        {
+            var names = new string[] 
+            {
+                callInfo.Instance.__Table__(), 
+                callInfo.Name
+            }.OrderBy(s => s);
+
+            return TableExists(string.Join("", names));
+        }
+
+        bool IsHasOne(dynamic callInfo)
+        {
+            return !callInfo.Instance.RespondsTo(callInfo.Name + "Id");
+        }
+
+        List<string> ColumnsFor(string table)
+        {
+            if (!ColumnCache.ContainsKey(table))
+            {
+                var columns = SchemaRepository
+                    .Query("select name from syscolumns where id = object_id(@0)", table)
+                    .Select(s => (string)s.Name)
+                    .ToList();
+
+                ColumnCache.Add(table, columns);
+            }
+
+            return ColumnCache[table];
+        }
+
+        bool TableExists(string table)
+        {
+            if (!TableCache.ContainsKey(table))
+            {
+                var exists = SchemaRepository
+                    .Query("select name from sysobjects where name = @0", table)
+                    .Any();
+
+                TableCache.Add(table, exists);
+            }
+
+            return TableCache[table];
+        }
+    }
+
+    public class Association : Gemini
+    {
+        public string MethodName { get; set; }
+
+        public DynamicRepository Repository { get; set; }
+
+        public dynamic Model { get; set; }
+
+        public string TableName
+        {
+            get { return Repository.TableName; }
+        }
+
+        public string Singular(object o)
+        {
+            var name = o.GetType().Name;
+
+            if (o is string) name = o as string;
+
+            if (!name.EndsWith("s")) return name;
+
+            return name.Substring(0, name.Length - 1);
+        }
+
+        public string SigularId(object o)
+        {
+            return Singular(o) + Id();
+        }
+
+        public string Id()
+        {
+            return Repository.PrimaryKeyField;
+        }
+
+        public bool DiscardCache(dynamic options)
+        {
+            if (options == null) options = new { discardCache = false };
+
+            options = (options as object).ToPrototype();
+
+            return options.discardCache;
+        }
+
+        public string InnerJoinSelectClause(string xRefFromColumn,
+            string toTable,
+            string xRefTable,
+            string xRefToColumn,
+            string toTableColumn,
+            string idProperty,
+            params dynamic[] models)
+        {
+            return @"
+            select {toTable}.*, {xRefTable}.{xRefFromColumn}
+            from {xRefTable}
+            inner join {toTable}
+            on {xRefTable}.{xRefToColumn} = {toTable}.{toTableColumn}
+            where {xRefTable}.{xRefFromColumn} in ({inClause})"
+                .Replace("{xRefFromColumn}", xRefFromColumn)
+                .Replace("{toTableColumn}", toTableColumn)
+                .Replace("{toTable}", toTable)
+                .Replace("{xRefTable}", xRefTable)
+                .Replace("{xRefToColumn}", xRefToColumn)
+                .Replace("{inClause}", InClause(models, idProperty));
+        }
+
+        public void AddReferenceBackToModel(dynamic association, dynamic model)
+        {
+            association.SetMember(model.GetType().Name, Model);
+        }
+
+        public string InClause(IEnumerable<dynamic> models, string member)
+        {
+            return string.Join(",", models.Select(s => string.Format("'{0}'", s.GetMember(member))).Distinct());
+        }
+
+        public virtual void AddRepository(DynamicModels collection, DynamicRepository repository)
+        {
+            collection.SetMember("Repository", repository);
+        }
+
+        public virtual void AddNewAssociationMethod(DynamicModels collection, dynamic model)
+        {
+            collection.SetMember("New", NewItemDelegate());
+        }
+
+        public DynamicFunctionWithParam NewItemDelegate()
+        {
+            var newItemDelegate = new DynamicFunctionWithParam(attributes =>
+            {
+                return EntityFor(attributes);
+            });
+
+            return newItemDelegate;
+        }
+
+        public dynamic EntityFor(dynamic attributes)
+        {
+            var entity = new Gemini(attributes);
+
+            return Repository.Projection(entity);
+        }
+    }
+
+    public class SingleAssociation : Association { }
+
+    public class EagerLoadSingleForAll
+    {
+        static void ConvertToList(string property, dynamic inObject)
+        {
+            if (inObject.GetMember(property) is List<dynamic>) return;
+
+            var newPropValue = new List<dynamic>();
+            newPropValue.Add(inObject.GetMember(property));
+            inObject.SetMember(property, newPropValue);
+        }
+
+        public static DynamicModels Execute(IEnumerable<dynamic> models,
+            DynamicRepository repository,
+            string associationName,
+            string sql,
+            Func<dynamic, dynamic, bool> findClause)
+        {
+            var belongsResult = new List<dynamic>(repository.Query(sql));
+
+            foreach (var item in belongsResult)
+            {
+                var relatedModels = models.Where(s => findClause(item, s));
+
+                foreach (var relateModel in relatedModels)
+                {
+                    var association = relateModel.AssociationNamed(associationName);
+
+                    association.Model = item;
+
+                    var propName = relateModel.GetType().Name;
+
+                    if (item.RespondsTo(propName))
+                    {
+                        ConvertToList(propName, item);
+
+                        item.GetMember(propName).Add(relateModel);
+                    }
+                    else
+                    {
+                        item.SetMember(propName, relateModel);
+                    }
+                }
+            }
+
+            return new DynamicModels(belongsResult);
+        }
+    }
+
+    public class EagerLoadMany
+    {
+        public DynamicModels Cache { get; set; }
+
+        public bool ShouldDiscardCache(dynamic options)
+        {
+            if (options == null) options = new { discardCache = false };
+
+            options = (options as object).ToPrototype();
+
+            return options.discardCache;
+        }
+
+        public DynamicModels Execute(dynamic options,
+            DynamicRepository repository,
+            string associationName,
+            string selectClause,
+            IEnumerable<dynamic> models,
+            string parentMemberName)
+        {
+            if (ShouldDiscardCache(options)) Cache = null;
+
+            if (Cache != null) return Cache;
+
+            var many = repository.Query(selectClause).ToList();
+
+            foreach (var item in many)
+            {
+                var model = models.First(s => s.Id == item.GetMember(parentMemberName));
+
+                item.SetMember(model.GetType().Name, model);
+            }
+
+            foreach (var model in models)
+            {
+                var assocation = model.AssociationNamed(associationName);
+
+                var relatedTo = many.Where(s => s.GetMember(model.GetType().Name).Equals(model)).Select(s => s);
+
+                assocation.EagerLoadMany.Cache = new DynamicModels(relatedTo);
+
+                assocation.AddNewAssociationMethod(assocation.EagerLoadMany.Cache, model);
+            }
+
+            return new DynamicModels(many);
         }
     }
 }

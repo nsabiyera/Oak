@@ -80,7 +80,6 @@ namespace Oak.Tests.describe_DynamicToJson
             };
         }
 
-        [Tag("wip")]
         void describe_entities_with_error_collection()
         {
             before = () =>
