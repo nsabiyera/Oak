@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_DynamicDb
 {
-    [Tag("wip")]
     class helpful_errors : nspec
     {
         dynamic db;
@@ -31,16 +30,16 @@ namespace Oak.Tests.describe_DynamicDb
                 db.Foobars();
                 Exception();
             }
-            catch (InvalidOperationException ex)
+            catch (AssociationByConventionsException ex)
             {
-                ex.Message.should_contain("Table [Foobars] does not exist.");
+                ex.Message.should_contain("Table [Foobars] doesn't exist.");
             }
         }
 
         object blogId;
         void has_many_help()
         {
-            context["has many table doesn't exist"] = () =>
+            context["table doesn't exist"] = () =>
             {
                 before = () =>
                 {
@@ -59,7 +58,7 @@ namespace Oak.Tests.describe_DynamicDb
                         db.Blogs().Single(blogId).Comments();
                         Exception();
                     }
-                    catch (AssociationConventionException ex)
+                    catch (AssociationByConventionsException ex)
                     {
                         ex.Message.should_contain("No HasMany or HasManyAndBelongsTo relationships found:");
                         ex.Message.should_contain("Table [Comments] with column [BlogId] doesn't exist (HasMany).");
@@ -68,7 +67,7 @@ namespace Oak.Tests.describe_DynamicDb
                 };
             };
 
-            context["has many table exists, but columns aren't right"] = () =>
+            context["table exists, but columns aren't right"] = () =>
             {
                 before = () =>
                 {
@@ -93,7 +92,7 @@ namespace Oak.Tests.describe_DynamicDb
                         db.Blogs().Single(blogId).Comments();
                         Exception();
                     }
-                    catch (AssociationConventionException ex)
+                    catch (AssociationByConventionsException ex)
                     {
                         ex.Message.should_contain("Table [Comments] with column [BlogId] doesn't exist (HasMany).");
                     }
@@ -104,7 +103,7 @@ namespace Oak.Tests.describe_DynamicDb
         object math, jane;
         void has_many_and_belongs_to_help()
         {
-            context["has many belongs to table doesn't exist"] = () =>
+            context["table doesn't exist"] = () =>
             {
                 before = () =>
                 {
@@ -130,7 +129,7 @@ namespace Oak.Tests.describe_DynamicDb
                         db.Courses().Single(math).Students();
                         Exception();
                     }
-                    catch (AssociationConventionException ex)
+                    catch (AssociationByConventionsException ex)
                     {
                         ex.Message.should_contain("No HasMany or HasManyAndBelongsTo relationships found:");
                         ex.Message.should_contain("Table [Students] with column [CourseId] doesn't exist (HasMany).");
@@ -139,7 +138,7 @@ namespace Oak.Tests.describe_DynamicDb
                 };
             };
 
-            context["has many belongs to columns aren't right"] = () =>
+            context["table exists, but columns aren't right"] = () =>
             {
                 before = () =>
                 {
@@ -171,7 +170,7 @@ namespace Oak.Tests.describe_DynamicDb
                         db.Courses().Single(math).Students();
                         Exception();
                     }
-                    catch (AssociationConventionException ex)
+                    catch (AssociationByConventionsException ex)
                     {
                         ex.Message.should_contain("No HasMany or HasManyAndBelongsTo relationships found:");
                         ex.Message.should_contain("Table [Students] with column [CourseId] doesn't exist (HasMany).");
@@ -184,7 +183,7 @@ namespace Oak.Tests.describe_DynamicDb
         object commentId;
         void belongs_to_help()
         {
-            context["belongs to table doesn't exist"] = () =>
+            context["table doesn't exist"] = () =>
             {
                 before = () =>
                 {
@@ -204,11 +203,112 @@ namespace Oak.Tests.describe_DynamicDb
                         db.Comments().Single(commentId).Blog();
                         Exception();
                     }
-                    catch (AssociationConventionException ex)
+                    catch (AssociationByConventionsException ex)
                     {
                         ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
                         ex.Message.should_contain("Table [Blogs] with column [CommentId] doesn't exist (HasOne).");
                         ex.Message.should_contain("Table [Comments] with column [BlogId] doesn't exist (BelongsTo).");
+                    }
+                };
+            };
+
+            context["table exists, but columns aren't right"] = () =>
+            {
+                before = () =>
+                {
+                    seed.CreateTable("Blogs",
+                        seed.Id(),
+                        new { Title = "nvarchar(255)" },
+                        new { AuthorId = "int" }
+                    ).ExecuteNonQuery();
+
+                    seed.CreateTable("Comments",
+                        seed.Id(),
+                        new { fk_BlogId = "int" },
+                        new { Text = "nvarchar(max)" }
+                   ).ExecuteNonQuery();
+
+                    commentId = new { fk_BlogId = 10, Text = "a comment" }.InsertInto("Comments");
+                };
+
+                it["gives a helpful error message"] = () =>
+                {
+                    try
+                    {
+                        db.Comments().Single(commentId).Blog();
+                        Exception();
+                    }
+                    catch (AssociationByConventionsException ex)
+                    {
+                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("Table [Blogs] with column [CommentId] doesn't exist (HasOne).");
+                        ex.Message.should_contain("Table [Comments] with column [BlogId] doesn't exist (BelongsTo).");
+                    }
+                };
+            };
+        }
+
+        object authorId;
+        void has_one_help()
+        {
+            context["table doesn't exist"] = () =>
+            {
+                before = () =>
+                {
+                    seed.CreateTable("Authors",
+                        seed.Id(),
+                        new { Name = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    authorId = new { Name = "Amir" }.InsertInto("Authors");
+                };
+
+                it["gives helpful message"] = () =>
+                {
+                    try
+                    {
+                        db.Authors().Single(commentId).Email();
+                        Exception();
+                    }
+                    catch (AssociationByConventionsException ex)
+                    {
+                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("Table [Emails] with column [AuthorId] doesn't exist (HasOne).");
+                        ex.Message.should_contain("Table [Authors] with column [EmailId] doesn't exist (BelongsTo).");
+                    }
+                };
+            };
+
+            context["table exists, but columns aren't right"] = () =>
+            {
+                before = () =>
+                {
+                    seed.CreateTable("Authors",
+                        seed.Id(),
+                        new { Name = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    seed.CreateTable("Emails",
+                        seed.Id(),
+                        new { fk_AuthorId = "int" },
+                        new { Address = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    authorId = new { Name = "Amir" }.InsertInto("Authors");
+                };
+
+                it["gives helpful message"] = () =>
+                {
+                    try
+                    {
+                        db.Authors().Single(commentId).Email();
+                        Exception();
+                    }
+                    catch (AssociationByConventionsException ex)
+                    {
+                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("Table [Emails] with column [AuthorId] doesn't exist (HasOne).");
+                        ex.Message.should_contain("Table [Authors] with column [EmailId] doesn't exist (BelongsTo).");
                     }
                 };
             };

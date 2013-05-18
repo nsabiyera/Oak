@@ -428,7 +428,7 @@ namespace Oak
             PropertyContainingIdValue = PropertyContainingIdValue ?? Id();
 
             model.SetMember(
-                Singular(Repository),
+                MethodName,
                 new DynamicFunctionWithParam((options) => GetModelOrCache(model, options)));
         }
 
@@ -546,279 +546,6 @@ namespace Oak
         }
     }
 
-    public class Associations
-    {
-        List<dynamic> referencedAssociations = new List<dynamic>();
-
-        public Associations(dynamic mixWith)
-        {
-            if (!SupportsAssociations(mixWith)) return;
-
-            IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
-
-            foreach (dynamic association in associations)
-            {
-                referencedAssociations.Add(association);
-
-                association.Init(mixWith);
-            }
-
-            mixWith.SetMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
-        }
-
-        public bool SupportsAssociations(dynamic mixWith)
-        {
-            return mixWith.GetType().GetMethod("Associates") != null || mixWith.RespondsTo("Associates");
-        }
-
-        public dynamic AssociationNamed(dynamic collectionName)
-        {
-            var association = referencedAssociations.FirstOrDefault(s => s.MethodName == collectionName || s.MethodName == Singularize(collectionName));
-
-            if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
-
-            return association;
-        }
-
-        public static string Singularize(string collectionName)
-        {
-            if (!collectionName.EndsWith("s")) return collectionName;
-
-            return collectionName.Substring(0, collectionName.Length - 1);
-        }
-    }
-
-    public class AssociationConventionException : Exception
-    {
-        public AssociationConventionException(string message)
-            : base(message)
-        {
-            
-        }
-    }
-
-    public class AssociationByConventions
-    {
-        public static Dictionary<string, bool> TableCache = new Dictionary<string, bool>();
-        public static Dictionary<string, List<string>> ColumnCache = new Dictionary<string, List<string>>();
-        public static DynamicRepository SchemaRepository = new DynamicRepository();
-
-        public AssociationByConventions(dynamic o)
-        {
-            o.MethodMissing = new DynamicFunctionWithParam(AddConvention);
-        }
-
-        public static void ApplyProjection(dynamic repository)
-        {
-            repository.Projection = new Func<dynamic, dynamic>(d =>
-            {
-                d.Extend<AssociationByConventions>();
-                d.__Table__ = new DynamicFunction(() => repository.TableName);
-                return d;
-            });
-        }
-
-        public static DynamicRepository RepositoryFor(string tableName)
-        {
-            var repo = new DynamicRepository(tableName);
-
-            AssociationByConventions.ApplyProjection(repo);
-
-            return repo;
-        }
-
-        void AddConventionForMany(dynamic callInfo)
-        {
-            var repoOnTheFly = RepositoryFor(callInfo.Name);
-
-            var hasMany = new HasMany(repoOnTheFly);
-
-            if (callInfo.Instance.RespondsTo("__Table__")) hasMany.ForeignKey = ParentKey(callInfo);
-
-            hasMany.Init(callInfo.Instance);
-        }
-
-        void AddConventionForSingle(dynamic callInfo)
-        {
-            var repoOnTheFly = RepositoryFor(callInfo.Name + "s");
-
-            if (IsHasOne(callInfo)) AddConventionForHasOne(repoOnTheFly, callInfo);
-
-            else AddConventionForBelongsTo(repoOnTheFly, callInfo);
-        }
-
-        void AddConventionForHasOne(DynamicRepository repository, dynamic callInfo)
-        {
-            var hasOne = new HasOne(repository, callInfo.Name);
-
-            hasOne.ForeignKey = "Id";
-
-            hasOne.Init(callInfo.Instance);
-        }
-
-        void AddConventionForBelongsTo(DynamicRepository repository, dynamic callInfo)
-        {
-            var belongsTo = new BelongsTo(repository, callInfo.Name);
-
-            belongsTo.PropertyContainingIdValue = ChildKey(callInfo);
-
-            belongsTo.Init(callInfo.Instance);
-        }
-
-        dynamic AddConvention(dynamic callInfo)
-        {
-            string associationName = callInfo.Name;
-
-            VerifyAssociationMatchesConvention(callInfo);
-
-            if (IsHasMany(callInfo)) AddConventionForMany(callInfo);
-
-            else if (IsManyToMany(callInfo)) AddConventionForManyToMany(callInfo);
-
-            else AddConventionForSingle(callInfo);
-
-            return callInfo.Instance.GetMember(associationName)(null);
-        }
-
-        void VerifyAssociationMatchesForHasMany(dynamic callInfo)
-        {
-            var message =
-@"No HasMany or HasManyAndBelongsTo relationships found:
-Table [{0}] with column [{1}] doesn't exist (HasMany).
-Table [{2}] with schema [Id, {3}, {4}] doesn't exist (HasManyAndBelongsTo).";
-
-            var mergedMessage = string.Format(
-                message,
-                callInfo.Name,
-                ParentKey(callInfo),
-                ManyToManyTableName(callInfo),
-                ParentKey(callInfo),
-                ChildKey(callInfo)
-            );
-
-            bool tableExists = TableExists(callInfo.Name);
-
-            bool oneManyColumnExists = ColumnsFor(callInfo.Name).Contains(ParentKey(callInfo));
-
-            bool manyToManyColumn1Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ParentKey(callInfo));
-
-            bool manyToManyColumn2Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ChildKey(callInfo));
-
-            if (!tableExists) throw new AssociationConventionException(mergedMessage);
-
-            if (!oneManyColumnExists && (!manyToManyColumn1Exists || !manyToManyColumn2Exists)) throw new AssociationConventionException(mergedMessage);
-        }
-
-        private void VerifyAssocationMatchesForHasOne(dynamic callInfo)
-        {
-            var message =
-@"No BelongsTo or HasOne relationships found:
-Table [{0}] with column [{1}] doesn't exist (HasOne).
-Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
-
-            var mergedMessage = string.Format(
-                message,
-                callInfo.Name + "s",
-                ParentKey(callInfo),
-                callInfo.Instance.__Table__(),
-                ChildKey(callInfo)
-            );
-
-            bool tableExists = TableExists(callInfo.Name + "s");
-
-            if (!tableExists) throw new AssociationConventionException(mergedMessage);
-        }
-
-        void VerifyAssociationMatchesConvention(dynamic callInfo)
-        {
-            if (callInfo.Name.EndsWith("s")) VerifyAssociationMatchesForHasMany(callInfo);
-
-            else VerifyAssocationMatchesForHasOne(callInfo);
-        }
-
-        void AddConventionForManyToMany(dynamic callInfo)
-        {
-            var repo = RepositoryFor(callInfo.Name);
-
-            var referenceRepo = RepositoryFor(callInfo.Instance.__Table__());
-
-            var manyToMany = new HasManyAndBelongsTo(repo, referenceRepo);
-
-            manyToMany.XRefFromColumn = ParentKey(callInfo);
-
-            manyToMany.XRefToColumn = ChildKey(callInfo);
-
-            manyToMany.Init(callInfo.Instance);
-        }
-
-        string ParentKey(dynamic callInfo)
-        {
-            return Associations.Singularize(callInfo.Instance.__Table__()) + "Id";
-        }
-
-        string ChildKey(dynamic callInfo)
-        {
-            return Associations.Singularize(callInfo.Name) + "Id";
-        }
-
-        bool IsHasMany(dynamic callInfo)
-        {
-            var foreignKey = ParentKey(callInfo);
-
-            return ColumnsFor(callInfo.Name).Contains(foreignKey);
-        }
-
-        bool IsManyToMany(dynamic callInfo)
-        {
-            return TableExists(ManyToManyTableName(callInfo));
-        }
-
-        string ManyToManyTableName(dynamic callInfo)
-        {
-            var names = new string[] 
-            {
-                callInfo.Instance.__Table__(), 
-                callInfo.Name
-            }.OrderBy(s => s);
-
-            return string.Join("", names);
-        }
-
-        bool IsHasOne(dynamic callInfo)
-        {
-            return !callInfo.Instance.RespondsTo(callInfo.Name + "Id");
-        }
-
-        List<string> ColumnsFor(string table)
-        {
-            if (!ColumnCache.ContainsKey(table))
-            {
-                var columns = SchemaRepository
-                    .Query("select name from syscolumns where id = object_id(@0)", table)
-                    .Select(s => (string)s.Name)
-                    .ToList();
-
-                ColumnCache.Add(table, columns);
-            }
-
-            return ColumnCache[table];
-        }
-
-        public static bool TableExists(string table)
-        {
-            if (!TableCache.ContainsKey(table))
-            {
-                var exists = SchemaRepository
-                    .Query("select name from sysobjects where name = @0", table)
-                    .Any();
-
-                TableCache.Add(table, exists);
-            }
-
-            return TableCache[table];
-        }
-    }
-
     public class Association : Gemini
     {
         public string MethodName { get; set; }
@@ -923,6 +650,315 @@ Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
     }
 
     public class SingleAssociation : Association { }
+
+    public class Associations
+    {
+        List<dynamic> referencedAssociations = new List<dynamic>();
+
+        public Associations(dynamic mixWith)
+        {
+            if (!SupportsAssociations(mixWith)) return;
+
+            IEnumerable<dynamic> associations = (mixWith as dynamic).Associates();
+
+            foreach (dynamic association in associations)
+            {
+                referencedAssociations.Add(association);
+
+                association.Init(mixWith);
+            }
+
+            mixWith.SetMember("AssociationNamed", new DynamicFunctionWithParam(AssociationNamed));
+        }
+
+        public bool SupportsAssociations(dynamic mixWith)
+        {
+            return mixWith.GetType().GetMethod("Associates") != null || mixWith.RespondsTo("Associates");
+        }
+
+        public dynamic AssociationNamed(dynamic collectionName)
+        {
+            var association = referencedAssociations.FirstOrDefault(s => s.MethodName == collectionName || s.MethodName == Singularize(collectionName));
+
+            if (association == null) throw new InvalidOperationException("No association named " + collectionName + " exists.");
+
+            return association;
+        }
+
+        public static string Singularize(string collectionName)
+        {
+            if (!collectionName.EndsWith("s")) return collectionName;
+
+            return collectionName.Substring(0, collectionName.Length - 1);
+        }
+    }
+
+    public class AssociationByConventions
+    {
+        public static Dictionary<string, bool> TableCache = new Dictionary<string, bool>();
+        public static Dictionary<string, List<string>> ColumnCache = new Dictionary<string, List<string>>();
+        public static DynamicRepository SchemaRepository = new DynamicRepository();
+
+        public AssociationByConventions(dynamic o)
+        {
+            o.MethodMissing = new DynamicFunctionWithParam(AddConvention);
+        }
+
+        public static void ApplyProjection(dynamic repository)
+        {
+            repository.Projection = new Func<dynamic, dynamic>(d =>
+            {
+                d.Extend<AssociationByConventions>();
+                d.__Table__ = new DynamicFunction(() => repository.TableName);
+                return d;
+            });
+        }
+
+        public static DynamicRepository RepositoryFor(string tableName)
+        {
+            var repo = new DynamicRepository(tableName);
+
+            AssociationByConventions.ApplyProjection(repo);
+
+            return repo;
+        }
+
+        void AddConventionForMany(dynamic callInfo)
+        {
+            var repoOnTheFly = RepositoryFor(callInfo.Name);
+
+            var hasMany = new HasMany(repoOnTheFly);
+
+            if (callInfo.Instance.RespondsTo("__Table__")) hasMany.ForeignKey = ParentKey(callInfo);
+
+            hasMany.Init(callInfo.Instance);
+        }
+
+        void AddConventionForHasOne(DynamicRepository repository, dynamic callInfo)
+        {
+            var hasOne = new HasOne(repository, callInfo.Name);
+
+            hasOne.ForeignKey = "Id";
+
+            hasOne.Init(callInfo.Instance);
+        }
+
+        void AddConventionForBelongsTo(DynamicRepository repository, dynamic callInfo)
+        {
+            var belongsTo = new BelongsTo(repository, callInfo.Name);
+
+            belongsTo.PropertyContainingIdValue = ChildKey(callInfo);
+
+            belongsTo.Init(callInfo.Instance);
+        }
+
+        void AddConventionForHasOneThrough(dynamic callInfo)
+        {
+            var repo = RepositoryFor(Pluralize(callInfo.Name));
+
+            var throughRepo = RepositoryFor(ManyToManyTableName(callInfo));
+
+            var hasOneThrough = new HasOneThrough(repo, throughRepo, callInfo.Name);
+
+            hasOneThrough.XRefFromColumn = ParentKey(callInfo);
+
+            hasOneThrough.XRefToColumn = ChildKey(callInfo);
+
+            hasOneThrough.Init(callInfo.Instance);
+        }
+
+        dynamic AddConvention(dynamic callInfo)
+        {
+            string associationName = callInfo.Name;
+
+            VerifyAssociationMatchesConvention(callInfo);
+
+            if (associationName.EndsWith("s"))
+            {
+                if (IsHasMany(callInfo)) AddConventionForMany(callInfo);
+
+                else if (IsManyToMany(callInfo)) AddConventionForManyToMany(callInfo);
+            }
+            else
+            {
+                var repoOnTheFly = RepositoryFor(callInfo.Name + "s");
+                
+                if (IsManyToMany(callInfo)) AddConventionForHasOneThrough(callInfo);
+
+                else if (IsHasOne(callInfo)) AddConventionForHasOne(repoOnTheFly, callInfo);
+
+                else AddConventionForBelongsTo(repoOnTheFly, callInfo);
+            }
+
+            return callInfo.Instance.GetMember(associationName)(null);
+        }
+
+        void VerifyAssociationMatchesForHasMany(dynamic callInfo)
+        {
+            var message =
+@"No HasMany or HasManyAndBelongsTo relationships found:
+Table [{0}] with column [{1}] doesn't exist (HasMany).
+Table [{2}] with schema [Id, {3}, {4}] doesn't exist (HasManyAndBelongsTo).";
+
+            var mergedMessage = string.Format(
+                message,
+                callInfo.Name,
+                ParentKey(callInfo),
+                ManyToManyTableName(callInfo),
+                ParentKey(callInfo),
+                ChildKey(callInfo)
+            );
+
+            bool tableExists = TableExists(callInfo.Name);
+
+            bool oneManyColumnExists = ColumnsFor(callInfo.Name).Contains(ParentKey(callInfo));
+
+            bool manyToManyColumn1Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ParentKey(callInfo));
+
+            bool manyToManyColumn2Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ChildKey(callInfo));
+
+            if (!tableExists) throw new AssociationByConventionsException(mergedMessage);
+
+            if (!oneManyColumnExists && (!manyToManyColumn1Exists || !manyToManyColumn2Exists)) throw new AssociationByConventionsException(mergedMessage);
+        }
+
+        void VerifyAssocationMatchesForHasOne(dynamic callInfo)
+        {
+            var message =
+@"No BelongsTo or HasOne relationships found:
+Table [{0}] with column [{1}] doesn't exist (HasOne).
+Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
+
+            var mergedMessage = string.Format(
+                message,
+                callInfo.Name + "s",
+                ParentKey(callInfo),
+                callInfo.Instance.__Table__(),
+                ChildKey(callInfo)
+            );
+
+            var pluralizedTable = callInfo.Name + "s";
+
+            bool tableExists = TableExists(pluralizedTable);
+
+            bool foreignKeyOnMainTableExists = ColumnsFor(callInfo.Instance.__Table__()).Contains(ChildKey(callInfo));
+
+            bool foreignKeyOnChildTableExists = ColumnsFor(pluralizedTable).Contains(ParentKey(callInfo));
+
+            bool manyToManyColumn1Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ParentKey(callInfo));
+
+            bool manyToManyColumn2Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ChildKey(callInfo));
+
+            bool manyToManyColumnsExists = manyToManyColumn1Exists && manyToManyColumn2Exists;
+
+            if (!tableExists) throw new AssociationByConventionsException(mergedMessage);
+
+            if (!foreignKeyOnMainTableExists && 
+                !foreignKeyOnChildTableExists &&
+                !manyToManyColumnsExists) throw new AssociationByConventionsException(mergedMessage);
+        }
+
+        void VerifyAssociationMatchesConvention(dynamic callInfo)
+        {
+            if (callInfo.Name.EndsWith("s")) VerifyAssociationMatchesForHasMany(callInfo);
+
+            else VerifyAssocationMatchesForHasOne(callInfo);
+        }
+
+        void AddConventionForManyToMany(dynamic callInfo)
+        {
+            var repo = RepositoryFor(callInfo.Name);
+
+            var referenceRepo = RepositoryFor(callInfo.Instance.__Table__());
+
+            var manyToMany = new HasManyAndBelongsTo(repo, referenceRepo);
+
+            manyToMany.XRefFromColumn = ParentKey(callInfo);
+
+            manyToMany.XRefToColumn = ChildKey(callInfo);
+
+            manyToMany.Init(callInfo.Instance);
+        }
+
+        string ParentKey(dynamic callInfo)
+        {
+            return Associations.Singularize(callInfo.Instance.__Table__()) + "Id";
+        }
+
+        string ChildKey(dynamic callInfo)
+        {
+            return Associations.Singularize(callInfo.Name) + "Id";
+        }
+
+        bool IsHasMany(dynamic callInfo)
+        {
+            var foreignKey = ParentKey(callInfo);
+
+            return ColumnsFor(callInfo.Name).Contains(foreignKey);
+        }
+
+        bool IsManyToMany(dynamic callInfo)
+        {
+            return TableExists(ManyToManyTableName(callInfo));
+        }
+
+        string Pluralize(string word)
+        {
+            if (word.EndsWith("s")) return word;
+
+            return word + "s";
+        }
+
+        string ManyToManyTableName(dynamic callInfo)
+        {
+            var names = new string[] 
+                {
+                    Pluralize(callInfo.Instance.__Table__()), 
+                    Pluralize(callInfo.Name)
+                }.OrderBy(s => s);
+
+            return string.Join("", names);
+        }
+
+        bool IsHasOne(dynamic callInfo)
+        {
+            return !callInfo.Instance.RespondsTo(callInfo.Name + "Id");
+        }
+
+        List<string> ColumnsFor(string table)
+        {
+            if (!ColumnCache.ContainsKey(table))
+            {
+                var columns = SchemaRepository
+                    .Query("select name from syscolumns where id = object_id(@0)", table)
+                    .Select(s => (string)s.Name)
+                    .ToList();
+
+                ColumnCache.Add(table, columns);
+            }
+
+            return ColumnCache[table];
+        }
+
+        public static bool TableExists(string table)
+        {
+            if (!TableCache.ContainsKey(table))
+            {
+                var exists = SchemaRepository
+                    .Query("select name from sysobjects where name = @0", table)
+                    .Any();
+
+                TableCache.Add(table, exists);
+            }
+
+            return TableCache[table];
+        }
+    }
+
+    public class AssociationByConventionsException : Exception
+    {
+        public AssociationByConventionsException(string message) : base(message) { }
+    }
 
     public class EagerLoadSingleForAll
     {
