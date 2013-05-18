@@ -201,7 +201,6 @@ namespace Oak.Tests.describe_DynamicDb
                 {
                     try
                     {
-                        System.Diagnostics.Debugger.Launch();
                         db.Comments().Single(commentId).Blog();
                         Exception();
                     }
