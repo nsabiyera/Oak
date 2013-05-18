@@ -11,10 +11,7 @@ namespace Oak
         public void LogToConsole()
         {
             DynamicRepository.WriteDevLog = true;
-            DynamicRepository.LogSql = (o, sql, args) =>
-            {
-                Console.WriteLine(sql);
-            };
+            DynamicRepository.LogSql = DynamicRepository.LogSqlDelegate;
         }
 
         dynamic MethodMissing(dynamic callInfo)
@@ -23,7 +20,7 @@ namespace Oak
 
             if (!AssociationByConventions.TableExists(tableName))
             {
-                throw new InvalidOperationException("Table [" + tableName + "] does not exist.");
+                throw new AssociationByConventionsException("Table [" + tableName + "] doesn't exist.");
             }
 
             var repositoryProperty = tableName + "Repository";

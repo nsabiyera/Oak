@@ -7,10 +7,9 @@ using Massive;
 
 namespace Oak.Tests
 {
-    [Tag("wip")]
     class core_behavior : nspec
     {
-        object blogId, blog2Id, authorId, math, science, history, jane, john;
+        object blogId, blog2Id, authorId, author2Id, math, science, history, jane, john;
         dynamic db;
         Seed seed;
 
@@ -90,7 +89,9 @@ namespace Oak.Tests
 
             blog2Id = new { Title = "a blog" }.InsertInto("Blogs");
 
-            new { authorId, Address = "user@example.com" }.InsertInto("Emails");
+            authorId = new { authorId, Address = "user@example.com" }.InsertInto("Emails");
+
+            author2Id = new { Name = "Jane" }.InsertInto("Authors");
 
             new { blogId, Text = "Comment 1" }.InsertInto("Comments");
 
@@ -104,6 +105,10 @@ namespace Oak.Tests
             var comments = blog.Comments();
 
             Expect(comments.Count()).to_be(2);
+
+            Expect(comments.Select("Text"))
+                .to_contain("Comment 1")
+                .to_contain("Comment 2");
         }
 
         void specify_belongs_to()
@@ -122,11 +127,47 @@ namespace Oak.Tests
 
         void specify_has_one()
         {
-            var blog = db.Blogs().Single(blogId);
+            var author = db.Authors().Single(authorId);
 
-            Expect(blog.Author().Name).to_be("Amir");
+            Expect(author.Email().Address).to_be("user@example.com");
+        }
 
-            Expect(blog.Author().Email().Address).to_be("user@example.com");
+        void specify_has_one_missing()
+        {
+            var author = db.Authors().Single(author2Id);
+
+            Expect(author.Email()).to_be(null);
+        }
+
+        object peepId, peep2Id, locationId;
+        [Tag("wip")]
+        void specify_has_one_through()
+        {
+            seed.CreateTable("Peeps", 
+                seed.Id(), 
+                new { Name = "nvarchar(255)" }).ExecuteNonQuery();
+
+            seed.CreateTable("LocationsPeeps",
+                seed.Id(),
+                new { LocationId = "int" },
+                new { PeepId = "int" }).ExecuteNonQuery();
+
+            seed.CreateTable("Locations", 
+                seed.Id(),
+                new { Street = "nvarchar(255)" }).ExecuteNonQuery();
+
+            peepId = new { Name = "Jane" }.InsertInto("Peeps");
+            peep2Id = new { Name = "John" }.InsertInto("Peeps");
+            locationId = new { Street = "Main" }.InsertInto("Locations");
+
+            new { PeepId = peepId, LocationId = locationId }.InsertInto("LocationsPeeps");
+            new { PeepId = peep2Id, LocationId = locationId }.InsertInto("LocationsPeeps");
+
+            var peep = db.Peeps().Single(peepId);
+            Expect(peep.Location().Street).to_be("Main");
+
+            peep = db.Peeps().Single(peep2Id);
+            Expect(peep.Location().Street).to_be("Main");
         }
 
         void specify_many_to_many()
@@ -135,25 +176,25 @@ namespace Oak.Tests
 
             Expect(student.Courses().Count()).to_be(2);
 
-            Expect(student.Courses().Select("Name")).to_contain("Math");
-
-            Expect(student.Courses().Select("Name")).to_contain("Science");
+            Expect(student.Courses().Select("Name"))
+                .to_contain("Math")
+                .to_contain("Science");
 
             student = db.Students().Single(jane);
 
             Expect(student.Courses().Count()).to_be(2);
 
-            Expect(student.Courses().Select("Name")).to_contain("Math");
-
-            Expect(student.Courses().Select("Name")).to_contain("History");
+            Expect(student.Courses().Select("Name"))
+                .to_contain("Math")
+                .to_contain("History");
 
             var course = db.Courses().Single(math);
 
             Expect(course.Students().Count()).to_be(2);
 
-            Expect(course.Students().Select("Name")).to_contain("Jane");
-
-            Expect(course.Students().Select("Name")).to_contain("John");
+            Expect(course.Students().Select("Name"))
+                .to_contain("Jane")
+                .to_contain("John");
 
             course = db.Courses().Single(science);
 
