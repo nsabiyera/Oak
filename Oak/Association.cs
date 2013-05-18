@@ -767,13 +767,18 @@ namespace Oak
             hasOneThrough.Init(callInfo.Instance);
         }
 
+        bool IsPlural(string word)
+        {
+            return word.EndsWith("s");
+        }
+
         dynamic AddConvention(dynamic callInfo)
         {
             string associationName = callInfo.Name;
 
             VerifyAssociationMatchesConvention(callInfo);
 
-            if (associationName.EndsWith("s"))
+            if (IsPlural(associationName))
             {
                 if (IsHasMany(callInfo)) AddConventionForMany(callInfo);
 
@@ -781,7 +786,7 @@ namespace Oak
             }
             else
             {
-                var repoOnTheFly = RepositoryFor(callInfo.Name + "s");
+                var repoOnTheFly = RepositoryFor(Pluralize(callInfo.Name));
                 
                 if (IsManyToMany(callInfo)) AddConventionForHasOneThrough(callInfo);
 
@@ -793,7 +798,7 @@ namespace Oak
             return callInfo.Instance.GetMember(associationName)(null);
         }
 
-        void VerifyAssociationMatchesForHasMany(dynamic callInfo)
+        void VerifyAssociationMatchesForMany(dynamic callInfo)
         {
             var message =
 @"No HasMany or HasManyAndBelongsTo relationships found:
@@ -811,33 +816,40 @@ Table [{2}] with schema [Id, {3}, {4}] doesn't exist (HasManyAndBelongsTo).";
 
             bool tableExists = TableExists(callInfo.Name);
 
-            bool oneManyColumnExists = ColumnsFor(callInfo.Name).Contains(ParentKey(callInfo));
+            bool oneToManyColumnExists = ColumnsFor(callInfo.Name).Contains(ParentKey(callInfo));
 
+            if (!tableExists) throw new AssociationByConventionsException(mergedMessage);
+
+            if (!oneToManyColumnExists && !ManyToManyColumnsExist(callInfo)) throw new AssociationByConventionsException(mergedMessage);
+        }
+
+        bool ManyToManyColumnsExist(dynamic callInfo)
+        {
             bool manyToManyColumn1Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ParentKey(callInfo));
 
             bool manyToManyColumn2Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ChildKey(callInfo));
 
-            if (!tableExists) throw new AssociationByConventionsException(mergedMessage);
-
-            if (!oneManyColumnExists && (!manyToManyColumn1Exists || !manyToManyColumn2Exists)) throw new AssociationByConventionsException(mergedMessage);
+            return manyToManyColumn1Exists && manyToManyColumn2Exists;
         }
 
-        void VerifyAssocationMatchesForHasOne(dynamic callInfo)
+        void VerifyAssocationMatchesForOne(dynamic callInfo)
         {
             var message =
-@"No BelongsTo or HasOne relationships found:
+@"No BelongsTo, HasOneThrough or HasOne relationships found::
 Table [{0}] with column [{1}] doesn't exist (HasOne).
-Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
+Table [{2}] with column [{3}] doesn't exist (BelongsTo).
+Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
 
             var mergedMessage = string.Format(
                 message,
-                callInfo.Name + "s",
+                Pluralize(callInfo.Name),
                 ParentKey(callInfo),
                 callInfo.Instance.__Table__(),
-                ChildKey(callInfo)
+                ChildKey(callInfo),
+                ManyToManyTableName(callInfo)
             );
 
-            var pluralizedTable = callInfo.Name + "s";
+            var pluralizedTable = Pluralize(callInfo.Name);
 
             bool tableExists = TableExists(pluralizedTable);
 
@@ -845,24 +857,18 @@ Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
 
             bool foreignKeyOnChildTableExists = ColumnsFor(pluralizedTable).Contains(ParentKey(callInfo));
 
-            bool manyToManyColumn1Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ParentKey(callInfo));
-
-            bool manyToManyColumn2Exists = ColumnsFor(ManyToManyTableName(callInfo)).Contains(ChildKey(callInfo));
-
-            bool manyToManyColumnsExists = manyToManyColumn1Exists && manyToManyColumn2Exists;
-
             if (!tableExists) throw new AssociationByConventionsException(mergedMessage);
 
             if (!foreignKeyOnMainTableExists && 
                 !foreignKeyOnChildTableExists &&
-                !manyToManyColumnsExists) throw new AssociationByConventionsException(mergedMessage);
+                !ManyToManyColumnsExist(callInfo)) throw new AssociationByConventionsException(mergedMessage);
         }
 
         void VerifyAssociationMatchesConvention(dynamic callInfo)
         {
-            if (callInfo.Name.EndsWith("s")) VerifyAssociationMatchesForHasMany(callInfo);
+            if (IsPlural(callInfo.Name)) VerifyAssociationMatchesForMany(callInfo);
 
-            else VerifyAssocationMatchesForHasOne(callInfo);
+            else VerifyAssocationMatchesForOne(callInfo);
         }
 
         void AddConventionForManyToMany(dynamic callInfo)
@@ -904,7 +910,7 @@ Table [{2}] with column [{3}] doesn't exist (BelongsTo).";
 
         string Pluralize(string word)
         {
-            if (word.EndsWith("s")) return word;
+            if (IsPlural(word)) return word;
 
             return word + "s";
         }

@@ -6,6 +6,7 @@ using NSpec;
 
 namespace Oak.Tests.describe_DynamicDb
 {
+    [Tag("wip")]
     class helpful_errors : nspec
     {
         dynamic db;
@@ -205,9 +206,10 @@ namespace Oak.Tests.describe_DynamicDb
                     }
                     catch (AssociationByConventionsException ex)
                     {
-                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("No BelongsTo, HasOneThrough or HasOne relationships found:");
                         ex.Message.should_contain("Table [Blogs] with column [CommentId] doesn't exist (HasOne).");
                         ex.Message.should_contain("Table [Comments] with column [BlogId] doesn't exist (BelongsTo).");
+                        ex.Message.should_contain("Table [BlogsComments] with schema [Id, BlogId, CommentId] doesn't exist (HasOneThrough).");
                     }
                 };
             };
@@ -240,9 +242,10 @@ namespace Oak.Tests.describe_DynamicDb
                     }
                     catch (AssociationByConventionsException ex)
                     {
-                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("No BelongsTo, HasOneThrough or HasOne relationships found:");
                         ex.Message.should_contain("Table [Blogs] with column [CommentId] doesn't exist (HasOne).");
                         ex.Message.should_contain("Table [Comments] with column [BlogId] doesn't exist (BelongsTo).");
+                        ex.Message.should_contain("Table [BlogsComments] with schema [Id, BlogId, CommentId] doesn't exist (HasOneThrough).");
                     }
                 };
             };
@@ -267,14 +270,15 @@ namespace Oak.Tests.describe_DynamicDb
                 {
                     try
                     {
-                        db.Authors().Single(commentId).Email();
+                        db.Authors().Single(authorId).Email();
                         Exception();
                     }
                     catch (AssociationByConventionsException ex)
                     {
-                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("No BelongsTo, HasOneThrough or HasOne relationships found:");
                         ex.Message.should_contain("Table [Emails] with column [AuthorId] doesn't exist (HasOne).");
                         ex.Message.should_contain("Table [Authors] with column [EmailId] doesn't exist (BelongsTo).");
+                        ex.Message.should_contain("Table [AuthorsEmails] with schema [Id, EmailId, AuthorId] doesn't exist (HasOneThrough).");
                     }
                 };
             };
@@ -301,14 +305,97 @@ namespace Oak.Tests.describe_DynamicDb
                 {
                     try
                     {
-                        db.Authors().Single(commentId).Email();
+                        db.Authors().Single(authorId).Email();
                         Exception();
                     }
                     catch (AssociationByConventionsException ex)
                     {
-                        ex.Message.should_contain("No BelongsTo or HasOne relationships found:");
+                        ex.Message.should_contain("No BelongsTo, HasOneThrough or HasOne relationships found:");
                         ex.Message.should_contain("Table [Emails] with column [AuthorId] doesn't exist (HasOne).");
                         ex.Message.should_contain("Table [Authors] with column [EmailId] doesn't exist (BelongsTo).");
+                        ex.Message.should_contain("Table [AuthorsEmails] with schema [Id, EmailId, AuthorId] doesn't exist (HasOneThrough).");
+                    }
+                };
+            };
+        }
+
+        object peepId, peep2Id, locationId;
+        void has_one_through()
+        {
+            context["table doesn't exist"] = () =>
+            {
+                before = () =>
+                {
+                    seed.CreateTable("Peeps",
+                        seed.Id(),
+                        new { Name = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    seed.CreateTable("Locations",
+                        seed.Id(),
+                        new { Street = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    peepId = new { Name = "Jane" }.InsertInto("Peeps");
+                    peep2Id = new { Name = "John" }.InsertInto("Peeps");
+                    locationId = new { Street = "Main" }.InsertInto("Locations");
+                };
+
+                it["gives helpeful error message"] = () =>
+                {
+                    try
+                    {
+                        db.Peeps().Single(peepId).Location();
+                        Exception();
+                    }
+                    catch (AssociationByConventionsException ex)
+                    {
+                        ex.Message.should_contain("No BelongsTo, HasOneThrough or HasOne relationships found:");
+                        ex.Message.should_contain("Table [Locations] with column [PeepId] doesn't exist (HasOne).");
+                        ex.Message.should_contain("Table [Peeps] with column [LocationId] doesn't exist (BelongsTo).");
+                        ex.Message.should_contain("Table [LocationsPeeps] with schema [Id, LocationId, PeepId] doesn't exist (HasOneThrough).");
+                    }
+                };
+            };
+
+            context["table exists, but columns aren't right"] = () =>
+            {
+                before = () =>
+                {
+                    seed.CreateTable("Peeps",
+                        seed.Id(),
+                        new { Name = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    seed.CreateTable("LocationsPeeps",
+                        seed.Id(),
+                        new { LocationId = "int" },
+                        new { fk_PeepId = "int" }
+                    ).ExecuteNonQuery();
+
+                    seed.CreateTable("Locations",
+                        seed.Id(),
+                        new { Street = "nvarchar(255)" }
+                    ).ExecuteNonQuery();
+
+                    peepId = new { Name = "Jane" }.InsertInto("Peeps");
+                    peep2Id = new { Name = "John" }.InsertInto("Peeps");
+                    locationId = new { Street = "Main" }.InsertInto("Locations");
+                };
+
+                it["gives helpeful error message"] = () =>
+                {
+                    try
+                    {
+                        db.Peeps().Single(peepId).Location();
+                        Exception();
+                    }
+                    catch (AssociationByConventionsException ex)
+                    {
+                        ex.Message.should_contain("No BelongsTo, HasOneThrough or HasOne relationships found:");
+                        ex.Message.should_contain("Table [Locations] with column [PeepId] doesn't exist (HasOne).");
+                        ex.Message.should_contain("Table [Peeps] with column [LocationId] doesn't exist (BelongsTo).");
+                        ex.Message.should_contain("Table [LocationsPeeps] with schema [Id, LocationId, PeepId] doesn't exist (HasOneThrough).");
                     }
                 };
             };
