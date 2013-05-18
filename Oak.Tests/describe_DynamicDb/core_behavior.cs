@@ -7,6 +7,7 @@ using Massive;
 
 namespace Oak.Tests
 {
+    [Tag("wip")]
     class core_behavior : nspec
     {
         object blogId, blog2Id, authorId, author2Id, math, science, history, jane, john;
@@ -140,21 +141,23 @@ namespace Oak.Tests
         }
 
         object peepId, peep2Id, locationId;
-        [Tag("wip")]
         void specify_has_one_through()
         {
             seed.CreateTable("Peeps", 
                 seed.Id(), 
-                new { Name = "nvarchar(255)" }).ExecuteNonQuery();
+                new { Name = "nvarchar(255)" }
+            ).ExecuteNonQuery();
 
             seed.CreateTable("LocationsPeeps",
                 seed.Id(),
                 new { LocationId = "int" },
-                new { PeepId = "int" }).ExecuteNonQuery();
+                new { PeepId = "int" }
+            ).ExecuteNonQuery();
 
             seed.CreateTable("Locations", 
                 seed.Id(),
-                new { Street = "nvarchar(255)" }).ExecuteNonQuery();
+                new { Street = "nvarchar(255)" }
+            ).ExecuteNonQuery();
 
             peepId = new { Name = "Jane" }.InsertInto("Peeps");
             peep2Id = new { Name = "John" }.InsertInto("Peeps");
