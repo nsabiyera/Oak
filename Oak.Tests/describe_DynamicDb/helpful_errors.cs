@@ -6,7 +6,6 @@ using NSpec;
 
 namespace Oak.Tests.describe_DynamicDb
 {
-    [Tag("wip")]
     class helpful_errors : nspec
     {
         dynamic db;
