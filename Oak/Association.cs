@@ -736,20 +736,63 @@ namespace Oak
             else AddConventionForBelongsTo(callInfo);
         }
 
-        dynamic EntryPoint(dynamic callInfo)
+        dynamic CallAssocationIdsMethod(dynamic callInfo)
         {
-            if (callInfo.Name == "AssociationNamed")
-            {
-                callInfo.Name = callInfo.Parameters[0];
+            string original = callInfo.Name;
 
-                if(!callInfo.Instance.RespondsTo(callInfo.Name)) AddConvention(callInfo);
+            callInfo.Name = callInfo.Name.Remove(callInfo.Name.Length - 3);
 
-                return Associations.AssociationNamed(referencedAssociations, callInfo.Name);
-            }
+            callInfo.Name = Pluralize(callInfo.Name);
 
             AddConvention(callInfo);
 
+            return callInfo.Instance.GetMember(original)();
+        }
+
+        dynamic CallAssocationNamedMethod(dynamic callInfo)
+        {
+            callInfo.Name = callInfo.Parameters[0];
+
+            if (!callInfo.Instance.RespondsTo(callInfo.Name)) AddConvention(callInfo);
+
+            return Associations.AssociationNamed(referencedAssociations, callInfo.Name);
+        }
+        
+        dynamic CallNewAssocationMethod(dynamic callInfo)
+        {
+            string original = callInfo.Name;
+
+            callInfo.Name = callInfo.Name.Substring(3);
+
+            callInfo.Name = Pluralize(callInfo.Name);
+
+            AddConvention(callInfo);
+
+            dynamic parametersToPass = callInfo.Parameter;
+
+            bool containsUnnamedParameters = callInfo.ParameterNames.Length == 0 && callInfo.Parameters.Length != 0;
+
+            if (containsUnnamedParameters) parametersToPass = callInfo.Parameters[0];
+
+            return callInfo.Instance.GetMember(original)(parametersToPass);
+        }
+
+        dynamic CallAssociationMethod(dynamic callInfo)
+        {
+            AddConvention(callInfo);
+
             return callInfo.Instance.GetMember(callInfo.Name)(null);
+        }
+
+        dynamic EntryPoint(dynamic callInfo)
+        {
+            if (callInfo.Name == "AssociationNamed") return CallAssocationNamedMethod(callInfo);
+
+            if (callInfo.Name.EndsWith("Ids")) return CallAssocationIdsMethod(callInfo);
+
+            if (callInfo.Name.StartsWith("New")) return CallNewAssocationMethod(callInfo);
+
+            return CallAssociationMethod(callInfo);
         }
 
         public static void ApplyProjection(dynamic repository)
