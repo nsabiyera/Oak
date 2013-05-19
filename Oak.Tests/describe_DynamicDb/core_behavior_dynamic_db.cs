@@ -118,13 +118,20 @@ namespace Oak.Tests
             Expect(course.Students().Select("Name")).to_contain("Jane");
         }
 
+        [Tag("wip")]
         void specify_eager_load_many()
         {
-            var blogs = db.Blogs().All().Include("Comments");
+            List<string> queriesExecuted = new List<string>();
 
+            DynamicRepository.WriteDevLog = true;
+            DynamicRepository.LogSql = (o, sql, args) => queriesExecuted.Add(sql);
+
+            var blogs = db.Blogs().All().Include("Comments");
             var comments = blogs.First().Comments();
 
             Expect(comments.Count()).to_be(2);
+
+            queriesExecuted.Count(s => s.Trim().Contains("from Comments")).should_be(1);
         }
 
         void specify_eager_load_single()
