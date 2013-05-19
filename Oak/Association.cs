@@ -704,32 +704,23 @@ namespace Oak
         public static Dictionary<string, List<string>> ColumnCache = new Dictionary<string, List<string>>();
         public static DynamicRepository SchemaRepository = new DynamicRepository();
 
-        List<dynamic> referencedAssoctations = new List<dynamic>();
+        List<dynamic> referencedAssociations;
         public AssociationByConventions(dynamic o)
         {
-            o.__ReferencedAssocations__ = new List<dynamic>();
+            referencedAssociations = new List<dynamic>();
 
-            o.MethodMissing = new DynamicFunctionWithParam(AddConvention);
+            o.MethodMissing = new DynamicFunctionWithParam(EntryPoint);
         }
 
         void InitAssociation(dynamic association, dynamic instance)
         {
-            referencedAssoctations.Add(association);
+            referencedAssociations.Add(association);
 
             association.Init(instance);
         }
 
-        dynamic AddConvention(dynamic callInfo)
+        void AddConvention(dynamic callInfo)
         {
-            if (callInfo.Name == "AssociationNamed")
-            {
-                callInfo.Name = callInfo.Parameters[0];
-
-                AddConvention(callInfo);
-
-                return Associations.AssociationNamed(referencedAssoctations, callInfo.Name);
-            }
-
             string associationName = callInfo.Name;
 
             VerifyAssociationMatchesConvention(callInfo);
@@ -743,8 +734,22 @@ namespace Oak
             else if (IsHasOne(callInfo)) AddConventionForHasOne(callInfo);
 
             else AddConventionForBelongsTo(callInfo);
+        }
 
-            return callInfo.Instance.GetMember(associationName)(null);
+        dynamic EntryPoint(dynamic callInfo)
+        {
+            if (callInfo.Name == "AssociationNamed")
+            {
+                callInfo.Name = callInfo.Parameters[0];
+
+                if(!callInfo.Instance.RespondsTo(callInfo.Name)) AddConvention(callInfo);
+
+                return Associations.AssociationNamed(referencedAssociations, callInfo.Name);
+            }
+
+            AddConvention(callInfo);
+
+            return callInfo.Instance.GetMember(callInfo.Name)(null);
         }
 
         public static void ApplyProjection(dynamic repository)
@@ -871,7 +876,7 @@ Table [{2}] with schema [Id, {3}, {4}] doesn't exist (HasManyAndBelongsTo).";
         void VerifyAssocationMatchesForOne(dynamic callInfo)
         {
             var message =
-@"No BelongsTo, HasOneThrough or HasOne relationships found::
+@"No BelongsTo, HasOneThrough or HasOne relationships found:
 Table [{0}] with column [{1}] doesn't exist (HasOne).
 Table [{2}] with column [{3}] doesn't exist (BelongsTo).
 Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
