@@ -7,6 +7,7 @@ using Massive;
 
 namespace Oak.Tests
 {
+    [Tag("wip")]
     class core_behavior_dynamic_db : nspec
     {
         object blogId, blog2Id, authorId, author2Id, math, science, history, jane, john;
@@ -118,7 +119,6 @@ namespace Oak.Tests
             Expect(course.Students().Select("Name")).to_contain("Jane");
         }
 
-        [Tag("wip")]
         void specify_eager_load_many()
         {
             List<string> queriesExecuted = new List<string>();
@@ -139,6 +139,46 @@ namespace Oak.Tests
             var peeps = db.Peeps().All().Include("Location");
 
             Expect(peeps.First().Location().Street).to_be("Main");
+        }
+
+        void ancillary_methods_for_has_many()
+        {
+            context["[Association]Ids method provides correct values"] = () =>
+            {
+                it["works"] = () => 
+                {
+                    var blog = db.Blogs().Single(blogId);
+
+                    var commentsIds = blog.CommentIds();
+
+                    Expect(commentsIds.Count).to_be(2);
+                };
+            };
+
+            context["New[Association] method provides correct values"] = () =>
+            {
+                it["works for no parameters"] = () =>
+                {
+                    var blog = db.Blogs().Single(blogId);
+                    var comment = blog.NewComment();
+                    Expect(comment.RespondsTo("text")).to_be(false);
+                };
+
+                it["works for named parameters"] = () =>
+                {
+                    var blog = db.Blogs().Single(blogId);
+                    var comment = blog.NewComment(text: "text");
+                    Expect(comment.Text).to_be("text");
+                };
+
+                it["works for anonymous type"] = () => 
+                {
+                    var blog = db.Blogs().Single(blogId);
+                    var comment = blog.NewComment(new { Text = "text" });
+                    Expect(comment.BlogId).to_be(blogId);
+                    Expect(comment.Text).to_be("text");
+                };
+            };
         }
 
         void SeedPeepsSchema()
