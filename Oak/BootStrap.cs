@@ -1215,7 +1215,7 @@ You can see what the script looks like by running this command: <pre>rake export
 <h2>Looks like you're using DynamicDb</h2>
 <p>
 You're getting this error because you tried to access a table that doesn't exist in your database, or the columns in the tables
-do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DyanmicDb will look for: 
+do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DynamicDb will look for: 
 </p>
 <ul>
     <li>Invoking an assocation that ends with ""s"" will return a collection. Example:
