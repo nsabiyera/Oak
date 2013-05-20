@@ -162,7 +162,6 @@ public class Blog : DynamicModel
         yield return new Presense("Name");
     }
 
-    Blogs blogs = new Blogs();
     public Blog(object dto) : base(dto) { }
     public Blog() : base() { }
 }</pre>
@@ -244,9 +243,64 @@ public class Blog : DynamicModel
     <!--<![endif]-->
  </object>
 </div>
-
-
  <br/>
+
+<a id="dynamicdb"></a>
+<h2>Frictionless, Zero Class Data Access - DynamicDb</h2>
+<p>DynamicDb gives you the ability to perform zero class CRUD operations based on some assumptions. It will even find table relationships for you. Lets assume you have a Blogging Database that has the following schema:</p>
+<ul>
+<li>[Authors]: [Id, Name]</li>
+<li>[Profiles]: [Id, AuthorId, Email]</li>
+<li>[Blogs]: [Id, AuthorId, Title]</li>
+<li>[Comments]: [Id, BlogId, Text]</li>
+</ul>
+
+<ul>
+<li>[Blogs] have many [Comments]</li>
+<li>[Blogs] belong to a single [Authors]</li>
+<li>Each [Authors] has one [Profiles]</li>
+</ul>
+
+<p>You get the ability to do this:</p>
+<pre>
+//new up a DynamicDb, be sure to cast it as dynamic
+dynamic db = new DynamicDb();
+
+//insert an Author
+var authorId = db.Authors().Insert(new { Name = "An Author" });
+
+//create a Profile for Author
+db.Profiles().Insert(new { authorId, Email = "user@example.com" });
+
+//insert a blog and associate it to Author
+var blogId = db.Blogs().Insert(new { Title = "A Blog", authorId });
+
+//insert 2 comments associated with Blog
+db.Comments().Insert(new { Text = "comment 1", blogId });
+db.Comments().Insert(new { Text = "comment 2", blogId });
+</pre>
+<p>and this:</p>
+<pre>
+//this will give you an IEnumerable<dynamic> of Blogs
+var blogs = db.Blogs().All();
+
+foreach(var blog in blogs)
+{
+    //accessing the Author through a BelongsTo relationship
+    Console.WriteLine(blog.Author().Name);
+
+    //accessing the Author's Profile through a HasOne relationship
+    Console.WriteLine(blog.Author().Profile().Email);
+
+    //accessing the Comments for the Blog through a HasMany relationship
+    foreach(var comment in blog.Comments())
+    {
+        Console.WriteLine(comment.Text);
+    }
+}
+</pre>
+
+
 <h2>Frictionless Schema Generation - Oak's Seed</h2>
 <p>Schema generation should be simple. Period.  Here's what simple looks like:</p>
 <pre>
