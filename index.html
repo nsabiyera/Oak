@@ -281,7 +281,7 @@ db.Comments().Insert(new { Text = "comment 2", blogId });
 </pre>
 <p>and this:</p>
 <pre>
-//this will give you an IEnumerable<dynamic> of Blogs
+//this will give you an IEnumerable&lt;dynamic&gt; of Blogs
 var blogs = db.Blogs().All();
 
 foreach(var blog in blogs)
@@ -299,7 +299,7 @@ foreach(var blog in blogs)
     }
 }
 </pre>
-<p>More info on the <a href="https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb">DynamicDb wiki page</a>
+<p>More info can be found on the <a href="https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb">DynamicDb wiki page</a>
 
 <h2>Frictionless Schema Generation - Oak's Seed</h2>
 <p>Schema generation should be simple. Period.  Here's what simple looks like:</p>
