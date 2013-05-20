@@ -351,26 +351,35 @@ rake ui
 Oak comes bootstrapped with a suite of rake scripts that help you scaffold common files in your solution.  These scripts can be leveraged by you to quickly generate classes. Using a command prompt that supports ruby <b>(be sure to run the command prompt as an administrator)</b>, you can type any of the following commands:
 </p>
 <pre>
+all scripts are customizable and are located in .\scaffold.rb
+
 rake gen:controller[name]
     adds a controller class to your mvc project
+    example: rake gen:controller[Blogs]
 
 rake gen:model[name]
     adds a dynamic model class to your mvc project
+    example: rake gen:model[Blog]
 
 rake gen:repo[name]
     adds a dynamic repository class to your mvc project
+    example: rake gen:repo[Blogs]
 
 rake gen:repo_model[repo_and_model_name]
     adds a dynamic repository with a projection to a dynamic model
+    example: rake gen:repo_model[Blogs:Blog]
 
 rake gen:script[name]
     adds javascript file to your mvc project
+    example: rake gen:script[index]
 
 rake gen:test[name]
     adds a test file to your test project
+    example: rake gen:test[describe_BlogsController]
 
-rake gen:view[controller_and_name]
-    adds cshtml to your mvc project
+rake gen:view[controller_and_view_name]
+    adds a cshtml to your mvc project
+    example: rake gen:view[Home:Index]
 </pre>
 
 <div id="sampleapps"></div>
