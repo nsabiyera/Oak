@@ -1215,15 +1215,19 @@ You can see what the script looks like by running this command: <pre>rake export
 <h2>Looks like you're using DynamicDb</h2>
 <p>
 You're getting this error because you tried to access a table that doesn't exist in your database, or the columns in the tables
-do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DynamicDb will look for: 
+do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DyanmicDb will look for: 
 </p>
 <ul>
     <li>Invoking an assocation that ends with ""s"" will return a collection. Example:
-        <pre>(new DynamicDb() as dynamic).Blogs().Single(blogId)<strong style=""font-size: large"" >.Comments()</strong></pre>
+        <pre>
+dynamic db = new DynamicDb();
+db.Blogs().Single(blogId)<strong style=""font-size: large"" >.Comments()</strong></pre>
         will return an IEnumerable&lt;dynamic&gt; that represents a collection of Comments.<br/><br/>
     </li>
     <li>Invoking an assocation that doesn't end with ""s"" will return a single item. Example:
-        <pre>(new DynamicDb() as dynamic).Comments().Single(commentId)<strong style=""font-size: large"">.Blog()</strong></pre>
+        <pre>
+dynamic db = new DynamicDb();
+db.Comments().Single(commentId)<strong style=""font-size: large"">.Blog()</strong></pre>
         will return a dynamic entity that represents a Blog.<br/><br/>
     </li>
     <li>Tables must have an Id column.</li>
