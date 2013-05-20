@@ -247,7 +247,7 @@ public class Blog : DynamicModel
 
 <a id="dynamicdb"></a>
 <h2>Frictionless, Zero Class Data Access - DynamicDb</h2>
-<p>DynamicDb gives you the ability to perform zero class CRUD operations based on some assumptions. It will even find table relationships for you. Lets assume you have a Blogging Database that has the following schema:</p>
+<p>DynamicDb gives you the ability to perform zero class CRUD operations based on some assumptions, even find table relationships for you. Given a Blogging database with the following schema:</p>
 <ul>
 <li>[Authors]: [Id, Name]</li>
 <li>[Profiles]: [Id, AuthorId, Email]</li>
@@ -299,7 +299,7 @@ foreach(var blog in blogs)
     }
 }
 </pre>
-
+<p>More info on the <a href="https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb">DynamicDb wiki page</a>
 
 <h2>Frictionless Schema Generation - Oak's Seed</h2>
 <p>Schema generation should be simple. Period.  Here's what simple looks like:</p>
