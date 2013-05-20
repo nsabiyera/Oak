@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>cambium</id> 
-    <version>1.4.9</version> 
+    <version>1.5.0</version> 
     <authors>Amir Rajan</authors>
     <description>Dynamic models for .Net applications (data access, associations, validation change tracking). Handles saving and retrieving data (using an altered version of Massive..DynamicRepository).</description> 
     <language>en-US</language>
@@ -12,6 +12,7 @@
   </metadata>
   <files>
     <file src="Oak\ConnectionProfile.cs" target="content\Oak\ConnectionProfile.cs" />
+    <file src="Oak\DynamicDb.cs" target="content\Oak\DynamicDb.cs" />
     <file src="Oak\DynamicModel.cs" target="content\Oak\DynamicModel.cs" />
     <file src="Oak\DynamicModels.cs" target="content\Oak\DynamicModels.cs" />
     <file src="Oak\Massive.cs" target="content\Oak\Massive.cs" />
