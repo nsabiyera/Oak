@@ -120,12 +120,13 @@ namespace Oak
                 new TutorialBlogIsValid(),
                 new TutorialCreateComments(),
                 new TutorialAddComment(),
+                new DynamicDbRecommendation(),
                 new CreateTableRecommendation(),
                 new InvalidColumnRecommendation(),
                 new ValidationsFailedRecommendation(),
                 new NoDefinitionOnDerivedGeminiRecommendation(),
                 new NoDefinitionOnGeminiRecommendation(),
-                new DynamicDbRecommendation()
+                
             };
 
             mvcApplication.EndRequest += PrintInefficientQueries;
@@ -1231,9 +1232,56 @@ do not match the prescribed conventions. DynamicDb will try to find table relati
 </ul>
 
 <p style=""font-size: large"">
+For more information about DynamicDB, refer to the <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb"" target=""_blank"">wiki</a>
+</p>
+
+<p style=""font-size: large"">
 If you don't want to follow these conventions, then create <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Massive.DynamicRepository"" target=""_blank"">DynamicRepository</a> and 
 <a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""__blank"">DynamicModel</a> classes.
-</p>" + CreateTableRecommendation.CreateTableRecommendationString();
+</p>" + ScaffoldingRecommendationString.Body() + CreateTableRecommendation.CreateTableRecommendationString();
+        }
+    }
+
+    public class ScaffoldingRecommendationString
+    {
+        public static string Body()
+        {
+            return @"
+<h2>Scaffolding DynamicRepository and DynamicModel classes quickly</h1>
+You can quickly scaffold your DynamicRepository and DynamicModel (among other things) quickly by using the following rake tasks:
+<pre>
+<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" />
+all scripts are customizable and are located in .\scaffold.rb (latest versions: <a href=""https://github.com/amirrajan/Loam/blob/master/Rakefile.rb"" target=""_blank"">Rakefile.rb</a> <a href=""https://github.com/amirrajan/Loam/blob/master/scaffold.rb"" target=""_blank"">scaffold.rb</a>)
+
+rake gen:controller[name]
+    adds a controller class to your mvc project
+    example: rake gen:controller[Blogs]
+
+rake gen:model[name]
+    adds a dynamic model class to your mvc project
+    example: rake gen:model[Blog]
+
+rake gen:repo[name]
+    adds a dynamic repository class to your mvc project
+    example: rake gen:repo[Blogs]
+
+rake gen:repo_model[repo_and_model_name]
+    adds a dynamic repository with a projection to a dynamic model
+    example: rake gen:repo_model[Blogs:Blog]
+
+rake gen:script[name]
+    adds javascript file to your mvc project
+    example: rake gen:script[index]
+
+rake gen:test[name]
+    adds a test file to your test project
+    example: rake gen:test[describe_BlogsController]
+
+rake gen:view[controller_and_view_name]
+    adds a cshtml to your mvc project
+    example: rake gen:view[Home:Index]
+</pre>
+";
         }
     }
 }
