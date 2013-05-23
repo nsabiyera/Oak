@@ -29,6 +29,7 @@
     render: function() {
       var consultantContainer,
         _this = this;
+
       $(this.el).empty();
       consultantContainer = $("<ul></ul>").addClass("thumbnails").css({
         'margin-top': '10px'
@@ -36,6 +37,7 @@
       $(this.el).append(consultantContainer);
       return this.bench.each(function(consultant) {
         var view;
+
         view = new ConsultantView({
           model: consultant,
           editor: EditConsultantModal
@@ -59,12 +61,14 @@
     render: function() {
       var consultantContainer, monthSeperator, yearSeperator,
         _this = this;
+
       $(this.el).empty();
       monthSeperator = -1;
       yearSeperator = -1;
       consultantContainer = null;
       return this.rollOffs.each(function(consultant) {
         var currentMonth, currentYear, view;
+
         view = new ConsultantView({
           model: consultant,
           editor: EditConsultantModal,
@@ -97,6 +101,7 @@
     },
     render: function() {
       var imageUrl;
+
       imageUrl = "http://placehold.it/130x90";
       if (this.model.picture()) {
         imageUrl = this.model.picture();
@@ -196,6 +201,7 @@
     },
     update: function() {
       var _this = this;
+
       return $.post("/consultants/update", {
         id: this.get("id"),
         name: this.get("name"),
@@ -208,6 +214,7 @@
     },
     create: function() {
       var _this = this;
+
       return $.post("/consultants/create", {
         name: this.get("name"),
         rollOffDate: this.get("rollOffDate")
@@ -218,6 +225,7 @@
     },
     extendTil: function(date) {
       var _this = this;
+
       return $.post("/rolloffs/extensions", {
         consultantId: this.get("id"),
         til: date
@@ -241,6 +249,7 @@
   EditConsultantModal = new (Backbone.View.extend({
     render: function() {
       var _this = this;
+
       this.el = "#editConsultantModal";
       $(this.el).find("#rollOffDate").datepicker();
       $(this.el).find("#updateConsultant").click(function() {
@@ -256,6 +265,7 @@
     },
     edit: function(consultant) {
       var d, date, formatted, month, year;
+
       this.model = consultant;
       $("#consultantName").val(consultant.name());
       $(this.el).find("#picture").val(consultant.picture());
@@ -277,6 +287,7 @@
   NewConsultantModal = new (Backbone.View.extend({
     render: function() {
       var _this = this;
+
       this.el = "#newConsultantModal";
       $(this.el).find("#createConsultant").click(function() {
         _this.model.setName($(_this.el).find("#newConsultantName").val());
@@ -301,6 +312,7 @@
     render: function() {
       var view,
         _this = this;
+
       this.el = "#extendConsultantModal";
       $(this.el).modal({
         show: false
