@@ -10,3 +10,4 @@
 2013/05/23 16:08:09 [notice] 5912#5916: signal process started
 2013/05/23 16:08:09 [error] 5912#5916: CreateFile() "C:\Development\Oak\Sample Apps\BorrowedGames\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
 2013/05/23 16:08:20 [emerg] 5936#5940: CreateDirectory() "C:\Development\Oak\Sample Apps\BorrowedGames\nginx/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2013/05/23 16:30:47 [notice] 704#3084: signal process started
