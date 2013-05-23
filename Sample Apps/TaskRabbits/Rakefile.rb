@@ -19,7 +19,10 @@ task :rake_dot_net_initialize do
   @website_port_load_balanced_2 = yml["website_port_load_balanced_2"]
   @website_deploy_directory_load_balanced_2 = yml["website_deploy_directory_load_balanced_2"]
   @solution_name = "#{ yml["solution_name"] }.sln"
+  @solution_name_sans_extension = "#{ yml["solution_name"] }"
   @mvc_project_directory = yml["mvc_project"]
+
+  @test_project = yml["test_project"]
   @test_dll = "./#{ yml["test_project"] }/bin/debug/#{ yml["test_project"] }.dll"
 
   @test_runner_path = yml["test_runner"]
@@ -34,6 +37,7 @@ task :rake_dot_net_initialize do
   @file_sync.source = @mvc_project_directory
   @file_sync.destination = @website_deploy_directory
   @database_name = yml["database_name"]
+  @database_server = yml["database_server"]
   @test_database_name = yml["database_name"] + "Test"
 end
 
@@ -122,13 +126,54 @@ end
 
 desc "creates your databases if they don't exist"
 task :create_db => :rake_dot_net_initialize do
-  execute_sql "master", "create database #{ @database_name }"
-  execute_sql "master", "create database #{ @test_database_name }"
-  puts "done."
+  execute_sql "master", "create database #{ @database_name }", @database_server
+  execute_sql "master", "create database #{ @test_database_name }", @database_server
+  puts "\nDone.\n\n"
+  puts "If you received DB connection errors, run the command: rake list_db_servers"
 end
 
-def execute_sql database, sql
-  puts `sqlcmd -d #{ database } -S (local) -Q \"#{ sql }\"`
+desc "lists database servers on the network and provides a rake command for updating your database connection string"
+task :list_db_servers => :rake_dot_net_initialize do
+  puts "scanning the network for db servers (this may take a while)"
+  puts "if you already know what database server you want to connect to,"
+  puts "you can change your connection strings in the application by running the command:"
+  puts "rake update_db_server[server_name], example: rake update_db_server[.\\sqlexpress]"
+  puts "looking....\n\n"
+
+  output = `sqlcmd -Lc`
+  puts "here are your db servers and the rake command to update your connection strings:\n\n"
+  output.each_line do |line|
+    puts "rake update_db_server[#{line.strip}]" if line.strip != ""
+  end
+end
+
+desc "updates all database connection string server values to the value specified, example: rake update_db_server[./sqlexpress]"
+task :update_db_server, [:new_value] => :rake_dot_net_initialize do |t, args|
+  raise "You need to specify a new database server name, example: rake update_db_server[./sqlexpress]" if args[:new_value].nil?
+
+  [
+    "#{ @mvc_project_directory }/Web.config",
+    "#{ @test_project }/App.config"
+  ].each do |file|
+    puts "updating connection string in: #{ file }"
+    content = File.open(file).read
+    content.gsub!("data source=#{ @database_server };", "data source=#{ args[:new_value] };")
+    File.open(file, "w") { |f| f.write(content) }
+    puts "done"
+  end
+
+  puts "updating dev.yml"
+  content = File.open("dev.yml").read
+  content.gsub!("database_server: #{ @database_server }",
+                "database_server: #{ args[:new_value] }")
+  File.open("dev.yml", "w") { |f| f.write(content) }
+  puts "done"
+  
+  puts "if you ran this because of errors related to rake create_db, run rake create_db again now"
+end
+
+def execute_sql database, sql, server
+  puts `sqlcmd -d #{ database } -S #{ server } -Q \"#{ sql }\"`
 end
 
 desc "run ui automation tests"
