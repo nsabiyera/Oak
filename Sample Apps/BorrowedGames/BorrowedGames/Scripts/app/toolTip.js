@@ -16,6 +16,7 @@
   this.toolTip = {
     init: function($element, key, startingMessage, endingMessage, left, top) {
       var $toolTip;
+
       if (!toolTips[key]) {
         toolTips[key] = {
           startingMessage: startingMessage,

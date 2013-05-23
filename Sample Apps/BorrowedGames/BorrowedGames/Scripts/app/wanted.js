@@ -31,6 +31,7 @@
     },
     shortName: function() {
       var name;
+
       name = this.name();
       if (name.length > 41) {
         name = name.substring(0, 40) + "... ";
@@ -39,6 +40,7 @@
     },
     undoRequest: function(callback) {
       var _this = this;
+
       return $.post(this.get("deleteWant"), {}, function() {
         preferred.getPreferredGames();
         _this.change();
@@ -47,6 +49,7 @@
     },
     returnGame: function(callback) {
       var _this = this;
+
       return $.post(this.get("returnGame"), {}, function() {
         preferred.getPreferredGames();
         _this.change();
@@ -74,6 +77,7 @@
     },
     render: function() {
       var _this = this;
+
       $(this.el).empty();
       return this.wantedGames.each(function(game) {
         return _this.addGame(game);
@@ -81,6 +85,7 @@
     },
     addGame: function(game) {
       var view;
+
       view = new wantedGameView({
         model: game
       });
@@ -103,6 +108,7 @@
     },
     "delete": function() {
       var el;
+
       el = this.el;
       if (!this.model.canReturnGame()) {
         this.model.undoRequest(function() {
@@ -126,6 +132,7 @@
     },
     renderRequestedGame: function() {
       var game;
+
       game = $.tmpl(this.requestedGameTemplate, {
         gameName: this.model.shortName(),
         owner: this.model.owner()
@@ -137,6 +144,7 @@
     },
     renderBorrowedGame: function() {
       var daysLeft, daysLeftClass, daysLeftText, game;
+
       daysLeft = this.model.daysLeft();
       daysLeftClass = "label-info";
       daysLeftText = daysLeft + " day(s) left";

@@ -28,6 +28,7 @@
     },
     shortName: function() {
       var name;
+
       name = this.name();
       if (name.length > 41) {
         name = name.substring(0, 40) + "... ";
@@ -36,6 +37,7 @@
     },
     giveGame: function(callback) {
       var _this = this;
+
       return $.post(this.get("giveGame"), {}, function() {
         requested.getRequestedGames();
         return callback();
@@ -43,6 +45,7 @@
     },
     gameReturned: function(callback) {
       var _this = this;
+
       return $.post(this.get("gameReturned"), {}, function() {
         requested.getRequestedGames();
         return callback();
@@ -72,6 +75,7 @@
     },
     render: function() {
       var _this = this;
+
       $(this.el).empty();
       if (this.requestedGames.length === 0) {
         $("#requestedGamesHeader").hide();
@@ -84,6 +88,7 @@
     },
     addGame: function(game) {
       var view;
+
       view = new requestedGameView({
         model: game
       });
@@ -100,6 +105,7 @@
     },
     giveGame: function() {
       var el;
+
       el = this.el;
       return this.model.giveGame(function() {
         return $(el).find(".check").tooltip("hide");
@@ -107,6 +113,7 @@
     },
     gameReturned: function() {
       var el;
+
       el = this.el;
       return this.model.gameReturned(function() {
         return $(el).find(".cancel").tooltip("hide");
@@ -114,6 +121,7 @@
     },
     render: function() {
       var game;
+
       if (this.model.canGiveGame()) {
         game = this.genCanGiveTemplate();
       }
@@ -125,6 +133,7 @@
     },
     genCanGiveTemplate: function() {
       var gen, requestedBy;
+
       gen = $.tmpl(this.canGiveGameTemplate, {
         requestedBy: this.model.requestedBy(),
         gameName: this.model.shortName()
@@ -137,6 +146,7 @@
     },
     genReturnGame: function() {
       var daysOut, gen;
+
       daysOut = this.model.daysOut();
       if (daysOut === 0) {
         daysOut = "just borrowed";

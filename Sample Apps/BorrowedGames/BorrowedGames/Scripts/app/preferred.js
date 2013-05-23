@@ -25,6 +25,7 @@
     },
     shortName: function() {
       var name;
+
       name = this.name();
       if (name.length > 41) {
         name = name.substring(0, 40) + "... ";
@@ -33,6 +34,7 @@
     },
     notInterested: function(callback) {
       var _this = this;
+
       return $.post(this.get("notInterested"), {}, function() {
         _this.deleted = true;
         unwanted.getUnwantedGames();
@@ -45,18 +47,21 @@
     },
     favorite: function() {
       var _this = this;
+
       return $.post(this.get("favoriteGame"), {}, function() {
         return preferred.getPreferredGames();
       });
     },
     unfavorite: function() {
       var _this = this;
+
       return $.post(this.get("unfavoriteGame"), {}, function() {
         return preferred.getPreferredGames();
       });
     },
     wantGame: function(callback) {
       var _this = this;
+
       return $.post(this.get("wantGame"), {}, function() {
         _this.wanted = true;
         wanted.getWantedGames();
@@ -90,9 +95,11 @@
     },
     render: function() {
       var _this = this;
+
       $(this.el).empty();
       this.preferredGames.each(function(library) {
         var view;
+
         view = new preferredGameView({
           model: library
         });
@@ -126,6 +133,7 @@
     },
     notInterested: function() {
       var el;
+
       el = this.el;
       return this.model.notInterested(function() {
         return $(el).fadeOut();
@@ -133,6 +141,7 @@
     },
     wantGame: function() {
       var el;
+
       el = this.el;
       return this.model.wantGame(function() {
         return $(el).fadeOut();
@@ -151,6 +160,7 @@
     },
     render: function() {
       var game, starClass;
+
       starClass = "icon-star-empty";
       if (this.model.isFavorited()) {
         starClass = "icon-star";

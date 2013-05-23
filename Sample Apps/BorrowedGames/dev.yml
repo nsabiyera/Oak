@@ -10,3 +10,4 @@ test_dll: ./BorrowedGames.Tests/bin/debug/BorrowedGames.Tests.dll
 test_runner: ./packages/nspec.0.9.62/tools/NSpecRunner.exe
 iis_express: C:\Program Files (x86)\IIS Express
 database_name: BorrowedGames
+database_server: (local)

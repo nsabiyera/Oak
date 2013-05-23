@@ -19,6 +19,7 @@
     },
     shortName: function() {
       var name;
+
       name = this.name();
       if (name.length > 21) {
         name = name.substring(0, 20) + "... ";
@@ -30,6 +31,7 @@
     },
     undo: function(callback) {
       var _this = this;
+
       return $.post(this.get("undoNotInterested"), {}, function() {
         preferred.getPreferredGames();
         _this.change();
@@ -57,6 +59,7 @@
     },
     render: function() {
       var _this = this;
+
       $(this.el).empty();
       this.unwantedGames.each(function(game) {
         return _this.addGame(game);
@@ -67,6 +70,7 @@
     },
     addGame: function(game) {
       var view;
+
       view = new unwantedGameView({
         model: game
       });
@@ -88,6 +92,7 @@
     },
     undo: function() {
       var el;
+
       el = this.el;
       return this.model.undo(function() {
         return $(el).fadeOut();
@@ -95,6 +100,7 @@
     },
     render: function() {
       var game;
+
       game = $.tmpl(this.gameTemplate, {
         gameName: this.model.shortName()
       });
