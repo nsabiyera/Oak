@@ -169,7 +169,7 @@ task :update_db_server, [:new_value] => :rake_dot_net_initialize do |t, args|
   File.open("dev.yml", "w") { |f| f.write(content) }
   puts "done"
 
-  puts "if you're ran this becuase of errors related to rake create_db, run rake create_db again now"
+  puts "if you ran this because of errors related to rake create_db, run rake create_db again now"
 end
 
 def execute_sql database, sql, server

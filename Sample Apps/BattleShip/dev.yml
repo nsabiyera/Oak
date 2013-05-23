@@ -10,3 +10,4 @@ test_project: BattleShip.Tests #just the folder name, no .csproj extension
 test_runner: ./packages/nspec.0.9.64/tools/NSpecRunner.exe
 iis_express: C:\Program Files (x86)\IIS Express
 database_name: BattleShip
+database_server: (local)
