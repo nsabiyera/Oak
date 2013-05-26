@@ -7,7 +7,6 @@ using Massive;
 
 namespace Oak.Tests
 {
-    [Tag("wip")]
     class core_behavior_dynamic_db : nspec
     {
         object blogId, blog2Id, authorId, author2Id, math, science, history, jane, john;
