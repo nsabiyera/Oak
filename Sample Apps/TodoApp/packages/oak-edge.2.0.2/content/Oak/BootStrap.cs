@@ -86,7 +86,7 @@ namespace Oak
 
         bool HasJson(ActionExecutingContext filterContext)
         {
-            return filterContext.HttpContext.Request.ContentType == "application/json";
+            return filterContext.HttpContext.Request.ContentType.Contains("application/json");
         }
 
         bool HasPayload(ActionExecutingContext filterContext)
@@ -120,11 +120,13 @@ namespace Oak
                 new TutorialBlogIsValid(),
                 new TutorialCreateComments(),
                 new TutorialAddComment(),
+                new DynamicDbRecommendation(),
                 new CreateTableRecommendation(),
                 new InvalidColumnRecommendation(),
                 new ValidationsFailedRecommendation(),
                 new NoDefinitionOnDerivedGeminiRecommendation(),
-                new NoDefinitionOnGeminiRecommendation()
+                new NoDefinitionOnGeminiRecommendation(),
+                
             };
 
             mvcApplication.EndRequest += PrintInefficientQueries;
@@ -305,7 +307,7 @@ namespace Oak
                 .GetAssembly(typeof(Recommendation))
                 .GetTypes()
                 .Where(s => s.Name.EndsWith("Controller"))
-                .Count() <= 2;
+                .Count() <= 3;
         }
     }
 
@@ -324,7 +326,8 @@ This is probably the first time you've run Oak for this solution. <strong>Be sur
 the website at some point and take a look at the screencasts and sample apps (STRONGLY recommended): 
 <a href=""http://amirrajan.github.com/Oak"" target=""_blank"">Oak's Github Page</a></strong>.
 If you want to try Oak out in an interactive way, do the following:<br/>
-Update HomeController.cs and put the follwing <strong>between the namespace block</strong>:
+Update HomeController.cs and put the follwing <strong>between the namespace block (be sure to do both Step 1 and Step 2 - 
+after you've done this, refresh the page)</strong>:
 <h3>Step 1 - Update HomeController.cs</h3>
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
@@ -510,7 +513,7 @@ Create an Index.cshtml page for the Index action and add the following code ther
             return @"
 <h2>Tutorial: Create the Blogs table using SeedController</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate the Blogs table (keep in mind
+Go to <strong>Controller\SeedController.cs</strong> and add a method to the Schema class to generate the Blogs table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
 Here is an example of creating this schema:
 <pre>
@@ -564,7 +567,7 @@ the script (the console window you use to execute this command must have ruby su
             return @"
 <h2>Tutorial: Create the Comments table using SeedController</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate the Comments table (keep in mind
+Go to <strong>Controller\SeedController.cs</strong> and add a method to the Schema class to generate the Comments table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
 Here is an example of creating this schema:
 <pre>
@@ -626,12 +629,12 @@ the script (the console window you use to execute this command must have ruby su
             return e is SqlException && e.ToString().Contains("Invalid object name");
         }
 
-        public override string GetRecommendation(Exception e)
+        public static string CreateTableRecommendationString()
         {
             return @"
 <h2>Using SeedController to create tables (in general)</h2>
 It looks like you are trying to access an object in the database that doesn't exist.  
-Go to Controller\SeedController.cs and add a method to the Schema class to generate your table (keep in mind
+Go to <strong>Controller\SeedController.cs</strong> and add a method to the Schema class to generate your table (keep in mind
 that the default convention for Oak is a pluralized table name).<br/><br/>
 Here is an example of creating this schema (let's say I want to create a table called Blogs):
 <pre>
@@ -689,6 +692,12 @@ public void SampleEntries()
 </pre>
 
 You can then run this command to <strong>purge</strong> your database and regen it with sample data: <pre>rake sample <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>";
+
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return CreateTableRecommendationString();
         }
     }
 
@@ -709,7 +718,6 @@ retrieving, the first thing we need to do is return a Blog from the database.  T
 is by defining a projection:
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
-//our Hello World example
 public class Blogs : DynamicRepository 
 {
     public Blogs()
@@ -814,7 +822,6 @@ By default dynamic repository returns a ""typeless"" dynamic object (called Gemi
 a dynamic type by doing the following (again using our Blog example):
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
-//our Hello World example
 public class Blogs : DynamicRepository 
 {
     public Blogs()
@@ -943,7 +950,7 @@ public class Blog : DynamicModel
 </pre>
 <h3>Step 2 - Eager load Comments in HomeController's Index method</h3>
 Every Blog on the main page will load its comments (hitting the database for each blog).  This is inefficient and
-should be fixed.  <strong>Update HomeController's Index method to eager load Comments:</strong>
+should be fixed (<strong>you can see all inefficient queries in the IIS Express Console Window</strong>).  <strong>Update HomeController's Index method to eager load Comments:</strong>
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
 public ActionResult Index()
@@ -1032,7 +1039,6 @@ define an Association.  Here is an example of an association, <strong>a Blog has
 
 <pre>
 <img src=""http://i.imgur.com/YJrrG.png"" style=""float: right"" />
-//our Hello World example
 public class Blogs : DynamicRepository 
 {
     public Blogs()
@@ -1192,6 +1198,93 @@ After adding the function to create your table.  Run this command to execute the
 
 You can see what the script looks like by running this command: <pre>rake export <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
 
+";
+        }
+    }
+
+    public class DynamicDbRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is AssociationByConventionsException;
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Looks like you're using DynamicDb</h2>
+<p>
+You're getting this error because you tried to access a table that doesn't exist in your database, or the columns in the tables
+do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DyanmicDb will look for: 
+</p>
+<ul>
+    <li>Invoking an assocation that ends with ""s"" will return a collection. Example:
+        <pre>
+dynamic db = new DynamicDb();
+db.Blogs().Single(blogId)<strong style=""font-size: large"" >.Comments()</strong></pre>
+        will return an IEnumerable&lt;dynamic&gt; that represents a collection of Comments.<br/><br/>
+    </li>
+    <li>Invoking an assocation that doesn't end with ""s"" will return a single item. Example:
+        <pre>
+dynamic db = new DynamicDb();
+db.Comments().Single(commentId)<strong style=""font-size: large"">.Blog()</strong></pre>
+        will return a dynamic entity that represents a Blog.<br/><br/>
+    </li>
+    <li>Tables must have an Id column.</li>
+    <li>Foreign keys must be in the format [Table in Singular Form]Id. For example: a foreign key to the Blogs table would be BlogId</li>
+    <li>Many to many tables need to be in the format [Table1Table2 Alphabetically].  For example: [Students] have many [Courses] through a [CoursesStudents] table.</li>
+</ul>
+
+<p style=""font-size: large"">
+For more information about DynamicDB, refer to the <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb"" target=""_blank"">wiki</a>
+</p>
+
+<p style=""font-size: large"">
+If you don't want to follow these conventions, then create <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Massive.DynamicRepository"" target=""_blank"">DynamicRepository</a> and 
+<a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""__blank"">DynamicModel</a> classes.
+</p>" + ScaffoldingRecommendationString.Body() + CreateTableRecommendation.CreateTableRecommendationString();
+        }
+    }
+
+    public class ScaffoldingRecommendationString
+    {
+        public static string Body()
+        {
+            return @"
+<h2>Scaffolding DynamicRepository and DynamicModel classes quickly</h1>
+You can quickly scaffold your DynamicRepository and DynamicModel (among other things) quickly by using the following rake tasks:
+<pre>
+<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" />
+all scripts are customizable and are located in .\scaffold.rb (latest versions: <a href=""https://github.com/amirrajan/Loam/blob/master/Rakefile.rb"" target=""_blank"">Rakefile.rb</a> <a href=""https://github.com/amirrajan/Loam/blob/master/scaffold.rb"" target=""_blank"">scaffold.rb</a>)
+
+rake gen:controller[name]
+    adds a controller class to your mvc project
+    example: rake gen:controller[Blogs]
+
+rake gen:model[name]
+    adds a dynamic model class to your mvc project
+    example: rake gen:model[Blog]
+
+rake gen:repo[name]
+    adds a dynamic repository class to your mvc project
+    example: rake gen:repo[Blogs]
+
+rake gen:repo_model[repo_and_model_name]
+    adds a dynamic repository with a projection to a dynamic model
+    example: rake gen:repo_model[Blogs:Blog]
+
+rake gen:script[name]
+    adds javascript file to your mvc project
+    example: rake gen:script[index]
+
+rake gen:test[name]
+    adds a test file to your test project
+    example: rake gen:test[describe_BlogsController]
+
+rake gen:view[controller_and_view_name]
+    adds a cshtml to your mvc project
+    example: rake gen:view[Home:Index]
+</pre>
 ";
         }
     }

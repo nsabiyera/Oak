@@ -29,7 +29,7 @@ namespace Oak
                 return;
             }
 
-            if (!IsValueType(o)) encounteredObjects.Add(o);
+            if (!IsValueType(o) && !IsNull(o)) encounteredObjects.Add(o);
 
             if (o is Gemini)
             {

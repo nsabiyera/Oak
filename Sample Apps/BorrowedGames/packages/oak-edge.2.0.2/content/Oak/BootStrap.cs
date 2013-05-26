@@ -120,11 +120,13 @@ namespace Oak
                 new TutorialBlogIsValid(),
                 new TutorialCreateComments(),
                 new TutorialAddComment(),
+                new DynamicDbRecommendation(),
                 new CreateTableRecommendation(),
                 new InvalidColumnRecommendation(),
                 new ValidationsFailedRecommendation(),
                 new NoDefinitionOnDerivedGeminiRecommendation(),
-                new NoDefinitionOnGeminiRecommendation()
+                new NoDefinitionOnGeminiRecommendation(),
+                
             };
 
             mvcApplication.EndRequest += PrintInefficientQueries;
@@ -627,7 +629,7 @@ the script (the console window you use to execute this command must have ruby su
             return e is SqlException && e.ToString().Contains("Invalid object name");
         }
 
-        public override string GetRecommendation(Exception e)
+        public static string CreateTableRecommendationString()
         {
             return @"
 <h2>Using SeedController to create tables (in general)</h2>
@@ -690,6 +692,12 @@ public void SampleEntries()
 </pre>
 
 You can then run this command to <strong>purge</strong> your database and regen it with sample data: <pre>rake sample <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>";
+
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return CreateTableRecommendationString();
         }
     }
 
@@ -1190,6 +1198,93 @@ After adding the function to create your table.  Run this command to execute the
 
 You can see what the script looks like by running this command: <pre>rake export <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
 
+";
+        }
+    }
+
+    public class DynamicDbRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is AssociationByConventionsException;
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Looks like you're using DynamicDb</h2>
+<p>
+You're getting this error because you tried to access a table that doesn't exist in your database, or the columns in the tables
+do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DyanmicDb will look for: 
+</p>
+<ul>
+    <li>Invoking an assocation that ends with ""s"" will return a collection. Example:
+        <pre>
+dynamic db = new DynamicDb();
+db.Blogs().Single(blogId)<strong style=""font-size: large"" >.Comments()</strong></pre>
+        will return an IEnumerable&lt;dynamic&gt; that represents a collection of Comments.<br/><br/>
+    </li>
+    <li>Invoking an assocation that doesn't end with ""s"" will return a single item. Example:
+        <pre>
+dynamic db = new DynamicDb();
+db.Comments().Single(commentId)<strong style=""font-size: large"">.Blog()</strong></pre>
+        will return a dynamic entity that represents a Blog.<br/><br/>
+    </li>
+    <li>Tables must have an Id column.</li>
+    <li>Foreign keys must be in the format [Table in Singular Form]Id. For example: a foreign key to the Blogs table would be BlogId</li>
+    <li>Many to many tables need to be in the format [Table1Table2 Alphabetically].  For example: [Students] have many [Courses] through a [CoursesStudents] table.</li>
+</ul>
+
+<p style=""font-size: large"">
+For more information about DynamicDB, refer to the <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb"" target=""_blank"">wiki</a>
+</p>
+
+<p style=""font-size: large"">
+If you don't want to follow these conventions, then create <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Massive.DynamicRepository"" target=""_blank"">DynamicRepository</a> and 
+<a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""__blank"">DynamicModel</a> classes.
+</p>" + ScaffoldingRecommendationString.Body() + CreateTableRecommendation.CreateTableRecommendationString();
+        }
+    }
+
+    public class ScaffoldingRecommendationString
+    {
+        public static string Body()
+        {
+            return @"
+<h2>Scaffolding DynamicRepository and DynamicModel classes quickly</h1>
+You can quickly scaffold your DynamicRepository and DynamicModel (among other things) quickly by using the following rake tasks:
+<pre>
+<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" />
+all scripts are customizable and are located in .\scaffold.rb (latest versions: <a href=""https://github.com/amirrajan/Loam/blob/master/Rakefile.rb"" target=""_blank"">Rakefile.rb</a> <a href=""https://github.com/amirrajan/Loam/blob/master/scaffold.rb"" target=""_blank"">scaffold.rb</a>)
+
+rake gen:controller[name]
+    adds a controller class to your mvc project
+    example: rake gen:controller[Blogs]
+
+rake gen:model[name]
+    adds a dynamic model class to your mvc project
+    example: rake gen:model[Blog]
+
+rake gen:repo[name]
+    adds a dynamic repository class to your mvc project
+    example: rake gen:repo[Blogs]
+
+rake gen:repo_model[repo_and_model_name]
+    adds a dynamic repository with a projection to a dynamic model
+    example: rake gen:repo_model[Blogs:Blog]
+
+rake gen:script[name]
+    adds javascript file to your mvc project
+    example: rake gen:script[index]
+
+rake gen:test[name]
+    adds a test file to your test project
+    example: rake gen:test[describe_BlogsController]
+
+rake gen:view[controller_and_view_name]
+    adds a cshtml to your mvc project
+    example: rake gen:view[Home:Index]
+</pre>
 ";
         }
     }

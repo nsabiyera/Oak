@@ -783,7 +783,7 @@ namespace Oak
         {
             var prototype = new Prototype() as IDictionary<string, object>;
 
-            args.ForEach(s => 
+            args.ForEach(s =>
             {
                 if (RespondsTo(s)) prototype.Add(s, GetMember(s));
             });
