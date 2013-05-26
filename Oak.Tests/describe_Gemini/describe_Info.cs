@@ -105,5 +105,21 @@ namespace Oak.Tests.describe_Gemini
   SetMembers (DynamicFunctionWithParam)
 ");
         }
+
+        [Tag("wip")]
+        void specify_nulls_are_not_considered_circular()
+        {
+            gemini = new Gemini(new { Description = "Test", Order = 5, Person = (object)null, Person2 = (object)null });
+
+            var info = gemini.__Info__() as string;
+
+            info.should_be(@"this (Gemini)
+  Description (String): Test
+  Order (Int32): 5
+  Person (null)
+  Person2 (null)
+  SetMembers (DynamicFunctionWithParam)
+");
+        }
     }
 }
