@@ -49,7 +49,7 @@ namespace TodoApp.Controllers
 
         public dynamic Todo(dynamic @params)
         {
-            return @params.Exclude("Update", "Create", "Delete");
+            return @params.Select("Id", "Content", "Done", "Order");
         }
 
         public dynamic Get(Guid id)
