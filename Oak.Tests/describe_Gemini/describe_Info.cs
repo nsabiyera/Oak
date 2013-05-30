@@ -106,7 +106,6 @@ namespace Oak.Tests.describe_Gemini
 ");
         }
 
-        [Tag("wip")]
         void specify_nulls_are_not_considered_circular()
         {
             gemini = new Gemini(new { Description = "Test", Order = 5, Person = (object)null, Person2 = (object)null });
