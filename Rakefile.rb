@@ -38,6 +38,11 @@ task :wip => :build do
   sh @test_runner_command + " --tag wip"
 end
 
+desc "run nspec tests tagged with args passed in"
+task :test_for_tag, [:tag] => :build do |t, args|
+  sh @test_runner_command + " --tag #{args[:tag]}"
+end
+
 desc "run nspec tests"
 task :tests_excluding_performance => :build do
   sh @test_runner_command + " --tag ~performance"

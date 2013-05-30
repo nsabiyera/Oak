@@ -49,8 +49,8 @@ end
 GrowlNotifier.growl_path = 
   'C:\program files (x86)\Growl for Windows\growlnotify.exe'
 
-watch('.*.\.cs$') do 
-  results = @sh.execute "rake tests_excluding_performance"
+watch('.*.\.cs$') do |f|
+  results = @sh.execute "rake test_for_tag[#{File.basename(f[0], ".cs")}]"
 
   if(!tests_passed? results)
     @growl.execute "sad panda", "tests failed", "red"
