@@ -64,6 +64,18 @@
   <li><a href="http://visualstudiomagazine.com/articles/2011/11/29/nspec-simplifies-testing.aspx" target="_blank">NSpec in Visual Studio Magazine</a></li>
   <li><a href="http://visualstudiomagazine.com/articles/2011/09/07/continuous-testing.aspx" target="_blank">SpecWatchr in Visual Studio Magazine</a></li>
 </ul>
+
+<h1>Get Started</h1>
+<p>
+Oak has full documentation, screencasts, sample apps, and an interactive tutorail to help developers ramp up quickly.  Here is what you need to do:
+</p>
+<ul>
+  <li><a href="#screencasts">Watch the screencasts</a></li>
+  <li><a href="#prerequisites">Install the prerequisites</a></li>
+  <li><a href="#bootstrapoak">Run through the interactive tutorial</a></li>
+  <li><a href="#sampleapps">Get the sample apps running</a></li>
+  <li><a href="https://github.com/amirrajan/oak/wiki">Read the wiki to wrap up (it's succinct and very helpful)</a></li>
+</ul>
         
 <a id="prerequisites"></a>
 <h2>First Time (Prerequisites)</h2>
@@ -82,14 +94,23 @@ gem install warmup (used for solution generation)
 
 <div id="bootstrapoak"></div>
 <h2>Start Coding Now - Bootstrapped Solution With Oak</h2>
-Run the following commands to quickly create a fully loaded .Net solution bootstrapped with Oak:
+<p>
+Run the following commands to quickly create a fully loaded .Net solution bootstrapped with Oak. Using a command prompt that supports ruby <b>(be sure to run the command prompt as an administrator)</b>:
+</p>
 <pre>
-using a command prompt that supports ruby
-<b>(be sure to run the command prompt as an administrator)</b>:
+warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/loam</a> Blog
+Downloads a .Net sln bootstrapped with Oak, ~20MB.
 
-warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/loam</a> Blog (creates a .Net solution)
 === OR if you want a solution that includes UI Automation ===
+
 warmup <a href="http://github.com/amirrajan/loam">http://github.com/amirrajan/walkingskeleton</a> Blog
+Downloads a .Net sln bootstrapped with Oak and Selenium libraries, ~70MB.
+If this is your first time trying Oak, stick to the first warmup command.
+</pre>
+<p>
+After the warmup command runs (speed of download is based on internet connection), run the following:
+</p>
+<pre>
 cd Blog
 start Blog.sln (opens sln, upgrade to VS 2012 if that's what you're using)
 rake (builds the .net app)
@@ -114,7 +135,7 @@ To get the most out of the Interactive Tutorial, take the time to install Growl 
   <li>Extract the Theme to: C:\Users\%USER%\AppData\Local\Growl\2.0.0.0\Displays\TranslucentDark</li>
   <li>Restart Growl for Windows to refresh the theme list</li>
   <li>Start Growl and set it to the Translucent Dark Theme: <a href="http://i.imgur.com/buWyf.png">Here are the settings that I like</a></li>
-  <li>You'll now get a nice growl message to tell you if your tests passed or failed.</li>
+  <li>You'll now get a nice growl message (while sidekick.bat is running) that tells you if your solution built successfully and if tests passed or failed.</li>
 </ul>
 
 <h2 style="border: solid 1px #f5f5f5; padding: 20px">
@@ -123,7 +144,6 @@ To get the most out of the Interactive Tutorial, take the time to install Growl 
 <a id="screencasts"></a>
 <h1>The Screencasts - It's all about reducing friction</h1>
 <hr/>
-
 <h2>Frictionless Development Cycle - Oak's Walking Skeleton</h2>
 <p>Oak has an addicting development life cycle that incorporates rapid application development, fast feedback loops, testing, and UI automation. Watch the video to see Oak in action:</p>
 <div id="media">
@@ -373,7 +393,7 @@ seed.CreateTable("Comments",
 open canopy
 start "firefox"
 url "http://google.com"
-"input[type='text']" << "hello world"
+"input[type='text']" &lt;&lt; "hello world"
 click "input[type='button']"
 </pre>
 <a id="rakedotnet"></a>
@@ -446,14 +466,23 @@ rake gen:view[controller_and_view_name]
 
 <div id="sampleapps"></div>
 
-<h1>Smaller Sample Apps</h1>
+<h1>Sample Apps</h1>
 <hr/>
+<p id="downloadsource">
+<h2>Download the Source</h2>
+These are the sample apps that show off all of Oak's capabilities. The sample apps (and there are <b>alot of them</b>) come with Oak's source. <a href="https://github.com/amirrajan/Oak/archive/master.zip">You can download the source as a zip file from here (~250MB)</a> or clone the git repo:
+</p>
+<pre>
+git clone https://github.com/amirrajan/Oak.git (~500 MB git source tree)
+</pre>
 <h2>Minimal Implementation: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
 <p>This is..you guessed it...a blogging app.  It's a <i>really</i> minimal implementation.  Look at the other sample apps for a deeper dive into Oak.</p>
 <ul>
 <li>Run the following commands:
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\DynamicBlog"
 start DynamicBlog.sln
 </pre>
@@ -489,7 +518,9 @@ start http://localhost:3000
 <ul>
 <li>Run the following commands:
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\Peeps"
 start Peeps.sln
 </pre>
@@ -518,7 +549,9 @@ You may want to look at the <a href="#taskrabbits">Task Rabbits</a> sample app f
 <ul>
 <li>Run the following commands:
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\BattleShip"
 start BattleShip.sln
 </pre>
@@ -554,7 +587,9 @@ This is a web application that shows how you can integrate Oak with some popular
 <ul>
 <li>Run the following commands:
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\TaskRabbits"
 start TaskRabbits.sln
 </pre>
@@ -581,7 +616,9 @@ start http://localhost:3000
 <ul>
 <li>Run the following commands:
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\Crib"
 start Crib.sln
 </pre>
@@ -611,7 +648,9 @@ This is a web application that uses Oak to implement a REST api using Oak.  A si
 <ul>
 <li>Run the following commands:
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\TodoApp"
 start TodoApp.sln
 </pre>
@@ -641,7 +680,9 @@ This is a full blown reference implementation that uses all aspects of Oak.  Bor
 <ul>
 <li>Run the following commands
 <pre>
-git clone <a href="https://github.com/amirrajan/Oak.git">https://github.com/amirrajan/Oak.git</a> (or download the zip)
+<a href="#downloadsource">Download Oak's source with Sample Apps</a>
+
+open the solution
 cd "Oak\Sample Apps\BorrowedGames"
 start BorrowedGames.sln
 </pre>
