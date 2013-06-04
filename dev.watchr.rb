@@ -41,7 +41,6 @@ class CommandShell
   end
 end
 
-
 @sh = CommandShell.new
 
 @growl = GrowlNotifier.new
@@ -51,6 +50,7 @@ GrowlNotifier.growl_path =
 
 watch('.*.\.cs$') do |f|
   results = @sh.execute "rake test_for_tag[#{File.basename(f[0], ".cs")}]"
+
 
   if(!tests_passed? results)
     @growl.execute "sad panda", "tests failed", "red"

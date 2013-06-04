@@ -9,6 +9,7 @@ require './RakeDotNet/sln_builder.rb'
 require './RakeDotNet/file_sync.rb'
 require 'net/http'
 require 'yaml'
+require './stacktrace.rb'
 
 task :rake_dot_net_initialize do
   yml = YAML::load File.open("dev.yml")
@@ -30,7 +31,11 @@ end
 
 desc "run nspec tests"
 task :tests => :build do
-  sh @test_runner_command
+  results = `#{@test_runner_command}`
+
+  puts results
+
+  write_stack_trace results
 end
 
 desc "run nspec tests tagged with Tag[\"wip\"]"
@@ -40,7 +45,13 @@ end
 
 desc "run nspec tests tagged with args passed in"
 task :test_for_tag, [:tag] => :build do |t, args|
-  sh @test_runner_command + " --tag #{args[:tag]}"
+  command = @test_runner_command + " --tag #{args[:tag]}"
+
+  results = `#{command}`
+
+  puts results
+
+  write_stack_trace results
 end
 
 desc "run nspec tests"
@@ -51,4 +62,15 @@ end
 desc "generates ctags"
 task :tags do
   sh "ctags --recurse --exclude=\"Sample Apps\""
+end
+
+def write_stack_trace test_output
+  stacktrace = ""
+
+  if test_output.match /FAILURES/
+    stacktrace = results.split('**** FAILURES ****').last.strip
+    stacktrace = stacktrace.split(/^.*Examples, /).first.strip
+  end
+
+  File.open("stacktrace.txt", 'w') { |f| f.write(stacktrace) }
 end
