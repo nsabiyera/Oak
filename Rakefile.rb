@@ -68,7 +68,7 @@ def write_stack_trace test_output
   stacktrace = ""
 
   if test_output.match /FAILURES/
-    stacktrace = results.split('**** FAILURES ****').last.strip
+    stacktrace = test_output.split('**** FAILURES ****').last.strip
     stacktrace = stacktrace.split(/^.*Examples, /).first.strip
   end
 
