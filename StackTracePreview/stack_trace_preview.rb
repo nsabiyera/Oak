@@ -47,11 +47,11 @@ class StackTracePreview
   def generate path
     models = models_for(@stacktrace, @working_directory)
 
-    table_of_contents = table_of_contents_for(models)
+    table_of_contents = table_of_contents_for(models[0..4])
 
     all_slides = ""
 
-    models.each_with_index { |model, i| all_slides += slides_for(model, i * 1500) }
+    models[0..4].each_with_index { |model, i| all_slides += slides_for(model, i * 1500) }
 
     html = html_page table_of_contents, all_slides
 
