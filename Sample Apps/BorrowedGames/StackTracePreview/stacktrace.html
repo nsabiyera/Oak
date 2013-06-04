@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Stack Trace Preview</title>
+<meta name="description" content="impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.">
+<meta name="author" content="Bartek Szopka">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold%7CPT+Sans:400,700,400italic,700italic%7CPT+Serif:400,700,400italic,700italic" rel="stylesheet">
+<link href="stylesheets/impress-demo.css" rel="stylesheet">
+<link rel="shortcut icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+        <div id="toc" class="step slide" data-x="200" data-y="-3000" data-z="-500">
+      <h1 style="font-size: 20px !important">Stack Trace Preview [use arrow keys to navigate]
+        <div style="float: right; padding: 3px; font-size: 14px">
+          about: <a href="http://amirrajan.github.io/StackTracePreview/#/toc" target="_blank">Awesome sample to show others</a> -
+                 <a href="http://github.com/amirrajan/StackTracePreview" target="_blank">Fork me on GitHub</a> - 
+                 <a href="http://amirrajan.github.com/Oak" target="_blank">An integral part of Oak</a>
+        </div>
+      </h1>
+      <hr>
+      <ul id="toc-ol" style="list-style-type: decimal; font-family: courier">
+       <li style='margin-top: 10px; font-size: 18px'>System.InvalidOperationException: No association named Anyy exists.<ol><li><a href="#20f732d4-46c4-43e1-8337-7e10028f5fff">\BorrowedGames\Models\User.cs - 142</a></li><li><a href="#9526916d-6a3b-4873-b397-0eda18ec1f6f">\BorrowedGames\Controllers\HomeController.cs - 23</a></li></li></ol>
+      </ul>
+    </div>
+
+          <div id="20f732d4-46c4-43e1-8337-7e10028f5fff" class="step slide code" data-x="0" data-y="-0" data-z="-0">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\BorrowedGames\Models\User.cs - 142
+        </pre>
+        <pre class="diff" style="font-family: courier">
+132  }
+133
+134  public bool HasGames()
+135  {
+136      return _.Games().Any();
+137  }
+138
+139  public bool HasFriends()
+140  {
+<b style='color: #FA8072'>141      return _.Friends().Anyy();
+</b>142  }
+143
+144  public void MarkGameNotInterested(dynamic gameId)
+145  {
+146      notInterestedGames.Insert(_.NotInterestedGames().New(new { gameId }));
+147  }
+148
+149  public bool GameIsWanted(dynamic game)
+150  {
+151      return _.Wants().Any(new { GameId = game.Id, FromUserId = game.User.Id });
+152  }
+
+        </pre>
+      </div>
+      <div id="9526916d-6a3b-4873-b397-0eda18ec1f6f" class="step slide code" data-x="0" data-y="-600" data-z="-300">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\BorrowedGames\Controllers\HomeController.cs - 23
+        </pre>
+        <pre class="diff" style="font-family: courier">
+13      library = new Library();
+14  }
+15
+16  public dynamic Index()
+17  {
+18      ViewBag.HasGames = User().HasGames();
+19
+20      ViewBag.Handle = User().Handle;
+21
+<b style='color: #FA8072'>22      ViewBag.HasFriends = User().HasFriends();
+</b>23
+24      return View();
+25  }
+26
+27  [HttpPost]
+28  public dynamic Handle(dynamic @params)
+29  {
+30      var user = User();
+31
+32      user.Handle = @params.handle.ToLower();
+33
+
+        </pre>
+      </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+<script>
+if ("ontouchstart" in document.documentElement) { 
+    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+}
+</script><script src="javascripts/impress.js"></script><script src="javascripts/jquery-1.6.2.min.js"></script><link type="text/css" href="stylesheets/jquery.jsscrollpane.css" rel="stylesheet" media="all">
+<script type="text/javascript" src="javascripts/jquery-1.6.2.min.js"></script><script type="text/javascript" src="javascripts/jquery.jsscrollpane.min.js"></script><script type="text/javascript" src="javascripts/jquery.mousewheel.js"></script><script type="text/javascript" src="javascripts/prettydiff.js"></script><script>
+  impress().init();
+  $(document).ready(function(){
+    $('.slide').jScrollPane({
+    horizontalGutter:5,
+    verticalGutter:5,
+    'showArrows': false
+    });
+
+    $('.comment').jScrollPane({
+    horizontalGutter:5,
+    verticalGutter:5,
+    'showArrows': false
+    });
+  });
+</script>
+</body>
+</html>
