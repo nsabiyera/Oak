@@ -20,13 +20,15 @@ class StackTracePreview
           :description => l.strip,
           :method => "",
           :file => "",
-          :detail => ""
+          :detail => "",
+          :no_lines => true
         }
         file_part = hash[:description].split(" in ").last
         hash[:method] = hash[:description].split(" in ").first.gsub /^at /, ""
         tokens = file_part.split(":line ")
         hash[:file] = { :path => tokens[0], :line => tokens[1].to_i }
         hash[:detail] = lines_from(hash[:file][:path], hash[:file][:line])
+        hash[:no_lines] = hash[:detail].empty?
         model[:errors] << hash
       else
         if(was_in_stack_trace == true)
@@ -47,11 +49,11 @@ class StackTracePreview
   def generate path
     models = models_for(@stacktrace, @working_directory)
 
-    table_of_contents = table_of_contents_for(models)
+    table_of_contents = table_of_contents_for(models[0..4])
 
     all_slides = ""
 
-    models.each_with_index { |model, i| all_slides += slides_for(model, i * 1500) }
+    models[0..4].each_with_index { |model, i| all_slides += slides_for(model, i * 1500) }
 
     html = html_page table_of_contents, all_slides
 
@@ -87,7 +89,11 @@ class StackTracePreview
       links += "<li style='margin-top: 10px; font-size: 18px'>#{model[:header].join('<br />')}<ol>"
 
       model[:errors].each do |kvp|
-        links += "<li><a href=\"##{ kvp[:id] }\">#{kvp[:file][:path].gsub(model[:working_directory], "")} - #{kvp[:file][:line]}</a></li>"
+        if(kvp[:no_lines])
+          links += "<li>#{kvp[:file][:path].gsub(model[:working_directory], "")} - #{kvp[:file][:line]}</li>"
+        else
+          links += "<li><a href=\"##{ kvp[:id] }\">#{kvp[:file][:path].gsub(model[:working_directory], "")} - #{kvp[:file][:line]}</a></li>"
+        end
       end
 
       links += "</li></ol>"
@@ -139,7 +145,7 @@ here
 
     i = 0
 
-    model[:errors].each do |kvp|
+    model[:errors].reject { |kvp| kvp[:no_lines] }.each do |kvp|
       formatted += <<here
       <div id="#{ kvp[:id] }" class="step slide code" data-x="#{x}" data-y="-#{ i * 600 }" data-z="-#{ i * 300 }">
         <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
@@ -228,3 +234,4 @@ if ("ontouchstart" in document.documentElement) {
 Impress
   end
 end
+
