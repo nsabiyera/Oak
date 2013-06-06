@@ -134,6 +134,10 @@ class TestRunner
     @test_dlls_override = override 
   end
 
+  def write_stack_trace output
+
+  end
+
   def test_dlls
     return @test_dlls_override if(@test_dlls_override)
 
@@ -260,8 +264,12 @@ class NSpecRunner < TestRunner
     @test_statuses.clear
     @first_failed_test = nil
 
+    stack_trace_output = ""
+
     test_dlls.each do |dll| 
       output = @sh.execute(test_cmd(dll, test_name))
+
+      stack_trace_output += stack_trace_for(output) + "\n\n"
 
       test_result = Hash.new
       in_failure = false
@@ -287,6 +295,8 @@ class NSpecRunner < TestRunner
         end
       end
 
+      write_stack_trace(stack_trace_output)
+
       @test_statuses[dll] = test_result
 
       @test_results += output
@@ -305,6 +315,21 @@ class NSpecRunner < TestRunner
 
   def test_cmd dll, name
     return "\"#{NSpecRunner.nspec_path}\" \"#{dll}\" \"#{name}\""
+  end
+
+  def stack_trace_for test_output
+    stacktrace = ""
+
+    if test_output.match /FAILURES/
+      stacktrace = test_output.split('**** FAILURES ****').last.strip
+      stacktrace = stacktrace.split(/^.*Examples, /).first.strip
+    end
+
+    return stacktrace
+  end
+
+  def write_stack_trace output
+    File.open("stacktrace.txt", 'w') { |f| f.write(output) }
   end
   
   def inconclusive
@@ -391,6 +416,9 @@ OUTPUT
       
       console_output = @sh.execute(test_cmd(test_dll, test_name))
       puts console_output
+
+      write_stack_trace console_output
+
       test_result = Hash.new
       test_result[:inconclusive] = false
       test_result[:failed] = false
@@ -818,4 +846,5 @@ class WatcherDotNet
 
   end
 end
+
 
