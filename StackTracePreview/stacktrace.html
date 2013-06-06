@@ -21,7 +21,7 @@
 </div>
 
 <div id="impress">
-        <div id="toc" class="step slide" data-x="0" data-y="-3000" data-z="-500">
+        <div id="toc" class="step slide" data-x="1000" data-y="-3000" data-z="-500">
       <h1 style="font-size: 20px !important">Stack Trace Preview [use arrow keys to navigate]
         <div style="float: right; padding: 3px; font-size: 14px">
           about: <a href="http://amirrajan.github.io/StackTracePreview/#/toc" target="_blank">Awesome sample to show others</a> -
@@ -31,11 +31,1241 @@
       </h1>
       <hr>
       <ul id="toc-ol" style="list-style-type: decimal; font-family: courier">
-       
+       <li style='margin-top: 10px; font-size: 18px'>nspec.  describe DynamicToJson. serialization of self reference objects. describe entities with error collection. serializes errors for each record.<br />Context Failure: Operation is not valid due to the current state of the object., Example Failure: Expected string length 160 but was 228. Strings differ at index 0., Expected: "[ { "name": "", "errors": [ { "key": "Name", "value": "Name i...", But was: "{ "people": [ { "name": "Jane Doe", "friends": [ { "name": "J...", -----------^<ol><li><a href="#84b56f0b-3ecd-49ca-8b66-89ddaad31e5b">\Oak\Validation.cs - 61</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2) - 0</li><li><a href="#385445b2-ed42-4352-a8b4-ab71738da4d6">\Oak\Validation.cs - 106</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1) - 0</li><li><a href="#d513170f-a5db-4257-9075-a253c36e5556">\Oak\Validation.cs - 89</a></li><li><a href="#bcaac9d0-b9d7-46bd-8126-1ad9ed84147d">\Oak\Validation.cs - 78</a></li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1) - 0</li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li><a href="#646fb6e9-54f8-45c8-ad7c-8a2903b51e98">\Oak\Gemini.cs - 741</a></li><li><a href="#9eb100a7-4655-4591-bcce-4fde76ecd734">\Oak\Gemini.cs - 744</a></li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute4[T0,T1,T2,T3,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2, T3 arg3) - 0</li><li>at CallSite.Target(Closure , CallSite , Gemini , Object , Object[] , String[] ) - 0</li><li><a href="#4051a7bc-88b8-4e66-af63-5f81a75ef86c">\Oak\Gemini.cs - 692</a></li><li>at CallSite.Target(Closure , CallSite , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid1[T0](CallSite site, T0 arg0) - 0</li><li><a href="#c8d7eb6e-8a5d-4efd-9140-85c1ef4455e3">\Oak.Tests\describe_DynamicToJson\serialization_of_self_reference_objects.cs - 107</a></li><li>at System.Collections.Generic.List`1.ForEach(Action`1 action) - 0</li><li><a href="#85312a40-7f6b-4a77-93c2-be3e7703e695">\Oak.Tests\describe_DynamicToJson\serialization_of_self_reference_objects.cs - 107</a></li></li></ol><li style='margin-top: 10px; font-size: 18px'>nspec.  describe DynamicToJson. simple serializations. describe key value pair serialization. serializes key value pairs (structs).<br />Context Failure: Operation is not valid due to the current state of the object., Example Failure: Expected string length 65 but was 100. Strings differ at index 3., Expected: "{ "errors": [ { "key": "Name", "value": "Name is required." }...", But was: "{ "quotes": "\\"Quoted\\"", "ticks": "'Ticked'", "backSlashes":...", --------------^<ol><li><a href="#d603cde6-8582-4534-a6f3-f61806174533">\Oak\Validation.cs - 61</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object , Object ) - 0</li><li><a href="#90ec2f16-2b6b-481b-94e0-84313b89f116">\Oak\Validation.cs - 106</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object ) - 0</li><li><a href="#3febd400-73a4-4d6c-9c65-6d5850e20f3d">\Oak\Validation.cs - 89</a></li><li><a href="#a85c5727-7260-4271-9cc9-9472fe67ed95">\Oak\Validation.cs - 78</a></li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li><a href="#0d4c17c0-0425-4492-a7ad-20523b005d0c">\Oak\Gemini.cs - 741</a></li><li><a href="#3b7b42f6-3f78-4685-9826-a90bbdd39b8e">\Oak\Gemini.cs - 744</a></li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute4[T0,T1,T2,T3,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2, T3 arg3) - 0</li><li>at CallSite.Target(Closure , CallSite , Gemini , Object , Object[] , String[] ) - 0</li><li><a href="#78d27d6c-797b-4e1a-aaab-2e5750ffc1f0">\Oak\Gemini.cs - 692</a></li><li>at CallSite.Target(Closure , CallSite , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid1[T0](CallSite site, T0 arg0) - 0</li><li><a href="#81ecb4e1-11d2-473b-8b2a-97c9fdeb43f1">\Oak.Tests\describe_DynamicToJson\simple_serializations.cs - 407</a></li></li></ol><li style='margin-top: 10px; font-size: 18px'>nspec. core behavior for validations. validation can be added directly to gemini. validation methods exist when validation is mixed in.<br />Operation is not valid due to the current state of the object.<ol><li><a href="#c432f8b5-7545-4ac0-b872-b7de4f202f60">\Oak\Validation.cs - 61</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object , Object ) - 0</li><li><a href="#e8119084-92e1-47f9-b666-836bbd3f12ef">\Oak\Validation.cs - 106</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object ) - 0</li><li><a href="#e59b3f0e-c4f5-4ecd-87ea-aa8b37d7c4fd">\Oak\Validation.cs - 89</a></li><li><a href="#dbd5f814-d17f-46e6-9157-240840943ffe">\Oak\Validation.cs - 78</a></li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li><a href="#c70da4a3-0d6c-4581-bd5d-bb028c5fcc64">\Oak\Gemini.cs - 741</a></li><li><a href="#490c05a2-dd54-4345-9eb0-a093171e7029">\Oak\Gemini.cs - 744</a></li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute4[T0,T1,T2,T3,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2, T3 arg3) - 0</li><li>at CallSite.Target(Closure , CallSite , Gemini , Object , Object[] , String[] ) - 0</li><li><a href="#1ea95f21-4a09-4f68-bd8e-c90e194c9220">\Oak\Gemini.cs - 692</a></li><li>at CallSite.Target(Closure , CallSite , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0) - 0</li><li><a href="#205fb675-918d-4c87-84a0-bca129574f97">\Oak.Tests\describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs - 32</a></li></li></ol><li style='margin-top: 10px; font-size: 18px'>nspec. core behavior for validations. specify validations error message can be a delegate to allow for deferred error messages.<br />Operation is not valid due to the current state of the object.<ol><li><a href="#df2cfff6-3064-4bc9-b5c7-1801c55e2c63">\Oak\Validation.cs - 61</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object , Object ) - 0</li><li><a href="#974ae53e-4808-4c8f-b4de-14574a36b90f">\Oak\Validation.cs - 106</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object ) - 0</li><li><a href="#b43065ac-4f40-4b43-948d-537e0a798d91">\Oak\Validation.cs - 89</a></li><li><a href="#83ebee0b-d083-468c-a23e-3e9871554da4">\Oak\Validation.cs - 78</a></li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1) - 0</li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li><a href="#3bd7bec5-1a28-4f62-a6cc-723fbb7141d8">\Oak\Gemini.cs - 741</a></li><li><a href="#f59b2e5e-c8a5-40d8-bf15-9187e91fb18e">\Oak\Gemini.cs - 744</a></li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute4[T0,T1,T2,T3,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2, T3 arg3) - 0</li><li>at CallSite.Target(Closure , CallSite , Gemini , Object , Object[] , String[] ) - 0</li><li><a href="#eb678bd7-3f0f-4199-a0d6-d2c47d87b0fa">\Oak\Gemini.cs - 692</a></li><li>at CallSite.Target(Closure , CallSite , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid1[T0](CallSite site, T0 arg0) - 0</li><li><a href="#e8cac171-4761-4392-b7bf-bcc908db7683">\Oak.Tests\describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs - 59</a></li></li></ol><li style='margin-top: 10px; font-size: 18px'>nspec. length for class with auto properties. validating length of. title is not long enough. is not valid.<br />Context Failure: Operation is not valid due to the current state of the object.<ol><li><a href="#9389ac9e-17f6-4e35-9918-2f0592420b9c">\Oak\Validation.cs - 61</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object , Object ) - 0</li><li><a href="#089c8bba-a510-4d1e-9d7a-56053684f90f">\Oak\Validation.cs - 106</a></li><li>at CallSite.Target(Closure , CallSite , Validations , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1) - 0</li><li>at CallSite.Target(Closure , CallSite , Validations , Object ) - 0</li><li><a href="#efb983ac-5a62-43cc-ae4d-5ad173fcf45f">\Oak\Validation.cs - 89</a></li><li><a href="#b06c2d30-78fc-4ce7-8106-d131298f0b89">\Oak\Validation.cs - 78</a></li><li>at CallSite.Target(Closure , CallSite , Object , Object ) - 0</li><li><a href="#7cdd9b3f-b514-4c79-9ab4-bab6b86fbba8">\Oak\Gemini.cs - 741</a></li><li><a href="#566c1f66-cf82-4619-8e9d-7d1ea38bf218">\Oak\Gemini.cs - 744</a></li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute4[T0,T1,T2,T3,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2, T3 arg3) - 0</li><li>at CallSite.Target(Closure , CallSite , Gemini , Object , Object[] , String[] ) - 0</li><li><a href="#3fdf3119-e46b-4c25-b0e8-ca6c2c9a082b">\Oak\Gemini.cs - 692</a></li><li>at CallSite.Target(Closure , CallSite , Object ) - 0</li><li>at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0) - 0</li><li><a href="#734c2fe2-83c2-402d-a748-425d2e07a802">\Oak.Tests\describe_DynamicModel\describe_Validation\length.cs - 42</a></li></li></ol>
       </ul>
     </div>
 
-    
+          <div id="84b56f0b-3ecd-49ca-8b66-89ddaad31e5b" class="step slide code" data-x="0" data-y="-0" data-z="-0">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 61
+        </pre>
+        <pre class="diff" style="font-family: courier">
+51  }
+52
+53  public bool HasValidationCapabilities(dynamic mixWith)
+54  {
+55      return mixWith.GetType().GetMethod(&quot;Validates&quot;) != null || mixWith.RespondsTo(&quot;Validates&quot;);
+56  }
+57
+58  public void AddError(string property, string message)
+59  {
+<b style='color: #FA8072'>60      throw new InvalidOperationException();
+</b>61
+62      errors.Add(new Gemini(new { Key = property, Value = message }));
+63  }
+64
+65  public void AddRule(dynamic rule)
+66  {
+67      rules.Add(rule);
+68  }
+69
+70  public dynamic Errors()
+71  {
+
+        </pre>
+      </div>
+      <div id="385445b2-ed42-4352-a8b4-ab71738da4d6" class="step slide code" data-x="0" data-y="-600" data-z="-300">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 106
+        </pre>
+        <pre class="diff" style="font-family: courier">
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+100
+101      bool isValid = rule.Validate(@this);
+102
+103      if (rule.After != null) rule.After();
+104
+<b style='color: #FA8072'>105      if (!isValid) AddError(rule.Property, rule.Message());
+</b>106
+107      return isValid;
+108  }
+109
+110  public dynamic FirstError()
+111  {
+112      var error = errors.FirstOrDefault();
+113
+114      if (object.ReferenceEquals(error, null)) return null;
+115
+116      return error.Value;
+
+        </pre>
+      </div>
+      <div id="d513170f-a5db-4257-9075-a253c36e5556" class="step slide code" data-x="0" data-y="-1200" data-z="-600">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 89
+        </pre>
+        <pre class="diff" style="font-family: courier">
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+<b style='color: #FA8072'>88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+</b>89
+90      return isValid;
+91  }
+92
+93  public bool Validate(dynamic rule)
+94  {
+95      if (rule.Before != null) rule.Before();
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+
+        </pre>
+      </div>
+      <div id="bcaac9d0-b9d7-46bd-8126-1ad9ed84147d" class="step slide code" data-x="0" data-y="-1800" data-z="-900">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 78
+        </pre>
+        <pre class="diff" style="font-family: courier">
+68  }
+69
+70  public dynamic Errors()
+71  {
+72      return errors;
+73  }
+74
+75  public virtual dynamic IsValid(dynamic property)
+76  {
+<b style='color: #FA8072'>77      if(property == null) return IsValid(s =&gt; true);
+</b>78
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+
+        </pre>
+      </div>
+      <div id="646fb6e9-54f8-45c8-ad7c-8a2903b51e98" class="step slide code" data-x="0" data-y="-2400" data-z="-1200">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 741
+        </pre>
+        <pre class="diff" style="font-family: courier">
+731
+732      if (member is DynamicFunctionWithParam)
+733      {
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+<b style='color: #FA8072'>740          function = () =&gt; member.Invoke(argsToInvokeWith);
+</b>741      };
+742
+743      return function();
+744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+
+        </pre>
+      </div>
+      <div id="9eb100a7-4655-4591-bcce-4fde76ecd734" class="step slide code" data-x="0" data-y="-3000" data-z="-1500">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 744
+        </pre>
+        <pre class="diff" style="font-family: courier">
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+740          function = () =&gt; member.Invoke(argsToInvokeWith);
+741      };
+742
+<b style='color: #FA8072'>743      return function();
+</b>744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+752          (argName, argValue) =&gt; new
+753          {
+754              name = argName,
+
+        </pre>
+      </div>
+      <div id="4051a7bc-88b8-4e66-af63-5f81a75ef86c" class="step slide code" data-x="0" data-y="-3600" data-z="-1800">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 692
+        </pre>
+        <pre class="diff" style="font-family: courier">
+682
+683      result = null;
+684
+685      if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
+686
+687      var member = GetMember(binder.Name);
+688
+689      if (!DynamicFunction(member)) return base.TryInvokeMember(binder, args, out result);
+690
+<b style='color: #FA8072'>691      result = InvokeDynamicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
+</b>692
+693      return true;
+694  }
+695
+696  public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+697  {
+698      if (RespondsTo(&quot;MethodMissing&quot;))
+699      {
+700          var argNames = binder.CallInfo.ArgumentNames.ToArray();
+701
+702          result = _.MethodMissing(
+
+        </pre>
+      </div>
+      <div id="c8d7eb6e-8a5d-4efd-9140-85c1ef4455e3" class="step slide code" data-x="0" data-y="-4200" data-z="-2100">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak.Tests\describe_DynamicToJson\serialization_of_self_reference_objects.cs - 107
+        </pre>
+        <pre class="diff" style="font-family: courier">
+97
+98              rules.Add(new Presence(&quot;Name&quot;));
+99
+100              return rules;
+101          });
+102      });
+103
+104      list.ForEach(s =&gt; s.Extend&lt;Validations&gt;());
+105
+<b style='color: #FA8072'>106      list.ForEach(s =&gt; s.IsValid());
+</b>107
+108      list.ForEach(s =&gt; s.Errors = s.Errors());
+109
+110      objectToConvert = list;
+111  };
+112
+113  it[&quot;serializes errors for each record&quot;] = () =&gt;
+114  {
+115      var expected = @&quot;[ { &quot;&quot;name&quot;&quot;: &quot;&quot;&quot;&quot;, &quot;&quot;errors&quot;&quot;: [ { &quot;&quot;key&quot;&quot;: &quot;&quot;Name&quot;&quot;, &quot;&quot;value&quot;&quot;: &quot;&quot;Name is required.&quot;&quot; } ] }, { &quot;&quot;name&quot;&quot;: &quot;&quot;&quot;&quot;, &quot;&quot;errors&quot;&quot;: [ { &quot;&quot;key&quot;&quot;: &quot;&quot;Name&quot;&quot;, &quot;&quot;value&quot;&quot;: &quot;&quot;Name is required.&quot;&quot; } ] } ]&quot;;
+116
+117      jsonString = DynamicToJson.Convert(objectToConvert);
+
+        </pre>
+      </div>
+      <div id="85312a40-7f6b-4a77-93c2-be3e7703e695" class="step slide code" data-x="0" data-y="-4800" data-z="-2400">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak.Tests\describe_DynamicToJson\serialization_of_self_reference_objects.cs - 107
+        </pre>
+        <pre class="diff" style="font-family: courier">
+97
+98              rules.Add(new Presence(&quot;Name&quot;));
+99
+100              return rules;
+101          });
+102      });
+103
+104      list.ForEach(s =&gt; s.Extend&lt;Validations&gt;());
+105
+<b style='color: #FA8072'>106      list.ForEach(s =&gt; s.IsValid());
+</b>107
+108      list.ForEach(s =&gt; s.Errors = s.Errors());
+109
+110      objectToConvert = list;
+111  };
+112
+113  it[&quot;serializes errors for each record&quot;] = () =&gt;
+114  {
+115      var expected = @&quot;[ { &quot;&quot;name&quot;&quot;: &quot;&quot;&quot;&quot;, &quot;&quot;errors&quot;&quot;: [ { &quot;&quot;key&quot;&quot;: &quot;&quot;Name&quot;&quot;, &quot;&quot;value&quot;&quot;: &quot;&quot;Name is required.&quot;&quot; } ] }, { &quot;&quot;name&quot;&quot;: &quot;&quot;&quot;&quot;, &quot;&quot;errors&quot;&quot;: [ { &quot;&quot;key&quot;&quot;: &quot;&quot;Name&quot;&quot;, &quot;&quot;value&quot;&quot;: &quot;&quot;Name is required.&quot;&quot; } ] } ]&quot;;
+116
+117      jsonString = DynamicToJson.Convert(objectToConvert);
+
+        </pre>
+      </div>
+      <div id="d603cde6-8582-4534-a6f3-f61806174533" class="step slide code" data-x="1500" data-y="-0" data-z="-0">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 61
+        </pre>
+        <pre class="diff" style="font-family: courier">
+51  }
+52
+53  public bool HasValidationCapabilities(dynamic mixWith)
+54  {
+55      return mixWith.GetType().GetMethod(&quot;Validates&quot;) != null || mixWith.RespondsTo(&quot;Validates&quot;);
+56  }
+57
+58  public void AddError(string property, string message)
+59  {
+<b style='color: #FA8072'>60      throw new InvalidOperationException();
+</b>61
+62      errors.Add(new Gemini(new { Key = property, Value = message }));
+63  }
+64
+65  public void AddRule(dynamic rule)
+66  {
+67      rules.Add(rule);
+68  }
+69
+70  public dynamic Errors()
+71  {
+
+        </pre>
+      </div>
+      <div id="90ec2f16-2b6b-481b-94e0-84313b89f116" class="step slide code" data-x="1500" data-y="-600" data-z="-300">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 106
+        </pre>
+        <pre class="diff" style="font-family: courier">
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+100
+101      bool isValid = rule.Validate(@this);
+102
+103      if (rule.After != null) rule.After();
+104
+<b style='color: #FA8072'>105      if (!isValid) AddError(rule.Property, rule.Message());
+</b>106
+107      return isValid;
+108  }
+109
+110  public dynamic FirstError()
+111  {
+112      var error = errors.FirstOrDefault();
+113
+114      if (object.ReferenceEquals(error, null)) return null;
+115
+116      return error.Value;
+
+        </pre>
+      </div>
+      <div id="3febd400-73a4-4d6c-9c65-6d5850e20f3d" class="step slide code" data-x="1500" data-y="-1200" data-z="-600">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 89
+        </pre>
+        <pre class="diff" style="font-family: courier">
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+<b style='color: #FA8072'>88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+</b>89
+90      return isValid;
+91  }
+92
+93  public bool Validate(dynamic rule)
+94  {
+95      if (rule.Before != null) rule.Before();
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+
+        </pre>
+      </div>
+      <div id="a85c5727-7260-4271-9cc9-9472fe67ed95" class="step slide code" data-x="1500" data-y="-1800" data-z="-900">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 78
+        </pre>
+        <pre class="diff" style="font-family: courier">
+68  }
+69
+70  public dynamic Errors()
+71  {
+72      return errors;
+73  }
+74
+75  public virtual dynamic IsValid(dynamic property)
+76  {
+<b style='color: #FA8072'>77      if(property == null) return IsValid(s =&gt; true);
+</b>78
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+
+        </pre>
+      </div>
+      <div id="0d4c17c0-0425-4492-a7ad-20523b005d0c" class="step slide code" data-x="1500" data-y="-2400" data-z="-1200">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 741
+        </pre>
+        <pre class="diff" style="font-family: courier">
+731
+732      if (member is DynamicFunctionWithParam)
+733      {
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+<b style='color: #FA8072'>740          function = () =&gt; member.Invoke(argsToInvokeWith);
+</b>741      };
+742
+743      return function();
+744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+
+        </pre>
+      </div>
+      <div id="3b7b42f6-3f78-4685-9826-a90bbdd39b8e" class="step slide code" data-x="1500" data-y="-3000" data-z="-1500">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 744
+        </pre>
+        <pre class="diff" style="font-family: courier">
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+740          function = () =&gt; member.Invoke(argsToInvokeWith);
+741      };
+742
+<b style='color: #FA8072'>743      return function();
+</b>744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+752          (argName, argValue) =&gt; new
+753          {
+754              name = argName,
+
+        </pre>
+      </div>
+      <div id="78d27d6c-797b-4e1a-aaab-2e5750ffc1f0" class="step slide code" data-x="1500" data-y="-3600" data-z="-1800">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 692
+        </pre>
+        <pre class="diff" style="font-family: courier">
+682
+683      result = null;
+684
+685      if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
+686
+687      var member = GetMember(binder.Name);
+688
+689      if (!DynamicFunction(member)) return base.TryInvokeMember(binder, args, out result);
+690
+<b style='color: #FA8072'>691      result = InvokeDynamicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
+</b>692
+693      return true;
+694  }
+695
+696  public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+697  {
+698      if (RespondsTo(&quot;MethodMissing&quot;))
+699      {
+700          var argNames = binder.CallInfo.ArgumentNames.ToArray();
+701
+702          result = _.MethodMissing(
+
+        </pre>
+      </div>
+      <div id="81ecb4e1-11d2-473b-8b2a-97c9fdeb43f1" class="step slide code" data-x="1500" data-y="-4200" data-z="-2100">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak.Tests\describe_DynamicToJson\simple_serializations.cs - 407
+        </pre>
+        <pre class="diff" style="font-family: courier">
+397      };
+398  }
+399
+400  void describe_key_value_pair_serialization()
+401  {
+402      before = () =&gt;
+403      {
+404          dynamic rabbit = new Rabbit(new { });
+405
+<b style='color: #FA8072'>406          rabbit.IsValid();
+</b>407
+408          objectToConvert = new { Errors = rabbit.Errors() };
+409      };
+410
+411      act = () =&gt;
+412      {
+413          jsonString = DynamicToJson.Convert(objectToConvert);
+414      };
+415
+416      it[&quot;serializes key value pairs (structs)&quot;] = () =&gt;
+417      {
+
+        </pre>
+      </div>
+      <div id="c432f8b5-7545-4ac0-b872-b7de4f202f60" class="step slide code" data-x="3000" data-y="-0" data-z="-0">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 61
+        </pre>
+        <pre class="diff" style="font-family: courier">
+51  }
+52
+53  public bool HasValidationCapabilities(dynamic mixWith)
+54  {
+55      return mixWith.GetType().GetMethod(&quot;Validates&quot;) != null || mixWith.RespondsTo(&quot;Validates&quot;);
+56  }
+57
+58  public void AddError(string property, string message)
+59  {
+<b style='color: #FA8072'>60      throw new InvalidOperationException();
+</b>61
+62      errors.Add(new Gemini(new { Key = property, Value = message }));
+63  }
+64
+65  public void AddRule(dynamic rule)
+66  {
+67      rules.Add(rule);
+68  }
+69
+70  public dynamic Errors()
+71  {
+
+        </pre>
+      </div>
+      <div id="e8119084-92e1-47f9-b666-836bbd3f12ef" class="step slide code" data-x="3000" data-y="-600" data-z="-300">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 106
+        </pre>
+        <pre class="diff" style="font-family: courier">
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+100
+101      bool isValid = rule.Validate(@this);
+102
+103      if (rule.After != null) rule.After();
+104
+<b style='color: #FA8072'>105      if (!isValid) AddError(rule.Property, rule.Message());
+</b>106
+107      return isValid;
+108  }
+109
+110  public dynamic FirstError()
+111  {
+112      var error = errors.FirstOrDefault();
+113
+114      if (object.ReferenceEquals(error, null)) return null;
+115
+116      return error.Value;
+
+        </pre>
+      </div>
+      <div id="e59b3f0e-c4f5-4ecd-87ea-aa8b37d7c4fd" class="step slide code" data-x="3000" data-y="-1200" data-z="-600">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 89
+        </pre>
+        <pre class="diff" style="font-family: courier">
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+<b style='color: #FA8072'>88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+</b>89
+90      return isValid;
+91  }
+92
+93  public bool Validate(dynamic rule)
+94  {
+95      if (rule.Before != null) rule.Before();
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+
+        </pre>
+      </div>
+      <div id="dbd5f814-d17f-46e6-9157-240840943ffe" class="step slide code" data-x="3000" data-y="-1800" data-z="-900">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 78
+        </pre>
+        <pre class="diff" style="font-family: courier">
+68  }
+69
+70  public dynamic Errors()
+71  {
+72      return errors;
+73  }
+74
+75  public virtual dynamic IsValid(dynamic property)
+76  {
+<b style='color: #FA8072'>77      if(property == null) return IsValid(s =&gt; true);
+</b>78
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+
+        </pre>
+      </div>
+      <div id="c70da4a3-0d6c-4581-bd5d-bb028c5fcc64" class="step slide code" data-x="3000" data-y="-2400" data-z="-1200">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 741
+        </pre>
+        <pre class="diff" style="font-family: courier">
+731
+732      if (member is DynamicFunctionWithParam)
+733      {
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+<b style='color: #FA8072'>740          function = () =&gt; member.Invoke(argsToInvokeWith);
+</b>741      };
+742
+743      return function();
+744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+
+        </pre>
+      </div>
+      <div id="490c05a2-dd54-4345-9eb0-a093171e7029" class="step slide code" data-x="3000" data-y="-3000" data-z="-1500">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 744
+        </pre>
+        <pre class="diff" style="font-family: courier">
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+740          function = () =&gt; member.Invoke(argsToInvokeWith);
+741      };
+742
+<b style='color: #FA8072'>743      return function();
+</b>744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+752          (argName, argValue) =&gt; new
+753          {
+754              name = argName,
+
+        </pre>
+      </div>
+      <div id="1ea95f21-4a09-4f68-bd8e-c90e194c9220" class="step slide code" data-x="3000" data-y="-3600" data-z="-1800">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 692
+        </pre>
+        <pre class="diff" style="font-family: courier">
+682
+683      result = null;
+684
+685      if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
+686
+687      var member = GetMember(binder.Name);
+688
+689      if (!DynamicFunction(member)) return base.TryInvokeMember(binder, args, out result);
+690
+<b style='color: #FA8072'>691      result = InvokeDynamicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
+</b>692
+693      return true;
+694  }
+695
+696  public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+697  {
+698      if (RespondsTo(&quot;MethodMissing&quot;))
+699      {
+700          var argNames = binder.CallInfo.ArgumentNames.ToArray();
+701
+702          result = _.MethodMissing(
+
+        </pre>
+      </div>
+      <div id="205fb675-918d-4c87-84a0-bca129574f97" class="step slide code" data-x="3000" data-y="-4200" data-z="-2100">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak.Tests\describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs - 32
+        </pre>
+        <pre class="diff" style="font-family: courier">
+22              {
+23                  new Presence(&quot;FirstName&quot;)
+24              };
+25          });
+26
+27          new Validations(gemini);
+28      };
+29
+30      it[&quot;validation methods exist when validation is mixed in&quot;] = () =&gt;
+<b style='color: #FA8072'>31          ((bool)gemini.IsValid()).should_be(false);
+</b>32  }
+33
+34  void specify_a_detailed_exception_is_thrown_if_the_inititalization_for_validation_fails()
+35  {
+36      gemini = new FailedValidation();
+37
+38      try
+39      {
+40          gemini.IsValid();
+41      }
+42      catch (Exception ex)
+
+        </pre>
+      </div>
+      <div id="df2cfff6-3064-4bc9-b5c7-1801c55e2c63" class="step slide code" data-x="4500" data-y="-0" data-z="-0">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 61
+        </pre>
+        <pre class="diff" style="font-family: courier">
+51  }
+52
+53  public bool HasValidationCapabilities(dynamic mixWith)
+54  {
+55      return mixWith.GetType().GetMethod(&quot;Validates&quot;) != null || mixWith.RespondsTo(&quot;Validates&quot;);
+56  }
+57
+58  public void AddError(string property, string message)
+59  {
+<b style='color: #FA8072'>60      throw new InvalidOperationException();
+</b>61
+62      errors.Add(new Gemini(new { Key = property, Value = message }));
+63  }
+64
+65  public void AddRule(dynamic rule)
+66  {
+67      rules.Add(rule);
+68  }
+69
+70  public dynamic Errors()
+71  {
+
+        </pre>
+      </div>
+      <div id="974ae53e-4808-4c8f-b4de-14574a36b90f" class="step slide code" data-x="4500" data-y="-600" data-z="-300">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 106
+        </pre>
+        <pre class="diff" style="font-family: courier">
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+100
+101      bool isValid = rule.Validate(@this);
+102
+103      if (rule.After != null) rule.After();
+104
+<b style='color: #FA8072'>105      if (!isValid) AddError(rule.Property, rule.Message());
+</b>106
+107      return isValid;
+108  }
+109
+110  public dynamic FirstError()
+111  {
+112      var error = errors.FirstOrDefault();
+113
+114      if (object.ReferenceEquals(error, null)) return null;
+115
+116      return error.Value;
+
+        </pre>
+      </div>
+      <div id="b43065ac-4f40-4b43-948d-537e0a798d91" class="step slide code" data-x="4500" data-y="-1200" data-z="-600">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 89
+        </pre>
+        <pre class="diff" style="font-family: courier">
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+<b style='color: #FA8072'>88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+</b>89
+90      return isValid;
+91  }
+92
+93  public bool Validate(dynamic rule)
+94  {
+95      if (rule.Before != null) rule.Before();
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+
+        </pre>
+      </div>
+      <div id="83ebee0b-d083-468c-a23e-3e9871554da4" class="step slide code" data-x="4500" data-y="-1800" data-z="-900">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 78
+        </pre>
+        <pre class="diff" style="font-family: courier">
+68  }
+69
+70  public dynamic Errors()
+71  {
+72      return errors;
+73  }
+74
+75  public virtual dynamic IsValid(dynamic property)
+76  {
+<b style='color: #FA8072'>77      if(property == null) return IsValid(s =&gt; true);
+</b>78
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+
+        </pre>
+      </div>
+      <div id="3bd7bec5-1a28-4f62-a6cc-723fbb7141d8" class="step slide code" data-x="4500" data-y="-2400" data-z="-1200">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 741
+        </pre>
+        <pre class="diff" style="font-family: courier">
+731
+732      if (member is DynamicFunctionWithParam)
+733      {
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+<b style='color: #FA8072'>740          function = () =&gt; member.Invoke(argsToInvokeWith);
+</b>741      };
+742
+743      return function();
+744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+
+        </pre>
+      </div>
+      <div id="f59b2e5e-c8a5-40d8-bf15-9187e91fb18e" class="step slide code" data-x="4500" data-y="-3000" data-z="-1500">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 744
+        </pre>
+        <pre class="diff" style="font-family: courier">
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+740          function = () =&gt; member.Invoke(argsToInvokeWith);
+741      };
+742
+<b style='color: #FA8072'>743      return function();
+</b>744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+752          (argName, argValue) =&gt; new
+753          {
+754              name = argName,
+
+        </pre>
+      </div>
+      <div id="eb678bd7-3f0f-4199-a0d6-d2c47d87b0fa" class="step slide code" data-x="4500" data-y="-3600" data-z="-1800">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 692
+        </pre>
+        <pre class="diff" style="font-family: courier">
+682
+683      result = null;
+684
+685      if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
+686
+687      var member = GetMember(binder.Name);
+688
+689      if (!DynamicFunction(member)) return base.TryInvokeMember(binder, args, out result);
+690
+<b style='color: #FA8072'>691      result = InvokeDynamicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
+</b>692
+693      return true;
+694  }
+695
+696  public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+697  {
+698      if (RespondsTo(&quot;MethodMissing&quot;))
+699      {
+700          var argNames = binder.CallInfo.ArgumentNames.ToArray();
+701
+702          result = _.MethodMissing(
+
+        </pre>
+      </div>
+      <div id="e8cac171-4761-4392-b7bf-bcc908db7683" class="step slide code" data-x="4500" data-y="-4200" data-z="-2100">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak.Tests\describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs - 59
+        </pre>
+        <pre class="diff" style="font-family: courier">
+49
+50  void specify_validations_error_message_can_be_a_delegate_to_allow_for_deferred_error_messages()
+51  {
+52      gemini = new DeferredFailedValidation();
+53
+54      gemini.FirstName = &quot;&quot;;
+55
+56      gemini.DeferredProp = &quot;Hello&quot;;
+57
+<b style='color: #FA8072'>58      gemini.IsValid();
+</b>59
+60      (gemini.FirstError() as string).should_be(&quot;Hello&quot;);
+61  }
+62
+63  void specify_first_error_returns_null_if_no_errors()
+64  {
+65      gemini = new DeferredFailedValidation();
+66
+67      gemini.FirstName = &quot;Foobar&quot;;
+68
+69      gemini.IsValid();
+
+        </pre>
+      </div>
+      <div id="9389ac9e-17f6-4e35-9918-2f0592420b9c" class="step slide code" data-x="6000" data-y="-0" data-z="-0">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 61
+        </pre>
+        <pre class="diff" style="font-family: courier">
+51  }
+52
+53  public bool HasValidationCapabilities(dynamic mixWith)
+54  {
+55      return mixWith.GetType().GetMethod(&quot;Validates&quot;) != null || mixWith.RespondsTo(&quot;Validates&quot;);
+56  }
+57
+58  public void AddError(string property, string message)
+59  {
+<b style='color: #FA8072'>60      throw new InvalidOperationException();
+</b>61
+62      errors.Add(new Gemini(new { Key = property, Value = message }));
+63  }
+64
+65  public void AddRule(dynamic rule)
+66  {
+67      rules.Add(rule);
+68  }
+69
+70  public dynamic Errors()
+71  {
+
+        </pre>
+      </div>
+      <div id="089c8bba-a510-4d1e-9d7a-56053684f90f" class="step slide code" data-x="6000" data-y="-600" data-z="-300">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 106
+        </pre>
+        <pre class="diff" style="font-family: courier">
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+100
+101      bool isValid = rule.Validate(@this);
+102
+103      if (rule.After != null) rule.After();
+104
+<b style='color: #FA8072'>105      if (!isValid) AddError(rule.Property, rule.Message());
+</b>106
+107      return isValid;
+108  }
+109
+110  public dynamic FirstError()
+111  {
+112      var error = errors.FirstOrDefault();
+113
+114      if (object.ReferenceEquals(error, null)) return null;
+115
+116      return error.Value;
+
+        </pre>
+      </div>
+      <div id="efb983ac-5a62-43cc-ae4d-5ad173fcf45f" class="step slide code" data-x="6000" data-y="-1200" data-z="-600">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 89
+        </pre>
+        <pre class="diff" style="font-family: courier">
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+<b style='color: #FA8072'>88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+</b>89
+90      return isValid;
+91  }
+92
+93  public bool Validate(dynamic rule)
+94  {
+95      if (rule.Before != null) rule.Before();
+96
+97      if (rule.If != null &amp;&amp; !rule.If()) return true;
+98
+99      if (rule.Unless != null &amp;&amp; rule.Unless()) return true;
+
+        </pre>
+      </div>
+      <div id="b06c2d30-78fc-4ce7-8106-d131298f0b89" class="step slide code" data-x="6000" data-y="-1800" data-z="-900">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Validation.cs - 78
+        </pre>
+        <pre class="diff" style="font-family: courier">
+68  }
+69
+70  public dynamic Errors()
+71  {
+72      return errors;
+73  }
+74
+75  public virtual dynamic IsValid(dynamic property)
+76  {
+<b style='color: #FA8072'>77      if(property == null) return IsValid(s =&gt; true);
+</b>78
+79      return IsValid(s =&gt; s.Property == property);
+80  }
+81
+82  public virtual bool IsValid(Func&lt;dynamic, bool&gt; filter)
+83  {
+84      errors.Clear();
+85
+86      bool isValid = true;
+87
+88      foreach (var rule in rules.Where(filter)) isValid = Validate(rule) &amp;&amp; isValid;
+
+        </pre>
+      </div>
+      <div id="7cdd9b3f-b514-4c79-9ab4-bab6b86fbba8" class="step slide code" data-x="6000" data-y="-2400" data-z="-1200">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 741
+        </pre>
+        <pre class="diff" style="font-family: courier">
+731
+732      if (member is DynamicFunctionWithParam)
+733      {
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+<b style='color: #FA8072'>740          function = () =&gt; member.Invoke(argsToInvokeWith);
+</b>741      };
+742
+743      return function();
+744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+
+        </pre>
+      </div>
+      <div id="566c1f66-cf82-4619-8e9d-7d1ea38bf218" class="step slide code" data-x="6000" data-y="-3000" data-z="-1500">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 744
+        </pre>
+        <pre class="diff" style="font-family: courier">
+734          var argsToInvokeWith = args.FirstOrDefault() as dynamic;
+735
+736          if (argNames.Any()) argsToInvokeWith = GetNamedArgs(args, argNames);
+737
+738          else if (args.Count() &gt; 1) argsToInvokeWith = args;
+739
+740          function = () =&gt; member.Invoke(argsToInvokeWith);
+741      };
+742
+<b style='color: #FA8072'>743      return function();
+</b>744  }
+745
+746  private dynamic GetNamedArgs(object[] args, string[] argNames)
+747  {
+748      var namedArgs = new Gemini();
+749
+750      argNames.Zip(
+751          args.Skip(args.Length - argNames.Length),
+752          (argName, argValue) =&gt; new
+753          {
+754              name = argName,
+
+        </pre>
+      </div>
+      <div id="3fdf3119-e46b-4c25-b0e8-ca6c2c9a082b" class="step slide code" data-x="6000" data-y="-3600" data-z="-1800">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak\Gemini.cs - 692
+        </pre>
+        <pre class="diff" style="font-family: courier">
+682
+683      result = null;
+684
+685      if (!RespondsTo(binder.Name)) return MethodMissing(binder, args, ref result);
+686
+687      var member = GetMember(binder.Name);
+688
+689      if (!DynamicFunction(member)) return base.TryInvokeMember(binder, args, out result);
+690
+<b style='color: #FA8072'>691      result = InvokeDynamicFunction(member, args, binder.CallInfo.ArgumentNames.ToArray());
+</b>692
+693      return true;
+694  }
+695
+696  public virtual bool MethodMissing(InvokeMemberBinder binder, object[] args, ref object result)
+697  {
+698      if (RespondsTo(&quot;MethodMissing&quot;))
+699      {
+700          var argNames = binder.CallInfo.ArgumentNames.ToArray();
+701
+702          result = _.MethodMissing(
+
+        </pre>
+      </div>
+      <div id="734c2fe2-83c2-402d-a748-425d2e07a802" class="step slide code" data-x="6000" data-y="-4200" data-z="-2100">
+        <div style="float: right; margin-right: 20px; font-size: small"><a href="#toc">toc</a></div>
+        <pre class="test-results" style="font-family: courier">
+\Oak.Tests\describe_DynamicModel\describe_Validation\length.cs - 42
+        </pre>
+        <pre class="diff" style="font-family: courier">
+32    
+33  abstract class length : nspec
+34  {
+35      public dynamic essay;
+36
+37      public bool isValid;
+38
+39      void validating_length_of()
+40      {
+<b style='color: #FA8072'>41          act = () =&gt; isValid = essay.IsValid();
+</b>42
+43          context[&quot;title is not long enough&quot;] = () =&gt;
+44          {
+45              before = () =&gt; essay.Title = string.Empty;
+46                
+47              it[&quot;is not valid&quot;] = () =&gt; isValid.should_be_false();
+48          };
+49
+50          context[&quot;title is exact length&quot;] = () =&gt;
+51          {
+52              before = () =&gt; essay.Title = &quot;1&quot;;
+
+        </pre>
+      </div>
+
 </div>
 
 <div class="hint">
