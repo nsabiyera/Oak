@@ -326,7 +326,7 @@ This is probably the first time you've run Oak for this solution. <strong>Be sur
 the website at some point and take a look at the screencasts and sample apps (STRONGLY recommended): 
 <a href=""http://amirrajan.github.com/Oak"" target=""_blank"">Oak's Github Page</a></strong>.
 If you want to try Oak out in an interactive way, do the following:<br/>
-Update HomeController.cs and put the follwing <strong>between the namespace block (be sure to do both Step 1 and Step 2 - 
+Update HomeController.cs and put the following <strong>between the namespace block (be sure to do both Step 1 and Step 2 - 
 after you've done this, refresh the page)</strong>:
 <h3>Step 1 - Update HomeController.cs</h3>
 <pre>
