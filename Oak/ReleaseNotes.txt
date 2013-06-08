@@ -1,4 +1,13 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.6.3+
+oak-edge 2.0.3+
+=============== CHANGES ==================
+DebugBootstrap.cs now catches all web exceptions and writes out a
+stacktrace.txt file.  This file can be used with Stack Trace Preview
+for nice stack trace visualization.
+More Info: https://github.com/amirrajan/Oak/wiki/Getting-Started#stack-trace-preview-requires-optional-steps
+
+============== FOR VERSIONS ==============
 oak 2.6.2+
 oak-edge 2.0.2+
 oak-json 1.1.3+
