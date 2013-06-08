@@ -1316,10 +1316,16 @@ rake gen:view[controller_and_view_name]
         {
             return @"
 <h2>Stack Trace Visualization</h2>
+<p>
 After running the command:
+</p>
 <pre>rake stacktrace:gen_preview<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
 you can view a visualization of the stack trace by navigating in the browser to:
 <pre>file:///C:/Development/StackTraceOak/StackTracePreview/stacktrace.html (copy and paste into address bar)</pre>
+<p>
+If you did not use the warmup template and instead manually installed Oak, please refer to the <a href=""https://github.com/amirrajan/Oak/wiki/Getting-Started#stack-trace-preview-requires-optional-steps"" target=""_blank"">wiki</a> 
+for instructions on how to set up stack trace visualization.
+</p>
 ";
         }
     }
