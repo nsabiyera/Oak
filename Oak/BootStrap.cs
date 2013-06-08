@@ -27,7 +27,20 @@ namespace Oak
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Out.WriteLine("======== Exception Occurred ==========");
-                Console.Out.WriteLine(Bullet.ScrubStackTrace(filterContext.Exception.ToString()));
+
+                string stackTrace = "========= Clean Stack Trace =========" + 
+                    Environment.NewLine + 
+                    Bullet.ScrubStackTrace(filterContext.Exception.ToString()) + 
+                    Environment.NewLine +
+                    "========= Unaltered Stack Trace (verbose) =========" + 
+                    Environment.NewLine + 
+                    filterContext.Exception.ToString();
+
+                File.WriteAllText(filterContext.HttpContext.Server.MapPath("~/stacktrace.txt"), stackTrace);
+                Console.Out.WriteLine(stackTrace);
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Out.WriteLine("StackTrace written to " + filterContext.HttpContext.Server.MapPath("~/stacktrace.txt"));
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Out.WriteLine("====================================\n\n");
                 Console.ResetColor();
             }
@@ -173,11 +186,13 @@ namespace Oak
 
             recos.Add(OriginalStackTrace(error));
 
-            if (applicable != null)
-            {
-                recos.Add(applicable.GetRecommendation(error));
-                WriteRecommendation(mvcApplication, recos);
-            }
+            if (applicable != null) recos.Add(applicable.GetRecommendation(error));
+
+            if (StackTracePreview.CanPreview(Bullet.ScrubStackTrace(error.ToString()))) recos.Add(StackTracePreview.Instructions());
+
+            recos.Add(UnAlteredStackTrace.Body(error.ToString()));
+
+            WriteRecommendation(mvcApplication, recos);
         }
 
         private static void WriteRecommendation(HttpApplication mvcApplication, List<string> applicatableRecommendations)
@@ -192,7 +207,7 @@ namespace Oak
         pre { background-color: #F5F5F5; border: solid 1px silver; padding: 10px; overflow-x: auto; white-space: pre-wrap; }
     </style>
 
-    <h2>An error was thrown and Oak has a recommendation:</h2>
+    <h2>An error was thrown:</h2>
 
     {recommendations}
 
@@ -217,6 +232,7 @@ namespace Oak
         <div style=""width: 100px; float: right;"">
          <img src=""http://i.imgur.com/kSZdd.png"" />
         </div>
+        
         <div style=""width: 500px; float: right; padding: 3px"">
             Note: This error can also be seen in the IISExpress console.  Running <pre style=""display: inline; padding: 0px"">rake server</pre> starts up a IIS Express minimized with the following icon:
         </div>
@@ -730,7 +746,7 @@ public class Blogs : DynamicRepository
 <h3>Step 2 - In HomeController.cs, declare the Comments repository and give the Blog class an association to Comments</h3>
 With the projection in place, you will now get back a dynamically typed object 
 (as opposed to just a Gemini). Any query that is executed from a ""projected"" 
-dynamic repository (in this case Blogs) will go through this mapping.  Now that the project
+dynamic repository (in this case Blogs) will go through this mapping.  Now that the projection
 is in place we can add an association to blog to return comments. <strong>Here is how you 
 say ""A blog has many comments""</strong>:
 <pre>
@@ -1286,6 +1302,38 @@ rake gen:view[controller_and_view_name]
     example: rake gen:view[Home:Index]
 </pre>
 ";
+        }
+    }
+
+    public class StackTracePreview
+    {
+        public static bool CanPreview(string stackTrace)
+        {
+            return stackTrace.Contains("at") && stackTrace.Contains(":line");
+        }
+
+        public static string Instructions()
+        {
+            return @"
+<h2>Stack Trace Visualization</h2>
+After running the command:
+<pre>rake stacktrace:gen_preview<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
+you can view a visualization of the stack trace by navigating in the browser to:
+<pre>file:///C:/Development/StackTraceOak/StackTracePreview/stacktrace.html (copy and paste into address bar)</pre>
+";
+        }
+    }
+
+    public class UnAlteredStackTrace
+    {
+        public static string Body(string stackTrace)
+        {
+            return @"
+<div style='margin: 5px; font-weight: bold'>
+    <h2>Unaltered Stack Trace</h2>
+    <p>Here is the unaltered stack trace if you're interested:</p>
+    <pre>{stackTrace}</pre>
+</div>".Replace("{stackTrace}", stackTrace);
         }
     }
 }
