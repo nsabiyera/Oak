@@ -2,10 +2,11 @@
 <package> 
   <metadata> 
     <id>oak-json</id> 
-    <version>1.1.3</version> 
+    <version>1.1.4</version> 
     <authors>Amir Rajan</authors>
     <description>Just the JSON capabilities of Oak</description> 
     <language>en-US</language>
+    <iconUrl>http://amirrajan.github.io/Oak/oak-nuget.png</iconUrl>
     <projectUrl>http://amirrajan.github.com/Oak/</projectUrl>
     <licenseUrl>https://github.com/amirrajan/Oak/blob/master/license.txt</licenseUrl>
     <tags>dynamic mvc migrations rails aspnetmvc oak</tags>

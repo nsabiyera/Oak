@@ -2,10 +2,11 @@
 <package> 
   <metadata> 
     <id>oak</id> 
-    <version>2.6.3</version> 
+    <version>2.6.4</version> 
     <authors>Amir Rajan</authors>
     <description>ASP.NET MVC augmentations needed to support single page applications.</description> 
     <language>en-US</language>
+    <iconUrl>http://amirrajan.github.io/Oak/oak-nuget.png</iconUrl>
     <projectUrl>http://amirrajan.github.com/Oak/</projectUrl>
     <licenseUrl>https://github.com/amirrajan/Oak/blob/master/license.txt</licenseUrl>
     <tags>dynamic mvc migrations rails aspnetmvc oak</tags>
