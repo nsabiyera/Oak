@@ -187,7 +187,7 @@ public class Blog : DynamicModel
 {
     <b>//validation, name is required</b>
     IEnumerable&lt;dynamic&gt; Validates() {
-        yield return new Presense("Name");
+        yield return new Presence("Name");
     }
 
     public Blog(object dto) : base(dto) { }
