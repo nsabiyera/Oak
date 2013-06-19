@@ -48,11 +48,10 @@
         Oak gives you a way to quickly build these kind of apps by:
         <ul>
           <li>Building on top of ASP.NET MVC, leveraging what you already know</li>
-          <li>Bridging language barriers between JavaScript (a prototypical language) and C# (a statically compiled languge).</li>
-          <li>Leveraging C#'s 4.0 DLR to give your classes extremely powerful dynamic and prototypical capabilites.</li>
-          <li>Augmenting ASP.NET MVC to better support consuming and returning JSON payloads.</li>
-          <li>Providing a lean, fast, dynamic ORM to seamlessly save dynamic/prototypical classes.</li>
-          <li>Providing a holistic approach to develop, build, and test single page web apps.</li>
+          <li>Bridging the gap between JavaScript and C#'s by using the DLR to give you <a href="http://en.wikipedia.org/wiki/Prototype-based_programming" target="_blank">prototype based programming</a> and the ability to use <a href="http://en.wikipedia.org/wiki/Mixin" target="_blank">mixins</a></li>
+          <li>Providing a dynamic model binder that converts JSON payloads to dynamic C# classes, <b>eliminating</b> the need for DTOs and ViewModels</li>
+          <li>Providing a suite of mixins to perform validation, data access, change tracking, and memoization with dynamic objects</li>
+          <li>Providing a continuous development feedback loop that will automatically build, deploy and test your applications <b>while you code</b></li>
         </ul>
 
 <h2>Publications and Credibility</h2>
@@ -69,14 +68,17 @@
 <p>
 Oak has full documentation, screencasts, sample apps, and an interactive tutorial to help developers ramp up quickly.  Here is what you need to do:
 </p>
-<ul>
-  <li><a href="#screencasts">Watch the screencasts</a></li>
+<ol>
+  <li><a href="#screencasts">Watch the screen casts (each ~10 mins long)</a></li>
   <li><a href="#prerequisites">Install the prerequisites</a></li>
   <li><a href="#bootstrapoak">Run through the interactive tutorial</a></li>
+</ol>
+<p>After your interest is piqued.</p>
+<ol>
   <li><a href="#sampleapps">Get the sample apps running</a></li>
   <li><a href="https://github.com/amirrajan/oak/wiki" target="_blank">Read the wiki to wrap up (it's succinct and very helpful)</a></li>
   <li><a href="https://twitter.com/amirrajan" target="_blank">Let me know what you think</a></li>
-</ul>
+</ol>
         
 <a id="prerequisites"></a>
 <h2>First Time (Prerequisites)</h2>
@@ -496,7 +498,7 @@ git clone https://github.com/amirrajan/Oak.git
 The git source tree is ~500 MB, but also includes all the screencasts which can be viewed off line via the <strong>gh-pages</strong> branch.
 </p>
 <h2>Minimal Implementation: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
-<p>This is..you guessed it...a blogging app.  It's a <i>really</i> minimal implementation.  Look at the other sample apps for a deeper dive into Oak.</p>
+<p>This blogging applications is will show you how to preform validation and data access using Oak's mixins. Look at the other sample apps for a deeper dive into Oak.</p>
 <ul>
 <li>Run the following commands:
 <pre>
@@ -526,8 +528,8 @@ start http://localhost:3000
 
 <a id="peeps"></a>
 <h2>Hello World Single Page Apps: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/Peeps">Peeps</a></h2>
-<p>This is a really simple app that adds and updates records to a single table over ajax. It's a <i>really</i> minimal server side implementation for a number of JavaScript front end frameworks:</p>
-<ul style="font-size: 20px">
+<p>This is a really simple app that adds and updates records to a single table over ajax. This sample app shows how Oak can easily integrate with a number of JavaScript frameworks such as:</p>
+<ul style="font-size: 20px"> 
   <li>Plain 'Ol jQuery</li>
   <li>BackboneJS</li>
   <li>BackboneJS+Marionette</li>
@@ -561,11 +563,11 @@ start http://localhost:3000
 </ul>
 
 <p style="font-size: 20px">
-You may want to look at the <a href="#taskrabbits">Task Rabbits</a> sample app for a deeper dive.
+For a more complex application that shows integration with JavaScript frameworks, you may want to look at the <a href="#taskrabbits">Task Rabbits</a> sample app for a deeper dive.
 </p>
 
 <h2>Two Player Game, Complex Object Graph: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BattleShip">BattleShip</a></h2>
-<p>This is a web based version of the game BattleShip.  Open up two browsers and start playing!</p>
+<p>This is a web based version of the game BattleShip. This sample app shows the use of a rich domain model that uses dynamic classes. There is also a supporting test suite that shows how to test ASP.NET MVC applications.</p>
 <ul>
 <li>Run the following commands:
 <pre>
@@ -596,8 +598,7 @@ start http://localhost:3000
 <a id="taskrabbits"></a>
 <h2>Single Page App, JS framework integration: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/TaskRabbits">Task Rabbits</a></h2>
 <p>
-This is a web application that shows how you can integrate Oak with some popular JavaScript frameworks such as
-:
+This app show more complex usages of JavaScript frameworks and how they integrate with the server side. This sample app also comes with an UI automation suite, so you can see how to write UI automation tests for a more complex application. You can use this sample app to do a side by side comparison of the following JavaScript frameworks:</p>
 </p>
 <ul style="font-size: 20px">
   <li>BackboneJS</li>
@@ -632,7 +633,9 @@ start http://localhost:3000
 </ul>
 
 <h2>Single Page App, CoffeeScript, Complex DB Queries: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/Crib">Crib</a></h2>
-<p>This is a web application that tracks consultants and when they roll off of a client engagement.  Consulting companies like <a href="http://improvingenterprises.com" target="_blank">Improving Enterprises</a> would use this app to manage their resource pool.</p>
+<p>
+  This is a web application that tracks consultants and when they roll off of a client engagement. This sample app uses BackboneJS and CoffeeScript on the front end, again showing the integration with the server side. This application also shows how to do more complex data access using Oak's DynamicRepository. Integration/unit test suite included.
+</p>
 <ul>
 <li>Run the following commands:
 <pre>
@@ -663,7 +666,7 @@ start http://localhost:3000
 
 <h2>Single Page App, REST Api: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/TodoApp">Todo List</a></h2>
 <p>
-This is a web application that uses Oak to implement a REST api using Oak.  A simple todo list that allows you to add items, remove them, and mark things as done.
+The app is a simple todo list that allows you to add items, remove them, and mark things as done. The front end is built using JavaScript and BackboneJS. The server side code shows a sample of how you can create a REST Api using ASP.NET MVC and the dynamic capabilities of Oak.  There is a test suite associated with this app that shows how to test a REST Api too.
 </p>
 <ul>
 <li>Run the following commands:
@@ -695,7 +698,7 @@ start http://localhost:3000
 <h1>THE Reference App - <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/BorrowedGames">Borrowed Games</a></h1>
 <hr/>
 <p>
-This is a full blown reference implementation that uses all aspects of Oak.  Borrowed Games is a single page web app that allows a circle of friends to borrow games from each other.  This site is deployed and in production at <a href="http://borrowedgames.com" target="_blank">http://borrowedgames.com</a>.
+This is a full blown reference implementation that uses all aspects of Oak. Borrowed Games is a single page web app that allows a circle of friends to borrow games from each other.  This site is deployed and in production at <a href="http://borrowedgames.com" target="_blank">http://borrowedgames.com</a>.  The app's front end is written in BackboneJS and CoffeeScript. It comes with a full unit/integration test suite, along with UI Automation.
 </p>
 <ul>
 <li>Run the following commands
