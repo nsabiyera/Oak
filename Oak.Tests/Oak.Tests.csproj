@@ -49,9 +49,9 @@
     <Reference Include="NHibernate">
       <HintPath>..\Libraries\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NSpec, Version=0.9.62.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NSpec, Version=0.9.67.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\nspec.0.9.62\lib\NSpec.dll</HintPath>
+      <HintPath>..\packages\nspec.0.9.67\lib\NSpec.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
