@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<form method="post" action="@Url.RouteUrl(new { controller = "Games", action = "Create" })" id="form">
+    @Html.Label("Name:")
+    @Html.TextBox("name")<br />
+    <a id="create" href="javascript:;" class="btn btn-primary">Save</a>
+</form>
+
+<script>
+    $(function () {
+        $("#create").click(function () {
+            $("#form").submit();
+        });
+    });
+</script>

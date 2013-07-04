@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2E5DEFA5-5D21-4C20-AD94-36F151189E70}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BorrowedGames</RootNamespace>
+    <AssemblyName>BorrowedGames</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Core">
+      <HintPath>..\packages\Glimpse.0.85\lib\net40\Glimpse.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Elmah">
+      <HintPath>..\packages\Glimpse.Elmah.0.9.5\lib\net40\Glimpse.Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Mvc3">
+      <HintPath>..\packages\Glimpse.Mvc3.0.85\lib\net40\Glimpse.Mvc3.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonFx">
+      <HintPath>..\packages\JsonFx.2.0.1106.2610\lib\net40\JsonFx.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\oak-edge.2.0.2\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
+    <Compile Include="Controllers\GamesController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LibraryController.cs" />
+    <Compile Include="Models\Email.cs" />
+    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\LendedGame.cs" />
+    <Compile Include="Models\LibraryEntry.cs" />
+    <Compile Include="Oak\Association.cs" />
+    <Compile Include="Oak\BootStrap.cs" />
+    <Compile Include="Oak\Bullet.cs" />
+    <Compile Include="Oak\Changes.cs" />
+    <Compile Include="Oak\ConnectionProfile.cs" />
+    <Compile Include="Oak\DynamicDb.cs" />
+    <Compile Include="Oak\DynamicForm.cs" />
+    <Compile Include="Oak\DynamicJsonResult.cs" />
+    <Compile Include="Oak\DynamicModel.cs" />
+    <Compile Include="Oak\DynamicModels.cs" />
+    <Compile Include="Oak\DynamicToJson.cs" />
+    <Compile Include="Oak\ElementMetaData.cs" />
+    <Compile Include="Oak\Gemini.cs" />
+    <Compile Include="Oak\GeminiInfo.cs" />
+    <Compile Include="Oak\JsonToDynamic.cs" />
+    <Compile Include="Oak\Massive.cs" />
+    <Compile Include="Oak\Memoize.cs" />
+    <Compile Include="Oak\ObjectExtensions.cs" />
+    <Compile Include="Oak\ParamsModelBinder.cs" />
+    <Compile Include="Oak\Query.cs" />
+    <Compile Include="Oak\Seed.cs" />
+    <Compile Include="Oak\StrongParameters.cs" />
+    <Compile Include="Oak\Validation.cs" />
+    <Compile Include="Repositories\EmailHistorys.cs" />
+    <Compile Include="Models\FriendAssociation.cs" />
+    <Compile Include="Models\FriendAssociations.cs" />
+    <Compile Include="Models\PreferredGame.cs" />
+    <Compile Include="Models\Rental.cs" />
+    <Compile Include="Models\NotInterestedGame.cs" />
+    <Compile Include="Models\RequestedGame.cs" />
+    <Compile Include="Models\WantedGame.cs" />
+    <Compile Include="Repositories\FavoritedGames.cs" />
+    <Compile Include="Repositories\WantedGames.cs" />
+    <Compile Include="Repositories\Games.cs" />
+    <Compile Include="Repositories\Library.cs" />
+    <Compile Include="Controllers\SeedController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories\NotInterestedGames.cs" />
+    <Compile Include="Models\ObjectExtensions.cs" />
+    <Compile Include="Models\Registration.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Repositories\Users.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\Glimpse.Elmah.Readme.txt" />
+    <Content Include="App_Readme\glimpse.mvc3.readme.txt" />
+    <Content Include="App_Readme\glimpse.readme.txt" />
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\datepicker.css" />
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\screen.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Oak\ReleaseNotes.txt" />
+    <Content Include="Scripts\app\autocomplete.js" />
+    <Content Include="Scripts\app\friends.js" />
+    <Content Include="Scripts\app\gamelibrary.js" />
+    <Content Include="Scripts\app\growl.js" />
+    <Content Include="Scripts\app\preferred.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>preferred.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\app\profile.js" />
+    <Content Include="Scripts\app\requested.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>requested.js</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\app\requested.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>requested.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\app\wanted.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>wanted.js</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\app\wanted.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>wanted.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\app\toggle.js" />
+    <Content Include="Scripts\app\toolTip.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>toolTip.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\backbone.js" />
+    <Content Include="Scripts\backbone.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-tooltip.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery-position.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jQuery.tmpl.js" />
+    <Content Include="Scripts\jQuery.tmpl.min.js" />
+    <Content Include="Scripts\modit\modit.js" />
+    <Content Include="Scripts\modit\underscore.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
+    <Content Include="specwatchr-usage.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\LogOn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\Register.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="Views\Home\_Library.cshtml" />
+    <Content Include="Views\Home\_Friends.cshtml" />
+    <Content Include="App_Code\OakForm.cshtml" />
+    <None Include="sass\screen.scss" />
+    <Content Include="Views\Home\_Games.cshtml" />
+    <None Include="Scripts\app\preferred.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>preferred.js</LastGenOutput>
+    </None>
+    <None Include="Scripts\app\toolTip.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>toolTip.js</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5848</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

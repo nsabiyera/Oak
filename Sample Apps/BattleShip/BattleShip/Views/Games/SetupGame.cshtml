@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "SetupGame";
+}
+
+<h2>Setup Game</h2>
+<hr />
+<table>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">1A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">1B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">1C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">1D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">1E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">2A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">2B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">2C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">2D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">2E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">3A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">3B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">3C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">3D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">3E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">4A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">4B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">4C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">4D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">4E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">5A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">5B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">5C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">5D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 20px">5E</div></td>
+    </tr>
+</table>
+<div>
+    <a id="ready" style="margin: 10px" href="javascript:;" class="btn btn-primary">Ready</a>
+</div>
+<script>
+    $(function () {
+        $(".square").click(function () {
+            var squareElement = $(this);
+
+            var square = $(this).html();
+
+            $.post("/games/setupgame", 
+                { gameId: @(ViewBag.GameId), playerId: '@(ViewBag.UserId)', location: square }, 
+                function(d) {
+                    if(d.success) squareElement.toggleClass("alert-success");
+                    
+                    else alert("you can only select 5 squares, click ready if you're done");
+                });
+        });
+
+        $("#ready").click(function() {
+            $.post(
+                "/games/ready", 
+                { gameId: @(ViewBag.GameId), playerId: '@(ViewBag.UserId)' },
+                function() { 
+                    window.location = '@Url.RouteUrl(new { controller = "Games", action = "Play" })' + "?gameId=" + '@(ViewBag.GameId)' + "&playerId=@(ViewBag.UserId)"; 
+                });
+        });
+    });
+</script>

@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "Play";
+}
+
+<h2>Play</h2>
+
+<h2 id="status"></h2>
+
+<h2>Pick a square to hit</h2>
+<table>
+    <tr>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_1A">1A</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_1B">1B</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_1C">1C</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_1D">1D</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_1E">1E</div></td>
+    </tr>
+    <tr>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_2A">2A</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_2B">2B</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_2C">2C</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_2D">2D</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_2E">2E</div></td>
+    </tr>
+    <tr>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_3A">3A</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_3B">3B</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_3C">3C</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_3D">3D</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_3E">3E</div></td>
+    </tr>
+    <tr>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_4A">4A</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_4B">4B</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_4C">4C</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_4D">4D</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_4E">4E</div></td>
+    </tr>
+    <tr>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_5A">5A</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_5B">5B</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_5C">5C</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_5D">5D</div></td>
+        <td><div class="opponent" style="border: 1px solid silver; padding: 20px" id="opp_5E">5E</div></td>
+    </tr>
+</table>
+
+<h2>Your Squares</h2>
+<table>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="1A">1A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="1B">1B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="1C">1C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="1D">1D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="1E">1E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="2A">2A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="2B">2B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="2C">2C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="2D">2D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="2E">2E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="3A">3A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="3B">3B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="3C">3C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="3D">3D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="3E">3E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="4A">4A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="4B">4B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="4C">4C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="4D">4D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="4E">4E</div></td>
+    </tr>
+    <tr>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="5A">5A</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="5B">5B</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="5C">5C</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="5D">5D</div></td>
+        <td><div class="square" style="border: 1px solid silver; padding: 5px" id="5E">5E</div></td>
+    </tr>
+</table>
+
+<input type="hidden" value="@ViewBag.PlayerId" id="playerId" />
+<input type="hidden" value="@ViewBag.GameId" id="gameId" />
+<script>
+    var playerId = "";
+    var gameId = "";
+    $(function () {
+        playerId = $("#playerId").val();
+        gameId = $("#gameId").val();
+
+
+        var opponentSquares = $(".opponent");
+
+        _.each(opponentSquares, function (e) {
+            $(e).click(function () {
+                var element = $(this);
+                $.post("/games/attack", { gameId: gameId, playerId: playerId, location: element.html() });
+            });
+        });
+
+        GetGame();
+    });
+
+    function GetGame() {
+        $.getJSON('/games/get?gameId=' + $("#gameId").val(), function (game) {
+            UpdateGame(game);
+
+            if (game.loser == "") setTimeout(GetGame, 1000);
+
+            else if (game.loser == playerId) alert("you lost!");
+
+            else alert("you won!!");
+        });
+    }
+
+    function UpdateGame(game) {
+        if (game.started == false) {
+            $("#status").html("waiting for the other player");
+        } else if (game.currentTurn === playerId) {
+            $("#status").html("it's your turn! fire away!");
+        }
+        else {
+            $("#status").html("it's the opponent's turn, please wait");
+        }
+
+        if (playerId == game.player1Id) {
+            UpdateMySquares(game.player1Squares);
+
+            UpdateHitsOnMe(game.player2HitsOnPlayer1);
+            UpdateMissesOnMe(game.player2MissesOnPlayer1);
+
+            UpdateHitsOnThem(game.player1HitsOnPlayer2);
+            UpdateMissesOnThem(game.player1MissesOnPlayer2);
+        }
+        else {
+            UpdateMySquares(game.player2Squares);
+
+            UpdateHitsOnMe(game.player1HitsOnPlayer2);
+            UpdateMissesOnMe(game.player1MissesOnPlayer2);
+
+            UpdateHitsOnThem(game.player2HitsOnPlayer1);
+            UpdateMissesOnThem(game.player2MissesOnPlayer1);
+        }
+    }
+
+    function UpdateMySquares(squares) {
+        _.each(squares, function (square) {
+            $("#" + square.location).addClass("alert-success");
+        });
+    }
+
+    function UpdateHitsOnMe(squares) {
+        _.each(squares, function (square) {
+            $("#" + square).addClass("alert-error");
+        });
+    }
+
+    function UpdateMissesOnMe(squares) {
+        _.each(squares, function (square) {
+            $("#" + square).addClass("alert-info");
+        });
+    }
+
+    function UpdateHitsOnThem(squares) {
+        _.each(squares, function (square) {
+            $("#opp_" + square).addClass("alert-error");
+        });
+    }
+
+    function UpdateMissesOnThem(squares) {
+        _.each(squares, function (square) {
+            $("#opp_" + square).addClass("alert-info");
+        });
+    }
+</script>

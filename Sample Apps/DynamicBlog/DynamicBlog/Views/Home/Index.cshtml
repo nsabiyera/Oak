@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.PageTitle = "Blogs";
+}
+
+<h2>Blogs</h2>
+<hr/>
+@foreach (var blog in ViewBag.Blogs)
+{
+    <div class="row">
+    @Html.ActionLink(blog.Title as string, "get", new { id = blog.Id })<br />
+    @blog.Summary
+    </div>
+    <hr/>
+}
+
+<a class="btn" href="@Url.RouteUrl(new { controller = "Home", action = "New" })">new blog</a>

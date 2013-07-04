@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Index";
+    var userId = Guid.NewGuid().ToString();
+}
+
+<h2>Games</h2>
+<hr />
+<div id="games">
+</div>
+
+<script>
+    $(function () {
+        PollForGames();
+    });
+
+    function PollForGames() {
+        $.getJSON("/games/list", function (games) {
+            $("#games").html("");
+
+            _.each(games, function (g) {
+                $("#games").append('\
+                    <div>\
+                        <a style="margin-right: 10px" href="javascript:;" class="btn btn-primary join" data-gameId="' + g.id + '">Join</a>\
+                        <span style="font-weight: bold; font-size: 20px">' + g.name + '</span>\
+                        <hr />\
+                    </div>\
+                    ');
+            });
+
+            $(".join").click(function () {
+                var gameId = $(this).attr("data-gameId");
+                $.post("/games/join",
+                    { GameId: gameId, UserId: '@userId' },
+                    function () { window.location = '@Url.RouteUrl(new { controller = "Games", action = "SetupGame" })' + "?gameId=" + gameId + "&userId=@userId"; }
+                );
+            });
+
+            setTimeout(PollForGames, 1000);
+        });
+    }
+</script>

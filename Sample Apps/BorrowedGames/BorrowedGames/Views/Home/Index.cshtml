@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Home - " + @User.Identity.Name;
+}
+
+<script src="@Url.Content("~/scripts/app/profile.js")"></script>
+
+<script src="@Url.Content("~/scripts/app/toolTip.js")"></script>
+
+<h2>Welcome</h2>
+<hr />
+<div class="well">
+<div>
+    <div style="font-size: 20px">
+      <a id="handle" href="javascript:;">@(ViewBag.Handle ?? "@nameless")</a>
+      <form class="form-inline"><span id="updatePlaceHolder"></span></form>
+    </div>
+@{
+    Html.RenderPartial("~/views/home/_library.cshtml");
+    Html.RenderPartial("~/views/home/_friends.cshtml");
+}
+<br />
+</div>
+
+</div>
+
+
+@{
+    Html.RenderPartial("~/views/home/_games.cshtml");
+}
+
+<script>
+    $(function () {
+        var urls = {};
+
+        urls.updateHandleUrl = '@Url.RouteUrl(new { action = "Handle" })';
+
+        profile.init(urls);
+    });
+</script>

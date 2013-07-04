@@ -1,0 +1,40 @@
+﻿<script src="@Url.Content("~/scripts/app/autocomplete.js")"></script>
+<script src="@Url.Content("~/scripts/app/gamelibrary.js")"></script>
+<script src="@Url.Content("~/scripts/app/toggle.js")"></script>
+
+    
+<div id="library" class="modal hide">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" id="closeLibraryTop" href="javascript:;">x</button>
+    <h3>Your Game Library</h3>
+    <hr/>
+    <input type="text" id="gameToAdd" style="width: 100%" placeholder="type here to add game..." />
+  </div>
+  <div class="modal-body">
+    <table id="games" class="table table-condensed table-striped"></table>
+  </div>
+  <div class="modal-footer">
+    <a id="closeLibrary" href="javascript:;" class="btn" data-dismiss="modal">close</a>
+    <br/>
+  </div>
+</div>
+    
+<script>
+    $(function () {
+        var searchUrl = '@Url.RouteUrl(new { controller = "Library", action = "Search" })';
+        var addGameUrl = '@Url.RouteUrl(new { controller = "Library", action = "Add" })';
+        var removeGameUrl = '@Url.RouteUrl(new { controller = "Library", action = "Delete" })';
+        var libraryUrl = '@Url.RouteUrl(new { controller = "Library", action = "List" })';
+        gamelibrary.init({
+            searchUrl: searchUrl,
+            addGameUrl: addGameUrl,
+            removeGameUrl: removeGameUrl,
+            libraryUrl: libraryUrl
+        });
+    });
+</script>
+
+@if (ViewBag.HasGames)
+{ <a href="javascript:;" id="showLibrary" class="btn btn-info">view your game library</a> }
+else
+{ <a href="javascript:;" id="showLibrary" class="btn btn-danger">looks like you have no games, click to add</a> }

@@ -1,0 +1,112 @@
+﻿@helper TextBox(string name)
+{
+    @TextBox(new Oak.ElementMetaData(name))
+}
+
+@helper TextBox(string name, string value)
+{
+    @TextBox(new Oak.ElementMetaData(name, value))
+}
+
+@helper TextBox(Oak.ElementMetaData metaData)
+{
+    <input type="text" id="@metaData.Id()" name="@metaData.Id()" value="@metaData.Value()"@Attributes(metaData)@Styles(metaData)/>
+}
+
+@helper Password(Oak.ElementMetaData metaData)
+{
+    <input type="password" id="@metaData.Id()" name="@metaData.Id()" value="@metaData.Value()"@Attributes(metaData)@Styles(metaData)/>
+}
+
+@helper TextArea(string name)
+{
+    @TextArea(new Oak.ElementMetaData(name))    
+}
+
+@helper TextArea(string name, string value)
+{
+    @TextArea(new Oak.ElementMetaData(name, value))    
+}
+
+@helper TextArea(Oak.ElementMetaData metaData)
+{
+    <textarea id="@metaData.Id()" name="@metaData.Id()"@Attributes(metaData)@Styles(metaData)>@metaData.Value()</textarea>
+}
+
+@helper Label(Oak.ElementMetaData metaData)
+{
+    @Label(metaData, null);
+}
+
+@helper Label(Oak.ElementMetaData metaData, string text)
+{
+    <label for="@metaData.Id()"@Attributes(metaData)@Styles(metaData)>@(text ?? @metaData.Id())</label>
+}
+
+@helper Date(Oak.ElementMetaData metaData)
+{
+    <input type="text" id="@metaData.Id()" name="@metaData.Id()" value="@DateFor(metaData)"@Attributes(metaData)@Styles(metaData)/>
+}
+
+@helper Attributes(Oak.ElementMetaData metaData)
+{
+    foreach (var kvp in metaData.Hash) { if(IsAttribute(kvp.Key)) {<text> </text>@kvp.Key<text>="</text>@kvp.Value<text>"</text>} }
+}
+
+@helper Styles(Oak.ElementMetaData metaData)
+{
+    var styleValues = StylesValues(metaData);
+    
+    if(styleValues.Count > 0) { <text>style="</text>} foreach (var kvp in styleValues) {@kvp.Key<text>:</text>@kvp.Value<text>;</text>} if(styleValues.Count > 0) {<text>"</text>}
+}
+
+@functions
+{
+    static string[] Attributes()
+    {
+        return new[]
+        {
+            "id",
+            "class",
+            "placeholder"
+        };
+    }
+
+    static Oak.Hash StylesValues(Oak.ElementMetaData metaData)
+    {
+        var hash = new Oak.Hash();
+        
+        foreach(var kvp in metaData.Hash) 
+        {
+            if(!IsAttribute(kvp.Key))
+            {
+                hash.Add(kvp.Key, kvp.Value);
+            }
+        }
+
+        return hash;
+    }
+    
+    static string DateFor(Oak.ElementMetaData metaData) 
+    {
+        var dateTime = DateTime.Today;
+        var dateAsString = "";
+        
+        if (DateTime.TryParse(metaData.Value().ToString(), out dateTime))
+        {
+            if (dateTime.Date == dateTime) dateAsString = dateTime.ToShortDateString();
+            else dateAsString = dateTime.ToString();
+        }
+
+        return dateAsString;
+    }
+    
+    static bool IsAttribute(string key) 
+    {
+        return Attributes().Contains(key) || key.StartsWith("data-");
+    }
+}
+
+@*
+Todo: labels, radio buttons, drop down lists, password input, anchor tags, etc
+*@

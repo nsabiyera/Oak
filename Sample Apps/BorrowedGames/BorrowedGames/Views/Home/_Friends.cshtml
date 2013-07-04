@@ -1,0 +1,34 @@
+﻿<script src="@Url.Content("~/scripts/app/friends.js")"></script>
+
+<div id="friends" class="modal hide" style="padding: 10px">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" id="closeFriendsTop" href="javascript:;">x</button>
+    <h3>Following</h3>
+    <hr/>
+    <input type="text" id="handleToAdd" placeholder="type in the handle for users you want to follow..." style="width: 100%" />
+    <a id="addHandle" href="javascript:;" class="btn btn-primary">follow</a>
+  </div>
+  <div class="modal-body">
+    <table id="handles" class="table table-condensed table-striped"></table>
+  </div>
+  <div class="modal-footer">
+      <a id="closeFriends" href="javascript:;" class="btn" data-dismiss="modal">close</a>
+  </div>
+</div>
+
+@if (ViewBag.HasFriends)
+{ <a href="javascript:;" id="showFriends" class="btn btn-info">view users you are following</a> }
+else
+{ <a href="javascript:;" id="showFriends" class="btn btn-danger">you aren't following anyone, click to add</a> }
+
+<script>
+    $(function () {
+        var urls = {
+            addFriendUrl: '@Url.RouteUrl(new { controller = "Friends", action = "Follow" })',
+            listFriendsUrl: '@Url.RouteUrl(new { controller = "Friends", action = "List" })',
+            deleteFriendUrl: '@Url.RouteUrl(new { controller = "Friends", action = "Unfollow" })'
+        };
+
+        $(function () { friends.init(urls); });
+    });
+</script>

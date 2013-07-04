@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>restful-client</id>
+    <version>2.0.2</version>
+    <authors>Amir Rajan</authors>
+    <owners>Amir Rajan</owners>
+    <licenseUrl>https://github.com/amirrajan/Restful/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/amirrajan/Restful</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Code that gives you a simple starting point communicating with rest services.</description>
+    <language>en-US</language>
+    <tags>rest mvc http</tags>
+    <references>
+      <reference file="Newtonsoft.Json.dll" />
+    </references>
+  </metadata>
+</package>

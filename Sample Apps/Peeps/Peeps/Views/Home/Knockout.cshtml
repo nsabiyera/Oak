@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Knockout";
+}
+
+<script src="@Url.Content("~/Scripts/knockout.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/knockout-app/app.js")" type="text/javascript"></script>
+
+<div id="dashboard">
+  <div class="row">
+    <h2>Knockout</h2>
+    <hr />
+  </div>
+
+  <div class="row">
+    <input type="button" id="new" class="btn btn-primary" value="new  person" data-bind="click: addPeep" />
+    <hr />
+  </div>
+
+  <div id="peeps" class="row" data-bind='template: { name: "peepTemplate", foreach: peeps }'>
+    
+  </div>
+
+  <div class="row">
+    <input type="button" class="btn btn-primary" id="saveAll" value="save all" data-bind="click: saveAll" />
+    <div id="saveSuccessful" class="span8 alert alert-success pull-right">
+        <button type="button" class="close">&times;</button>
+        Save Successful
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="peepTemplate">
+    <form class="form-inline" >
+        <div data-bind="html: name"></div>
+        <input type='text' class='personname' data-bind="value: name, valueUpdate: 'keyup'" />
+        <input type='button' value='save' class='save btn' data-bind="click: save" />
+    </form>
+</script>

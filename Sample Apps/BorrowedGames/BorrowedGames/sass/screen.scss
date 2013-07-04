@@ -1,0 +1,349 @@
+﻿@font-face
+{
+	font-family: 'junkos';
+	src: url('fonts/junkos_typewriter-webfont.eot');
+	src: url('fonts/junkos_typewriter-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/junkos_typewriter-webfont.woff') format('woff'), url('fonts/junkos_typewriter-webfont.ttf') format('truetype'), url('fonts/junkos_typewriter-webfont.svg#junkostypewriterRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face
+{
+	font-family: '1942';
+	src: url('fonts/1942-webfont.eot');
+	src: url('fonts/1942-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/1942-webfont.woff') format('woff'), url('fonts/1942-webfont.ttf') format('truetype'), url('fonts/1942-webfont.svg#1942report1942report') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face
+{
+	font-family: 'Boycott';
+	src: url('fonts/BOYCOTT_-webfont.eot');
+	src: url('fonts/BOYCOTT_-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/BOYCOTT_-webfont.woff') format('woff'), url('fonts/BOYCOTT_-webfont.ttf') format('truetype'), url('fonts/BOYCOTT_-webfont.svg#BoycottRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+div.modal
+{
+	width: 560px;
+	position: absolute;
+	top: 200px;
+	padding: 20px;
+	border: solid 1px #bbb;
+	background: #fff;
+	-webkit-box-shadow: 0px 3px 6px rgba(0,0,0,0.25);
+
+	&.shown
+	{
+		opacity: 1.0;
+		z-index: 100;
+	}
+}
+
+div.menubar
+{
+	padding-bottom: 5px; 
+	margin-bottom: 10px; 
+	border-bottom: 1px silver solid; 
+	height: 20px
+}
+
+.title 
+{
+	margin: 3px;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: #46629D;
+	color: #ffffff;
+	font-weight: bold;
+	border-radius: 5px;
+}
+
+div.dropshadow
+{
+	-webkit-box-shadow: 0px 3px 6px rgba(0,0,0,0.25);
+}
+
+div.modal input
+{
+	display: block;
+	width: 100%;
+}
+
+.current
+{
+	background-color: #46629D;
+	color: #ffffff;
+}
+
+.button
+{
+	text-decoration: none;
+	padding: 3px;
+	border-radius: 5px;
+	background-color: #46629D;
+	border: solid 1px black;
+	color: White;
+}
+
+.button:hover
+{
+	color: black;
+}
+
+.growlwrapper
+{
+	width: 520px;
+	border-radius: 5px;
+	border-style: solid;
+	border-color: #46629D;
+	border-width: 2px;
+	background: White;
+	-webkit-box-shadow: 0px 3px 6px rgba(0,0,0,0.25);
+}
+
+.growlinfo
+{
+	width: 520px;
+	border-radius: 5px;
+	background-image: url('images/info.png');
+	background-position: left center;
+	background-repeat: no-repeat;
+	color: black;
+	padding-left: 50px;
+	padding-top: 10px;
+	margin-left: 5px;
+	padding-bottom: 10px;
+	font-size: 17px;
+}
+
+.edit, .delete, .info, .cancel, .add, .up, .down, .check
+{
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 25px;
+	padding-top: 3px;
+	text-decoration: none;
+	color: black;
+}
+
+.edit
+{
+	background-image: url('images/edit20.png');
+}
+
+.delete
+{
+	background-image: url('images/delete20.png');
+}
+
+.info
+{
+	background-image: url('images/info20.png');
+}
+
+.cancel
+{
+	background-image: url('images/cancel20.png');
+}
+
+.add
+{
+    background-image: url('images/add20.png');
+}
+
+.up
+{
+	background-image: url('images/up20.png');
+}
+
+.down
+{
+	background-image: url('images/down20.png');
+}
+
+.check
+{
+	background-image: url('images/check20.png');	
+}
+
+.border
+{
+	margin: 5px;
+	border: solid 1px silver;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.gameBox
+{
+	margin: 5px;
+	border: solid 1px silver;
+	border-radius: 5px;
+	padding: 5px;
+	-webkit-box-shadow: 0px 3px 6px rgba(0,0,0,0.25);
+  float: left;
+  width: 100px;
+  height: 160px;
+}
+
+.gameBoxSmall
+{
+	margin: 5px;
+	border: solid 1px silver;
+	border-radius: 5px;
+	padding: 5px;
+  float: left;
+  width: 100px;
+  height: 80px;
+}
+
+.autocomplete
+{
+	width: 556px;
+	border: solid 1px silver;
+	background-color: White;
+}
+
+.hidden
+{
+	display: none;
+}
+
+body
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 900px;
+	background-image: url('images/background.png');
+	background-repeat: repeat-x;
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+}
+
+.box
+{
+	float: left;
+	border: solid 1px silver;
+	margin: 3px;
+	height: 150px;
+	border-radius: 5px;
+	padding: 3px;
+}
+
+.clear
+{
+	clear: both;
+}
+
+#main
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 860px;
+	border-radius: 5px;
+	background: white;
+	padding-left: 25px;
+	padding-right: 25px;
+	margin-top: 3px;
+	padding-top: 10px;
+	padding-bottom: 30px;
+}
+
+.section
+{
+	border-left: 1px solid silver;
+	padding-left: 5px;
+}
+
+#banner
+{
+	font-family: 'Boycott';
+	color: white;
+}
+
+.brand
+{
+	font-family: 'Boycott';
+}
+
+nav a
+{
+	text-decoration: none;
+	font-size: 20px;
+	margin: 10px;
+	padding: 5px;
+	color: black;
+	background-color: #E1EFFB;
+	border: 1px solid black;
+	border-radius: 5px;
+	font-weight: bold;
+	display: block;
+	float: left;
+	width: 100px;
+}
+
+nav
+{
+	float: right;
+}
+
+.notification
+{
+	color: black;
+	border-radius: 10px;
+	background: #FBEC88;
+	font-size: 15px;
+	padding: 3px;
+	padding-left: 20px;
+	border: 1px solid #FAD42E;
+}
+
+.seperator
+{
+	width: 100%;
+	border-bottom: 1px solid silver;
+}
+
+#nav-wrapper
+{
+	height: 60px;
+	width: 1045px;
+}
+
+h1, h2, h3, h4
+{
+	border-bottom: 1px solid silver;
+	padding: 5px;
+}
+
+.toggleSwitchOn
+{
+	background-color: #46629D;
+	background-image: url('images/circle20.png');
+	background-repeat: no-repeat;
+
+	label 
+	{
+		font-weight: bold;
+		color: #FFFFFF;
+		float: right;
+		cursor: pointer;
+	}
+}
+
+.toggleSwitchOff
+{
+	background-color: #E0E5EE;
+	background-image: url('images/circle20.png');
+	background-repeat: no-repeat;
+
+	label
+	{
+		font-weight: bold;
+		color: #545454;
+		float: left;
+		cursor: pointer;
+	}
+}

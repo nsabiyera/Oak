@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>specwatchr</id>
+    <version>1.6.8</version>
+    <authors>Amir Rajan,  Matt Florence</authors>
+    <owners>Amir Rajan,  Matt Florence</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://nspec.org/continuoustesting</projectUrl>
+    <iconUrl>http://nspec.org/images/specwatchr.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Set of ruby scripts that help you do continuous testing in .Net (supports NSpec, MSTest and NUnit).</description>
+    <language>en-US</language>
+    <tags>test testing autotest bdd</tags>
+  </metadata>
+</package>

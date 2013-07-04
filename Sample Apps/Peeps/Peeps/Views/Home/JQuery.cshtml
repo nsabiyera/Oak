@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "JQuery";
+}
+
+<div class="row">
+    <h2>JQuery</h2>
+    <hr />
+</div>
+
+<div class="row">
+    <input type="button" id="new" class="btn btn-primary" value="new  person" />
+    <hr />
+</div>
+
+<div id="peeps" class="row">
+    
+</div>
+
+<div class="row">
+    <input type="button" class="btn btn-primary" id="saveAll" value="save all" />
+    <div id="saveSuccessful" class="span8 alert alert-success pull-right">
+        <button type="button" class="close">&times;</button>
+        Save Successful
+    </div>
+</div>
+
+<script type="text/template" id="peepTemplate">
+  <form class='person form-inline'>
+    <div class="preview"></div>
+    <input type='text' class='personname' />
+    <input type='button' value='save' class='save btn' />
+  </form>
+</script>
+
+<script src="@Url.Content("~/Scripts/jquery-app/app.js")" type="text/javascript"></script>
