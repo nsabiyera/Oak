@@ -68,11 +68,28 @@ namespace Oak
                     string formattedQueryStrings = string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s]));
                     Console.Out.WriteLine(formattedQueryStrings + "\n");
                 }
-
+ 
                 if (HasForm(filterContext))
                 {
-                    Console.Out.WriteLine("Content:");
-                    Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
+                    try
+                    {
+                        Console.Out.WriteLine("Content:");
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
+                    }
+                    catch
+                    {
+                        Console.Out.WriteLine(@"
+                        Looks like trying to print the request's form collection threw an exception in Oak\BootStrap.cs.
+                        If you're using ASP.NET MVC 4,
+                        update
+
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + ""\n"");
+
+                        to
+
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Unvalidated.Form, null) + ""\n"");
+                        ");
+                    }
                 }
 
                 if (HasJson(filterContext))
