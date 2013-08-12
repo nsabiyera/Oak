@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>seed</id> 
-    <version>1.1.1</version> 
+    <version>1.1.2</version> 
     <authors>Amir Rajan</authors>
     <description>Dsl for generating sql that creates schema and inserts records.</description> 
     <language>en-US</language>
@@ -10,6 +10,9 @@
     <projectUrl>http://amirrajan.github.com/Oak/</projectUrl>
     <licenseUrl>https://github.com/amirrajan/Oak/blob/master/license.txt</licenseUrl>
     <tags>migrations schema oak</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Configuration" />
+    </frameworkAssemblies>
   </metadata>
   <files>
     <file src="Oak\ConnectionProfile.cs" target="content\Oak\ConnectionProfile.cs" />

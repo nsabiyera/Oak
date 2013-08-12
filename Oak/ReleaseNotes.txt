@@ -1,4 +1,14 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.6.6+
+oak-edge 2.0.6+
+cambium 1.5.3+
+seed 1.1.2+
+=============== CHANGES ==================
+DynamicDb can take in a connection string as a parameter which will override
+the default values supplied by ConnectionProfile.cs.
+
+
+============== FOR VERSIONS ==============
 oak 2.6.3+
 oak-edge 2.0.3+
 =============== CHANGES ==================
