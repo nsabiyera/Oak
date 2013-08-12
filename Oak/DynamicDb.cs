@@ -8,6 +8,17 @@ namespace Oak
 {
     public class DynamicDb : Gemini
     {
+        string connectionString;
+        public DynamicDb()
+        {
+            connectionString = new ConnectionProfile().ConnectionString;
+        }
+
+        public DynamicDb(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
         public void LogToConsole()
         {
             DynamicRepository.WriteDevLog = true;
@@ -18,14 +29,14 @@ namespace Oak
         {
             var tableName = callInfo.Name;
 
-            if (!AssociationByConventions.TableExists(tableName))
+            if (!AssociationByConventions.TableExists(tableName, connectionString))
             {
                 throw new AssociationByConventionsException("Table [" + tableName + "] doesn't exist.");
             }
 
             var repositoryProperty = tableName + "Repository";
 
-            callInfo.Instance.SetMember(repositoryProperty, AssociationByConventions.RepositoryFor(tableName));
+            callInfo.Instance.SetMember(repositoryProperty, AssociationByConventions.RepositoryFor(tableName, connectionString));
 
             callInfo.Instance.SetMember(
                 tableName,

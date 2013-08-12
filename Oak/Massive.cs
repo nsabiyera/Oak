@@ -112,7 +112,7 @@ namespace Massive
     public class DynamicRepository : Gemini
     {
         DbProviderFactory _factory;
-        ConnectionProfile ConnectionProfile { get; set; }
+        public ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
         public static bool WriteDevLog { get; set; }
 

@@ -795,28 +795,29 @@ namespace Oak
             return CallAssociationMethod(callInfo);
         }
 
-        public static void ApplyProjection(dynamic repository)
+        public static void ApplyProjection(dynamic repository, string connectionString)
         {
             repository.Projection = new Func<dynamic, dynamic>(d =>
             {
                 d.Extend<AssociationByConventions>();
                 d.__Table__ = new DynamicFunction(() => repository.TableName);
+                d.__ConnectionString__ = connectionString;
                 return d;
             });
         }
 
-        public static DynamicRepository RepositoryFor(string tableName)
+        public static DynamicRepository RepositoryFor(string tableName, string connectionString)
         {
-            var repo = new DynamicRepository(tableName);
+            var repo = new DynamicRepository(new ConnectionProfile { ConnectionString = connectionString }, tableName);
 
-            AssociationByConventions.ApplyProjection(repo);
+            AssociationByConventions.ApplyProjection(repo, connectionString);
 
             return repo;
         }
 
         void AddConventionForHasMany(dynamic callInfo)
         {
-            var repoOnTheFly = RepositoryFor(callInfo.Name);
+            var repoOnTheFly = RepositoryFor(callInfo.Name, callInfo.Instance.__ConnectionString__);
 
             var hasMany = new HasMany(repoOnTheFly);
 
@@ -827,7 +828,7 @@ namespace Oak
 
         void AddConventionForHasOne(dynamic callInfo)
         {
-            var repository = RepositoryFor(Pluralize(callInfo.Name));
+            var repository = RepositoryFor(Pluralize(callInfo.Name), callInfo.Instance.__ConnectionString__);
 
             var hasOne = new HasOne(repository, callInfo.Name);
 
@@ -838,7 +839,7 @@ namespace Oak
 
         void AddConventionForBelongsTo(dynamic callInfo)
         {
-            var repository = RepositoryFor(Pluralize(callInfo.Name));
+            var repository = RepositoryFor(Pluralize(callInfo.Name), callInfo.Instance.__ConnectionString__);
 
             var belongsTo = new BelongsTo(repository, callInfo.Name);
 
@@ -849,9 +850,9 @@ namespace Oak
 
         void AddConventionForHasOneThrough(dynamic callInfo)
         {
-            var repo = RepositoryFor(Pluralize(callInfo.Name));
+            var repo = RepositoryFor(Pluralize(callInfo.Name), callInfo.Instance.__ConnectionString__);
 
-            var throughRepo = RepositoryFor(ManyToManyTableName(callInfo));
+            var throughRepo = RepositoryFor(ManyToManyTableName(callInfo), callInfo.Instance.__ConnectionString__);
 
             var hasOneThrough = new HasOneThrough(repo, throughRepo, callInfo.Name);
 
@@ -864,9 +865,9 @@ namespace Oak
 
         void AddConventionForManyToMany(dynamic callInfo)
         {
-            var repo = RepositoryFor(callInfo.Name);
+            var repo = RepositoryFor(callInfo.Name, callInfo.Instance.__ConnectionString__);
 
-            var referenceRepo = RepositoryFor(callInfo.Instance.__Table__());
+            var referenceRepo = RepositoryFor(callInfo.Instance.__Table__(), callInfo.Instance.__ConnectionString__);
 
             var manyToMany = new HasManyAndBelongsTo(repo, referenceRepo);
 
@@ -898,7 +899,7 @@ Table [{2}] with schema [Id, {3}, {4}] doesn't exist (HasManyAndBelongsTo).";
                 ChildKey(callInfo)
             );
 
-            bool tableExists = TableExists(callInfo.Name);
+            bool tableExists = TableExists(callInfo.Name, callInfo.Instance.__ConnectionString__);
 
             bool oneToManyColumnExists = ColumnsFor(callInfo.Name).Contains(ParentKey(callInfo));
 
@@ -935,7 +936,7 @@ Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
 
             var pluralizedTable = Pluralize(callInfo.Name);
 
-            bool tableExists = TableExists(pluralizedTable);
+            bool tableExists = TableExists(pluralizedTable, callInfo.Instance.__ConnectionString__);
 
             bool foreignKeyOnMainTableExists = ColumnsFor(callInfo.Instance.__Table__()).Contains(ChildKey(callInfo));
 
@@ -974,12 +975,12 @@ Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
 
         bool IsHasOneThrough(dynamic callInfo)
         {
-            return !IsPlural(callInfo.Name) && TableExists(ManyToManyTableName(callInfo));
+            return !IsPlural(callInfo.Name) && TableExists(ManyToManyTableName(callInfo), callInfo.Instance.__ConnectionString__);
         }
 
         bool IsManyToMany(dynamic callInfo)
         {
-            return IsPlural(callInfo.Name) && TableExists(ManyToManyTableName(callInfo));
+            return IsPlural(callInfo.Name) && TableExists(ManyToManyTableName(callInfo), callInfo.Instance.__ConnectionString__);
         }
 
         string Pluralize(string word)
@@ -1020,8 +1021,10 @@ Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
             return ColumnCache[table];
         }
 
-        public static bool TableExists(string table)
+        public static bool TableExists(string table, string connectionString)
         {
+            SchemaRepository.ConnectionProfile.ConnectionString = connectionString;
+
             if (!TableCache.ContainsKey(table))
             {
                 var exists = SchemaRepository

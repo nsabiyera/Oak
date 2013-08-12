@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using Massive;
+using System.Configuration;
 
 namespace Oak.Tests
 {
+    [Tag("Association")]
     class core_behavior_dynamic_db : nspec
     {
         object blogId, blog2Id, authorId, author2Id, math, science, history, jane, john;
@@ -26,6 +28,37 @@ namespace Oak.Tests
             SeedSchoolSchema();
 
             SeedPeepsSchema();
+        }
+
+        void specify_db_can_be_specified()
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["AnotherDb"].ConnectionString;
+
+            seed = new Seed(new ConnectionProfile
+            {
+                ConnectionString = connectionString
+            });
+
+            seed.PurgeDb();
+
+            seed.CreateTable("Authors",
+                seed.Id(),
+                new { Name = "nvarchar(255)" }
+            ).ExecuteNonQuery(seed.ConnectionProfile);
+
+            seed.CreateTable("Emails",
+                seed.Id(),
+                new { AuthorId = "int" },
+                new { Address = "nvarchar(255)" }
+            ).ExecuteNonQuery(seed.ConnectionProfile);
+
+            db = new DynamicDb(connectionString);
+
+            var authorId = db.Authors().Insert(new { Name = "hello" });
+
+            db.Emails().Insert(new { authorId, Address = "user@example.com" });
+
+            (db.Authors().All().First().Email().Address as string).should_be("user@example.com");
         }
 
         void specify_has_many()
