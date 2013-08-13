@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\oak-edge.2.0.0\lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\oak-edge.2.0.6\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
@@ -77,6 +77,7 @@
     <Compile Include="Oak\Bullet.cs" />
     <Compile Include="Oak\Changes.cs" />
     <Compile Include="Oak\ConnectionProfile.cs" />
+    <Compile Include="Oak\DynamicDb.cs" />
     <Compile Include="Oak\DynamicForm.cs" />
     <Compile Include="Oak\DynamicJsonResult.cs" />
     <Compile Include="Oak\DynamicModel.cs" />

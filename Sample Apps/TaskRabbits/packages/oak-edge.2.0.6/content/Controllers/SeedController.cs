@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -67,7 +67,7 @@ namespace Oak.Controllers
 
             Seed.Export(exportPath, Schema.Scripts());
 
-            return Content("Scripts executed to: " + exportPath);
+            return Content("Scripts exported to: " + exportPath);
         }
 
         [HttpPost]
