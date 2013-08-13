@@ -27,7 +27,20 @@ namespace Oak
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Out.WriteLine("======== Exception Occurred ==========");
-                Console.Out.WriteLine(Bullet.ScrubStackTrace(filterContext.Exception.ToString()));
+
+                string stackTrace = "========= Clean Stack Trace =========" + 
+                    Environment.NewLine + 
+                    Bullet.ScrubStackTrace(filterContext.Exception.ToString()) + 
+                    Environment.NewLine +
+                    "========= Unaltered Stack Trace (verbose) =========" + 
+                    Environment.NewLine + 
+                    filterContext.Exception.ToString();
+
+                File.WriteAllText(filterContext.HttpContext.Server.MapPath("~/stacktrace.txt"), stackTrace);
+                Console.Out.WriteLine(stackTrace);
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Out.WriteLine("StackTrace written to " + filterContext.HttpContext.Server.MapPath("~/stacktrace.txt"));
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Out.WriteLine("====================================\n\n");
                 Console.ResetColor();
             }
@@ -55,11 +68,28 @@ namespace Oak
                     string formattedQueryStrings = string.Join("\n", qs.AllKeys.Select(s => s + ": " + qs[s]));
                     Console.Out.WriteLine(formattedQueryStrings + "\n");
                 }
-
+ 
                 if (HasForm(filterContext))
                 {
-                    Console.Out.WriteLine("Content:");
-                    Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
+                    try
+                    {
+                        Console.Out.WriteLine("Content:");
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
+                    }
+                    catch
+                    {
+                        Console.Out.WriteLine(@"
+                        Looks like trying to print the request's form collection threw an exception in Oak\BootStrap.cs.
+                        If you're using ASP.NET MVC 4,
+                        update
+
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + ""\n"");
+
+                        to
+
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Unvalidated.Form, null) + ""\n"");
+                        ");
+                    }
                 }
 
                 if (HasJson(filterContext))
@@ -120,11 +150,13 @@ namespace Oak
                 new TutorialBlogIsValid(),
                 new TutorialCreateComments(),
                 new TutorialAddComment(),
+                new DynamicDbRecommendation(),
                 new CreateTableRecommendation(),
                 new InvalidColumnRecommendation(),
                 new ValidationsFailedRecommendation(),
                 new NoDefinitionOnDerivedGeminiRecommendation(),
-                new NoDefinitionOnGeminiRecommendation()
+                new NoDefinitionOnGeminiRecommendation(),
+                
             };
 
             mvcApplication.EndRequest += PrintInefficientQueries;
@@ -171,11 +203,13 @@ namespace Oak
 
             recos.Add(OriginalStackTrace(error));
 
-            if (applicable != null)
-            {
-                recos.Add(applicable.GetRecommendation(error));
-                WriteRecommendation(mvcApplication, recos);
-            }
+            if (applicable != null) recos.Add(applicable.GetRecommendation(error));
+
+            if (StackTracePreview.CanPreview(Bullet.ScrubStackTrace(error.ToString()))) recos.Add(StackTracePreview.Instructions());
+
+            recos.Add(UnAlteredStackTrace.Body(error.ToString()));
+
+            WriteRecommendation(mvcApplication, recos);
         }
 
         private static void WriteRecommendation(HttpApplication mvcApplication, List<string> applicatableRecommendations)
@@ -190,7 +224,7 @@ namespace Oak
         pre { background-color: #F5F5F5; border: solid 1px silver; padding: 10px; overflow-x: auto; white-space: pre-wrap; }
     </style>
 
-    <h2>An error was thrown and Oak has a recommendation:</h2>
+    <h2>An error was thrown:</h2>
 
     {recommendations}
 
@@ -215,6 +249,7 @@ namespace Oak
         <div style=""width: 100px; float: right;"">
          <img src=""http://i.imgur.com/kSZdd.png"" />
         </div>
+        
         <div style=""width: 500px; float: right; padding: 3px"">
             Note: This error can also be seen in the IISExpress console.  Running <pre style=""display: inline; padding: 0px"">rake server</pre> starts up a IIS Express minimized with the following icon:
         </div>
@@ -324,7 +359,7 @@ This is probably the first time you've run Oak for this solution. <strong>Be sur
 the website at some point and take a look at the screencasts and sample apps (STRONGLY recommended): 
 <a href=""http://amirrajan.github.com/Oak"" target=""_blank"">Oak's Github Page</a></strong>.
 If you want to try Oak out in an interactive way, do the following:<br/>
-Update HomeController.cs and put the follwing <strong>between the namespace block (be sure to do both Step 1 and Step 2 - 
+Update HomeController.cs and put the following <strong>between the namespace block (be sure to do both Step 1 and Step 2 - 
 after you've done this, refresh the page)</strong>:
 <h3>Step 1 - Update HomeController.cs</h3>
 <pre>
@@ -627,7 +662,7 @@ the script (the console window you use to execute this command must have ruby su
             return e is SqlException && e.ToString().Contains("Invalid object name");
         }
 
-        public override string GetRecommendation(Exception e)
+        public static string CreateTableRecommendationString()
         {
             return @"
 <h2>Using SeedController to create tables (in general)</h2>
@@ -690,6 +725,12 @@ public void SampleEntries()
 </pre>
 
 You can then run this command to <strong>purge</strong> your database and regen it with sample data: <pre>rake sample <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>";
+
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return CreateTableRecommendationString();
         }
     }
 
@@ -722,7 +763,7 @@ public class Blogs : DynamicRepository
 <h3>Step 2 - In HomeController.cs, declare the Comments repository and give the Blog class an association to Comments</h3>
 With the projection in place, you will now get back a dynamically typed object 
 (as opposed to just a Gemini). Any query that is executed from a ""projected"" 
-dynamic repository (in this case Blogs) will go through this mapping.  Now that the project
+dynamic repository (in this case Blogs) will go through this mapping.  Now that the projection
 is in place we can add an association to blog to return comments. <strong>Here is how you 
 say ""A blog has many comments""</strong>:
 <pre>
@@ -1191,6 +1232,131 @@ After adding the function to create your table.  Run this command to execute the
 You can see what the script looks like by running this command: <pre>rake export <img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
 
 ";
+        }
+    }
+
+    public class DynamicDbRecommendation : Recommendation
+    {
+        public override bool CanRecommend(Exception e)
+        {
+            return e is AssociationByConventionsException;
+        }
+
+        public override string GetRecommendation(Exception e)
+        {
+            return @"
+<h2>Looks like you're using DynamicDb</h2>
+<p>
+You're getting this error because you tried to access a table that doesn't exist in your database, or the columns in the tables
+do not match the prescribed conventions. DynamicDb will try to find table relationships for you. Here are the conventions DyanmicDb will look for: 
+</p>
+<ul>
+    <li>Invoking an assocation that ends with ""s"" will return a collection. Example:
+        <pre>
+dynamic db = new DynamicDb();
+db.Blogs().Single(blogId)<strong style=""font-size: large"" >.Comments()</strong></pre>
+        will return an IEnumerable&lt;dynamic&gt; that represents a collection of Comments.<br/><br/>
+    </li>
+    <li>Invoking an assocation that doesn't end with ""s"" will return a single item. Example:
+        <pre>
+dynamic db = new DynamicDb();
+db.Comments().Single(commentId)<strong style=""font-size: large"">.Blog()</strong></pre>
+        will return a dynamic entity that represents a Blog.<br/><br/>
+    </li>
+    <li>Tables must have an Id column.</li>
+    <li>Foreign keys must be in the format [Table in Singular Form]Id. For example: a foreign key to the Blogs table would be BlogId</li>
+    <li>Many to many tables need to be in the format [Table1Table2 Alphabetically].  For example: [Students] have many [Courses] through a [CoursesStudents] table.</li>
+</ul>
+
+<p style=""font-size: large"">
+For more information about DynamicDB, refer to the <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Oak.DynamicDb"" target=""_blank"">wiki</a>
+</p>
+
+<p style=""font-size: large"">
+If you don't want to follow these conventions, then create <a href=""https://github.com/amirrajan/Oak/wiki/Retrieving-and-Saving-data-using-Massive.DynamicRepository"" target=""_blank"">DynamicRepository</a> and 
+<a href=""https://github.com/amirrajan/Oak/wiki/Adding-associations-using-Oak.DynamicModel"" target=""__blank"">DynamicModel</a> classes.
+</p>" + ScaffoldingRecommendationString.Body() + CreateTableRecommendation.CreateTableRecommendationString();
+        }
+    }
+
+    public class ScaffoldingRecommendationString
+    {
+        public static string Body()
+        {
+            return @"
+<h2>Scaffolding DynamicRepository and DynamicModel classes quickly</h1>
+You can quickly scaffold your DynamicRepository and DynamicModel (among other things) quickly by using the following rake tasks:
+<pre>
+<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" />
+all scripts are customizable and are located in .\scaffold.rb (latest versions: <a href=""https://github.com/amirrajan/Loam/blob/master/Rakefile.rb"" target=""_blank"">Rakefile.rb</a> <a href=""https://github.com/amirrajan/Loam/blob/master/scaffold.rb"" target=""_blank"">scaffold.rb</a>)
+
+rake gen:controller[name]
+    adds a controller class to your mvc project
+    example: rake gen:controller[Blogs]
+
+rake gen:model[name]
+    adds a dynamic model class to your mvc project
+    example: rake gen:model[Blog]
+
+rake gen:repo[name]
+    adds a dynamic repository class to your mvc project
+    example: rake gen:repo[Blogs]
+
+rake gen:repo_model[repo_and_model_name]
+    adds a dynamic repository with a projection to a dynamic model
+    example: rake gen:repo_model[Blogs:Blog]
+
+rake gen:script[name]
+    adds javascript file to your mvc project
+    example: rake gen:script[index]
+
+rake gen:test[name]
+    adds a test file to your test project
+    example: rake gen:test[describe_BlogsController]
+
+rake gen:view[controller_and_view_name]
+    adds a cshtml to your mvc project
+    example: rake gen:view[Home:Index]
+</pre>
+";
+        }
+    }
+
+    public class StackTracePreview
+    {
+        public static bool CanPreview(string stackTrace)
+        {
+            return stackTrace.Contains("at") && stackTrace.Contains(":line");
+        }
+
+        public static string Instructions()
+        {
+            return @"
+<h2>Stack Trace Visualization</h2>
+<p>
+After running the command:
+</p>
+<pre>rake stacktrace:gen_preview<img src=""http://i.imgur.com/Y2i1G.png"" style=""float: right"" /></pre>
+you can view a visualization of the stack trace by navigating in the browser to:
+<pre>file:///C:/Development/StackTraceOak/StackTracePreview/stacktrace.html (copy and paste into address bar)</pre>
+<p>
+If you did not use the warmup template and instead manually installed Oak, please refer to the <a href=""https://github.com/amirrajan/Oak/wiki/Getting-Started#stack-trace-preview-requires-optional-steps"" target=""_blank"">wiki</a> 
+for instructions on how to set up stack trace visualization.
+</p>
+";
+        }
+    }
+
+    public class UnAlteredStackTrace
+    {
+        public static string Body(string stackTrace)
+        {
+            return @"
+<div style='margin: 5px; font-weight: bold'>
+    <h2>Unaltered Stack Trace</h2>
+    <p>Here is the unaltered stack trace if you're interested:</p>
+    <pre>{stackTrace}</pre>
+</div>".Replace("{stackTrace}", stackTrace);
         }
     }
 }

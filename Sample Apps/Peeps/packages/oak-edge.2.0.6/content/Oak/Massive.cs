@@ -112,7 +112,7 @@ namespace Massive
     public class DynamicRepository : Gemini
     {
         DbProviderFactory _factory;
-        ConnectionProfile ConnectionProfile { get; set; }
+        public ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
         public static bool WriteDevLog { get; set; }
 
@@ -184,9 +184,9 @@ namespace Massive
         {
             using (var conn = OpenConnection())
             {
-                var rdr = CreateCommand(sql, conn, args).ExecuteReader();
-
                 if (WriteDevLog) LogSql(this, sql, args);
+
+                var rdr = CreateCommand(sql, conn, args).ExecuteReader();
 
                 while (rdr.Read())
                 {
@@ -713,6 +713,7 @@ Sql Exception:
         /// </summary>
         public virtual dynamic SingleWhere(string where, params object[] args)
         {
+            if (args == null) return null;
             var sql = string.Format("SELECT * FROM {0} WHERE {1}", TableName, where);
             return Query(sql, args).FirstOrDefault();
         }

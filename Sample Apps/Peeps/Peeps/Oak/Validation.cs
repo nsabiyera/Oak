@@ -58,7 +58,7 @@ namespace Oak
 
         public void AddError(string property, string message)
         {
-            errors.Add(new KeyValuePair<string, string>(property, message));
+            errors.Add(new Gemini(new { Key = property, Value = message }));
         }
 
         public void AddRule(dynamic rule)
@@ -108,7 +108,11 @@ namespace Oak
 
         public dynamic FirstError()
         {
-            return errors.First().Value;
+            var error = errors.FirstOrDefault();
+
+            if (object.ReferenceEquals(error, null)) return null;
+
+            return error.Value;
         }
     }
 
