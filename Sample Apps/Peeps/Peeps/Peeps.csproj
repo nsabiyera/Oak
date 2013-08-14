@@ -118,9 +118,6 @@
     <Content Include="Scripts\chosen.js" />
     <Content Include="Scripts\date.js" />
     <Content Include="Scripts\ember-app\app.js" />
-    <Content Include="Scripts\ember-app\mvc-rest-adapter.js" />
-    <Content Include="Scripts\ember-data.js" />
-    <Content Include="Scripts\ember-model.js" />
     <Content Include="Scripts\ember.js" />
     <Content Include="Scripts\handlebars.js" />
     <Content Include="Scripts\jquery-1.8.2-vsdoc.js" />
