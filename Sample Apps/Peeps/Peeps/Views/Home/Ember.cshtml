@@ -20,10 +20,11 @@
     <input type="button" id="new" {{ action "add" }} class="btn btn-primary" value="new  person" />
     <hr />
   </div>
-  {{#each controller}}
+  {{#each controller itemController="peep"}}
     <form class="form-inline">
       <div>{{name}}</div>
       {{ view Ember.TextField valueBinding='name' }}
+      <input type="button" {{ action "save" }} class="btn" value="save" />
     </form>
   {{/each}}
   <div class="row">
