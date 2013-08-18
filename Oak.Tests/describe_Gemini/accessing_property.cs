@@ -47,7 +47,6 @@ namespace Oak.Tests.describe_Gemini
             };
         }
 
-        [Tag("focus")]
         void selecting_properties()
         {
             context["core behavior"] = () =>

@@ -43,15 +43,24 @@
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\Libraries\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\Mono.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\External Assemblies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\Libraries\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="NSpec, Version=0.9.67.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\nspec.0.9.67\lib\NSpec.dll</HintPath>
+    </Reference>
+    <Reference Include="policy.2.0.Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\policy.2.0.Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -66,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebuggerShim.cs" />
+    <Compile Include="describe_DbProviders\describe_Postgresql.cs" />
     <Compile Include="describe_DynamicDb\core_behavior_dynamic_db.cs" />
     <Compile Include="describe_DynamicDb\helpful_errors.cs" />
     <Compile Include="describe_DynamicForm.cs" />

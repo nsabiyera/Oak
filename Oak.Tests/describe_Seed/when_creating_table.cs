@@ -42,7 +42,7 @@ namespace Oak.Tests.describe_Seed
                 CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
-                        [FirstName] nvarchar(255) NULL,
+                        [FirstName] nvarchar(255) NULL
                     )
                 ");
 
@@ -69,7 +69,7 @@ namespace Oak.Tests.describe_Seed
                 CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
-                        [FirstName] nvarchar(255) NOT NULL,
+                        [FirstName] nvarchar(255) NOT NULL
                     )
                 ");
 
@@ -99,7 +99,7 @@ namespace Oak.Tests.describe_Seed
                     CREATE TABLE [dbo].[Users]
                     (
                         [FirstName] nvarchar(255) NOT NULL DEFAULT('test'),
-                        [LastName] nvarchar(255) NULL,
+                        [LastName] nvarchar(255) NULL
                     )
                 ");
 
@@ -121,7 +121,7 @@ namespace Oak.Tests.describe_Seed
                     CREATE TABLE [dbo].[Users]
                     (
                         [FirstName] nvarchar(255) NULL DEFAULT('test'),
-                        [LastName] nvarchar(255) NULL DEFAULT('test'),
+                        [LastName] nvarchar(255) NULL DEFAULT('test')
                     )
                 ");
 
@@ -179,7 +179,7 @@ namespace Oak.Tests.describe_Seed
                     CREATE TABLE [dbo].[Users]
                     (
                         [Id] int NOT NULL IDENTITY(1,1),
-                        [Name] nvarchar(255) NULL,
+                        [Name] nvarchar(255) NULL
                     )
                 ");
 
@@ -210,7 +210,7 @@ namespace Oak.Tests.describe_Seed
                     (
                         [Id] int NOT NULL IDENTITY(1,1),
                         [Name] nvarchar(255) NULL,
-                        [CustomerId] int NULL FOREIGN KEY REFERENCES Customers(Id),
+                        [CustomerId] int NULL FOREIGN KEY REFERENCES Customers(Id)
                     )
                 ");
 
@@ -247,7 +247,7 @@ namespace Oak.Tests.describe_Seed
                 CommandShouldBe(@"
                     CREATE TABLE [dbo].[Users]
                     (
-                        [CustomerId] int NOT NULL FOREIGN KEY REFERENCES Customers(Id),
+                        [CustomerId] int NOT NULL FOREIGN KEY REFERENCES Customers(Id)
                     )
                 ");
 

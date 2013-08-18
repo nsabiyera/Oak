@@ -8,6 +8,11 @@ namespace Oak
 {
     public class ConnectionProfile
     {
+        public ConnectionProfile()
+        {
+            ProviderName = "System.Data.SqlClient";
+        }
+
         private string connectionString;
         public string ConnectionString
         {
@@ -29,6 +34,9 @@ namespace Oak
                 connectionString = value;
             }
         }
+
+        private string providerName;
+        public string ProviderName { get; set; }
 
         bool DefinedInProjectConfigFile(ConnectionStringSettings config)
         {
