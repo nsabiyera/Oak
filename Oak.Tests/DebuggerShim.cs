@@ -52,3 +52,13 @@ public class DebuggerShim
         Process.Start(path);
     }
 }
+
+public static class TestHelpers
+{
+    public static string Print(this string s)
+    {
+        System.Console.WriteLine(s);
+
+        return s;
+    }
+}
