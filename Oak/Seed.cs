@@ -69,7 +69,7 @@ namespace Oak
 
         public string DropTable(string table)
         {
-            return "drop table if exists " + table;
+            return "drop table " + table;
         }
 
         /// <summary>
