@@ -12,25 +12,39 @@ namespace Oak.Tests.describe_DbProviders
     {
         string connectionString = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=Postgres1234;Database=Oak;";
 
+        Seed seed;
+
+        void before_each()
+        {
+            seed = new Seed(
+                new ConnectionProfile
+                {
+                    ConnectionString = connectionString,
+                    ProviderName = "Npgsql"
+                });
+        }
+
         void describe_Seed()
         {
             it["can drop and create tables"] = () => 
             {
-                var seed = new Seed(
-                    new ConnectionProfile
-                    {
-                        ConnectionString = connectionString,
-                        ProviderName = "Npgsql"
-                    });
-
                 seed.ExecuteNonQuery(seed.CreateTable("People", new { Name = "varchar(255)" }));
 
-                seed.ExecuteScalar("select count(*) from Information_Schema.tables where table_name = 'people'").should_be(1);
+                TableExists("People").should_be(true);
 
                 seed.ExecuteNonQuery(seed.DropTable("People"));
 
-                seed.ExecuteScalar("select count(*) from Information_Schema.tables where table_name = 'people'").should_be(0);
+                TableExists("People").should_be(false);
             };
+        }
+
+        bool TableExists(string tableName)
+        {
+            var query = "select count(*) from Information_Schema.tables where table_name = '{0}'".With(tableName.ToLower());
+
+            var count = Convert.ToInt32(seed.ExecuteScalar(query));
+
+            return count == 1;
         }
     }
 }

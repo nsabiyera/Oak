@@ -35,7 +35,6 @@ namespace Oak
             }
         }
 
-        private string providerName;
         public string ProviderName { get; set; }
 
         bool DefinedInProjectConfigFile(ConnectionStringSettings config)
