@@ -41,15 +41,18 @@ namespace Oak
             return result;
         }
 
-        public static SqlDataReader ExecuteReader(this string query, ConnectionProfile connectionProfile = null)
+        public static DbDataReader ExecuteReader(this string query, ConnectionProfile connectionProfile = null)
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
-            sqlCommand.Connection.Open();
-            sqlCommand.CommandText = String.Format(query);
-            return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
+            DbProviderFactory factory = DbProviderFactories.GetFactory(connectionProfile.ProviderName);
+            DbConnection conn = factory.CreateConnection();
+            conn.ConnectionString = connectionProfile.ConnectionString;
+            DbCommand comm = factory.CreateCommand();
+            comm.Connection = conn;
+            comm.Connection.Open();
+            comm.CommandText = String.Format(query);
+            return comm.ExecuteReader(CommandBehavior.CloseConnection);
         }
     }
 }
