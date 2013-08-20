@@ -190,6 +190,7 @@
     <Compile Include="describe_Gemini\updating_members.cs" />
     <Compile Include="describe_Memoize.cs" />
     <Compile Include="describe_Seed\schemas.cs" />
+    <Compile Include="describe_Seed_for_Postgres\describe_PurgeDb.cs" />
     <Compile Include="describe_StrongParameterss.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Essay.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\FailedValidation.cs" />
