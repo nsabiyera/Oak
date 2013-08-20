@@ -36,6 +36,17 @@ namespace Oak.Tests.describe_DbProviders
 
                 TableExists("People").should_be(false);
             };
+
+            it["can drop all tables"] = () =>
+            {
+                seed.ExecuteNonQuery(seed.CreateTable("People", new { Name = "varchar(255)" }));
+
+                TableExists("People").should_be(true);
+
+                seed.PurgeDb();
+
+                TableExists("People").should_be(false);
+            };
         }
 
         bool TableExists(string tableName)

@@ -144,7 +144,7 @@ namespace Oak
 
         string Dbo()
         {
-            if (IsPostgres()) return "";
+            if (IsPostgres()) return "public";
 
             return "dbo";
         }
@@ -183,6 +183,8 @@ namespace Oak
 
         private void DropCustomSchemas()
         {
+            if(IsPostgres()) return; //TODO
+
             var reader = @"SELECT name FROM sys.schemas".ExecuteReader(ConnectionProfile);
 
             while (reader.Read())
@@ -218,6 +220,8 @@ namespace Oak
 
         void DropAllForeignKeys()
         {
+            if(IsPostgres()) return; //TODO
+
             var reader = @"
             select  name as constraint_name,
                     object_name(parent_obj) as table_name,
@@ -232,6 +236,8 @@ namespace Oak
 
         void DropAllPrimaryKeys()
         {
+            if(IsPostgres()) return; //TODO
+
             var reader = @"
             select  name as constraint_name, 
                     object_name(parent_obj) as table_name,
@@ -246,14 +252,25 @@ namespace Oak
 
         void DropAllTables()
         {
-            var reader = @"
+            var query = @"
             select  name as table_name, 
                     object_schema_name(id) as table_schema 
-            from sysobjects where xtype = 'u'".ExecuteReader(ConnectionProfile);
+            from sysobjects where xtype = 'u'";
+
+            if(IsPostgres())
+            {
+                query = @"
+                select table_name,
+                       table_schema
+                from information_schema.tables
+                where table_schema = 'public'";
+            }
+
+            var reader = query.ExecuteReader(ConnectionProfile);
 
             while (reader.Read())
             {
-                "drop table [{0}].[{1}] ".With(reader["table_schema"], reader["table_name"]).ExecuteNonQuery(ConnectionProfile);
+                "drop table {0}.{1} ".With(Escape(reader["table_schema"] as string), Escape(reader["table_name"] as string)).ExecuteNonQuery(ConnectionProfile);
             }
         }
 
