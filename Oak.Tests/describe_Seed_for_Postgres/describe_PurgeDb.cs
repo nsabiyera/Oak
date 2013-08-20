@@ -6,9 +6,9 @@ using NSpec;
 using System.Data;
 using Npgsql;
 
-namespace Oak.Tests.describe_DbProviders
+namespace Oak.Tests.describe_Seed_for_Postgres
 {
-    class describe_Postgresql : nspec
+    class describe_PurgeDb : nspec
     {
         string connectionString = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=Postgres1234;Database=Oak;";
 
@@ -24,18 +24,15 @@ namespace Oak.Tests.describe_DbProviders
                 });
         }
 
-        void describe_Seed()
+        void it_can_drop_public_tables()
         {
-            it["can drop and create tables"] = () => 
-            {
-                seed.ExecuteNonQuery(seed.CreateTable("People", new { Name = "varchar(255)" }));
+            seed.ExecuteNonQuery(seed.CreateTable("People", new { Name = "varchar(255)" }));
 
-                TableExists("People").should_be(true);
+            TableExists("People").should_be(true);
 
-                seed.ExecuteNonQuery(seed.DropTable("People"));
+            seed.PurgeDb();
 
-                TableExists("People").should_be(false);
-            };
+            TableExists("People").should_be(false);
         }
 
         bool TableExists(string tableName)
