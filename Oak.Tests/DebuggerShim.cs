@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using System.Reflection;
 using NSpec;
 using NSpec.Domain;
@@ -60,5 +61,21 @@ public static class TestHelpers
         System.Console.WriteLine(s);
 
         return s;
+    }
+
+    public static string File(this string s, params string[] otherStrings)
+    {
+        var path = System.IO.Path.GetTempFileName();
+        s += string.Join("\n", otherStrings);
+        System.IO.File.WriteAllText(path, s);
+        System.Diagnostics.Process.Start(path);
+        return s;
+    }
+
+    public static string ToSingleLine(this string s)
+    {
+        var single = Regex.Replace(s, @"[ ]{2,}", "");
+        single = single.Trim().Replace(Environment.NewLine, "");
+        return single;
     }
 }

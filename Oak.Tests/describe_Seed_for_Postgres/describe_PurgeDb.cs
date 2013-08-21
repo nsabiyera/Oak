@@ -26,7 +26,26 @@ namespace Oak.Tests.describe_Seed_for_Postgres
 
         void it_can_drop_public_tables()
         {
-            seed.ExecuteNonQuery(seed.CreateTable("People", new { Name = "varchar(255)" }));
+            seed.ExecuteNonQuery(
+                seed.CreateTable(
+                    "People",
+                    new { Name = "varchar(255)" }
+                )
+            );
+
+            TableExists("People").should_be(true);
+
+            seed.PurgeDb();
+
+            TableExists("People").should_be(false);
+        }
+
+        void it_can_drop_public_table_with_primary_key()
+        {
+            seed.ExecuteNonQuery(seed.CreateTable(
+                "People",
+                seed.Id(),
+                new { Name = "varchar(255)" }));
 
             TableExists("People").should_be(true);
 
