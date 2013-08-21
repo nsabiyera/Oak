@@ -86,11 +86,12 @@ Oak has full documentation, screencasts, sample apps, and an interactive tutoria
 <ul>
 <li>Install <a href="http://www.microsoft.com/download/en/details.aspx?id=1038">IIS Express</a>
 </li>
-<li>Install <a href="http://rubyinstaller.org/downloads/">ruby 2.0.0</a> (used for build automation, continuous testing and solution generation)
+<li>Install <a href="http://rubyinstaller.org/downloads/">ruby 2.0.0</a> (used for build automation, continuous testing and solution generation, you can use 1.9.2 if you already have that installed)
 </li>
-<li>Install the following gems using a command prompt that supports ruby <b>(be sure to run the command prompt as an administrator)</b>:
+<li>Install the following gem using a command prompt that supports ruby <b>(be sure to run the command prompt as an administrator)</b>:
+<br/>
+<br/>
 <pre>
-gem install bundler (used for continuous testing)
 gem install warmup (used for solution generation)
 </pre>
 </li>
@@ -410,6 +411,15 @@ clone the git repo (~200MB):
 <pre>
 git clone https://github.com/amirrajan/Oak.git
 </pre>
+
+<p>
+Some of the sample apps use additional ruby gems, run the folowing command to prep your system for these gems:
+</p>
+
+<pre>
+gem install bundler
+</pre>
+
 <h2>Minimal Implementation: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
 <p>This blogging applications is will show you how to perform validation and data access using Oak's mixins. Look at the other sample apps for a deeper dive into Oak.</p>
 <ul>
