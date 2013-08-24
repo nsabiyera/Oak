@@ -9,7 +9,7 @@ using Npgsql;
 
 namespace Oak.Tests.describe_Seed_for_Postgres
 {
-    class _seed : nspec
+    class _seed_for_postgres : nspec
     {
         protected Seed seed;
         protected string command;
