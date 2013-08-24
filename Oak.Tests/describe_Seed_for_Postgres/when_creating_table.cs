@@ -8,10 +8,17 @@ using Npgsql;
 
 namespace Oak.Tests.describe_Seed_for_Postgres
 {
-    class when_creating_table : _seed
+    class when_creating_table : _seed_for_postgres
     {
         void act_each()
         {
+            seed.PurgeDb();
+
+            seed.ExecuteNonQuery(seed.CreateTable("Customers", 
+                seed.Id(),
+                new { Name = "varchar(255)" }
+            ));
+
             command = seed.CreateTable("Users", columns);
         }
 
@@ -32,6 +39,25 @@ namespace Oak.Tests.describe_Seed_for_Postgres
                       (
                         Id
                       )                                             
+                    )
+                ");
+        }
+
+        void foreign_key_column()
+        {
+            before = () =>
+                columns = new dynamic[]
+                {
+                    new { Name = "varchar(255)" },
+                    new { CustomerId = "int", ForeignKey = "Customers(Id)" }
+                };
+            
+            it["contains identity definition"] = () =>
+                CommandShouldBe(@"
+                    CREATE TABLE public.Users
+                    (
+                        Name varchar(255) NULL,
+                        CustomerId int NULL REFERENCES Customers(Id)
                     )
                 ");
         }

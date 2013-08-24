@@ -121,7 +121,7 @@ namespace Oak
             var isForeignKey = column.IsForeignKeyColumn();
 
             string identityAsString = isIdentity ? syntax.IdentityScript() : "";
-            string foreignKeyString = isForeignKey ? " FOREIGN KEY REFERENCES " + column.ForeignKey() : "";
+            string foreignKeyString = isForeignKey ? syntax.ForeignKeyScript(column.ForeignKey() as string) : "";
 
             return "{0} {1} {2} {3}{4}{5}"
                         .With(name,
@@ -205,17 +205,34 @@ namespace Oak
 
         void DropAllForeignKeys()
         {
-            if(syntax.IsPostgres()) return; //TODO
-
-            var reader = @"
+            string foreignKeyQuery = @"
             select  name as constraint_name,
                     object_name(parent_obj) as table_name,
                     object_schema_name(parent_obj) as table_schema
-            from sysobjects where xtype = 'f'".ExecuteReader(ConnectionProfile);
+            from sysobjects where xtype = 'f'";
+
+            string dropConstraintQuery = "alter table [{0}].[{1}] drop constraint {2} ";
+            
+
+            if(syntax.IsPostgres())
+            {
+              foreignKeyQuery = @"
+              SELECT tc.constraint_name,
+                     tc.table_name,
+                     'public' as table_schema
+              FROM information_schema.table_constraints AS tc 
+              JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name
+              JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name
+              WHERE constraint_type = 'FOREIGN KEY';";
+
+              dropConstraintQuery = "alter table {0}.{1} drop constraint {2} ";
+            }
+
+            var reader = foreignKeyQuery.ExecuteReader(ConnectionProfile);
 
             while (reader.Read())
             {
-                "alter table [{0}].[{1}] drop constraint {2} ".With(reader["table_schema"], reader["table_name"], reader["constraint_name"]).ExecuteNonQuery(ConnectionProfile);
+                dropConstraintQuery.With(reader["table_schema"], reader["table_name"], reader["constraint_name"]).ExecuteNonQuery(ConnectionProfile);
             }
         }
 
@@ -434,6 +451,13 @@ namespace Oak
             if (IsPostgres()) return "";
 
             return " IDENTITY(1,1)";
+        }
+
+        public string ForeignKeyScript(string foreignKeyColumn)
+        {
+            if (IsPostgres()) return " REFERENCES " + foreignKeyColumn;
+
+            return " FOREIGN KEY REFERENCES " + foreignKeyColumn;
         }
 
         public string PrimaryKeyConstraintName(string forTable)
