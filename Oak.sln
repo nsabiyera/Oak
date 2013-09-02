@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oak", "Oak\Oak.csproj", "{A84BD08C-2BFE-47B5-B68F-3DB1698FE71A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oak.Tests", "Oak.Tests\Oak.Tests.csproj", "{D1CA0AB1-F357-47D7-BD33-D0CFCE066510}"
