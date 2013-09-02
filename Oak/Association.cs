@@ -1011,8 +1011,8 @@ Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
             if (!ColumnCache.ContainsKey(table))
             {
                 var columns = SchemaRepository
-                    .Query("select name from syscolumns where id = object_id(@0)", table)
-                    .Select(s => (string)s.Name)
+                    .Query("select COLUMN_NAME from INFORMATION_SCHEMA.Columns where TABLE_NAME = @0", table)
+                    .Select(s => (string)s.COLUMN_NAME)
                     .ToList();
 
                 ColumnCache.Add(table, columns);
@@ -1028,7 +1028,7 @@ Table [{4}] with schema [Id, {3}, {1}] doesn't exist (HasOneThrough).";
             if (!TableCache.ContainsKey(table))
             {
                 var exists = SchemaRepository
-                    .Query("select name from sysobjects where name = @0", table)
+                    .Query("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @0", table)
                     .Any();
 
                 TableCache.Add(table, exists);

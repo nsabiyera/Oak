@@ -36,7 +36,7 @@ namespace Oak.Tests.describe_DynamicModels
 
             seed.CreateTable("Warehouses", new dynamic[] {
 		                new { Id = "int", Identity = true, PrimaryKey = true },
-				        new { Location = "nvarchar(max)" },
+				        new { Location = "nvarchar(255)" },
 		            }).ExecuteNonQuery();
         }
 

@@ -79,7 +79,7 @@ namespace Oak.Tests.describe_DynamicDb
                     seed.CreateTable("Comments",
                         seed.Id(),
                         new { fk_BlogId = "int" },
-                        new { Text = "nvarchar(max)" }
+                        new { Text = "nvarchar(255)" }
                     ).ExecuteNonQuery();
 
                     var blogId = new { Title = "a blog" }.InsertInto("Blogs");
@@ -190,7 +190,7 @@ namespace Oak.Tests.describe_DynamicDb
                     seed.CreateTable("Comments",
                         seed.Id(),
                         new { BlogId = "int" },
-                        new { Text = "nvarchar(max)" }
+                        new { Text = "nvarchar(255)" }
                     ).ExecuteNonQuery();
 
                     commentId = new { BlogId = 10, Text = "a comment" }.InsertInto("Comments");
@@ -226,7 +226,7 @@ namespace Oak.Tests.describe_DynamicDb
                     seed.CreateTable("Comments",
                         seed.Id(),
                         new { fk_BlogId = "int" },
-                        new { Text = "nvarchar(max)" }
+                        new { Text = "nvarchar(255)" }
                    ).ExecuteNonQuery();
 
                     commentId = new { fk_BlogId = 10, Text = "a comment" }.InsertInto("Comments");

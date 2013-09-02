@@ -32,6 +32,8 @@ namespace Oak.Tests
 
         void specify_db_can_be_specified()
         {
+            //System.Diagnostics.Debugger.Launch();
+
             var connectionString = ConfigurationManager.ConnectionStrings["AnotherDb"].ConnectionString;
 
             seed = new Seed(new ConnectionProfile
@@ -293,7 +295,7 @@ namespace Oak.Tests
             seed.CreateTable("Comments",
                 seed.Id(),
                 new { BlogId = "int", ForeignKey = "Blogs(Id)" },
-                new { Text = "nvarchar(max)" }
+                new { Text = "nvarchar(255)" }
            ).ExecuteNonQuery();
 
             authorId = new { Name = "Amir" }.InsertInto("Authors");

@@ -567,7 +567,7 @@ Here is an example of creating this schema:
             return Seed.CreateTable(""Blogs"",
                 Seed.Id(),
                 new { Name = ""nvarchar(255)"" },
-                new { Body = ""nvarchar(max)"" }
+                new { Body = ""nvarchar(255)"" }
             );
         }
 
@@ -623,7 +623,7 @@ Here is an example of creating this schema:
             return Seed.CreateTable(""Blogs"",
                 Seed.Id(),
                 new { Name = ""nvarchar(255)"" },
-                new { Body = ""nvarchar(max)"" }
+                new { Body = ""nvarchar(255)"" }
             );
         }
 
@@ -634,7 +634,7 @@ Here is an example of creating this schema:
             return Seed.CreateTable(""Comments"",
                 Seed.Id(),
                 new { BlogId = ""int"", ForeignKey = ""Blogs(Id)"" },
-                new { Body = ""nvarchar(max)"" }
+                new { Body = ""nvarchar(255)"" }
             );
         }
 
@@ -688,7 +688,7 @@ Here is an example of creating this schema (let's say I want to create a table c
             return Seed.CreateTable(""Blogs"",
                 Seed.Id(),
                 new { Name = ""nvarchar(255)"" },
-                new { Body = ""nvarchar(max)"" }
+                new { Body = ""nvarchar(255)"" }
             );
         }
     }
