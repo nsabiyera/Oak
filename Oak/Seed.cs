@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Oak.Extensions;
 using System.Diagnostics;
 using System.IO;
+using System.Data.SqlServerCe;
 
 namespace Oak
 {
@@ -112,7 +113,7 @@ namespace Oak
             var isForeignKey = column.IsForeignKeyColumn();
 
             string identityAsString = isIdentity ? " IDENTITY(1,1)" : "";
-            string foreignKeyString = isForeignKey ? " FOREIGN KEY REFERENCES " + column.ForeignKey() : "";
+            string foreignKeyString = isForeignKey ? " REFERENCES " + column.ForeignKey() : "";
 
             return "[{0}] {1} {2} {3}{4}{5}"
                         .With(name,
@@ -127,22 +128,33 @@ namespace Oak
 
         string CreateTableCommand(string schema, string table, string columns, List<string> primaryKeyColumns)
         {
-            var primaryKeyColumnScript = string.Join(",", primaryKeyColumns.Select(s => "[{0}] ASC".With(s)));
+            var primaryKeyColumnScript = string.Join(",", primaryKeyColumns.Select(s => "[{0}]".With(s)));
 
             var primaryKeyScript =
-                " CONSTRAINT [PK_{0}] PRIMARY KEY CLUSTERED ({1})".With(table, primaryKeyColumnScript ?? string.Empty);
+                " CONSTRAINT [PK_{0}] PRIMARY KEY ({1})".With(table, primaryKeyColumnScript ?? string.Empty);
 
             if (!primaryKeyColumns.Any()) primaryKeyScript = "";
 
-            return "CREATE TABLE [{0}].[{1}]({2}{3})".With(schema, table, columns, primaryKeyScript);
+            string result = "CREATE TABLE [{1}]({2}{3})".With(schema, table, columns, primaryKeyScript);
+
+            return result;
         }
 
         public void PurgeDb()
         {
-            DropAllForeignKeys();
-            DropAllPrimaryKeys();
-            DropAllTables();
-            DropCustomSchemas();
+            string fileName;
+            using (var conn = new SqlCeConnection(ConnectionProfile.ConnectionString))
+            {
+                fileName = conn.DataSource;
+            }
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            SqlCeEngine en = new SqlCeEngine(ConnectionProfile.ConnectionString);
+            en.CreateDatabase();
         }
 
         private void DropCustomSchemas()

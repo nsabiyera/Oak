@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using System.Data.SqlServerCe;
 
 namespace Oak
 {
@@ -12,8 +13,8 @@ namespace Oak
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
+            SqlCeCommand sqlCommand = new SqlCeCommand();
+            sqlCommand.Connection = new SqlCeConnection(connectionProfile.ConnectionString);
             sqlCommand.Connection.Open();
             sqlCommand.CommandText = String.Format(query);
             sqlCommand.ExecuteNonQuery();
@@ -24,8 +25,8 @@ namespace Oak
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
+            SqlCeCommand sqlCommand = new SqlCeCommand();
+            sqlCommand.Connection = new SqlCeConnection(connectionProfile.ConnectionString);
             sqlCommand.Connection.Open();
             sqlCommand.CommandText = String.Format(query);
             var result = sqlCommand.ExecuteScalar();
@@ -34,12 +35,12 @@ namespace Oak
             return result;
         }
 
-        public static SqlDataReader ExecuteReader(this string query, ConnectionProfile connectionProfile = null)
+        public static SqlCeDataReader ExecuteReader(this string query, ConnectionProfile connectionProfile = null)
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = new SqlConnection(connectionProfile.ConnectionString);
+            SqlCeCommand sqlCommand = new SqlCeCommand();
+            sqlCommand.Connection = new SqlCeConnection(connectionProfile.ConnectionString);
             sqlCommand.Connection.Open();
             sqlCommand.CommandText = String.Format(query);
             return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);

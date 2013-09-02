@@ -13,6 +13,7 @@ using Oak;
 using System.Diagnostics;
 using Massive;
 using System.Threading;
+using System.Data.SqlServerCe;
 
 //thank you Rob Conery for this awesome file https://github.com/robconery/massive
 
@@ -132,7 +133,7 @@ namespace Massive
         {
             TableName = tableName == "" ? this.GetType().Name : tableName;
             PrimaryKeyField = string.IsNullOrEmpty(primaryKeyField) ? "Id" : primaryKeyField;
-            var _providerName = "System.Data.SqlClient";
+            var _providerName = "System.Data.SqlServerCe.4.0";
             _factory = DbProviderFactories.GetFactory(_providerName);
 
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
@@ -210,9 +211,12 @@ namespace Massive
         /// </summary>
         public void QueryAsync(string sql, Action<List<dynamic>> callback, params object[] args)
         {
-            using (var conn = new SqlConnection(ConnectionProfile.ConnectionString))
+            throw new NotImplementedException();
+
+            /*
+            using (var conn = new SqlCeConnection(ConnectionProfile.ConnectionString))
             {
-                var cmd = new SqlCommand(sql, new SqlConnection(ConnectionProfile.ConnectionString));
+                var cmd = new SqlCeCommand(sql, new SqlCeConnection(ConnectionProfile.ConnectionString));
                 cmd.AddParams(args);
                 cmd.Connection.Open();
                 var task = Task.Factory.FromAsync<IDataReader>(cmd.BeginExecuteReader, cmd.EndExecuteReader, null);
@@ -220,6 +224,7 @@ namespace Massive
                 //make sure this is closed off.
                 conn.Close();
             }
+             * */
         }
 
         public virtual IEnumerable<dynamic> Query(string sql, DbConnection connection, params object[] args)

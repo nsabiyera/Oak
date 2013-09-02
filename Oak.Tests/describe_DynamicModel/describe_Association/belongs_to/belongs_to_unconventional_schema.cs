@@ -56,7 +56,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.belongs_to
                     seed.CreateTable("Blogs", new dynamic[] {
 		                        new { BlogId = "int", Identity = true, PrimaryKey = true },
 		                        new { Title = "nvarchar(255)" },
-		                        new { Body = "nvarchar(max)" }
+		                        new { Body = "nvarchar(255)" }
 		                    }).ExecuteNonQuery();
 
                     seed.CreateTable("Comments", new dynamic[] {
@@ -100,7 +100,7 @@ namespace Oak.Tests.describe_DynamicModel.describe_Association.belongs_to
             seed.CreateTable("Blogs", new dynamic[] {
 		                new { Id = "int", Identity = true, PrimaryKey = true },
 		                new { Title = "nvarchar(255)" },
-		                new { Body = "nvarchar(max)" }
+		                new { Body = "nvarchar(255)" }
 		            }).ExecuteNonQuery();
         }
 

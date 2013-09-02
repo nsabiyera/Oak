@@ -141,7 +141,7 @@ namespace Oak.Tests.describe_DynamicRepository
                     NTextColumn = "ntext column",
                     NumericColumn = 18.003,
                     NVarCharColumn = "nvarchar column",
-                    NVarCharMaxColumn = "nvarchar(max) column",
+                    NVarCharMaxColumn = "nvarchar(255) column",
                     RealColumn = 1.9,
                     SqlVariantColumn = 62,
                     SmallDateTimeColumn = DateTime.Today.AddDays(4),
@@ -183,7 +183,7 @@ namespace Oak.Tests.describe_DynamicRepository
                 ((decimal)record.NumericColumn).should_be(18.003);
                 ((string)record.NCharColumn).should_be("nchar column");
                 ((string)record.NVarCharColumn).should_be("nvarchar column");
-                ((string)record.NVarCharMaxColumn).should_be("nvarchar(max) column");
+                ((string)record.NVarCharMaxColumn).should_be("nvarchar(255) column");
                 ((Single)Convert.ToInt32(record.RealColumn)).should_be(2);
                 ((object)record.SqlVariantColumn).should_be(62);
                 ((DateTime)record.SmallDateTimeColumn).should_be(DateTime.Today.AddDays(4));
