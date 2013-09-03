@@ -8,452 +8,388 @@ There was an error parsing the query. [ Token line number = 1,Token line offset 
    at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
    at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
    at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
-   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 20
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
    at Oak.Tests.describe_Seed.schemas.specify_create_table() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 21
 
 nspec.  seed. schemas. specify add column.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.schemas.specify_add_column() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 38
+There was an error parsing the query. [ Token line number = 1,Token line offset = 8,Token in error = SCHEMA ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.schemas.specify_add_column() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 40
 
 nspec.  seed. schemas. specify drop column.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.schemas.specify_drop_column() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 67
+There was an error parsing the query. [ Token line number = 1,Token line offset = 8,Token in error = SCHEMA ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.schemas.specify_drop_column() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 69
 
 nspec.  seed. schemas. specify rename column.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.schemas.specify_rename_column() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 94
+There was an error parsing the query. [ Token line number = 1,Token line offset = 8,Token in error = SCHEMA ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.schemas.specify_rename_column() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 96
 
 nspec.  seed. schemas. specify drop constraint.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.schemas.specify_drop_constraint() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 123
+There was an error parsing the query. [ Token line number = 1,Token line offset = 8,Token in error = SCHEMA ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.schemas.specify_drop_constraint() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\schemas.cs:line 125
 
 nspec.  seed. deleting records. it deletes all records in all tables in the database.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Table1 ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.deleting_records.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\deleting_records.cs:line 13
+Context Failure: There was an error parsing the query. [ Token line number = 1,Token line offset = 37,Token in error = select ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteScalar()
+   at Oak.Query.ExecuteScalar(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 38
+   at Oak.Tests.describe_Seed.deleting_records.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\deleting_records.cs:line 28
 
 nspec.  seed. deleting records. it key contraints are reenabled after deletion.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.deleting_records.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\deleting_records.cs:line 13
+Context Failure: There was an error parsing the query. [ Token line number = 1,Token line offset = 37,Token in error = select ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteScalar()
+   at Oak.Query.ExecuteScalar(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 38
+   at Oak.Tests.describe_Seed.deleting_records.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\deleting_records.cs:line 28
 
 nspec.  seed. dropping column. it works.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.dropping_column.it_works() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\dropping_column.cs:line 13
+The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Table1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.dropping_column.it_works() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\dropping_column.cs:line 21
 
 nspec.  seed. dropping column. specify constraints can be dropped too.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.dropping_column.specify_constraints_can_be_dropped_too() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\dropping_column.cs:line 28
+The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Table1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.dropping_column.specify_constraints_can_be_dropped_too() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\dropping_column.cs:line 36
 
 nspec.  seed. execute non query. specify a single string query is executed by seed.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ sysobjects ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.execute_non_query.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\execute_non_query.cs:line 13
+The specified table does not exist. [ sysobjects ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteReader(CommandBehavior behavior)
+   at Oak.Query.ExecuteReader(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 56
+   at Oak.Tests.describe_Seed._seed.TableExists(String table) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 42
+   at Oak.Tests.describe_Seed.execute_non_query.specify_a_single_string_query_is_executed_by_seed() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\execute_non_query.cs:line 23
 
 nspec.  seed. execute non query. specify a function that returns a string is executed by seed.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table already exists. [ SingleQueryTable ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.execute_non_query.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\execute_non_query.cs:line 13
+The specified table does not exist. [ sysobjects ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteReader(CommandBehavior behavior)
+   at Oak.Query.ExecuteReader(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 56
+   at Oak.Tests.describe_Seed._seed.TableExists(String table) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 42
+   at Oak.Tests.describe_Seed.execute_non_query.specify_a_function_that_returns_a_string_is_executed_by_seed() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\execute_non_query.cs:line 36
 
 nspec.  seed. execute non query. specify a function that returns a collection is executed by seed.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table already exists. [ SingleQueryTable ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.execute_non_query.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\execute_non_query.cs:line 13
+The specified table does not exist. [ sysobjects ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteReader(CommandBehavior behavior)
+   at Oak.Query.ExecuteReader(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 56
+   at Oak.Tests.describe_Seed._seed.TableExists(String table) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 42
+   at Oak.Tests.describe_Seed.execute_non_query.specify_a_function_that_returns_a_collection_is_executed_by_seed() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\execute_non_query.cs:line 60
 
 nspec.  seed. executing scripts. it executes scripts up to specified script.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.executing_scripts.it_executes_scripts_up_to_specified_script() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\executing_scripts.cs:line 13
+The specified table does not exist. [ sysobjects ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteReader(CommandBehavior behavior)
+   at Oak.Query.ExecuteReader(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 56
+   at Oak.Tests.describe_Seed._seed.TableExists(String table) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 42
+   at Oak.Tests.describe_Seed.executing_scripts.it_executes_scripts_up_to_specified_script() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\executing_scripts.cs:line 17
 
 nspec.  seed. executing scripts. it executes scripts thru specified script.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.executing_scripts.it_executes_scripts_thru_specified_script() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\executing_scripts.cs:line 26
+The specified table does not exist. [ sysobjects ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteReader(CommandBehavior behavior)
+   at Oak.Query.ExecuteReader(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 56
+   at Oak.Tests.describe_Seed._seed.TableExists(String table) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 42
+   at Oak.Tests.describe_Seed.executing_scripts.it_executes_scripts_thru_specified_script() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\executing_scripts.cs:line 30
 
 nspec.  seed. renaming column. it works.
-The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.renaming_column.it_works() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\renaming_column.cs:line 13
+The number of columns in the query and the table must match. [ Number of columns in query = 1, Number of columns in table = 2 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.renaming_column.it_works() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\renaming_column.cs:line 21
 
 nspec.  seed. when adding columns. add int column. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [FooBar] int NULL", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add int column. the column can be inserted into.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = FooBar ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add int column. nulls are allowed.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = FooBar ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add not null int column. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [FooBar] int NOT NULL", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add not null int column. nulls are not allowed.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
 nspec.  seed. when adding columns. add two int columns. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [Column1] int NULL, [Column2] int NULL", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add two int columns. both columns can be inserted into.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = Column1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add two int columns. nulls are allowed.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = Column1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. column with default value. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [FooBar] int NOT NULL DEFAULT('10')", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. column with default value. default value is adhered to.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = FooBar ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. two columns with default values. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [Column1] int NOT NULL DEFAULT('10'), [Column2] nvarchar(255) NULL DEFAULT('Test')", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. two columns with default values. default values are adhered to.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = Column1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add date column with default value of GETDATE. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [Column1] datetime NOT NULL DEFAULT(getdate())", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add date column with default value of GETDATE. default value is set to todays date.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = Column1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add guid column with default value of newid. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [Column1] uniqueidentifier NOT NULL DEFAULT(newid())", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add guid column with default value of newid. generates a new guid.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The column name is not valid. [ Node name (if any) = ,Column name = Column1 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add foreign key column. creates the alter table statement.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "ALTER TABLE [dbo].[Users] ADD [Column1] int NULL FOREIGN KEY REFERENCES Customers(Id)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: Expected string length 85 but was 73. Strings differ at index 49., Expected: "...] ADD [Column1] int NULL FOREIGN KEY REFERENCES Customers(Id)", But was: "...] ADD [Column1] int NULL REFERENCES Customers(Id)", ---------------------------------------^
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when adding columns. add foreign key column. foreign key constraint is applied.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
 nspec.  seed. when adding columns. add foreign key column. allows insert if record exists in constraint table.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Customers ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_adding_columns.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 14
+Context Failure: The table name is not valid. [ Token line number (if known) = 1,Token line offset (if known) = 21,Table name = Users ], Example Failure: The number of columns in the query and the table must match. [ Number of columns in query = 1, Number of columns in table = 2 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_adding_columns.act_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_adding_columns.cs:line 31
 
 nspec.  seed. when creating table. table with a string column. the command contains create table with column and type.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NULL,)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. table with a string column. table can be queried.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. table with a string column. nulls can be inserted into table.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 59 but was 52. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NULL,)", But was: "CREATE TABLE [Users]([FirstName] nvarchar(255) NULL)", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<table_with_a_string_column>b__1() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 42
 
 nspec.  seed. when creating table. table with a string column. length specification is adhered to.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
 nspec.  seed. when creating table. column has a null definition. the command creates column as not null.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NOT NULL,)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. column has a null definition. table can be queried.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. column has a null definition. nulls cannot be inserted into table.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 63 but was 56. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NOT NULL,)", But was: "CREATE TABLE [Users]([FirstName] nvarchar(255) NOT NULL)", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<column_has_a_null_definition>b__8() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 69
 
 nspec.  seed. when creating table. column has a null definition. length specification is adhered to.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
 nspec.  seed. when creating table. column has default value. the command creates column with default value.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NOT NULL DEFAULT('test'),[LastName] nvarchar(255) NULL,)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. column has default value. default value is set.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 109 but was 102. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NOT NULL...", But was: "CREATE TABLE [Users]([FirstName] nvarchar(255) NOT NULL DEFAU...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<column_has_default_value>b__11() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 98
 
 nspec.  seed. when creating table. table with two columns. contains both columns in create script.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NULL DEFAULT('test'),[LastName] nvarchar(255) NULL DEFAULT('test'),)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. table with two columns. both columns are selectable.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 121 but was 114. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([FirstName] nvarchar(255) NULL DEF...", But was: "CREATE TABLE [Users]([FirstName] nvarchar(255) NULL DEFAULT('...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<table_with_two_columns>b__16() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 120
 
 nspec.  seed. when creating table. primary key column. contains primary key definition.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([Id] uniqueidentifier NOT NULL, CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC))", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 114 but was 94. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([Id] uniqueidentifier NOT NULL, CO...", But was: "CREATE TABLE [Users]([Id] uniqueidentifier NOT NULL, CONSTRAI...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<primary_key_column>b__1a() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 141
 
 nspec.  seed. when creating table. primary key column. it doesn't allow duplicate guid entries.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+A duplicate value cannot be inserted into a unique index. [ Table name = Users,Constraint name = PK_Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommandText(IntPtr& pCursor, Boolean& isBaseTableCursor)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_Seed.when_creating_table.<primary_key_column>b__1b() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 160
 
 nspec.  seed. when creating table. identity column. contains identity definition.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL IDENTITY(1,1),[Name] nvarchar(255) NULL,)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. identity column. inserts auto increment id column.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 86 but was 79. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL IDENTITY(1,1),[N...", But was: "CREATE TABLE [Users]([Id] int NOT NULL IDENTITY(1,1),[Name] n...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<identity_column>b__1e() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 178
 
 nspec.  seed. when creating table. identity column. doesn't allow the insert of id collumn.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
 nspec.  seed. when creating table. foreign key column. contains identity definition.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL IDENTITY(1,1),[Name] nvarchar(255) NULL,[CustomerId] int NULL FOREIGN KEY REFERENCES Customers(Id),)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
-nspec.  seed. when creating table. foreign key column. the foreign key is nullable.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 145 but was 126. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL IDENTITY(1,1),[N...", But was: "CREATE TABLE [Users]([Id] int NOT NULL IDENTITY(1,1),[Name] n...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<foreign_key_column>b__24() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 208
 
 nspec.  seed. when creating table. foreign key column. the foreign key constraint is adhered to.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
-nspec.  seed. when creating table. foreign key column. allows insert if foreign key matches.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
-
 nspec.  seed. when creating table. foreign key column not null. contains identity definition.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([CustomerId] int NOT NULL FOREIGN KEY REFERENCES Customers(Id),)", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 91 but was 72. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([CustomerId] int NOT NULL FOREIGN ...", But was: "CREATE TABLE [Users]([CustomerId] int NOT NULL REFERENCES Cus...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<foreign_key_column_not_null>b__2c() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 247
 
 nspec.  seed. when creating table. foreign key column not null. the foreign key column does not accept nulls.
 Exception of type SqlException was not thrown.
    at NSpec.nspec.<>c__DisplayClassa`1.<expect>b__9() in c:\Development\NSpec\src\NSpec\nspec.cs:line 245
 
 nspec.  seed. when creating table. generating a table where column is an identity column and primary key. contains identity definition.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL IDENTITY(1,1), CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC))", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 115 but was 95. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL IDENTITY(1,1), C...", But was: "CREATE TABLE [Users]([Id] int NOT NULL IDENTITY(1,1), CONSTRA...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<generating_a_table_where_column_is_an_identity_column_and_primary_key>b__30() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 267
 
 nspec.  seed. when creating table. generating composite primary keys. contains primary key constraint for both columns.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL,[CustomerId] int NOT NULL,[Name] nvarchar(255) NULL, CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC,[CustomerId] ASC))", But was: null
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+Expected string length 170 but was 146. Strings differ at index 14., Expected: "CREATE TABLE [dbo].[Users]([Id] int NOT NULL,[CustomerId] int...", But was: "CREATE TABLE [Users]([Id] int NOT NULL,[CustomerId] int NOT N...", -------------------------^
+   at Oak.Tests.describe_Seed._seed.CommandShouldBe(String expected) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\_seed.cs:line 28
+   at Oak.Tests.describe_Seed.when_creating_table.<generating_composite_primary_keys>b__32() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 291
 
 nspec.  seed. when creating table. generating composite primary keys. multi column primary key constraint is adhered to.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Users ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_Seed.when_creating_table.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 17
+A duplicate value cannot be inserted into a unique index. [ Table name = Users,Constraint name = PK_Users ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommandText(IntPtr& pCursor, Boolean& isBaseTableCursor)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteScalar()
+   at Oak.Query.ExecuteScalar(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 38
+   at Oak.Tests.describe_Seed.when_creating_table.<generating_composite_primary_keys>b__33() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_Seed\when_creating_table.cs:line 312
 
 nspec. saving model that contains an identity column. inserting model with invalid props. gives friendly exception.
 The column cannot be modified. [ Column name = Id ]
@@ -492,32 +428,45 @@ Context Failure: The specified data type is not valid. [ Data type (if known) = 
    at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
    at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
    at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
-   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 20
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
    at Oak.Tests.describe_DynamicRepository.inserting_and_updating.<updating_every_type_of_sql_column>b__4e() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\inserting_and_updating.cs:line 123
 
 nspec. executing procs. executing stored procs. proc results are converted to type.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: There was an error parsing the query. [ Token line number = 1,Token line offset = 13,Token in error = @0 ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_DynamicRepository.executing_procs.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\executing_procs.cs:line 22
+Context Failure: There was an error parsing the query. [ Token line number = 1,Token line offset = 1,Token in error = if ], Example Failure: There was an error parsing the query. [ Token line number = 1,Token line offset = 13,Token in error = @0 ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteNonQuery()
+   at Oak.Query.ExecuteNonQuery(String query, ConnectionProfile connectionProfile) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Query.cs:line 22
+   at Oak.Tests.describe_DynamicRepository.executing_procs.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\executing_procs.cs:line 24
 
 nspec. pagination. specify paged for repo.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ Records ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_DynamicRepository.pagination.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\pagination.cs:line 22
+There was an error parsing the query. [ Token line number = 1,Token line offset = 36,Token in error = OVER ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Massive.DynamicRepository.<Query>d__5.MoveNext() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Massive.cs:line 190
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Oak.DynamicModels..ctor(IEnumerable`1 models) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\DynamicModels.cs:line 24
+   at Massive.DynamicRepository.Paged(String where, String orderBy, String columns, Int32 pageSize, Int32 currentPage, Object[] args) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Massive.cs:line 683
+   at Oak.Tests.describe_DynamicRepository.pagination.specify_paged_for_repo() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\pagination.cs:line 80
 
 nspec. pagination. specify paged query for repo.
-Context Failure: The process cannot access the file 'C:\temp\Oak.sdf' because it is being used by another process., Example Failure: The specified table does not exist. [ records ]
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.File.InternalDelete(String path, Boolean checkHost)
-   at System.IO.File.Delete(String path)
-   at Oak.Seed.PurgeDb() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Seed.cs:line 154
-   at Oak.Tests.describe_DynamicRepository.pagination.before_each() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\pagination.cs:line 22
+There was an error parsing the query. [ Token line number = 1,Token line offset = 36,Token in error = OVER ]
+   at System.Data.SqlServerCe.SqlCeCommand.ProcessResults(Int32 hr)
+   at System.Data.SqlServerCe.SqlCeCommand.CompileQueryPlan()
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteCommand(CommandBehavior behavior, String method, ResultSetOptions options)
+   at System.Data.SqlServerCe.SqlCeCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Massive.DynamicRepository.<Query>d__5.MoveNext() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Massive.cs:line 190
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Oak.DynamicModels..ctor(IEnumerable`1 models) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\DynamicModels.cs:line 24
+   at Massive.DynamicRepository.PagedQuery(String sql, String where, String orderBy, String columns, Int32 pageSize, Int32 currentPage, Object[] args) in c:\Users\david.podhola\Documents\GitHub\Oak\Oak\Massive.cs:line 712
+   at Oak.Tests.describe_DynamicRepository.pagination.specify_paged_query_for_repo() in c:\Users\david.podhola\Documents\GitHub\Oak\Oak.Tests\describe_DynamicRepository\pagination.cs:line 87
 
 nspec. performance against nhibernate. specify it runs fast enough.
 An invalid or incomplete configuration was used while creating a SessionFactory. Check PotentialReasons collection, and InnerException for more detail.
