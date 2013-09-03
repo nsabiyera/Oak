@@ -261,7 +261,7 @@ namespace Massive
         {
             var args = new List<object>();
 
-            cmd.Parameters.ForEach<SqlParameter>(s => args.Add(s.Value));
+            cmd.Parameters.ForEach<SqlCeParameter>(s => args.Add(s.Value));
 
             LogSql(this, cmd.CommandText, args.ToArray());
         }
