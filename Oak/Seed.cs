@@ -134,6 +134,7 @@ namespace Oak
                 " CONSTRAINT [PK_{0}] PRIMARY KEY ({1})".With(table, primaryKeyColumnScript ?? string.Empty);
 
             if (!primaryKeyColumns.Any()) primaryKeyScript = "";
+            if (primaryKeyScript.Length == 0) columns = columns.TrimEnd(',');
 
             string result = "CREATE TABLE [{1}]({2}{3})".With(schema, table, columns, primaryKeyScript);
 
