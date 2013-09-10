@@ -87,20 +87,20 @@
     }
 
     function $gameRecordFor(game) {
-        var $game = $("<td style='width: 100%'>" + game.Name +  " (" + game.Console + ")" + "</td>")
+        var $game = $("<td style='width: 100%'>" + game.name +  " (" + game.console + ")" + "</td>")
 
-        $game.attr(view.gameIdAttribute, game.Id);
+        $game.attr(view.gameIdAttribute, game.id);
 
         $links = $("<td></td>");
 
         $links.append($deleteLinkFor(game));
 
-        return $("<tr></tr>").attr(view.gameIdAttribute, game.Id).append($game).append($links);
+        return $("<tr></tr>").attr(view.gameIdAttribute, game.id).append($game).append($links);
     }
 
     function $deleteLinkFor(game) {
         var $deleteLink = $("<a href='javascript:;' class='btn btn-danger'>remove</a>");
-        $deleteLink.attr(view.gameIdAttribute, game.GameId);
+        $deleteLink.attr(view.gameIdAttribute, game.gameId);
 
         $deleteLink.click(function () { gameRemoved(game); });
 
@@ -140,7 +140,7 @@
     }
 
     function gameRemoved(game) {
-        var gameId = game.Id;
+        var gameId = game.id;
 
         removeGameFromHaveList(gameId, function () { removeGame(gameId); });
     }
