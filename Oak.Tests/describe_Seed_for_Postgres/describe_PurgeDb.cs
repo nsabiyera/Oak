@@ -8,6 +8,7 @@ using Npgsql;
 
 namespace Oak.Tests.describe_Seed_for_Postgres
 {
+    [Tag("focus")]
     class describe_PurgeDb : nspec
     {
         string connectionString = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=Postgres1234;Database=Oak;";
@@ -74,6 +75,14 @@ namespace Oak.Tests.describe_Seed_for_Postgres
              
             TableExists("People").should_be(false);
             TableExists("Emails").should_be(false);
+        }
+
+        void it_drops_schemas()
+        {
+            seed.ExecuteNonQuery(seed.CreateTable(
+                "People",
+                seed.Id(),
+                new { Name = "varchar(255)" }));
         }
 
         bool TableExists(string tableName)
