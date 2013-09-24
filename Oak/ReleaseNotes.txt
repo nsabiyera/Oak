@@ -1,4 +1,12 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.6.8+
+oak-edge 2.0.8+
+cambium 1.5.5+
+=============== CHANGES ==================
+The Validations mixin/module will return true for IsValid if no validations is
+provided: https://github.com/amirrajan/Oak/commit/1749554966fcce2cde8346a91d72b106c53bdf7e
+
+============== FOR VERSIONS ==============
 oak 2.6.7+
 oak-edge 2.0.7+
 cambium 1.5.4+
