@@ -23,14 +23,14 @@ namespace Oak
 
             @this = mixWith;
 
+            mixWith.SetMember("Errors", new DynamicFunction(Errors));
+
+            mixWith.SetMember("IsValid", new DynamicFunctionWithParam(IsValid));
+
+            mixWith.SetMember("FirstError", new DynamicFunction(FirstError));
+
             if (HasValidationCapabilities(mixWith))
             {
-                mixWith.SetMember("Errors", new DynamicFunction(Errors));
-
-                mixWith.SetMember("IsValid", new DynamicFunctionWithParam(IsValid));
-
-                mixWith.SetMember("FirstError", new DynamicFunction(FirstError));
-
                 try
                 {
                     IEnumerable<dynamic> validationRules = @this.Validates();

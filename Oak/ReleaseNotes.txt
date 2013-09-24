@@ -1,4 +1,12 @@
 ﻿============== FOR VERSIONS ==============
+oak 2.6.7+
+oak-edge 2.0.7+
+cambium 1.5.4+
+=============== CHANGES ==================
+DynamicDb __ConnectionString__ inner property changed to a method to ensure
+that it isn't in advertantly serialized (eg serializing to JSON).
+
+============== FOR VERSIONS ==============
 oak 2.6.6+
 oak-edge 2.0.6+
 cambium 1.5.3+
