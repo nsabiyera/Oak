@@ -32,6 +32,15 @@ namespace Oak.Tests.describe_DynamicModel.describe_Validation
                 ((bool)gemini.IsValid()).should_be(false);
         }
 
+        void specify_is_valid_is_true_if_validates_isnt_given()
+        {
+            gemini = new Gemini();
+
+            new Validations(gemini);
+
+            ((bool)gemini.IsValid()).should_be(true); 
+        }
+
         void specify_a_detailed_exception_is_thrown_if_the_inititalization_for_validation_fails()
         {
             gemini = new FailedValidation();
