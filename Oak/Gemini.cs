@@ -140,15 +140,15 @@ namespace Oak
 
         private static List<KeyValuePair<Type, Action<dynamic>>> MethodHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
 
-        private List<Type> types = new List<Type>();
-
         private static List<KeyValuePair<Type, Action<dynamic>>> InitializationHooks = new List<KeyValuePair<Type, Action<dynamic>>>();
-
-        private List<Type> extendedWith = new List<Type>();
 
         private static Dictionary<Type, List<MethodInfo>> MethodCache = new Dictionary<Type, List<MethodInfo>>();
 
         private static Dictionary<Type, Dictionary<string, PropertyInfo>> PropertyCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+
+        private List<Type> types = new List<Type>();
+
+        private List<Type> extendedWith = new List<Type>();
 
         public virtual List<Type> ExtendedWith()
         {
@@ -286,14 +286,17 @@ namespace Oak
 
         private Dictionary<string, PropertyInfo> AutoProperties()
         {
-            if (!PropertyCache.ContainsKey(GetType()))
+            lock(typeof(Gemini))
             {
-                PropertyCache.Add(
-                    GetType(),
-                    PropertiesExcludingPrototype().ToDictionary(s => s.Name));
-            }
+                if (!PropertyCache.ContainsKey(GetType()))
+                {
+                    PropertyCache.Add(
+                        GetType(),
+                        PropertiesExcludingPrototype().ToDictionary(s => s.Name));
+                }
 
-            return PropertyCache[GetType()];
+                return PropertyCache[GetType()];
+            }
         }
 
         private IEnumerable<PropertyInfo> PropertiesExcludingPrototype()
@@ -409,19 +412,22 @@ namespace Oak
         {
             if (type == typeof(object)) return new List<MethodInfo>();
 
-            if (MethodCache.ContainsKey(type)) return MethodCache[type];
+            lock(typeof(Gemini))
+            {
+                if (MethodCache.ContainsKey(type)) return MethodCache[type];
 
-            var delegates = type
-                .GetMethods(PrivateFlags())
-                .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
+                var delegates = type
+                    .GetMethods(PrivateFlags())
+                    .Where(s => IsDynamicDelegate(s, s.GetParameters().ToList())).ToList();
 
-            if (type == typeof(Gemini)) delegates.RemoveAll(s => s.Name != "SetMembers");
+                if (type == typeof(Gemini)) delegates.RemoveAll(s => s.Name != "SetMembers");
 
-            delegates.AddRange(DynamicDelegates(type.BaseType));
+                delegates.AddRange(DynamicDelegates(type.BaseType));
 
-            MethodCache.Add(type, delegates);
+                MethodCache.Add(type, delegates);
 
-            return delegates;
+                return delegates;
+            }
         }
 
         public bool IsDynamicDelegate(MethodInfo method, List<ParameterInfo> parameters)
@@ -444,7 +450,6 @@ namespace Oak
             return TryGetMember(property, out result);
         }
 
-        static Dictionary<string, PropertyInfo> emptyDictionary = new Dictionary<string, PropertyInfo>();
         Dictionary<string, PropertyInfo> InstanceAutoProperties()
         {
             return PropertyCache[GetType()];
