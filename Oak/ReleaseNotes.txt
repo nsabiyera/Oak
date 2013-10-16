@@ -1,4 +1,14 @@
 ﻿============== FOR VERSIONS ==============
+gemini 1.3.1+
+oak 2.6.9+
+oak-edge 2.0.9+
+cambium 1.5.6+
+oak-json 1.1.5+
+==============
+Made Gemini's Property and Method caches thread safe:
+https://github.com/amirrajan/Oak/commit/9b489509878576572a8d7fdc6570e58baefbb756
+
+============== FOR VERSIONS ==============
 oak 2.6.8+
 oak-edge 2.0.8+
 cambium 1.5.5+
