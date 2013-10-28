@@ -5,6 +5,7 @@ using System.Text;
 using NSpec;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Configuration;
 
 namespace Oak.Tests.describe_Seed
 {
@@ -22,6 +23,15 @@ namespace Oak.Tests.describe_Seed
             seed = new Seed(connectionProfile);
         }
 
+        public bool IsSqlCe()
+        {
+            foreach(ConnectionStringSettings connectionString in ConfigurationManager.ConnectionStrings)
+            {
+                if(connectionString.ProviderName.Contains("SqlServerCe")) return true;
+            }
+
+            return false;
+        }
 
         public void CommandShouldBe(string expected)
         {
