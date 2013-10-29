@@ -19,19 +19,29 @@ namespace Oak.Tests.describe_Gemini
         DateTime start;
         Persons peoples = new Persons();
 
-        void specify_it_runs_fast_enough()
+        void for_mssql()
         {
-            CreateTable();
+            if(IsSqlCe()) return;
 
-            Insert100kRows();
+            it["runs fast enough"] = () =>
+            {
+                CreateTable();
+                Insert100kRows();
+                PrimeTheDbForSelectStatement();
+                var nhTime = TimeToRetrieve100kRowsFromNHibernate();
+                var oakTime = TimeToRetrieve100kRowsFromOak();
+                oakTime.should_be_less_than(nhTime);
+            };
+        }
 
-            PrimeTheDbForSelectStatement();
+        bool IsSqlCe()
+        {
+            foreach(ConnectionStringSettings connectionString in ConfigurationManager.ConnectionStrings)
+            {
+                if(connectionString.ProviderName.Contains("SqlServerCe")) return true;
+            }
 
-            var nhTime = TimeToRetrieve100kRowsFromNHibernate();
-
-            var oakTime = TimeToRetrieve100kRowsFromOak();
-
-            oakTime.should_be_less_than(nhTime);
+            return false;
         }
 
         double TotalSeconds(TimeSpan time)
