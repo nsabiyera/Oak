@@ -22,12 +22,20 @@ namespace Oak.Tests.describe_Gemini
         public DateTime start;
         public Persons peoples = new Persons();
 
-        void before_each()
+        public bool IsSqlCe()
+        {
+            foreach(ConnectionStringSettings connectionString in ConfigurationManager.ConnectionStrings)
+            {
+                if(connectionString.ProviderName.Contains("SqlServerCe")) return true;
+            }
+
+            return false;
+        }
+
+        public void Setup()
         {
             CreateTable();
-
             Insert100kRows();
-
             PrimeTheDbForSelectStatement();
         }
 
@@ -79,13 +87,17 @@ namespace Oak.Tests.describe_Gemini
     [Tag("performance")]
     class performance_against_nhibernate : performance
     {
-        void specify_it_runs_fast_enough()
+        void for_mssql()
         {
-            var nhTime = TimeToRetrieve100kRowsFromNHibernate();
+            if(IsSqlCe()) return; //test is only applicable for mssql (not sqlce)
 
-            var oakTime = TimeToRetrieve100kRowsFromOak();
-
-            oakTime.should_be_less_than(nhTime);
+            it["runs fast enough"] = () =>
+            {
+                Setup();
+                var nhTime = TimeToRetrieve100kRowsFromNHibernate();
+                var oakTime = TimeToRetrieve100kRowsFromOak();
+                oakTime.should_be_less_than(nhTime);
+            };
         }
 
         private static AutoPersistenceModel CreateMappings()
@@ -135,91 +147,4 @@ namespace Oak.Tests.describe_Gemini
             return TotalSeconds(finish - start);
         }
     }
-
-    //[Tag("wip,performance")]
-    //class performance_dynamic_model_against_dapper : performance
-    //{
-    //    void specify_it_runs_fast_enough()
-    //    {
-    //        var dynamicModelTime = TimeToRetrieve100kRowsFromDynamicModel();
-
-    //        var dapperTime = TimeToRetrive100kRowsFromDapper();
-
-    //        dynamicModelTime.should_be_less_or_equal_to(dapperTime);
-    //    }
-
-    //    private double TimeToRetrieve100kRowsFromDynamicModel()
-    //    {
-    //        peoples.Projection = d => d;
-
-    //        start = DateTime.Now;
-
-    //        var oakPeople = peoples.All().ToList();
-
-    //        oakPeople.Count.should_be(100000);
-
-    //        finish = DateTime.Now;
-
-    //        return TotalSeconds(finish - start);
-    //    }
-
-    //    private double TimeToRetrive100kRowsFromDapper()
-    //    {
-    //        start = DateTime.Now;
-
-    //        using (var connection = new SqlConnection(new ConnectionProfile().ConnectionString))
-    //        {
-    //            connection.Open();
-    //            var posts = connection.Query<Person>("select * from Person").ToList();
-    //            posts.Count().should_be(100000);
-    //        }
-
-    //        finish = DateTime.Now;
-
-    //        return TotalSeconds(finish - start);
-    //    }
-    //}
-
-    //[Tag("performance")]
-    //class performance_dynamic_model_against_gemini : performance
-    //{
-    //    void specify_it_runs_fast_enough()
-    //    {
-    //        var justGeminiTime = TimeToRetrieve100kRowsFromGemini();
-
-    //        var dynamicModelTime = TimeToRetrieve100kRowsFromDynamicModel();
-
-    //        dynamicModelTime.should_be_less_or_equal_to(justGeminiTime);
-    //    }
-
-    //    private double TimeToRetrieve100kRowsFromGemini()
-    //    {
-    //        peoples.Projection = d => d;
-
-    //        start = DateTime.Now;
-
-    //        var oakPeople = peoples.All().ToList();
-
-    //        oakPeople.Count.should_be(100000);
-
-    //        finish = DateTime.Now;
-
-    //        return TotalSeconds(finish - start);
-    //    }
-
-    //    private double TimeToRetrieve100kRowsFromDynamicModel()
-    //    {
-    //        peoples.Projection = d => new DynamicPerson(d);
-
-    //        start = DateTime.Now;
-
-    //        var oakPeople = peoples.All().ToList();
-
-    //        oakPeople.Count.should_be(100000);
-
-    //        finish = DateTime.Now;
-
-    //        return TotalSeconds(finish - start);
-    //    }
-    //}
 }
