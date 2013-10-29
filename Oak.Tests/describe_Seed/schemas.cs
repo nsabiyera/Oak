@@ -137,7 +137,19 @@ namespace Oak.Tests.describe_Seed
         {
             if(!IsSqlCe()) return; //these tests are only applicable for SQLCE
 
-            it["gives error that sqlce isn't supported"] = todo;
+            it["gives error that sqlce isn't supported"] = () => 
+            {
+                seed.PurgeDb();
+                try
+                {
+                    seed.CreateSchema("Logging").ExecuteNonQuery();
+                    throw new InvalidOperationException("no exception was thrown");
+                }
+                catch(Exception ex)
+                {
+                    ex.Message.should_be("SqlCe does not support Schemas.");
+                }
+            };
         }
     }
 }

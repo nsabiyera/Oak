@@ -30,6 +30,28 @@ namespace Oak
             }
         }
 
+        private string providerName;
+        public string ProviderName
+        {
+            get
+            {
+                //feel free to change this and just return your connection string
+                if (!string.IsNullOrEmpty(providerName)) return providerName;
+                    
+                //get the first connection string that is defined in project's configuration file (excludes machine.config and company)
+                foreach (ConnectionStringSettings config in ConfigurationManager.ConnectionStrings)
+                {
+                    if (DefinedInProjectConfigFile(config)) return config.ProviderName;
+                }
+
+                return providerName;
+            }
+            set
+            {
+                providerName = value;
+            }
+        }
+
         bool DefinedInProjectConfigFile(ConnectionStringSettings config)
         {
             return config.ElementInformation.Source != null;

@@ -77,8 +77,16 @@ namespace Oak
 
         public string CreateSchema(string schema)
         {
+            if(IsSqlCe()) throw new InvalidOperationException("SqlCe does not support Schemas.");
+            
             return "CREATE SCHEMA {0}".With(schema);
         }
+
+        public bool IsSqlCe()
+        {
+            return ConnectionProfile.ProviderName.ToLower().Contains("sqlserverce");
+        }
+
         /// <summary>
         /// Generates script to create columns.  Use ExecuteNonQuery()
         /// to execute script.
