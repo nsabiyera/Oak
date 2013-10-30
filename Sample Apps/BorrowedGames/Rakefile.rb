@@ -27,6 +27,8 @@ task :rake_dot_net_initialize do
   @test_project = yml["test_project"]
   @test_dll = "./#{ yml["test_project"] }/bin/debug/#{ yml["test_project"] }.dll"
 
+  @ui_project = yml["ui_project"]
+
   @test_runner_path = yml["test_runner"]
   @test_runner_command = "#{ yml["test_runner"] } #{ @test_dll }"
   
@@ -227,7 +229,8 @@ task :update_db_server, [:new_value] => :rake_dot_net_initialize do |t, args|
 
   [
     "#{ @mvc_project_directory }/Web.config",
-    "#{ @test_project }/App.config"
+    "#{ @test_project }/App.config",
+    "#{ @ui_project }/App.config"
   ].each do |file|
     puts "updating connection string in: #{ file }"
     content = File.open(file).read

@@ -7,6 +7,7 @@ website_deploy_directory_load_balanced_2: c:\iisexpress\website_5000
 solution_name: BorrowedGames
 mvc_project: BorrowedGames 
 test_project: BorrowedGames.Tests
+ui_project: BorrowedGames.UI.Tests
 test_runner: ./packages/nspec.0.9.67/tools/NSpecRunner.exe
 iis_express: C:\Program Files (x86)\IIS Express
 database_name: BorrowedGames
