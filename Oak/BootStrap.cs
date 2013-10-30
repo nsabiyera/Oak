@@ -434,13 +434,13 @@ Create an Index.cshtml page for the Index action and add the following code ther
     &lt;div style=""color:Red""&gt;@ViewBag.Flash&lt;/div&gt;
 }
 
-&lt;hr /&gt;
-
 @using (Html.BeginForm())  
 {
     @Html.TextBox(""Name"")
     &lt;input type=""submit"" value=""create"" /&gt;
 }
+
+&lt;hr /&gt;
 
 @foreach (var blog in ViewBag.Blogs)
 {
