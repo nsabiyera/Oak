@@ -17,7 +17,7 @@ namespace Oak.Tests.describe_Seed
     {
         void for_mssql()
         {
-            if(IsSqlCe()) return; //these tests are not applicable for SQLCE
+            if(!IsSql()) return; //these tests are not applicable for SQLCE
 
             before = () =>
             {

@@ -43,12 +43,14 @@ public class DebuggerShim
         results.Failures().Count().should_be(0);
     }
 
-    public static void AsFile(string s)
+    public static string AsFile(string s)
     {
         var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".txt");
 
         File.WriteAllText(path, s);
 
         Process.Start(path);
+
+        return s;
     }
 }

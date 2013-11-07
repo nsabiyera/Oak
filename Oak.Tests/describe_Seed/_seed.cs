@@ -23,6 +23,11 @@ namespace Oak.Tests.describe_Seed
             seed = new Seed(connectionProfile);
         }
 
+        public bool IsSql()
+        {
+            return !IsSqlCe();
+        }
+
         public bool IsSqlCe()
         {
             foreach(ConnectionStringSettings connectionString in ConfigurationManager.ConnectionStrings)

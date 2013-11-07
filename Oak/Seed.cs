@@ -306,6 +306,8 @@ namespace Oak
 
         public void DeleteAllRecords()
         {
+            if(IsSqlCe()) throw new NotSupportedException("SqlCe doesn't support DeleteAllRecords because sp_msforeachtable doesn't exist. Use PurgeDb() followed by running your schema scripts again.");
+
             DisableKeyConstaints().ExecuteNonQuery(ConnectionProfile);
 
             "EXEC sp_msforeachtable 'delete ?';".ExecuteNonQuery(ConnectionProfile);
