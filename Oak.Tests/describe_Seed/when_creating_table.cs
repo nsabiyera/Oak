@@ -47,7 +47,11 @@ namespace Oak.Tests.describe_Seed
                 ");
 
             it["table can be queried"] = () =>
-                "select FirstName from Users".ExecuteReader();
+            {
+                using ("select FirstName from Users".ExecuteReader())
+                {
+                }
+            };
 
             it["nulls can be inserted into table"] = () =>
                 "insert into Users(FirstName) values(null)".ExecuteNonQuery();
@@ -74,7 +78,11 @@ namespace Oak.Tests.describe_Seed
                 ");
 
             it["table can be queried"] = () =>
-                "select FirstName from Users".ExecuteReader();
+            {
+                using ("select FirstName from Users".ExecuteReader())
+                {
+                }
+            };
 
             it["nulls cannot be inserted into table"] = () =>
                 expect<SqlException>(() => "insert into Users(FirstName) values(null)".ExecuteNonQuery());
@@ -126,7 +134,11 @@ namespace Oak.Tests.describe_Seed
                 ");
 
             it["both columns are selectable"] = () =>
-                "select FirstName, LastName from Users".ExecuteReader();
+            {
+                using ("select FirstName, LastName from Users".ExecuteReader())
+                {
+                }
+            };
         }
 
         void primary_key_column()
