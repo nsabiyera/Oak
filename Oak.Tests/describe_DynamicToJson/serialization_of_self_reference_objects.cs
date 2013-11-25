@@ -123,6 +123,8 @@ namespace Oak.Tests.describe_DynamicToJson
 
         void describe_db_rows_to_json()
         {
+            DateTime dueDate = new DateTime(2013, 1, 14);
+
             before = () =>
             {
                 Seed seed = new Seed();
@@ -139,13 +141,13 @@ namespace Oak.Tests.describe_DynamicToJson
 
                 var rabbitId = new { Name = "Yours Truly" }.InsertInto("Rabbits");
 
-                new { rabbitId, Description = "bolt onto vans", DueDate = new DateTime(2013, 1, 14) }.InsertInto("Tasks");
+                new { rabbitId, Description = "bolt onto vans", DueDate = dueDate }.InsertInto("Tasks");
 
                 rabbitId = new { Name = "Hiro Protaganist" }.InsertInto("Rabbits");
 
-                new { rabbitId, Description = "save the world", DueDate = new DateTime(2013, 1, 14) }.InsertInto("Tasks");
+                new { rabbitId, Description = "save the world", DueDate = dueDate }.InsertInto("Tasks");
 
-                new { rabbitId, Description = "deliver pizza", DueDate = new DateTime(2013, 1, 14) }.InsertInto("Tasks");
+                new { rabbitId, Description = "deliver pizza", DueDate = dueDate }.InsertInto("Tasks");
 
                 rabbitId = new { Name = "Lots" }.InsertInto("Rabbits");
 
@@ -155,7 +157,7 @@ namespace Oak.Tests.describe_DynamicToJson
                     {
                         rabbitId,
                         Description = "Task: " + i.ToString(),
-                        DueDate = new DateTime(2013, 1, 14)
+                        DueDate = dueDate
                     }.InsertInto("Tasks");
                 }
             };
@@ -170,7 +172,7 @@ namespace Oak.Tests.describe_DynamicToJson
                 });
 
                 objectToConvert = new Gemini(new { Tasks = results });
-                string expected = @"{ ""tasks"": [ { ""id"": 1, ""description"": ""bolt onto vans"", ""rabbitId"": 1, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 1, ""name"": ""Yours Truly"" } }, { ""id"": 2, ""description"": ""save the world"", ""rabbitId"": 2, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 2, ""name"": ""Hiro Protaganist"" } }, { ""id"": 3, ""description"": ""deliver pizza"", ""rabbitId"": 2, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 2, ""name"": ""Hiro Protaganist"" } }, { ""id"": 4, ""description"": ""Task: 0"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 5, ""description"": ""Task: 1"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 6, ""description"": ""Task: 2"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 7, ""description"": ""Task: 3"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 8, ""description"": ""Task: 4"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 9, ""description"": ""Task: 5"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 10, ""description"": ""Task: 6"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 11, ""description"": ""Task: 7"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 12, ""description"": ""Task: 8"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } }, { ""id"": 13, ""description"": ""Task: 9"", ""rabbitId"": 3, ""dueDate"": ""1/14/2013 12:00:00 AM"", ""rabbit"": { ""id"": 3, ""name"": ""Lots"" } } ] }";
+                string expected = string.Format( @"{{ ""tasks"": [ {{ ""id"": 1, ""description"": ""bolt onto vans"", ""rabbitId"": 1, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 1, ""name"": ""Yours Truly"" }} }}, {{ ""id"": 2, ""description"": ""save the world"", ""rabbitId"": 2, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 2, ""name"": ""Hiro Protaganist"" }} }}, {{ ""id"": 3, ""description"": ""deliver pizza"", ""rabbitId"": 2, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 2, ""name"": ""Hiro Protaganist"" }} }}, {{ ""id"": 4, ""description"": ""Task: 0"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 5, ""description"": ""Task: 1"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 6, ""description"": ""Task: 2"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 7, ""description"": ""Task: 3"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 8, ""description"": ""Task: 4"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 9, ""description"": ""Task: 5"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 10, ""description"": ""Task: 6"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 11, ""description"": ""Task: 7"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 12, ""description"": ""Task: 8"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }}, {{ ""id"": 13, ""description"": ""Task: 9"", ""rabbitId"": 3, ""dueDate"": ""{0}"", ""rabbit"": {{ ""id"": 3, ""name"": ""Lots"" }} }} ] }}", dueDate );
                 jsonString = DynamicToJson.Convert(objectToConvert);
                 jsonString.should_be(expected);
             };
