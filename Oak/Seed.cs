@@ -107,7 +107,7 @@ namespace Oak
                 if (i != columns.Length - 1) columnString += ", ";
             }
 
-            return "ALTER TABLE [{0}].[{1}] ADD {2}"
+            return "ALTER TABLE [{1}] ADD {2}"
                 .With(schema, table, columnString);
         }
 
@@ -324,7 +324,7 @@ namespace Oak
 
         public string RenameColumn(string schema, string table, string currentColumnName, string newColumnName)
         {
-            return "sp_rename '[{0}].[{1}].[{2}]', '{3}', 'COLUMN'".With(schema, table, currentColumnName, newColumnName);
+            return "sp_rename '[{1}].[{2}]', '{3}', 'COLUMN'".With(schema, table, currentColumnName, newColumnName);
         }
 
         public string RenameColumn(string table, string currentColumnName, string newColumnName)

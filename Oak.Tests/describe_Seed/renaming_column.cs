@@ -10,6 +10,8 @@ namespace Oak.Tests.describe_Seed
     {
         void it_works()
         {
+            if (IsSqlCe()) return;
+
             seed.PurgeDb();
 
             seed.CreateTable("Table1", new dynamic[] 
@@ -18,7 +20,7 @@ namespace Oak.Tests.describe_Seed
                 new { Name = "nvarchar(255)" }
             }).ExecuteNonQuery();
 
-            "insert into Table1 values('Foobar');".ExecuteNonQuery();
+            "insert into Table1 (Name) values('Foobar');".ExecuteNonQuery();
 
             "select top 1 Name from Table1".ExecuteScalar().should_be("Foobar");
 

@@ -7,6 +7,7 @@ using Oak;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Data.SqlClient;
+using System.Data.SqlServerCe;
 
 namespace Oak.Tests.describe_Seed
 {
@@ -40,9 +41,9 @@ namespace Oak.Tests.describe_Seed
 
             it["the command contains create table with column and type"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
-                        [FirstName] nvarchar(255) NULL,
+                        [FirstName] nvarchar(255) NULL
                     )
                 ");
 
@@ -57,7 +58,7 @@ namespace Oak.Tests.describe_Seed
                 "insert into Users(FirstName) values(null)".ExecuteNonQuery();
 
             it["length specification is adhered to"] = 
-                expect<SqlException>(() => "insert into Users(FirstName) values('{0}')".With(StringWithLength(300)).ExecuteNonQuery());
+                expect<SqlCeException>(() => "insert into Users(FirstName) values('{0}')".With(StringWithLength(300)).ExecuteNonQuery());
                 
         }
 
@@ -71,9 +72,9 @@ namespace Oak.Tests.describe_Seed
 
             it["the command creates column as not null"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
-                        [FirstName] nvarchar(255) NOT NULL,
+                        [FirstName] nvarchar(255) NOT NULL
                     )
                 ");
 
@@ -85,10 +86,10 @@ namespace Oak.Tests.describe_Seed
             };
 
             it["nulls cannot be inserted into table"] = () =>
-                expect<SqlException>(() => "insert into Users(FirstName) values(null)".ExecuteNonQuery());
+                expect<SqlCeException>(() => "insert into Users(FirstName) values(null)".ExecuteNonQuery());
 
             it["length specification is adhered to"] =
-                expect<SqlException>(() => "insert into Users(FirstName) values('{0}')".With(StringWithLength(300)).ExecuteNonQuery());
+                expect<SqlCeException>(() => "insert into Users(FirstName) values('{0}')".With(StringWithLength(300)).ExecuteNonQuery());
         }
 
         void column_has_default_value()
@@ -104,10 +105,10 @@ namespace Oak.Tests.describe_Seed
 
             it["the command creates column with default value"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [FirstName] nvarchar(255) NOT NULL DEFAULT('test'),
-                        [LastName] nvarchar(255) NULL,
+                        [LastName] nvarchar(255) NULL
                     )
                 ");
 
@@ -126,10 +127,10 @@ namespace Oak.Tests.describe_Seed
 
             it["contains both columns in create script"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [FirstName] nvarchar(255) NULL DEFAULT('test'),
-                        [LastName] nvarchar(255) NULL DEFAULT('test'),
+                        [LastName] nvarchar(255) NULL DEFAULT('test')
                     )
                 ");
 
@@ -151,12 +152,12 @@ namespace Oak.Tests.describe_Seed
 
             it["contains primary key definition"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [Id] uniqueidentifier NOT NULL, 
-                        CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+                        CONSTRAINT [PK_Users] PRIMARY KEY 
                         (
-                            [Id] ASC
+                            [Id]
                         )
                     )
                 ");
@@ -173,7 +174,7 @@ namespace Oak.Tests.describe_Seed
 
                     throw new InvalidOperationException("Sql exception was not thrown");
                 }
-                catch (SqlException) { }
+                catch (SqlCeException) { }
             };
         }
 
@@ -188,10 +189,10 @@ namespace Oak.Tests.describe_Seed
 
             it["contains identity definition"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [Id] int NOT NULL IDENTITY(1,1),
-                        [Name] nvarchar(255) NULL,
+                        [Name] nvarchar(255) NULL
                     )
                 ");
 
@@ -203,7 +204,7 @@ namespace Oak.Tests.describe_Seed
             };
 
             it["doesn't allow the insert of id collumn"] = 
-                expect<SqlException>(() => "insert into Users(Id) values(1)".ExecuteNonQuery());
+                expect<SqlCeException>(() => "insert into Users(Id) values(1)".ExecuteNonQuery());
         }
 
         void foreign_key_column()
@@ -218,11 +219,11 @@ namespace Oak.Tests.describe_Seed
             
             it["contains identity definition"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [Id] int NOT NULL IDENTITY(1,1),
                         [Name] nvarchar(255) NULL,
-                        [CustomerId] int NULL FOREIGN KEY REFERENCES Customers(Id),
+                        [CustomerId] int NULL REFERENCES Customers(Id)
                     )
                 ");
 
@@ -234,7 +235,7 @@ namespace Oak.Tests.describe_Seed
             };
 
             it["the foreign key constraint is adhered to"] = 
-                expect<SqlException>(() => "insert into Users([Name], [CustomerId]) values('a name', 600)".ExecuteNonQuery());
+                expect<SqlCeException>(() => "insert into Users([Name], [CustomerId]) values('a name', 600)".ExecuteNonQuery());
 
 
             it["allows insert if foreign key matches"] = () =>
@@ -257,14 +258,14 @@ namespace Oak.Tests.describe_Seed
 
             it["contains identity definition"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
-                        [CustomerId] int NOT NULL FOREIGN KEY REFERENCES Customers(Id),
+                        [CustomerId] int NOT NULL REFERENCES Customers(Id)
                     )
                 ");
 
             it["the foreign key column does not accept nulls"] = 
-                expect<SqlException>(() => "insert into Users([Name], [CustomerId]) values('a name', null)".ExecuteNonQuery());
+                expect<SqlCeException>(() => "insert into Users([Name], [CustomerId]) values('a name', null)".ExecuteNonQuery());
         }
 
         void generating_a_table_where_column_is_an_identity_column_and_primary_key()
@@ -277,12 +278,12 @@ namespace Oak.Tests.describe_Seed
 
             it["contains identity definition"] = () =>
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [Id] int NOT NULL IDENTITY(1,1), 
-                        CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+                        CONSTRAINT [PK_Users] PRIMARY KEY 
                         (
-                            [Id] ASC
+                            [Id]
                         )
                     )
                 ");
@@ -301,15 +302,15 @@ namespace Oak.Tests.describe_Seed
             it["contains primary key constraint for both columns"] = () =>
             {
                 CommandShouldBe(@"
-                    CREATE TABLE [dbo].[Users]
+                    CREATE TABLE [Users]
                     (
                         [Id] int NOT NULL,
                         [CustomerId] int NOT NULL,
                         [Name] nvarchar(255) NULL, 
-                        CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+                        CONSTRAINT [PK_Users] PRIMARY KEY 
                         (
-                            [Id] ASC,
-                            [CustomerId] ASC
+                            [Id],
+                            [CustomerId]
                         )
                     )
                 ");
@@ -325,7 +326,7 @@ namespace Oak.Tests.describe_Seed
 
                     throw new InvalidOperationException("SqlException not thrown");
                 }
-                catch (SqlException) { }
+                catch (SqlCeException) { }
             };
         }
     }

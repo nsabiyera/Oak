@@ -366,7 +366,7 @@ namespace Massive
                         {
                             result += cmd.ExecuteNonQuery();
                         }
-                        catch (SqlException ex)
+                        catch (SqlCeException ex)
                         {
                             if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
 
@@ -536,7 +536,7 @@ namespace Massive
                     cmd.CommandText = "SELECT @@IDENTITY as newID";
                     result = cmd.ExecuteScalar();
                 }
-                catch (SqlException ex)
+                catch (SqlCeException ex)
                 {
                     if (IsInvalidColumnException(ex)) throw TryExcludingColumn(ex);
 
@@ -553,12 +553,12 @@ namespace Massive
             return result;
         }
 
-        private bool IsIdentityInsertException(SqlException ex)
+        private bool IsIdentityInsertException(SqlCeException ex)
         {
-            return ex.Message.Contains("Cannot insert explicit value for identity column in table");
+            return ex.Message.Contains("The column cannot be modified");
         }
 
-        private InvalidOperationException TryExcludingIdentity(SqlException ex)
+        private InvalidOperationException TryExcludingIdentity(SqlCeException ex)
         {
             return new InvalidOperationException(
 @"Looks like you are trying to save a property that is considered an Identity column.
@@ -577,12 +577,12 @@ Sql Exception:
 " + ex.Message);
         }
 
-        private bool IsInvalidColumnException(SqlException ex)
+        private bool IsInvalidColumnException(SqlCeException ex)
         {
-            return ex.Message.Contains("Invalid column name");
+            return ex.Message.Contains("The column name is not valid.");
         }
 
-        private InvalidOperationException TryExcludingColumn(SqlException ex)
+        private InvalidOperationException TryExcludingColumn(SqlCeException ex)
         {
             return new InvalidOperationException(
 @"Looks like you are trying to save a property that doesn't exist in your database.

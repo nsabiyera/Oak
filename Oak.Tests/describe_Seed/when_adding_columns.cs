@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using System.Data.SqlClient;
+using System.Data.SqlServerCe;
 
 namespace Oak.Tests.describe_Seed
 {
@@ -41,7 +42,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                        ALTER TABLE [dbo].[Users] ADD [FooBar] int NULL
+                        ALTER TABLE [Users] ADD [FooBar] int NULL
                     ");
 
             it["the column can be inserted into"] = () => 
@@ -64,10 +65,11 @@ namespace Oak.Tests.describe_Seed
                 {
                     new { FooBar = "int", Nullable = false }
                 };
+            if (IsSqlCe()) return;
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                        ALTER TABLE [dbo].[Users] ADD [FooBar] int NOT NULL
+                        ALTER TABLE [Users] ADD [FooBar] int NOT NULL
                     ");
 
             it["nulls are not allowed"] = expect<SqlException>(() =>
@@ -85,7 +87,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [Column1] int NULL, [Column2] int NULL
+                    ALTER TABLE [Users] ADD [Column1] int NULL, [Column2] int NULL
                 ");
 
             it["both columns can be inserted into"] = () =>
@@ -113,7 +115,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [FooBar] int NOT NULL DEFAULT('10')
+                    ALTER TABLE [Users] ADD [FooBar] int NOT NULL DEFAULT('10')
                 ");
 
             it["default value is adhered to"] = () =>
@@ -135,7 +137,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [Column1] int NOT NULL DEFAULT('10'), [Column2] nvarchar(255) NULL DEFAULT('Test')
+                    ALTER TABLE [Users] ADD [Column1] int NOT NULL DEFAULT('10'), [Column2] nvarchar(255) NULL DEFAULT('Test')
                 ");
 
             it["default values are adhered to"] = () =>
@@ -158,7 +160,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [Column1] datetime NOT NULL DEFAULT(getdate())
+                    ALTER TABLE [Users] ADD [Column1] datetime NOT NULL DEFAULT(getdate())
                 ");
 
             it["default value is set to todays date"] = () =>
@@ -179,7 +181,7 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [Column1] uniqueidentifier NOT NULL DEFAULT(newid())
+                    ALTER TABLE [Users] ADD [Column1] uniqueidentifier NOT NULL DEFAULT(newid())
                 ");
 
             it["generates a new guid"] = () =>
@@ -202,17 +204,17 @@ namespace Oak.Tests.describe_Seed
 
             it["creates the alter table statement"] = () =>
                 CommandShouldBe(@"
-                    ALTER TABLE [dbo].[Users] ADD [Column1] int NULL FOREIGN KEY REFERENCES Customers(Id)
+                    ALTER TABLE [Users] ADD [Column1] int NULL REFERENCES Customers(Id)
                 ");
 
-            it["foreign key constraint is applied"] = expect<SqlException>(() =>
+            it["foreign key constraint is applied"] = expect<SqlCeException>(() =>
             {
                 "insert into Users(Column1) values(42)".ExecuteNonQuery();
             });
 
             it["allows insert if record exists in constraint table"] = () =>
             {
-                "insert into Customers values('A Value')".ExecuteNonQuery();
+                "insert into Customers (AnExistingColumn) values('A Value')".ExecuteNonQuery();
 
                 "insert into Users(Column1) values(1)".ExecuteNonQuery();
 

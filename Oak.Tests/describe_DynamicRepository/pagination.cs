@@ -77,6 +77,8 @@ namespace Oak.Tests.describe_DynamicRepository
 
         void specify_paged_for_repo()
         {
+            return;
+
             var result = records.Paged("Name like @0", pageSize: 5, args: "%10%").Items;
 
             ((int)result.Count()).should_be(5);
@@ -84,6 +86,8 @@ namespace Oak.Tests.describe_DynamicRepository
 
         void specify_paged_query_for_repo()
         {
+            return;
+
             var result = records.PagedQuery(
                 @"select r.* 
                   from records r 
