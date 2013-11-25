@@ -54,7 +54,10 @@ namespace Oak.Tests.describe_Seed
 
         public bool TableExists(string table)
         {
-            return "select * from sysobjects where name = '{0}'".With(table).ExecuteReader().HasRows;
+            using (var reader = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'".With(table).ExecuteReader())
+            {
+                return reader.Read();
+            }
         }
 
         public void DeleteSqlFiles()
@@ -64,9 +67,10 @@ namespace Oak.Tests.describe_Seed
 
         public IEnumerable<string> Columns(string table)
         {
-            var reader = "select name from syscolumns where object_name(id) = '{0}';".With(table).ExecuteReader();
-
-            while (reader.Read()) yield return reader.GetString(0);
+            using (var reader = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}';".With(table).ExecuteReader())
+            {
+                while (reader.Read()) yield return reader.GetString(0);
+            }
         }
 
         public string StringWithLength(int length)

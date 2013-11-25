@@ -168,15 +168,16 @@ namespace Oak
 
         private void DropCustomSchemas()
         {
-            var reader = @"SELECT name FROM sys.schemas".ExecuteReader(ConnectionProfile);
-
-            while (reader.Read())
+            using (var reader = @"SELECT name FROM sys.schemas".ExecuteReader(ConnectionProfile))
             {
-                var schemaName = reader["name"];
-
-                if (!DefaultSchemas().Contains(schemaName))
+                while (reader.Read())
                 {
-                    "drop schema [{0}] ".With(schemaName).ExecuteNonQuery(ConnectionProfile);
+                    var schemaName = reader["name"];
+
+                    if (!DefaultSchemas().Contains(schemaName))
+                    {
+                        "drop schema [{0}] ".With(schemaName).ExecuteNonQuery(ConnectionProfile);
+                    }
                 }
             }
         }
@@ -203,42 +204,48 @@ namespace Oak
 
         void DropAllForeignKeys()
         {
-            var reader = @"
+            using (var reader = @"
             select  name as constraint_name,
                     object_name(parent_obj) as table_name,
                     object_schema_name(parent_obj) as table_schema
-            from sysobjects where xtype = 'f'".ExecuteReader(ConnectionProfile);
-
-            while (reader.Read())
+            from sysobjects where xtype = 'f'".ExecuteReader(ConnectionProfile))
             {
-                "alter table [{0}].[{1}] drop constraint {2} ".With(reader["table_schema"], reader["table_name"], reader["constraint_name"]).ExecuteNonQuery(ConnectionProfile);
+
+                while (reader.Read())
+                {
+                    "alter table [{0}].[{1}] drop constraint {2} ".With(reader["table_schema"], reader["table_name"], reader["constraint_name"]).ExecuteNonQuery(ConnectionProfile);
+                }
             }
         }
 
         void DropAllPrimaryKeys()
         {
-            var reader = @"
+            using (var reader = @"
             select  name as constraint_name, 
                     object_name(parent_obj) as table_name,
                     object_schema_name(parent_obj) as table_schema 
-            from sysobjects where xtype = 'pk'".ExecuteReader(ConnectionProfile);
-
-            while (reader.Read())
+            from sysobjects where xtype = 'pk'".ExecuteReader(ConnectionProfile))
             {
-                "alter table [{0}].[{1}] drop constraint {2} ".With(reader["table_schema"], reader["table_name"], reader["constraint_name"]).ExecuteNonQuery(ConnectionProfile);
+
+                while (reader.Read())
+                {
+                    "alter table [{0}].[{1}] drop constraint {2} ".With(reader["table_schema"], reader["table_name"], reader["constraint_name"]).ExecuteNonQuery(ConnectionProfile);
+                }
             }
         }
 
         void DropAllTables()
         {
-            var reader = @"
+            using (var reader = @"
             select  name as table_name, 
                     object_schema_name(id) as table_schema 
-            from sysobjects where xtype = 'u'".ExecuteReader(ConnectionProfile);
-
-            while (reader.Read())
+            from sysobjects where xtype = 'u'".ExecuteReader(ConnectionProfile))
             {
-                "drop table [{0}].[{1}] ".With(reader["table_schema"], reader["table_name"]).ExecuteNonQuery(ConnectionProfile);
+
+                while (reader.Read())
+                {
+                    "drop table [{0}].[{1}] ".With(reader["table_schema"], reader["table_name"]).ExecuteNonQuery(ConnectionProfile);
+                }
             }
         }
 
@@ -327,7 +334,7 @@ namespace Oak
 
         public string DropColumn(string schema, string table, string column)
         {
-            return "alter table [{0}].[{1}] drop column {2}".With(schema, table, column);
+            return "alter table [{1}] drop column {2}".With(schema, table, column);
         }
 
         public string DropColumn(string table, string column)
@@ -340,10 +347,10 @@ namespace Oak
             var name = @"
             select CONSTRAINT_NAME
             from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
-            where CONSTRAINT_SCHEMA = '{0}' and TABLE_NAME = '{1}'
+            where TABLE_NAME = '{1}'
             and COLUMN_NAME = '{2}'".With(schema, table, forColumn).ExecuteScalar(ConnectionProfile);
 
-            return "alter table [{0}].[{1}] drop constraint {2}".With(schema, table, name);
+            return "alter table [{1}] drop constraint {2}".With(schema, table, name);
         }
 
         public string DropConstraint(string table, string forColumn)

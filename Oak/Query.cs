@@ -47,15 +47,11 @@ namespace Oak
         {
             if (connectionProfile == null) connectionProfile = new ConnectionProfile();
 
-            using (SqlCeCommand sqlCommand = new SqlCeCommand())
-            {
-                using (sqlCommand.Connection = new SqlCeConnection(connectionProfile.ConnectionString))
-                {
-                    sqlCommand.Connection.Open();
-                    sqlCommand.CommandText = String.Format(query);
-                    return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
-                }
-            }
+            SqlCeCommand sqlCommand = new SqlCeCommand();
+            sqlCommand.Connection = new SqlCeConnection(connectionProfile.ConnectionString);
+            sqlCommand.Connection.Open();
+            sqlCommand.CommandText = String.Format(query);
+            return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
         }
     }
 }
