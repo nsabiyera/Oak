@@ -1,4 +1,5 @@
 ﻿open canopy
+open canopy.core
 open runner
 open uimethods
 open setupmethods

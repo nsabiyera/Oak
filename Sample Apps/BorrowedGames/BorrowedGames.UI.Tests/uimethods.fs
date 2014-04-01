@@ -1,14 +1,15 @@
 ﻿module uimethods
 
 open canopy
+open canopy.core
 open setupmethods
 open runner
 
 let baseUrl = "http://localhost:3000";
 
-let url = fun address -> canopy.url (baseUrl + address)
+let url = fun address -> canopy.core.url (baseUrl + address)
 
-let on = fun address -> canopy.on (baseUrl + address)
+let on = fun address -> canopy.core.on (baseUrl + address)
 
 let gameReturnedLink = "#requestedGames i.cancel"
 
@@ -52,7 +53,7 @@ let loginAs userName =
 let addGame name =
     click "#showLibrary"
     "#gameToAdd" << name
-    //"table tbody tr td" *~ name
+    "table tbody tr td" *~ name
     click "table tbody tr td"
     click "#closeLibraryTop"
     ()
