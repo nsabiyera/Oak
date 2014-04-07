@@ -84,7 +84,7 @@ namespace BorrowedGames.Tests
             var routes = new RouteCollection();
             MvcApplication.RegisterRoutes(routes);
 
-            var request = new Mock<HttpRequestBase>(MockBehavior.Strict);
+            var request = new Mock<HttpRequestBase>();
             request.SetupGet(x => x.ApplicationPath).Returns("/");
             request.SetupGet(x => x.Url).Returns(new Uri("", UriKind.Relative));
             request.SetupGet(x => x.ServerVariables).Returns(new System.Collections.Specialized.NameValueCollection());
@@ -92,7 +92,7 @@ namespace BorrowedGames.Tests
             var response = new Mock<HttpResponseBase>();
             response.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns<string>((s) => s);
 
-            var context = new Mock<HttpContextBase>(MockBehavior.Strict);
+            var context = new Mock<HttpContextBase>();
             context.SetupGet(x => x.Request).Returns(request.Object);
             context.SetupGet(x => x.Response).Returns(response.Object);
 

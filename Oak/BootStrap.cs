@@ -74,13 +74,13 @@ namespace Oak
                     try
                     {
                         Console.Out.WriteLine("Content:");
-                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Unvalidated.Form, null) + "\n");
                     }
                     catch
                     {
                         Console.Out.WriteLine(@"
                         Looks like trying to print the request's form collection threw an exception in Oak\BootStrap.cs.
-                        If you're using ASP.NET MVC 4,
+                        If you're using ASP.NET MVC 4+,
                         update
 
                         Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + ""\n"");
