@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Oak")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Amir Rajan")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Oak")]
-[assembly: AssemblyCopyright("Copyright © Amir Rajan 2011")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("62e2ac12-0a2a-4955-a4cb-6aecc250b9b3")]
+[assembly: Guid("30f278a1-b3b0-4cb8-9a01-d689e3db6db6")]
 
 // Version information for an assembly consists of the following four values:
 //

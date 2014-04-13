@@ -74,7 +74,7 @@ namespace Oak
                     try
                     {
                         Console.Out.WriteLine("Content:");
-                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Unvalidated.Form, null) + "\n");
+                        Console.Out.WriteLine(new DynamicParams(filterContext.HttpContext.Request.Form, null) + "\n");
                     }
                     catch
                     {

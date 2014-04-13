@@ -37,6 +37,7 @@ task :rake_dot_net_initialize do
   @web_deploy = WebDeploy.new
   @sh = CommandShell.new
   @sln = SlnBuilder.new
+  @sln.msbuild_path = "C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\amd64\\msbuild.exe"
   @file_sync = FileSync.new
   @file_sync.source = @mvc_project_directory
   @file_sync.destination = @website_deploy_directory
@@ -122,18 +123,15 @@ def delete_all_records
 end
 
 def build_coffee_scripts
-  puts "coffee time"
+  coffee_script_command = "coffee -c  BorrowedGames\\Scripts\\app"
+  puts ""
+  puts "running coffee script compilation using the following command `#{coffee_script_command}`"
+  puts "if you get errors:"
+  puts "- install NodeJS (which can be downloaded from http://nodejs.org/)"
+  puts "- install the coffee-script Node package: npm install -g coffee-script"
+  puts ""
 
-  Dir.glob("BorrowedGames/Scripts/app/*.coffee").each do |f| 
-    js = CoffeeScript.compile(File.open(f))
-    js = remove_encoding js
-    jsFileName = File.dirname(f) + "/" + File.basename(f, ".coffee") + ".js"
-    file = File.new(jsFileName, "w")
-    file.write(js)
-    file.close
-    @file_sync.sync jsFileName
-    puts "compiled/synced #{jsFileName}" 
-  end
+  `#{coffee_script_command}`
 end
 
 def remove_encoding output

@@ -1,0 +1,14 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.7.0)
+    execjs (2.0.2)
+
+PLATFORMS
+  x86-mingw32
+
+DEPENDENCIES
+  coffee-script

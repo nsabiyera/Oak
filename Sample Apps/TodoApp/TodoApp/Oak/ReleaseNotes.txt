@@ -1,4 +1,63 @@
 ﻿============== FOR VERSIONS ==============
+gemini 1.3.2+
+oak 2.7.0+
+oak-edge 2.1.0+
+cambium 1.5.7+
+oak-json 1.1.5+
+==============
+Gemini method sped up to use hash set instead of a list. Performance
+improvements for determinging which members are methods vs properties.
+
+Performance improvements to DynamicRepository. Setting the projection to null
+will give you a fast dictionary object as opposed to a dynamic type.
+
+
+============== FOR VERSIONS ==============
+gemini 1.3.1+
+oak 2.6.9+
+oak-edge 2.0.9+
+cambium 1.5.6+
+oak-json 1.1.5+
+==============
+Made Gemini's Property and Method caches thread safe:
+https://github.com/amirrajan/Oak/commit/9b489509878576572a8d7fdc6570e58baefbb756
+
+============== FOR VERSIONS ==============
+oak 2.6.8+
+oak-edge 2.0.8+
+cambium 1.5.5+
+=============== CHANGES ==================
+The Validations mixin/module will return true for IsValid if no validations is
+provided: https://github.com/amirrajan/Oak/commit/1749554966fcce2cde8346a91d72b106c53bdf7e
+
+============== FOR VERSIONS ==============
+oak 2.6.7+
+oak-edge 2.0.7+
+cambium 1.5.4+
+=============== CHANGES ==================
+DynamicDb __ConnectionString__ inner property changed to a method to ensure
+that it isn't in advertantly serialized (eg serializing to JSON).
+
+============== FOR VERSIONS ==============
+oak 2.6.6+
+oak-edge 2.0.6+
+cambium 1.5.3+
+seed 1.1.2+
+=============== CHANGES ==================
+DynamicDb can take in a connection string as a parameter which will override
+the default values supplied by ConnectionProfile.cs.
+
+
+============== FOR VERSIONS ==============
+oak 2.6.3+
+oak-edge 2.0.3+
+=============== CHANGES ==================
+DebugBootstrap.cs now catches all web exceptions and writes out a
+stacktrace.txt file.  This file can be used with Stack Trace Preview
+for nice stack trace visualization.
+More Info: https://github.com/amirrajan/Oak/wiki/Getting-Started#stack-trace-preview-requires-optional-steps
+
+============== FOR VERSIONS ==============
 oak 2.6.2+
 oak-edge 2.0.2+
 oak-json 1.1.3+

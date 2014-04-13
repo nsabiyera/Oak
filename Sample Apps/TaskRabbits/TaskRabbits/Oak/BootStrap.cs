@@ -440,6 +440,8 @@ Create an Index.cshtml page for the Index action and add the following code ther
     &lt;input type=""submit"" value=""create"" /&gt;
 }
 
+&lt;hr /&gt;
+
 @foreach (var blog in ViewBag.Blogs)
 {
     &lt;div&gt;
@@ -458,6 +460,7 @@ Create an Index.cshtml page for the Index action and add the following code ther
         &lt;br /&gt;
         &lt;pre&gt;@blog.Comments()&lt;/pre&gt;
     &lt;/div&gt;
+    &lt;hr /&gt;
 }
 </pre>";
         }

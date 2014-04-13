@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using NSpec;
 using RestfulClient;
-using Oak.Controllers;
 using Oak;
 using System.Configuration;
+using Oak.Controllers;
 
 namespace TodoApp.Tests
 {

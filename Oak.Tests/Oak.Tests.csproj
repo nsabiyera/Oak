@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D1CA0AB1-F357-47D7-BD33-D0CFCE066510}</ProjectGuid>
+    <ProjectGuid>{2C3A50A4-A924-43C8-8CC8-C518BE561C0E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Oak.Tests</RootNamespace>
     <AssemblyName>Oak.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,39 +28,27 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\packages\Dapper.1.10\lib\net40\Dapper.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentNHibernate, Version=1.3.0.727, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
-      <HintPath>..\Libraries\FluentNHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\Libraries\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\External Assemblies\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\Libraries\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NSpec, Version=0.9.67.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="NSpec">
       <HintPath>..\packages\nspec.0.9.67\lib\NSpec.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -116,6 +101,7 @@
     <Compile Include="describe_DynamicModels\Classes\DistributionChannels.cs" />
     <Compile Include="describe_DynamicModels\Classes\Email.cs" />
     <Compile Include="describe_DynamicModels\Classes\Emails.cs" />
+    <Compile Include="describe_DynamicModels\Classes\Game.cs" />
     <Compile Include="describe_DynamicModels\Classes\Games.cs" />
     <Compile Include="describe_DynamicModels\Classes\Library.cs" />
     <Compile Include="describe_DynamicModels\Classes\Market.cs" />
@@ -140,19 +126,19 @@
     <Compile Include="describe_DynamicModels\Classes\Users.cs" />
     <Compile Include="describe_DynamicModels\Classes\Warehouses.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_belongs_to.cs" />
+    <Compile Include="describe_DynamicModels\eager_loading_for_belongs_to_with_duplicates.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_belongs_to_with_overridden_primary_key.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_and_belongs_to.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_many_through.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_one.cs" />
     <Compile Include="describe_DynamicModels\eager_loading_for_has_one_through.cs" />
-    <Compile Include="describe_DynamicModels\eager_loading_for_belongs_to_with_duplicates.cs" />
+    <Compile Include="describe_DynamicModels\gemini_dynamic_models.cs" />
+    <Compile Include="describe_DynamicModels\prototype_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\select_has_many_and_belongs_to_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_belongs_to_relation.cs" />
-    <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />
-    <Compile Include="describe_DynamicModels\prototype_dynamic_models.cs" />
-    <Compile Include="describe_DynamicModels\gemini_dynamic_models.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_many_relation.cs" />
+    <Compile Include="describe_DynamicModels\select_many_for_has_many_through_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_one_relation.cs" />
     <Compile Include="describe_DynamicModels\select_many_for_has_one_through_relation.cs" />
     <Compile Include="describe_DynamicModels\select_properties_from_collection.cs" />
@@ -160,14 +146,14 @@
     <Compile Include="describe_DynamicModel\Classes\Inventory.cs" />
     <Compile Include="describe_DynamicModel\Classes\InventoryItem.cs" />
     <Compile Include="describe_DynamicModel\core_behavior_for_dynamic_model.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_for_static_type.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_conventional_schema.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_for_static_type.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\belongs_to\belongs_to_unconventional_schema.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Author.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Authors.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blog.cs" />
-    <Compile Include="describe_DynamicModel\describe_Association\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Blogs.cs" />
+    <Compile Include="describe_DynamicModel\describe_Association\Classes\Comment.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Comments.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Courses.cs" />
     <Compile Include="describe_DynamicModel\describe_Association\Classes\Customer.cs" />
@@ -202,40 +188,31 @@
     <Compile Include="describe_DynamicModel\describe_Association\has_one_through.cs" />
     <Compile Include="describe_DynamicModel\describe_Changes\Classes\Person.cs" />
     <Compile Include="describe_DynamicModel\describe_Changes\core_behavior_for_tracking_changes.cs" />
-    <Compile Include="describe_DynamicRepository\dynamic_query.cs" />
-    <Compile Include="describe_DynamicRepository\memoization_usage_with_dynamic_repository.cs" />
-    <Compile Include="describe_DynamicToJson\casing.cs" />
-    <Compile Include="describe_DynamicToJson\serialization_of_self_reference_objects.cs" />
-    <Compile Include="describe_DynamicToJson\simple_serializations.cs" />
-    <Compile Include="describe_Gemini\updating_members.cs" />
-    <Compile Include="describe_Memoize.cs" />
-    <Compile Include="describe_Seed\schemas.cs" />
-    <Compile Include="describe_StrongParameterss.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Book.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Coffee.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Essay.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\FailedValidation.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\LegalDocument.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Order.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Person.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Persons.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Player.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\length.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\numericality.cs" />
-    <Compile Include="describe_DynamicModel\saving_dynamic_model.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\acceptance.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Coffee.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\Classes\User.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Users.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\core_validation.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\exclusion.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\inclusion.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Book.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\presence.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\confirmation.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\format.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\Classes\LegalDocument.cs" />
-    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Person.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Product.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\Classes\Registration.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\User.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\Classes\Users.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\confirmation.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\core_behavior_for_validations.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\core_validation.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\exclusion.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\format.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\inclusion.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\length.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\numericality.cs" />
+    <Compile Include="describe_DynamicModel\describe_Validation\presence.cs" />
     <Compile Include="describe_DynamicModel\describe_Validation\uniqueness.cs" />
+    <Compile Include="describe_DynamicModel\saving_dynamic_model.cs" />
     <Compile Include="describe_DynamicRepository\Classes\Book.cs" />
     <Compile Include="describe_DynamicRepository\Classes\Books.cs" />
     <Compile Include="describe_DynamicRepository\Classes\Chapter.cs" />
@@ -243,20 +220,25 @@
     <Compile Include="describe_DynamicRepository\Classes\OtherRecords.cs" />
     <Compile Include="describe_DynamicRepository\Classes\Records.cs" />
     <Compile Include="describe_DynamicRepository\detecting_inefficient_queries.cs" />
-    <Compile Include="describe_DynamicRepository\inserting_and_updating.cs" />
+    <Compile Include="describe_DynamicRepository\dynamic_query.cs" />
     <Compile Include="describe_DynamicRepository\executing_procs.cs" />
+    <Compile Include="describe_DynamicRepository\inserting_and_updating.cs" />
+    <Compile Include="describe_DynamicRepository\memoization_usage_with_dynamic_repository.cs" />
     <Compile Include="describe_DynamicRepository\pagination.cs" />
+    <Compile Include="describe_DynamicToJson\casing.cs" />
+    <Compile Include="describe_DynamicToJson\serialization_of_self_reference_objects.cs" />
+    <Compile Include="describe_DynamicToJson\simple_serializations.cs" />
     <Compile Include="describe_DynamicToJson\_describe_DynamicToJson.cs" />
     <Compile Include="describe_Gemini\accessing_property.cs" />
     <Compile Include="describe_Gemini\Classes\AliasGemini.cs" />
     <Compile Include="describe_Gemini\Classes\BlogEntry.cs" />
+    <Compile Include="describe_Gemini\Classes\DynamicPerson.cs" />
     <Compile Include="describe_Gemini\Classes\InheritedGemini.cs" />
     <Compile Include="describe_Gemini\Classes\InheritedInheritedGemini.cs" />
     <Compile Include="describe_Gemini\Classes\MethodMissingGemini.cs" />
-    <Compile Include="describe_Gemini\Classes\Person.cs" />
     <Compile Include="describe_Gemini\Classes\ParameterlessGemini.cs" />
+    <Compile Include="describe_Gemini\Classes\Person.cs" />
     <Compile Include="describe_Gemini\Classes\Persons.cs" />
-    <Compile Include="describe_Gemini\Classes\DynamicPerson.cs" />
     <Compile Include="describe_Gemini\Classes\PrivateGemini.cs" />
     <Compile Include="describe_Gemini\deleting_members.cs" />
     <Compile Include="describe_Gemini\describe_constructions.cs" />
@@ -265,14 +247,16 @@
     <Compile Include="describe_Gemini\describe_methods.cs" />
     <Compile Include="describe_Gemini\describe_responds_to.cs" />
     <Compile Include="describe_Gemini\describe_types.cs" />
-    <Compile Include="describe_Gemini\implicitly_private_methods.cs" />
     <Compile Include="describe_Gemini\extending_gemini.cs" />
     <Compile Include="describe_Gemini\gemini_methods.cs" />
+    <Compile Include="describe_Gemini\implicitly_private_methods.cs" />
     <Compile Include="describe_Gemini\inheritance_of_gemini.cs" />
     <Compile Include="describe_Gemini\performance_against_nhibernate.cs" />
     <Compile Include="describe_Gemini\setting_member.cs" />
+    <Compile Include="describe_Gemini\updating_members.cs" />
     <Compile Include="describe_Gemini\_describe_Gemini.cs" />
     <Compile Include="describe_JsonToDynamic.cs" />
+    <Compile Include="describe_Memoize.cs" />
     <Compile Include="describe_ParamsModelBinder.cs" />
     <Compile Include="describe_Seed\deleting_records.cs" />
     <Compile Include="describe_Seed\dropping_column.cs" />
@@ -280,29 +264,23 @@
     <Compile Include="describe_Seed\executing_scripts.cs" />
     <Compile Include="describe_Seed\exporting_script.cs" />
     <Compile Include="describe_Seed\renaming_column.cs" />
+    <Compile Include="describe_Seed\schemas.cs" />
     <Compile Include="describe_Seed\when_adding_columns.cs" />
     <Compile Include="describe_Seed\when_creating_table.cs" />
     <Compile Include="describe_Seed\_seed.cs" />
+    <Compile Include="describe_StrongParameterss.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="specwatchr-usage.txt" />
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Oak\Oak.csproj">
-      <Project>{A84BD08C-2BFE-47B5-B68F-3DB1698FE71A}</Project>
+      <Project>{87f1b283-99dd-408a-9d6f-ec50a3b9b14e}</Project>
       <Name>Oak</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

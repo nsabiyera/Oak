@@ -9,7 +9,7 @@
     <projectUrl>http://www.nspec.org/</projectUrl>
     <iconUrl>http://nspec.org/images/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>NSpec is a BDD (Behavior Driven Development) framework for .NET of the xSpec (Context/Specification) flavor. NSpec is intended to drive development by specifying behavior within a declared context. NSpec is heavily inspired by RSpec and build upon the NUnit assertion library.</description>
+    <description>NSpec is a BDD (Behavior Driven Development) framework for .NET of the xSpec (Context/Specification) flavor. NSpec is intended to drive development by specifying behavior within a declared context. NSpec is heavily inspired by RSpec.</description>
     <language>en-US</language>
     <tags>testing bdd tdd</tags>
   </metadata>

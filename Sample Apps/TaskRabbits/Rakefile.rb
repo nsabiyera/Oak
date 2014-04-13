@@ -33,6 +33,7 @@ task :rake_dot_net_initialize do
   @web_deploy = WebDeploy.new
   @sh = CommandShell.new
   @sln = SlnBuilder.new
+  @sln.msbuild_path = "C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\amd64\\msbuild.exe"
   @file_sync = FileSync.new
   @file_sync.source = @mvc_project_directory
   @file_sync.destination = @website_deploy_directory

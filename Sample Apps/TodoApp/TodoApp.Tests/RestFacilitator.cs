@@ -6,7 +6,6 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
 using Oak;
-using System.Diagnostics;
 
 namespace RestfulClient
 {
@@ -65,31 +64,7 @@ namespace RestfulClient
 
             var request = CreateRequest(uri, Authorization);
 
-            try
-            {
-                return request.GetResponse();    
-            }
-            catch (WebException ex)
-            {
-                ThrowNiceError(ex);
-
-                throw;
-            }
-        }
-
-        void ThrowNiceError(WebException ex)
-        {
-            using (var sr = new StreamReader(ex.Response.GetResponseStream().FromBeginning()))
-            {
-                var body = sr.ReadToEnd();
-
-                if (HasErrorInfo(body)) throw new InvalidOperationException(JsonToDynamic.Parse(body).Error);
-            }
-        }
-
-        bool HasErrorInfo(string body)
-        {
-            return !string.IsNullOrEmpty(body) && body.Contains("\"Error\":");
+            return request.GetResponse();
         }
 
         public string ScrubbedContentType(string contentType, WebHeaderCollection headers)
@@ -177,20 +152,11 @@ namespace RestfulClient
                 sr.Close();
             }
 
-            try
-            {
-                var response = request.GetResponse();
+            var response = request.GetResponse();
 
-                var stream = response.GetResponseStream();
+            var stream = response.GetResponseStream();
 
-                return Parse(stream, response.ContentType, response.Headers);
-            }
-            catch (WebException ex)
-            {
-                ThrowNiceError(ex);
-
-                throw;
-            }
+            return Parse(stream, response.ContentType, response.Headers);
         }
 
         private string GenerateUrl(string url)

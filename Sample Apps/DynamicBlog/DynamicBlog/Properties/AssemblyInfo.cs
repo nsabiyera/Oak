@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DynamicBlog")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Amir Rajan")]
-[assembly: AssemblyProduct("Oak")]
-[assembly: AssemblyCopyright("Copyright © Amir Rajan 2011")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("DynamicBlog")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("DynamicBlog.Tests")]
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e79357a8-73ba-4e43-af95-83f2e7f73f3c")]
+[assembly: Guid("90324952-adc3-41ac-8db3-b01232c6a496")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -3,7 +3,6 @@ using System.Linq;
 using NSpec;
 using BorrowedGames.Controllers;
 using System.Web.Mvc;
-using Rnwood.SmtpServer;
 using System.Collections.Generic;
 
 namespace BorrowedGames.Tests.Controllers

@@ -10,7 +10,7 @@ http {
 
     upstream round_robin {
       server localhost:website_port_load_balanced_1;
-      server localhost:website_port_load_balanced_2;
+      server localhost:5000;
     }
 
     sendfile        on;

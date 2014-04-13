@@ -95,11 +95,23 @@ namespace Massive
 
         public static dynamic RecordToGemini(this IDataReader rdr, Func<dynamic, dynamic> projection)
         {
-            dynamic e = new Gemini();
-            var d = e.Prototype as IDictionary<string, object>;
-            for (int i = 0; i < rdr.FieldCount; i++)
-                d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
-            return projection(e);
+            if (projection == null)
+            {
+                var e = new Prototype() as IDictionary<string, object>;;
+                PopluateDynamicDictionary(rdr, e);
+                return e;
+            }
+            else
+            {
+                dynamic e = new Gemini();
+                PopluateDynamicDictionary(rdr, e.Prototype);
+                return projection(e);
+            }
+        }
+
+        public static void PopluateDynamicDictionary(this IDataReader rdr, IDictionary<string, object> d)
+        {
+            for (int i = 0; i < rdr.FieldCount; i++) d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
         }
     }
 
@@ -112,7 +124,7 @@ namespace Massive
     public class DynamicRepository : Gemini
     {
         DbProviderFactory _factory;
-        ConnectionProfile ConnectionProfile { get; set; }
+        public ConnectionProfile ConnectionProfile { get; set; }
         public virtual Func<dynamic, dynamic> Projection { get; set; }
         public static bool WriteDevLog { get; set; }
 
@@ -184,9 +196,9 @@ namespace Massive
         {
             using (var conn = OpenConnection())
             {
-                var rdr = CreateCommand(sql, conn, args).ExecuteReader();
-
                 if (WriteDevLog) LogSql(this, sql, args);
+
+                var rdr = CreateCommand(sql, conn, args).ExecuteReader();
 
                 while (rdr.Read())
                 {
@@ -713,6 +725,7 @@ Sql Exception:
         /// </summary>
         public virtual dynamic SingleWhere(string where, params object[] args)
         {
+            if (args == null) return null;
             var sql = string.Format("SELECT * FROM {0} WHERE {1}", TableName, where);
             return Query(sql, args).FirstOrDefault();
         }

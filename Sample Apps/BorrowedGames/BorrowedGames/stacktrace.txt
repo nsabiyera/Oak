@@ -1,9 +1,46 @@
 ========= Clean Stack Trace =========
-System.Web.HttpCompileException (0x80004005): c:\Development\Oak\Sample Apps\BorrowedGames\BorrowedGames\Views\Account\LogOn.cshtml(8): error CS0246: The type or namespace name 'DynamicForm' could not be found (are you missing a using directive or an assembly reference?)
+System.IO.FileLoadException: Could not load file or assembly 'System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+File name: 'System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
+
+=== Pre-bind state information ===
+LOG: DisplayName = System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+ (Fully-specified)
+LOG: Appbase = file:///C:/Users/amir/Documents/Visual Studio 2013/Projects/Oak/Sample Apps/BorrowedGames/BorrowedGames/
+LOG: Initial PrivatePath = C:\Users\amir\Documents\Visual Studio 2013\Projects\Oak\Sample Apps\BorrowedGames\BorrowedGames\bin
+Calling assembly : (Unknown).
+===
+LOG: This bind starts in default load context.
+LOG: Using application configuration file: C:\Users\amir\Documents\Visual Studio 2013\Projects\Oak\Sample Apps\BorrowedGames\BorrowedGames\web.config
+LOG: Using host configuration file: C:\Users\amir\Documents\IISExpress\config\aspnet.config
+LOG: Using machine configuration file from C:\Windows\Microsoft.NET\Framework\v4.0.30319\config\machine.config.
+LOG: Post-policy reference: System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+LOG: Attempting download of new URL file:///C:/Users/amir/AppData/Local/Temp/Temporary ASP.NET Files/root/346b9e6c/df233b1a/System.Web.Mvc.DLL.
+LOG: Attempting download of new URL file:///C:/Users/amir/AppData/Local/Temp/Temporary ASP.NET Files/root/346b9e6c/df233b1a/System.Web.Mvc/System.Web.Mvc.DLL.
+LOG: Attempting download of new URL file:///C:/Users/amir/Documents/Visual Studio 2013/Projects/Oak/Sample Apps/BorrowedGames/BorrowedGames/bin/System.Web.Mvc.DLL.
+WRN: Comparing the assembly name resulted in the mismatch: Minor Version
+ERR: Failed to complete setup of assembly (hr = 0x80131040). Probing terminated.
 
 ========= Unaltered Stack Trace (verbose) =========
-System.Web.HttpCompileException (0x80004005): c:\Development\Oak\Sample Apps\BorrowedGames\BorrowedGames\Views\Account\LogOn.cshtml(8): error CS0246: The type or namespace name 'DynamicForm' could not be found (are you missing a using directive or an assembly reference?)
-   at System.Web.Compilation.AssemblyBuilder.Compile()
+System.IO.FileLoadException: Could not load file or assembly 'System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+File name: 'System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
+   at System.RuntimeTypeHandle.GetTypeByName(String name, Boolean throwOnError, Boolean ignoreCase, Boolean reflectionOnly, StackCrawlMarkHandle stackMark, IntPtr pPrivHostBinder, Boolean loadTypeFromPartialName, ObjectHandleOnStack type)
+   at System.RuntimeTypeHandle.GetTypeByName(String name, Boolean throwOnError, Boolean ignoreCase, Boolean reflectionOnly, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean loadTypeFromPartialName)
+   at System.RuntimeType.GetType(String typeName, Boolean throwOnError, Boolean ignoreCase, Boolean reflectionOnly, StackCrawlMark& stackMark)
+   at System.Type.GetType(String typeName, Boolean throwOnError, Boolean ignoreCase)
+   at System.Web.Compilation.BuildManager.GetType(String typeName, Boolean throwOnError, Boolean ignoreCase)
+   at System.Web.WebPages.Razor.WebRazorHostFactory.DefaultTypeFactory(String typeName)
+   at System.Web.WebPages.Razor.WebRazorHostFactory.CreateFactory(String typeName)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at System.Web.WebPages.Razor.WebRazorHostFactory.CreateHostFromConfigCore(RazorWebSectionGroup config, String virtualPath, String physicalPath)
+   at System.Web.WebPages.Razor.WebRazorHostFactory.CreateHostFromConfig(String virtualPath, String physicalPath)
+   at System.Web.WebPages.Razor.WebRazorHostFactory.CreateHostFromConfig(String virtualPath)
+   at System.Web.WebPages.Razor.RazorBuildProvider.GetHostFromConfig()
+   at System.Web.WebPages.Razor.RazorBuildProvider.CreateHost()
+   at System.Web.WebPages.Razor.RazorBuildProvider.get_Host()
+   at System.Web.WebPages.Razor.RazorBuildProvider.EnsureGeneratedCode()
+   at System.Web.WebPages.Razor.RazorBuildProvider.get_CodeCompilerType()
+   at System.Web.Compilation.BuildProvider.GetCompilerTypeFromBuildProvider(BuildProvider buildProvider)
+   at System.Web.Compilation.BuildProvidersCompiler.ProcessBuildProviders()
    at System.Web.Compilation.BuildProvidersCompiler.PerformBuild()
    at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
    at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
@@ -20,5 +57,23 @@ System.Web.HttpCompileException (0x80004005): c:\Development\Oak\Sample Apps\Bor
    at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
    at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
    at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
-   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass1e.<>c__DisplayClass28.<BeginInvokeAction>b__19()
-   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass1e.<BeginInvokeAction>b__1b(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+=== Pre-bind state information ===
+LOG: DisplayName = System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+ (Fully-specified)
+LOG: Appbase = file:///C:/Users/amir/Documents/Visual Studio 2013/Projects/Oak/Sample Apps/BorrowedGames/BorrowedGames/
+LOG: Initial PrivatePath = C:\Users\amir\Documents\Visual Studio 2013\Projects\Oak\Sample Apps\BorrowedGames\BorrowedGames\bin
+Calling assembly : (Unknown).
+===
+LOG: This bind starts in default load context.
+LOG: Using application configuration file: C:\Users\amir\Documents\Visual Studio 2013\Projects\Oak\Sample Apps\BorrowedGames\BorrowedGames\web.config
+LOG: Using host configuration file: C:\Users\amir\Documents\IISExpress\config\aspnet.config
+LOG: Using machine configuration file from C:\Windows\Microsoft.NET\Framework\v4.0.30319\config\machine.config.
+LOG: Post-policy reference: System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+LOG: Attempting download of new URL file:///C:/Users/amir/AppData/Local/Temp/Temporary ASP.NET Files/root/346b9e6c/df233b1a/System.Web.Mvc.DLL.
+LOG: Attempting download of new URL file:///C:/Users/amir/AppData/Local/Temp/Temporary ASP.NET Files/root/346b9e6c/df233b1a/System.Web.Mvc/System.Web.Mvc.DLL.
+LOG: Attempting download of new URL file:///C:/Users/amir/Documents/Visual Studio 2013/Projects/Oak/Sample Apps/BorrowedGames/BorrowedGames/bin/System.Web.Mvc.DLL.
+WRN: Comparing the assembly name resulted in the mismatch: Minor Version
+ERR: Failed to complete setup of assembly (hr = 0x80131040). Probing terminated.

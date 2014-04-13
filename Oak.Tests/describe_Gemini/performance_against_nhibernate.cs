@@ -10,7 +10,6 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate.Linq;
 using System.Configuration;
 using System.Data.SqlClient;
-using Dapper;
 
 namespace Oak.Tests.describe_Gemini
 {
