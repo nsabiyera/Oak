@@ -121,10 +121,10 @@ After the warmup command runs (speed of download is based on internet connection
 </p>
 <pre>
 cd Blog
-start Blog.sln (opens sln, upgrade to VS 2012 if that's what you're using)
+start Blog.sln (this sln is VS 2013, install the <a href="http://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx">express edition if needed</a>)
 rake (builds the .net app)
 rake server (starts iis express)
-<del>watchr dotnet.watchr.rb</del> sidekick.bat (starts your feedback loop)
+sidekick.bat (starts your feedback loop)
 </pre>
 
 <a id="interactivetutorial"></a>
@@ -424,6 +424,11 @@ Some of the sample apps use additional ruby gems, run the folowing command to pr
 gem install bundler
 </pre>
 
+<h2>Get VS 2013</h2>
+<p>
+All sample apps are written using VS 2013, install the <a href="http://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx">express edition if needed</a> (you can use Oak with VS 2010 and VS 2012, <a href="https://github.com/amirrajan/Oak/wiki/Getting-Started">refer to the wiki for instructions</a>).
+</p>
+
 <h2>Minimal Implementation: <a href="https://github.com/amirrajan/Oak/tree/master/Sample%20Apps/DynamicBlog">DynamicBlog</a></h2>
 <p>This blogging applications is will show you how to perform validation and data access using Oak's mixins. Look at the other sample apps for a deeper dive into Oak.</p>
 <ul>
@@ -438,10 +443,6 @@ start DynamicBlog.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
 rake tests       (all tests should pass)
@@ -476,10 +477,6 @@ start Peeps.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
 rake server      (this will start up iis express)
@@ -507,10 +504,6 @@ start BattleShip.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
 rake tests       (all tests should pass)
@@ -544,10 +537,6 @@ start TaskRabbits.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
 rake server      (this will start up iis express)
@@ -575,10 +564,6 @@ start Crib.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 bundle install
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
@@ -607,10 +592,6 @@ start TodoApp.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
 rake server      (this will start up iis express)
@@ -640,10 +621,6 @@ start BorrowedGames.sln
 </li>
 <li>Then run the following commands in a command prompt that supports ruby (as an administrator):
 <pre>
-If you are using VS 2012, you'll need to upgrade
-the solution before running these commands. Simply open the
-solution in VS 2012 and the upgrade will occur.
-
 bundle install
 rake             (builds and deploys the application)
 rake create_db   (creates your databases)
