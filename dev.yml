@@ -1,5 +1,5 @@
 solution_name: Oak.sln
 test_dll: ./Oak.Tests/bin/debug/Oak.Tests.dll
-test_runner: ./packages/nspec.0.9.67/tools/NSpecRunner.exe
+test_runner: ./packages/nspec.0.9.68/tools/NSpecRunner.exe
 database_name: Oak 
 database_server: (local)
