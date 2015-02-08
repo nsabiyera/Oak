@@ -211,14 +211,16 @@ task :list_db_servers => :rake_dot_net_initialize do
   puts "scanning the network for db servers (this may take a while)"
   puts "if you already know what database server you want to connect to,"
   puts "you can change your connection strings in the application by running the command:"
-  puts "rake update_db_server[server_name], example: rake update_db_server[.\\sqlexpress]"
+  puts "rake update_db_server[server_name], example: rake update_db_server[\'.\\sqlexpress\']"
   puts "looking....\n\n"
 
   output = `sqlcmd -Lc`
   puts "here are your db servers and the rake command to update your connection strings:\n\n"
   output.each_line do |line|
-    puts "rake update_db_server[#{line.strip}]" if line.strip != ""
+    puts "rake update_db_server[\'#{line.strip}\']" if line.strip != ""
   end
+
+  puts "\nRun the command exactly as it is displayed above, including single quotes around the server name"
 end
 
 desc "updates all database connection string server values to the value specified, example: rake update_db_server[./sqlexpress]"
@@ -230,11 +232,13 @@ task :update_db_server, [:new_value] => :rake_dot_net_initialize do |t, args|
     "#{ @test_project }/App.config",
     "#{ @ui_project }/App.config"
   ].each do |file|
-    puts "updating connection string in: #{ file }"
-    content = File.open(file).read
-    content.gsub!("data source=#{ @database_server };", "data source=#{ args[:new_value] };")
-    File.open(file, "w") { |f| f.write(content) }
-    puts "done"
+    if File.exist? file
+      puts "updating connection string in: #{ file }"
+      content = File.open(file).read
+      content.gsub!("data source=#{ @database_server };", "data source=#{ args[:new_value] };")
+      File.open(file, "w") { |f| f.write(content) }
+      puts "done"
+    end
   end
 
   puts "updating dev.yml"
