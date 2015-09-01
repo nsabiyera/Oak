@@ -19,6 +19,7 @@ namespace BorrowedGames.Tests.Controllers
             SetCurrentUser(controller, GivenUser("user@example.com", "@me"));
         }
 
+
         [Tag("describe_User")]
         void when_following_someone()
         {
