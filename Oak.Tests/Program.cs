@@ -1,11 +1,6 @@
-﻿using System.Linq;
-using System.Reflection;
-using NSpec;
+﻿using System.Reflection;
 using NSpec.Domain;
-using NSpec.Domain.Formatters;
-using System.IO;
 using System;
-using System.Diagnostics;
 
 
 namespace Oak.Tests
