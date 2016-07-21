@@ -21,7 +21,7 @@ task :rake_dot_net_initialize do
   
   @sh = CommandShell.new
   @sln = SlnBuilder.new
-  @sln.msbuild_path = "C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\amd64\\msbuild.exe"
+  @sln.msbuild_path = "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe"
 end
 
 desc "builds and deploys website to directories iis express will use to run app"
